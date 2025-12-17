@@ -1,5 +1,7 @@
 import { Users, GraduationCap, UsersRound, DollarSign } from "lucide-react";
-
+import A1 from "../assets/a1.png";
+import A6 from "../assets/a6.png";
+import A7 from "../assets/a7.png";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import StatCard from "../components/StatCard";
@@ -46,11 +48,12 @@ export default function Dashboard() {
           {/* SUCCESS NOTIFICATION */}
           <div className="flex items-center justify-between bg-green-50 border border-green-300 text-green-700 rounded-lg px-4 py-2 mb-4">
             <div className="flex items-center gap-2 text-sm">
-              <img
-                src="https://i.pravatar.cc/40?img=15"
-                className="w-6 h-6 rounded-full"
-                alt="student"
-              />
+            <img
+  src={A1}
+  className="w-6 h-6 rounded-full"
+  alt="student"
+/>
+
               <span>
                 <strong>Fahed III.C</strong> has paid Fees for the{" "}
                 <strong>Term1</strong>

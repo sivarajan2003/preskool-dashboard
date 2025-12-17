@@ -1,5 +1,6 @@
 import { LucideIcon } from 'lucide-react';
 
+
 interface StatCardProps {
   icon: string;
   title: string;

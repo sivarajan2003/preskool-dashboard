@@ -1,25 +1,29 @@
 import { Plus } from "lucide-react";
+import A8 from "../assets/a8.png";
+import A9 from "../assets/a9.png";
+import A10 from "../assets/a10.png";
 
 const routines = [
   {
     month: "Jan 2025",
     progress: 70,
     color: "bg-blue-500",
-    img: "https://i.pravatar.cc/40?img=11",
+    img: A8,
   },
   {
     month: "Feb 2025",
     progress: 55,
     color: "bg-yellow-500",
-    img: "https://i.pravatar.cc/40?img=32",
+    img: A9,
   },
   {
     month: "Mar 2025",
     progress: 85,
     color: "bg-green-500",
-    img: "https://i.pravatar.cc/40?img=45",
+    img: A10,
   },
 ];
+
 
 export default function ClassRoutine() {
   return (

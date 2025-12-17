@@ -1,5 +1,6 @@
 import { Check, X, Calendar } from "lucide-react";
-
+import A6 from "../assets/a6.png";
+import A7 from "../assets/a7.png";
 export default function LeaveRequests() {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6 h-full">
@@ -22,11 +23,11 @@ export default function LeaveRequests() {
         {/* ITEM 1 */}
         <div className="flex items-center justify-between border border-gray-100 rounded-lg p-4">
           <div className="flex items-start gap-3">
-            <img
-              src="https://i.pravatar.cc/40?img=12"
-              className="w-10 h-10 rounded-lg object-cover"
-              alt="James"
-            />
+          <img
+  src={A6}
+  className="w-10 h-10 rounded-lg object-cover"
+  alt="James"
+/>
 
             <div>
               <p className="font-medium text-gray-900">
@@ -60,11 +61,11 @@ export default function LeaveRequests() {
         {/* ITEM 2 */}
         <div className="flex items-center justify-between border border-gray-100 rounded-lg p-4">
           <div className="flex items-start gap-3">
-            <img
-              src="https://i.pravatar.cc/40?img=32"
-              className="w-10 h-10 rounded-lg object-cover"
-              alt="Hendrita"
-            />
+          <img
+  src={A7}
+  className="w-10 h-10 rounded-lg object-cover"
+  alt="Hendrita"
+/>
 
             <div>
               <p className="font-medium text-gray-900">
