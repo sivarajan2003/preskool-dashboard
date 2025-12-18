@@ -36,14 +36,52 @@ export default function Dashboard() {
         <Header />
 
         <main className="flex-1 overflow-y-auto p-6">
+{/* PAGE TITLE + ACTION BUTTONS */}
+<div className="flex items-center justify-between mb-6">
 
-          {/* PAGE TITLE */}
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold">Admin Dashboard</h2>
-            <p className="text-sm text-gray-500">
-              Dashboard / Admin Dashboard
-            </p>
-          </div>
+  {/* LEFT — TITLE */}
+  <div>
+    <h2 className="text-xl font-semibold">Admin Dashboard</h2>
+    <p className="text-sm text-gray-500">
+      Dashboard / Admin Dashboard
+    </p>
+  </div>
+
+  {/* RIGHT — ACTION BUTTONS */}
+  <div className="flex items-center gap-3">
+
+    {/* ADD NEW STUDENT */}
+    <button
+      onClick={() => console.log("Add New Student")}
+      className="
+        px-4 py-2 
+        bg-blue-600 text-white 
+        text-sm font-medium 
+        rounded-lg 
+        hover:bg-blue-700 
+        transition
+      "
+    >
+      Add New Student
+    </button>
+
+    {/* FEES DETAILS */}
+    <button
+      onClick={() => console.log("Fees Details")}
+      className="
+        px-4 py-2 
+        bg-gray-100 text-gray-700 
+        text-sm font-medium 
+        rounded-lg 
+        hover:bg-gray-200 
+        transition
+      "
+    >
+      Fees Details
+    </button>
+
+  </div>
+</div>
 
           {/* SUCCESS NOTIFICATION */}
           <div className="flex items-center justify-between bg-green-50 border border-green-300 text-green-700 rounded-lg px-4 py-2 mb-4">

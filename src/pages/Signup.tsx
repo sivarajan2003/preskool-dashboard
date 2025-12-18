@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import SignupImg from '../assets/signup.png';
 import Logo from '../assets/logo.png';
 
+
 export default function Signup() {
   const navigate = useNavigate();
 

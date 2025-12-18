@@ -11,6 +11,9 @@ import {
   ChevronDown,
 } from "lucide-react";
 import A1 from "../assets/a1.png";
+import IN_FLAG from "../assets/in.png";
+import US_FLAG from "../assets/us.png";
+
 export default function Header() {
   const [dark, setDark] = useState(false);
   const [yearOpen, setYearOpen] = useState(false);
@@ -67,11 +70,16 @@ export default function Header() {
 
         <button
   onClick={() => setCountry(country === "IN" ? "US" : "IN")}
-  className="w-9 h-9 border border-gray-200 rounded-lg flex items-center justify-center text-lg"
+  className="w-9 h-9 border border-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-100"
   title={country === "IN" ? "India" : "USA"}
 >
-  {country === "IN" ? "🇮🇳" : "🇺🇸"}
+  <img
+    src={country === "IN" ? IN_FLAG : US_FLAG}
+    alt={country === "IN" ? "India" : "USA"}
+    className="w-5 h-5 object-contain"
+  />
 </button>
+
 
 
           {/* Add */}

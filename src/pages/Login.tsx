@@ -66,16 +66,31 @@ export default function Login() {
   return (
     <div className="min-h-screen flex">
       {/* LEFT IMAGE SECTION */}
-      <div className="hidden lg:flex lg:w-1/2 h-screen bg-[#F7FAFF] relative">
-      <div className="flex items-center justify-center w-full h-full">
+      {/* LEFT IMAGE SECTION (SAME AS SIGNUP) */}
+<div className="hidden lg:flex lg:w-1/2 h-screen bg-[#F7FAFF] relative overflow-hidden">
+
+{/* IMAGE */}
+<div className="flex items-center justify-center w-full h-full">
   <img
     src={LoginImg}
     alt="Login Illustration"
-    className="w-[70%] max-w-[600px] object-contain"
+    className="w-[520px] xl:w-[620px] 2xl:w-[680px] object-contain"
   />
 </div>
 
-      </div>
+{/* WAVE */}
+<div className="absolute bottom-0 left-0 w-full">
+  <svg viewBox="0 0 1440 320" className="w-full h-[160px]">
+    <path
+      fill="#4361EE"
+      fillOpacity="1"
+      d="M0,224L48,213.3C96,203,192,181,288,170.7C384,160,480,160,576,176C672,192,768,224,864,229.3C960,235,1056,213,1152,197.3C1248,181,1344,171,1392,165.3L1440,160L1440,320L0,320Z"
+    />
+  </svg>
+</div>
+
+</div>
+
 
       {/* RIGHT LOGIN FORM */}
       <div className="flex-1 flex items-center justify-center bg-white">

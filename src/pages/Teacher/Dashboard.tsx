@@ -9,6 +9,9 @@ import J3 from "../../assets/j3.png";
 import JA from "../../assets/ja.png";
 import JO from "../../assets/jo.png";
 import GoodRightImg from "../../assets/good1.png";
+import GoodImg from "../../assets/good.png";
+
+import { CalendarDays, FolderOpen, ChevronDown } from "lucide-react";
 
 
 export default function TeacherDashboard() {
@@ -65,7 +68,7 @@ export default function TeacherDashboard() {
 
 
       {/* ================= MAIN GRID ================= */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-x-6 gap-y-6 items-start">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-x-6 gap-y-6 ">
         {/* ========== PROFILE (LEFT) ========== */}
         <div>
           <div className="relative overflow-hidden rounded-xl p-5 text-white bg-gradient-to-r from-[#0F1025] to-[#1A1C3A]">
@@ -130,9 +133,38 @@ export default function TeacherDashboard() {
             </div>
           </div>
         </div>
+        <div className="xl:col-span-2">
+  <div className="bg-white rounded-xl border p-4">
+    <div className="flex justify-between mb-3">
+      <h4 className="text-sm font-semibold">Today's Class</h4>
+      <span className="text-xs text-gray-500">16 May 2025</span>
+    </div>
+
+    <div className="grid grid-cols-5 gap-3">
+      {[
+        { t: "09:00 - 09:45", c: "Class V, B", col: "red" },
+        { t: "09:45 - 10:30", c: "Class IV, C", col: "red" },
+        { t: "11:30 - 12:15", c: "Class V, A", col: "blue" },
+        { t: "01:30 - 02:15", c: "Class V, B", col: "blue" },
+        { t: "02:15 - 03:00", c: "Class I", col: "blue" },
+      ].map((i, idx) => (
+        <div key={idx} className="bg-[#F8FAFC] border rounded-lg px-3 py-2.5">
+          <span
+            className={`text-xs px-2 py-0.5 rounded-md text-white ${
+              i.col === "red" ? "bg-red-500" : "bg-blue-600"
+            }`}
+          >
+            ⏱ {i.t}
+          </span>
+          <p className="text-xs mt-1">{i.c}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
 
       {/* ================= SCHEDULES + UPCOMING EVENTS ================= */}
-<div className="xl:row-span-2 sticky top-6">
+      <div className="xl:row-span-3 sticky top-6 self-start h-fit">
   <div className="bg-white rounded-xl border px-4 py-4">
 
     {/* Header */}
@@ -242,40 +274,11 @@ export default function TeacherDashboard() {
 
   </div>
 </div>
-<div className="xl:col-span-2 xl:row-start-2 -mt-2">
-  <div className="bg-white rounded-xl border p-4">
-    <div className="flex justify-between mb-3">
-      <h4 className="text-sm font-semibold">Today's Class</h4>
-      <span className="text-xs text-gray-500">16 May 2024</span>
-    </div>
-
-    <div className="grid grid-cols-5 gap-3">
-      {[
-        { t: "09:00 - 09:45", c: "Class V, B", col: "red" },
-        { t: "09:45 - 10:30", c: "Class IV, C", col: "red" },
-        { t: "11:30 - 12:15", c: "Class V, A", col: "blue" },
-        { t: "01:30 - 02:15", c: "Class V, B", col: "blue" },
-        { t: "02:15 - 03:00", c: "Class I", col: "blue" },
-      ].map((i, idx) => (
-        <div key={idx} className="bg-[#F8FAFC] border rounded-lg px-3 py-2.5">
-          <span
-            className={`text-xs px-2 py-0.5 rounded-md text-white ${
-              i.col === "red" ? "bg-red-500" : "bg-blue-600"
-            }`}
-          >
-            ⏱ {i.t}
-          </span>
-          <p className="text-xs mt-1">{i.c}</p>
-        </div>
-      ))}
-    </div>
-  </div>
-</div>
 
 {/* ================= ATTENDANCE + PERFORMANCE SECTION ================= */}
-<div className="xl:col-span-2 xl:row-start-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+<div className="xl:col-span-2 xl:row-start-3 grid grid-cols-1 md:grid-cols-2 gap-5">
 {/* ================= ATTENDANCE (IMAGE-2 – CORRECT PADDING) ================= */}
-<div className="bg-white rounded-xl border p-6">
+<div className="bg-white rounded-xl border p-4">
 
   {/* Header */}
   <div className="flex items-center justify-between mb-5">
@@ -548,7 +551,7 @@ export default function TeacherDashboard() {
 
       </div>
       {/* ================= SYLLABUS / LESSON PLAN ================= */}
-<div className="xl:col-span-3">
+      <div className="xl:col-span-3 mt-8">
   <div className="bg-white rounded-xl border p-5">
 
     {/* Header */}
@@ -560,7 +563,7 @@ export default function TeacherDashboard() {
     </div>
 
     {/* Cards */}
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-6 gap-y-5">
 
       {[
         {
@@ -629,7 +632,7 @@ export default function TeacherDashboard() {
   </div>
 </div>
 {/* ================= STUDENT MARKS + LEAVE STATUS ================= */}
-<div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+<div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-8">
 
   {/* ================= STUDENT MARKS (LEFT – TABLE) ================= */}
   <div className="xl:col-span-2 bg-white rounded-xl border p-5">
@@ -639,12 +642,18 @@ export default function TeacherDashboard() {
       <h4 className="text-sm font-semibold">Student Marks</h4>
 
       <div className="flex items-center gap-4 text-xs text-gray-500">
-      <span className="text-xs text-gray-500 flex items-center gap-1">
-      📅 This Month
-    </span>
-        <span className="flex items-center gap-1 cursor-pointer">
-          📂 All Sections
-        </span>
+      <span className="flex items-center gap-1 text-xs text-gray-500 cursor-pointer">
+  <CalendarDays className="w-4 h-4" />
+  This Month
+  <ChevronDown className="w-3 h-3" />
+</span>
+
+<span className="flex items-center gap-1 text-xs text-gray-500 cursor-pointer">
+  <FolderOpen className="w-4 h-4" />
+  All Sections
+  <ChevronDown className="w-3 h-3" />
+</span>
+
       </div>
     </div>
 
@@ -730,8 +739,11 @@ export default function TeacherDashboard() {
     {/* Header */}
     <div className="flex items-center justify-between mb-4">
       <h4 className="text-sm font-semibold">Leave Status</h4>
-      <span className="text-xs text-gray-500">📅 This Year</span>
-    </div>
+      <span className="flex items-center gap-1 text-xs text-gray-500 cursor-pointer">
+  <CalendarDays className="w-4 h-4" />
+  This Year
+  <ChevronDown className="w-3 h-3" />
+</span>    </div>
 
     {[
       {
