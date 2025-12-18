@@ -25,6 +25,9 @@ import D2 from "../assets/D2.png";
 import D3 from "../assets/D3.png";
 import D4 from "../assets/D4.png";
 
+import StudentTable from "../components/tables/StudentTable";
+import FeesTable from "../components/tables/FeesTable";
+
 export default function Dashboard() {
   return (
     <div className="flex h-screen bg-gray-50">
@@ -170,6 +173,7 @@ export default function Dashboard() {
               iconBg="bg-green-50"
             />
           </div>
+          
 
           {/* FEES + LEAVE */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">

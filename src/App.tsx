@@ -57,6 +57,7 @@ export default function App() {
           </ProtectedRoute>
         }
       />
+      
 
       {/* FALLBACK */}
       <Route path="*" element={<Navigate to="/login" replace />} />

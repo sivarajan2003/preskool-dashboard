@@ -14,10 +14,11 @@ import {
   UserCheck,
   Users,
 } from "lucide-react";
+import {  useLocation } from "react-router-dom";
 
 export default function Sidebar() {
   const navigate = useNavigate();
-
+  const location = useLocation();
   const role = localStorage.getItem("role");
   const logout = () => {
     localStorage.clear();
@@ -25,7 +26,7 @@ export default function Sidebar() {
   };
   const [openDashboard, setOpenDashboard] = useState(true);
   const [openApplications, setOpenApplications] = useState(false);
-  const [openLayout, setOpenLayout] = useState(false);
+ 
   const [openPeople, setOpenPeople] = useState(false);
 const [openStudents, setOpenStudents] = useState(false);
 const [openTeachers, setOpenTeachers] = useState(false);
@@ -138,7 +139,8 @@ const [openLeaves, setOpenLeaves] = useState(false);
           </div>
         )}
 
-        {/* ================= LAYOUT (SEPARATE SECTION) ================= */}
+        {/* ================= LAYOUT (SEPARATE SECTION) ================= 
+         const [openLayout, setOpenLayout] = useState(false);
         <button
   onClick={() => setOpenLayout(!openLayout)}
   className="w-full flex items-center px-4 py-3 rounded-lg hover:bg-gray-100"
@@ -155,7 +157,7 @@ const [openLeaves, setOpenLeaves] = useState(false);
             <LayoutItem icon={<AlignLeft />} label="RTL" />
             <LayoutItem icon={<BoxIcon />} label="Box" />
           </div>
-        )}
+        )} */}
 {/* ================= PEOPLE ================= */}
 <button
   onClick={() => setOpenPeople(!openPeople)}
@@ -192,7 +194,7 @@ const [openLeaves, setOpenLeaves] = useState(false);
       />
     </button>
 
-    {openStudents && (
+       {/*{openStudents && (
       <div className="ml-11 space-y-1">
         <ChildItem
           label="All Students"
@@ -205,7 +207,7 @@ const [openLeaves, setOpenLeaves] = useState(false);
           onClick={() => setActiveItem("student-promotion")}
         />
       </div>
-    )}
+    )}*/}
 
     {/* ================= PARENTS ================= */}
     <button
@@ -261,7 +263,7 @@ const [openLeaves, setOpenLeaves] = useState(false);
       />
     </button>
 
-    {openTeachers && (
+   {/*{openTeachers && (
       <div className="ml-11 space-y-1">
         <ChildItem
           label="All Teachers"
@@ -274,7 +276,7 @@ const [openLeaves, setOpenLeaves] = useState(false);
           onClick={() => setActiveItem("teacher-routine")}
         />
       </div>
-    )}
+    )}  */}
   </div>
 )}
 {/* ================= ACADEMIC ================= */}
