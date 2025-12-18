@@ -79,9 +79,9 @@ export default function TeacherDashboard() {
 />
 
                 <div>
-                  <span className="inline-block text-[10px] px-2 py-[2px] rounded bg-blue-600 mb-1">
-                    #T594651
-                  </span>
+                <span className="inline-block text-[11px] bg-[#2D5BFF] px-2 py-0.5 rounded-md mb-1">
+        #T594651
+      </span>
                   <p className="font-semibold">Henriques Morgan</p>
                   <p className="text-xs text-gray-300">Classes : IV-A, V-B</p>
                   <p className="text-xs text-gray-300">Physics</p>
@@ -639,9 +639,9 @@ export default function TeacherDashboard() {
       <h4 className="text-sm font-semibold">Student Marks</h4>
 
       <div className="flex items-center gap-4 text-xs text-gray-500">
-        <span className="flex items-center gap-1 cursor-pointer">
-          📅 All Classes
-        </span>
+      <span className="text-xs text-gray-500 flex items-center gap-1">
+      📅 This Month
+    </span>
         <span className="flex items-center gap-1 cursor-pointer">
           📂 All Sections
         </span>

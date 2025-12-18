@@ -157,10 +157,28 @@ export default function ParentDashboard() {
         <div className="bg-green-50 border rounded-xl
                         flex flex-col items-center justify-center text-center px-3 py-3">
 
-          <div className="w-10 h-10 rounded-lg 
-                          flex items-center justify-center text-white mb-2">
-            📅
-          </div>
+<div className="w-10 h-10 rounded-lg bg-green-500 flex items-center justify-center mb-2">
+  <svg
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="white"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    {/* Calendar */}
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+    <line x1="16" y1="2" x2="16" y2="6" />
+    <line x1="8" y1="2" x2="8" y2="6" />
+
+    {/* Arrow */}
+    <path d="M14 14h6v6" />
+    <path d="M20 14l-7 7" />
+  </svg>
+</div>
+
 
           <p className="text-sm font-semibold">
             Medical Leaves (10)
@@ -176,10 +194,28 @@ export default function ParentDashboard() {
         <div className="bg-blue-50 border rounded-xl
                         flex flex-col items-center justify-center text-center px-4">
 
-          <div className="w-10 h-10 rounded-lg 
-                          flex items-center justify-center text-white mb-2">
-            📦
-          </div>
+<div className="w-10 h-10 rounded-lg bg-blue-500 flex items-center justify-center mb-2">
+  <svg
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="white"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    {/* Cube */}
+    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+    <path d="M3.27 6.96L12 12.01l8.73-5.05" />
+    <path d="M12 22V12" />
+
+    {/* Plus */}
+    <line x1="18" y1="10" x2="18" y2="16" />
+    <line x1="15" y1="13" x2="21" y2="13" />
+  </svg>
+</div>
+
 
           <p className="text-sm font-semibold">
             Casual Leaves (12)

@@ -5,6 +5,29 @@ import { useNavigate } from 'react-router-dom';
 import LoginImg from '../assets/login.png';
 import Logo from '../assets/logo.png';
 import GoogleIcon from '../assets/google.png';
+// 🔹 TEMP USERS (Frontend only)
+const USERS = [
+  {
+    email: "admin@preskool.com",
+    password: "admin123",
+    role: "admin",
+  },
+  {
+    email: "teacher@preskool.com",
+    password: "admin123",
+    role: "teacher",
+  },
+  {
+    email: "student@preskool.com",
+    password: "admin123",
+    role: "student",
+  },
+  {
+    email: "parent@preskool.com",
+    password: "admin123",
+    role: "parent",
+  },
+];
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,29 +40,28 @@ export default function Login() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
-
-    // Default admin login
-    if (email === 'admin@preskool.com' && password === 'admin123') {
-      localStorage.setItem('isAuth', 'true');
-      navigate("/admin/dashboard");
-
+  
+    const user = USERS.find(
+      (u) => u.email === email && u.password === password
+    );
+  
+    if (!user) {
+      setError("Invalid email or password");
+      setLoading(false);
       return;
     }
+  
+    // Save auth info
+    localStorage.setItem("isAuth", "true");
+    localStorage.setItem("role", user.role);
+  
+    // Redirect by role
+    navigate(`/${user.role}/dashboard`);
 
-    // Signup user login
-    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
-
-    if (email === storedUser.email && password === storedUser.password) {
-      localStorage.setItem('isAuth', 'true');
-      navigate('/dashboard');
-    } else {
-      setError('Invalid email or password');
-    }
-
-    setLoading(false);
   };
+  
 
   return (
     <div className="min-h-screen flex">

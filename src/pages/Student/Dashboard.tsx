@@ -12,6 +12,10 @@ import C2 from "../../assets/c2.png";
 import C3 from "../../assets/c3.png";
 import C4 from "../../assets/c4.png";
 import { X, Asterisk } from "lucide-react";
+import { useRef } from "react";
+import { CalendarDays } from "lucide-react";
+
+
 import {
   Bus,
   Book,
@@ -19,6 +23,7 @@ import {
   Utensils,
   Building,
 } from "lucide-react";
+
 export default function StudentDashboard() {
   return (
     <DashboardLayout>
@@ -47,38 +52,56 @@ export default function StudentDashboard() {
         <div className="space-y-6">
 
           {/* PROFILE CARD */}
-          <div className="rounded-xl p-4 text-white bg-gradient-to-br from-[#0B1028] to-[#1E2358]">
-            <div className="flex gap-4">
-            <img
-  src={StudentAvatar}
-  alt="Student"
-  className="w-14 h-14 rounded-lg border-2 border-white object-cover"
-/>
+          <div className="rounded-xl p-5 text-white bg-[#0E1333] relative overflow-hidden">
 
-              <div>
-                <span className="text-[10px] bg-blue-600 px-2 py-0.5 rounded">
-                  #ST123456
-                </span>
-                <p className="font-semibold mt-1">Angelo Riana</p>
-                <p className="text-xs text-blue-100">
-                  Class : III, C | Roll No : #36545
-                </p>
+  {/* TOP SECTION */}
+  <div className="flex items-start gap-4">
+    <img
+      src={StudentAvatar}
+      alt="Student"
+      className="w-14 h-14 rounded-lg border-2 border-white object-cover"
+    />
 
-                <div className="flex gap-2 mt-2">
-                  <span className="text-xs">1st Quarterly</span>
-                  <span className="bg-green-500 text-[10px] px-2 rounded">
-                    Pass
-                  </span>
-                </div>
-              </div>
-            </div>
+    <div className="flex-1">
+      {/* STUDENT ID */}
+      <span className="inline-block text-[11px] bg-[#2D5BFF] px-2 py-0.5 rounded-md mb-1">
+        #ST123456
+      </span>
 
-            <div className="flex justify-end mt-4">
-              <button className="bg-blue-600 text-xs px-4 py-1.5 rounded">
-                Edit Profile
-              </button>
-            </div>
-          </div>
+      {/* NAME */}
+      <p className="font-semibold text-base leading-tight">
+        Angelo Riana
+      </p>
+
+      {/* CLASS & ROLL */}
+      <p className="text-xs text-gray-300 mt-0.5">
+        Class : III, C | Roll No : #36545
+      </p>
+    </div>
+  </div>
+
+  {/* CENTER DASHED LINE */}
+  <div className="border-t border-dashed border-gray-500/40 my-4" />
+
+  {/* BOTTOM SECTION */}
+  <div className="flex items-center justify-between">
+    {/* LEFT */}
+    <div className="flex items-center gap-2">
+      <span className="text-xs text-gray-300">
+        1st Quarterly
+      </span>
+      <span className="bg-green-500 text-[10px] px-2 py-0.5 rounded-full font-medium">
+        Pass
+      </span>
+    </div>
+
+    {/* RIGHT */}
+    <button className="bg-[#2D5BFF] hover:bg-blue-700 transition text-xs px-4 py-1.5 rounded-lg">
+      Edit Profile
+    </button>
+  </div>
+</div>
+
 
           {/* TODAY'S CLASS */}
           <div className="bg-white border rounded-xl p-4">
@@ -419,37 +442,52 @@ export default function StudentDashboard() {
 {/* ================= PERFORMANCE + HOME WORK ================= */}
 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6">
 {/* ================= PERFORMANCE (LEFT) ================= */}
-<div className="xl:col-span-2 bg-white rounded-xl border p-5">
+<div className="xl:col-span-2 bg-white rounded-xl border p-3">
 
   {/* Header */}
-  <div className="flex items-center justify-between mb-4">
+  <div className="flex items-center justify-between mb-2">
     <h4 className="text-sm font-semibold">Performance</h4>
     <span className="text-xs text-gray-500 flex items-center gap-1">
-      📅 2024 - 2025
+      <CalendarDays className="w-4 h-4 text-indigo-500" />
+      2024 - 2025
     </span>
   </div>
 
-  <div className="relative h-60">
+  {/* GRAPH CONTAINER */}
+  <div className="relative bg-[#F8FAFF] rounded-lg p-12">
 
     {/* Y Axis */}
-    <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-xs text-gray-400">
-      {[100, 75, 50, 25, 0].map(v => <span key={v}>{v}</span>)}
+    <div className="absolute left-2 top-3 bottom-8 flex flex-col justify-between text-xs text-gray-400">
+      {[100, 75, 50, 25, 0].map(v => (
+        <span key={v}>{v}</span>
+      ))}
     </div>
 
-    <svg viewBox="0 0 500 220" className="ml-10 w-full h-full">
+    <svg viewBox="0 0 500 220" className="ml-8 w-full h-49">
 
-      {/* Grid */}
+      {/* GRID */}
       {[40, 80, 120, 160, 200].map(y => (
-        <line key={y} x1="0" y1={y} x2="500" y2={y} stroke="#EEF2F7" />
+        <line key={y} x1="0" y1={y} x2="500" y2={y} stroke="#E5EDFF" />
       ))}
 
-      {/* Area Fill */}
-      <path
-        d="M0,60 125,80 250,110 375,90 500,70 L500,220 L0,220 Z"
-        fill="#EEF4FF"
+      {/* FOCUS AREA */}
+      <rect x="225" y="0" width="50" height="220" fill="#EEF2FF" />
+      <line
+        x1="250"
+        y1="0"
+        x2="250"
+        y2="220"
+        stroke="#94A3B8"
+        strokeDasharray="3"
       />
 
-      {/* Attendance */}
+      {/* AREA FILL */}
+      <path
+        d="M0,60 125,80 250,110 375,90 500,70 L500,220 L0,220 Z"
+        fill="#EDF2FF"
+      />
+
+      {/* ATTENDANCE */}
       <polyline
         points="0,60 125,80 250,110 375,90 500,70"
         fill="none"
@@ -457,35 +495,34 @@ export default function StudentDashboard() {
         strokeWidth="2"
       />
 
-      {/* Exam Score */}
+      {/* EXAM SCORE */}
       <polyline
         points="0,45 125,65 250,95 375,75 500,55"
         fill="none"
         stroke="#4F46E5"
         strokeWidth="2"
       />
-
-      {/* Focus Line */}
-      <line
-        x1="250"
-        y1="0"
-        x2="250"
-        y2="220"
-        stroke="#CBD5E1"
-        strokeDasharray="4"
-      />
     </svg>
 
-    {/* Tooltip */}
-    <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-white border rounded-lg px-4 py-3 shadow text-xs">
+    {/* TOOLTIP */}
+    <div className="absolute top-8 left-1/2 -translate-x-1/2 bg-white border rounded-lg px-4 py-2 shadow text-xs">
       <p className="font-medium mb-1">Oct 2024</p>
       <p className="text-indigo-600">Exam Score <b>80%</b></p>
       <p className="text-sky-500">Attendance <b>40%</b></p>
     </div>
+
+    {/* X AXIS */}
+    <div className="grid grid-cols-5 text-xs text-gray-400 mt-2 ml-8">
+      <span>Quarter 1</span>
+      <span>Quarter 2</span>
+      <span>Half yearly</span>
+      <span>Model</span>
+      <span>Final Exam</span>
+    </div>
   </div>
 
-  {/* Legend */}
-  <div className="flex gap-6 mt-4 text-xs text-gray-500">
+  {/* LEGEND */}
+  <div className="flex gap-6 mt-3 text-xs text-gray-500">
     <span className="flex items-center gap-2">
       <span className="w-2 h-2 rounded-full bg-indigo-600" />
       Avg Score : 72%
@@ -494,15 +531,6 @@ export default function StudentDashboard() {
       <span className="w-2 h-2 rounded-full bg-blue-400" />
       Avg Attendance : 95%
     </span>
-  </div>
-
-  {/* X Axis */}
-  <div className="grid grid-cols-5 text-xs text-gray-400 mt-3 ml-10">
-    <span>Quarter 1</span>
-    <span>Quarter 2</span>
-    <span>Half yearly</span>
-    <span>Model</span>
-    <span>Final Exam</span>
   </div>
 </div>
 {/* ================= HOME WORK (RIGHT) ================= */}
@@ -520,7 +548,7 @@ export default function StudentDashboard() {
     color: "blue",
     title: "Write about Theory of Pendulum",
     teacher: "Aaron",
-    due: "16 Jun 2024",
+    due: "16 Jun 2025",
     percent: 90,
     img: H1,
   },
@@ -529,7 +557,7 @@ export default function StudentDashboard() {
     color: "green",
     title: "Chemistry - Change of Elements",
     teacher: "Hellana",
-    due: "18 Jun 2024",
+    due: "18 Jun 2025",
     percent: 65,
     img: H2,
   },
@@ -538,7 +566,7 @@ export default function StudentDashboard() {
     color: "yellow",
     title: "Maths - Problems to Solve Page 21",
     teacher: "Morgan",
-    due: "21 Jun 2024",
+    due: "21 Jun 2025",
     percent: 30,
     img: H3,
   },
@@ -547,7 +575,7 @@ export default function StudentDashboard() {
     color: "red",
     title: "English - Vocabulary Introduction",
     teacher: "Daniel Josua",
-    due: "21 Jun 2024",
+    due: "21 Jun 2025",
     percent: 10,
     img: H4,
   },
@@ -589,39 +617,45 @@ export default function StudentDashboard() {
     </div>
 
     {/* Circular Progress */}
-    <div className="relative w-10 h-10">
-      <svg viewBox="0 0 36 36" className="w-full h-full">
-        <path
-          d="M18 2.0845
-             a 15.9155 15.9155 0 0 1 0 31.831
-             a 15.9155 15.9155 0 0 1 0 -31.831"
-          fill="none"
-          stroke="#E5E7EB"
-          strokeWidth="3"
-        />
-        <path
-          d="M18 2.0845
-             a 15.9155 15.9155 0 0 1 0 31.831"
-          fill="none"
-          stroke={
-            h.color === "blue"
-              ? "#3B82F6"
-              : h.color === "green"
-              ? "#22C55E"
-              : h.color === "yellow"
-              ? "#EAB308"
-              : "#EF4444"
-          }
-          strokeWidth="3"
-          strokeDasharray={`${h.percent}, 100`}
-        />
-      </svg>
+    <div className="relative w-9 h-9">
+  <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+    {/* Background circle */}
+    <circle
+      cx="18"
+      cy="18"
+      r="15.5"
+      fill="none"
+      stroke="#E5E7EB"
+      strokeWidth="2.5"
+    />
 
-      <span className="absolute inset-0 flex items-center justify-center text-[10px] font-semibold">
-        {h.percent}%
-      </span>
-    </div>
-  </div>
+    {/* Progress circle */}
+    <circle
+      cx="18"
+      cy="18"
+      r="15.5"
+      fill="none"
+      stroke={
+        h.color === "blue"
+          ? "#3B82F6"
+          : h.color === "green"
+          ? "#22C55E"
+          : h.color === "yellow"
+          ? "#EAB308"
+          : "#EF4444"
+      }
+      strokeWidth="2.5"
+      strokeDasharray={`${(h.percent / 100) * 97.4} 97.4`}
+      strokeLinecap="round"
+    />
+  </svg>
+
+  {/* Percentage text */}
+  <span className="absolute inset-0 flex items-center justify-center text-[10px] font-semibold">
+    {h.percent}%
+  </span>
+</div>
+</div>
 ))}
 
 </div>
@@ -636,10 +670,14 @@ export default function StudentDashboard() {
   {/* Header */}
   <div className="flex justify-between items-center px-5 py-4 border-b">
     <h4 className="text-sm font-semibold">Leave Status</h4>
-    <span className="text-xs text-gray-500">📅 This Year</span>
+    <span className="text-xs text-gray-500 flex items-center gap-1">
+  <CalendarDays className="w-4 h-4 text-indigo-500" />
+  This Year
+</span>
+
   </div>
 
-  <div className="px-5 py-4">
+  <div className="px-5 py-3 pb-2">
     {[
       { title: "Emergency Leave", date: "15 Jun 2024", status: "Pending", icon: X, iconBg: "bg-red-100 text-red-500", badge: "bg-blue-500" },
       { title: "Medical Leave", date: "15 Jun 2024", status: "Approved", icon: Asterisk, iconBg: "bg-blue-100 text-blue-500", badge: "bg-green-500" },
@@ -650,8 +688,8 @@ export default function StudentDashboard() {
       return (
         <div
           key={i}
-          className="flex items-center justify-between px-4 py-3 rounded-lg mb-3 bg-gray-50"
-        >
+          className="flex items-center justify-between px-4 py-3 rounded-lg bg-gray-50 last:mb-0 mb-2"
+          >
           <div className="flex items-center gap-3">
             {/* ICON BOX */}
             <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${l.iconBg}`}>
@@ -682,8 +720,9 @@ export default function StudentDashboard() {
   <div className="flex items-center justify-between px-5 py-4 border-b">
     <h4 className="text-sm font-semibold">Exam Result</h4>
     <span className="text-xs text-gray-500 flex items-center gap-1">
-      📅 1st Quarter
-    </span>
+  <CalendarDays className="w-4 h-4 text-indigo-500" />
+  1st Quarter
+</span>
   </div>
 
   <div className="px-5 py-4">
@@ -705,7 +744,7 @@ export default function StudentDashboard() {
     </div>
 
     {/* Chart */}
-    <div className="flex items-end justify-between h-48 px-4">
+    <div className="flex items-end justify-between h-52 px-4">
 
       {/* Y Axis */}
       <div className="flex flex-col justify-between h-full text-xs text-gray-400 mr-3">
@@ -756,8 +795,9 @@ export default function StudentDashboard() {
   <div className="flex items-center justify-between px-5 py-4 border-b">
     <h4 className="text-sm font-semibold">Fees Reminder</h4>
     <span className="text-xs text-gray-500 flex items-center gap-1">
-      📅 2024 - 2025
-    </span>
+  <CalendarDays className="w-4 h-4 text-indigo-500" />
+  2024-2025
+</span>
   </div>
 
   <div className="px-5 py-4 space-y-4">
@@ -768,35 +808,35 @@ export default function StudentDashboard() {
         amount: "$2500",
         date: "25 May 2024",
         icon: "🚌",
-        iconBg: "bg-blue-100 text-blue-600",
+        iconBg: " text-blue-600",
       },
       {
         title: "Book Fees",
         amount: "$2500",
         date: "25 May 2024",
         icon: "📘",
-        iconBg: "bg-green-100 text-green-600",
+        iconBg: "text-green-600",
       },
       {
         title: "Exam Fees",
         amount: "$2500",
         date: "25 May 2024",
         icon: "📝",
-        iconBg: "bg-purple-100 text-purple-600",
+        iconBg: "text-purple-600",
       },
       {
         title: "Mess Fees",
         amount: "$2500 + $150",
         due: true,
         icon: "🍽️",
-        iconBg: "bg-red-100 text-red-600",
+        iconBg: "text-red-600",
       },
       {
         title: "Hostel",
         amount: "$2500",
         date: "25 May 2024",
         icon: "🏨",
-        iconBg: "bg-yellow-100 text-yellow-600",
+        iconBg: "text-yellow-600",
       },
     ].map((f, i) => (
       <div
@@ -941,31 +981,31 @@ export default function StudentDashboard() {
       title: "New Syllabus Instructions",
       date: "11 Mar 2024",
       icon: "📘",
-      bg: "bg-blue-100 text-blue-600",
+      bg: "text-blue-600",
     },
     {
       title: "World Environment Day",
       date: "21 Apr 2024",
       icon: "🌱",
-      bg: "bg-green-100 text-green-600",
+      bg: "text-green-600",
     },
     {
       title: "Exam Preparation Notification!",
       date: "13 Mar 2024",
       icon: "🔔",
-      bg: "bg-red-100 text-red-600",
+      bg: " text-red-600",
     },
     {
       title: "Online Classes Preparation",
       date: "24 May 2024",
       icon: "💻",
-      bg: "bg-cyan-100 text-cyan-600",
+      bg: " text-cyan-600",
     },
     {
       title: "Exam Time Table Release",
       date: "24 May 2024",
       icon: "📅",
-      bg: "bg-yellow-100 text-yellow-600",
+      bg: "text-yellow-600",
     },
   ].map((n, i) => (
     <div
