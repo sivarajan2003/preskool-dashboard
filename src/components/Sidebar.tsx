@@ -17,8 +17,14 @@ import {
 import {  useLocation } from "react-router-dom";
 
 export default function Sidebar() {
+  
+
   const navigate = useNavigate();
   const location = useLocation();
+  
+  const isActive = (path: string) =>
+    location.pathname === path;
+  
   const role = localStorage.getItem("role");
   const logout = () => {
     localStorage.clear();
@@ -45,7 +51,7 @@ const [openLeaves, setOpenLeaves] = useState(false);
 
 
   return (
-    <div className="w-64 bg-white border-r h-screen overflow-y-auto">
+<div className="w-64 bg-white border-r h-full overflow-y-auto">
 
       {/* ================= HEADER ================= */}
       <div className="p-6 border-b">
@@ -81,36 +87,33 @@ const [openLeaves, setOpenLeaves] = useState(false);
         {openDashboard && (
   <div className="ml-11 mt-2 space-y-2">
 
-    {role === "admin" && (
-      <SubItem
-        label="Admin Dashboard"
-        onClick={() => navigate("/admin")}
-      />
-    )}
+    <SubItem
+      label="Admin Dashboard"
+      onClick={() => navigate("/admin/dashboard")}
+      active={location.pathname.startsWith("/admin")}
+    />
 
-    {role === "teacher" && (
-      <SubItem
-        label="Teacher Dashboard"
-        onClick={() => navigate("/teacher")}
-      />
-    )}
+    <SubItem
+      label="Student Dashboard"
+      onClick={() => navigate("/student/dashboard")}
+      active={location.pathname.startsWith("/student")}
+    />
 
-    {role === "student" && (
-      <SubItem
-        label="Student Dashboard"
-        onClick={() => navigate("/student")}
-      />
-    )}
+    <SubItem
+      label="Teacher Dashboard"
+      onClick={() => navigate("/teacher/dashboard")}
+      active={location.pathname.startsWith("/teacher")}
+    />
 
-    {role === "parent" && (
-      <SubItem
-        label="Parent Dashboard"
-        onClick={() => navigate("/parent")}
-      />
-    )}
+    <SubItem
+      label="Parent Dashboard"
+      onClick={() => navigate("/parent/dashboard")}
+      active={location.pathname.startsWith("/parent")}
+    />
 
   </div>
 )}
+
         {/* ================= APPLICATIONS ================= */}
         <button
   onClick={() => setOpenApplications(!openApplications)}
@@ -123,7 +126,7 @@ const [openLeaves, setOpenLeaves] = useState(false);
 </button>
 
 
-        {openApplications && (
+         {/*  {openApplications && (
           <div className="ml-11 mt-2 space-y-1">
             {[
               "Chat",
@@ -139,7 +142,7 @@ const [openLeaves, setOpenLeaves] = useState(false);
           </div>
         )}
 
-        {/* ================= LAYOUT (SEPARATE SECTION) ================= 
+      ================= LAYOUT (SEPARATE SECTION) ================= 
          const [openLayout, setOpenLayout] = useState(false);
         <button
   onClick={() => setOpenLayout(!openLayout)}
@@ -173,9 +176,18 @@ const [openLeaves, setOpenLeaves] = useState(false);
 
     {/* ================= STUDENTS ================= */}
     <button
-      onClick={() => setOpenStudents(!openStudents)}
-      className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
-    >
+  onClick={() => {
+    navigate("/admin/dashboard/people/students");
+    setActiveItem("students");
+  }}
+  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg
+    ${
+      isActive("/admin/dashboard/people/students")
+        ? "bg-blue-600 text-white"
+        : "hover:bg-gray-50 text-gray-700"
+    }`}
+>
+
       <div className="flex items-center gap-3">
         {/* ICON */}
         <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
@@ -211,12 +223,18 @@ const [openLeaves, setOpenLeaves] = useState(false);
 
     {/* ================= PARENTS ================= */}
     <button
-      onClick={() => setActiveItem("parents")}
-      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg ${
-        activeItem === "parents"
-          ? "bg-blue-600 text-white"
-          : "hover:bg-gray-50 text-gray-700"
-      }`}
+      onClick={() => {
+        navigate("/admin/dashboard/people/parents");
+        setActiveItem("parents");
+      }}
+      
+      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
+  ${
+    isActive("/admin/dashboard/people/parents")
+      ? "bg-blue-600 text-white"
+      : "hover:bg-gray-50 text-gray-700"
+  }`}
+
     >
       <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
         <User className="w-4 h-4 text-gray-700" />
@@ -227,13 +245,18 @@ const [openLeaves, setOpenLeaves] = useState(false);
 
     {/* ================= GUARDIANS ================= */}
     <button
-      onClick={() => setActiveItem("guardians")}
-      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg ${
-        activeItem === "guardians"
-          ? "bg-blue-600 text-white"
-          : "hover:bg-gray-50 text-gray-700"
-      }`}
-    >
+  onClick={() => {
+    navigate("/admin/dashboard/people/guardians");
+    setActiveItem("guardians");
+  }}
+  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
+    ${
+      isActive("/admin/dashboard/people/guardians")
+        ? "bg-blue-600 text-white"
+        : "hover:bg-gray-50 text-gray-700"
+    }`}
+>
+
       <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
         <UserCheck className="w-4 h-4 text-gray-700" />
       </span>
@@ -243,9 +266,18 @@ const [openLeaves, setOpenLeaves] = useState(false);
 
     {/* ================= TEACHERS ================= */}
     <button
-      onClick={() => setOpenTeachers(!openTeachers)}
-      className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
-    >
+  onClick={() => {
+    navigate("/admin/dashboard/people/teachers");
+    setActiveItem("teachers");
+  }}
+  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg
+    ${
+      isActive("/admin/dashboard/people/teachers")
+        ? "bg-blue-600 text-white"
+        : "hover:bg-gray-50 text-gray-700"
+    }`}
+>
+
       <div className="flex items-center gap-3">
         <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
           <Users className="w-4 h-4 text-gray-700" />
@@ -294,38 +326,76 @@ const [openLeaves, setOpenLeaves] = useState(false);
 
     {/* ================= CLASSES (HAS CHILD) ================= */}
     <button
-      onClick={() => setOpenClasses(!openClasses)}
-      className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
-    >
-      <div className="flex items-center gap-3">
-        <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
-          <GraduationCap className="w-4 h-4" />
-        </span>
-        <span className="text-sm font-medium">Classes</span>
-      </div>
+  onClick={() => navigate("/admin/dashboard/academic/classes")}
+  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
+    ${isActive("/admin/dashboard/academic/classes")
+      ? "bg-blue-600 text-white"
+      : "hover:bg-gray-50 text-gray-700"}
+  `}
+>
+  <GraduationCap className="w-4 h-4" />
+  Classes
+</button>
 
-      <ChevronDown
-        className={`w-4 h-4 transition-transform ${
-          openClasses ? "rotate-180" : ""
-        }`}
-      />
-    </button>
 
-    {openClasses && (
+      {/*{openClasses && (
       <div className="ml-11 space-y-1">
         <ChildItem label="All Classes" />
         <ChildItem label="Schedule" />
       </div>
-    )}
+    )}*/}
 
     {/* ================= SINGLE MENUS ================= */}
-    <MainItem label="Class Room" icon={DoorOpen} />
-    <MainItem label="Class Routine" icon={CalendarDays} />
-    <MainItem label="Section" icon={Layers} />
-    <MainItem label="Subject" icon={BookOpen} />
-    <MainItem label="Syllabus" icon={FileText} />
-    <MainItem label="Time Table" icon={Table} />
-    <MainItem label="Home Work" icon={ClipboardList} />
+    <MainItem
+  label="Class Room"
+  icon={DoorOpen}
+  onClick={() =>
+    navigate("/admin/dashboard/academic/class-room")
+  }
+/>
+<MainItem
+  label="Class Routine"
+  icon={CalendarDays}
+  onClick={() =>
+    navigate("/admin/dashboard/academic/class-routine")
+  }
+/>
+<MainItem
+  label="Section"
+  icon={Layers}
+  onClick={() =>
+    navigate("/admin/dashboard/academic/section")
+  }
+/>
+<MainItem
+  label="Subject"
+  icon={BookOpen}
+  onClick={() =>
+    navigate("/admin/dashboard/academic/subject")
+  }
+/>
+<MainItem
+  label="Syllabus"
+  icon={FileText}
+  onClick={() =>
+    navigate("/admin/dashboard/academic/syllabus")
+  }
+/>
+<MainItem
+  label="Time Table"
+  icon={Table}
+  onClick={() =>
+    navigate("/admin/dashboard/academic/time-table")
+  }
+/>
+<MainItem
+  label="Home Work"
+  icon={ClipboardList}
+  onClick={() =>
+    navigate("/admin/dashboard/academic/home-work")
+  }
+/>
+
 
     {/* ================= EXAMINATIONS (HAS CHILD) ================= */}
     <button
@@ -586,6 +656,18 @@ const [openLeaves, setOpenLeaves] = useState(false);
           <MenuItem icon={MessageSquare} label="Notice Board" />
           <MenuItem icon={Settings} label="Settings" />
         </div>
+        {/* ================= LOGOUT ================= */}
+<div className="pt-4 mt-4 border-t">
+  <button
+    onClick={logout}
+    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg
+      text-red-600 hover:bg-red-50 transition"
+  >
+    <DoorOpen className="w-5 h-5" />
+    <span className="text-sm font-medium">Logout</span>
+  </button>
+</div>
+
       </nav>
     </div>
   );
@@ -593,16 +675,30 @@ const [openLeaves, setOpenLeaves] = useState(false);
 
 /* ================= REUSABLE COMPONENTS ================= */
 
-function SubItem({ label, onClick }: { label: string; onClick?: () => void }) {
+function SubItem({
+  label,
+  onClick,
+  active,
+}: {
+  label: string;
+  onClick?: () => void;
+  active?: boolean;
+}) {
   return (
     <button
       onClick={onClick}
-      className="block text-sm text-gray-600 hover:text-blue-600"
+      className={`block text-sm w-full text-left px-2 py-1 rounded
+        ${
+          active
+            ? "text-blue-600 font-medium"
+            : "text-gray-600 hover:text-blue-600"
+        }`}
     >
       {label}
     </button>
   );
 }
+
 
 function LayoutItem({ icon, label }: { icon: JSX.Element; label: string }) {
   return (

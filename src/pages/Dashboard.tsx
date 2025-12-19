@@ -27,102 +27,60 @@ import D4 from "../assets/D4.png";
 
 import StudentTable from "../components/tables/StudentTable";
 import FeesTable from "../components/tables/FeesTable";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
-  return (
-    <div className="flex h-screen bg-gray-50">
-      {/* SIDEBAR */}
-      <Sidebar />
+  const navigate = useNavigate();
+    return (
+      <>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-xl font-semibold">Admin Dashboard</h2>
+            <p className="text-sm text-gray-500">
+              Dashboard / Admin Dashboard
+            </p>
+          </div>
+  
+          <div className="flex gap-3">
+          <button
+  onClick={() => navigate("/admin/dashboard/people/students/add")}
+  className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+>
+  Add New Student
+</button>
 
-      {/* RIGHT CONTENT */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header />
-
-        <main className="flex-1 overflow-y-auto p-6">
-{/* PAGE TITLE + ACTION BUTTONS */}
-<div className="flex items-center justify-between mb-6">
-
-  {/* LEFT — TITLE */}
-  <div>
-    <h2 className="text-xl font-semibold">Admin Dashboard</h2>
-    <p className="text-sm text-gray-500">
-      Dashboard / Admin Dashboard
-    </p>
-  </div>
-
-  {/* RIGHT — ACTION BUTTONS */}
-  <div className="flex items-center gap-3">
-
-    {/* ADD NEW STUDENT */}
-    <button
-      onClick={() => console.log("Add New Student")}
-      className="
-        px-4 py-2 
-        bg-blue-600 text-white 
-        text-sm font-medium 
-        rounded-lg 
-        hover:bg-blue-700 
-        transition
-      "
-    >
-      Add New Student
-    </button>
-
-    {/* FEES DETAILS */}
-    <button
-      onClick={() => console.log("Fees Details")}
-      className="
-        px-4 py-2 
-        bg-gray-100 text-gray-700 
-        text-sm font-medium 
-        rounded-lg 
-        hover:bg-gray-200 
-        transition
-      "
-    >
-      Fees Details
-    </button>
-
-  </div>
-</div>
-
-          {/* SUCCESS NOTIFICATION */}
-          <div className="flex items-center justify-between bg-green-50 border border-green-300 text-green-700 rounded-lg px-4 py-2 mb-4">
-            <div className="flex items-center gap-2 text-sm">
-            <img
-  src={A1}
-  className="w-6 h-6 rounded-full"
-  alt="student"
-/>
-
-              <span>
-                <strong>Fahed III.C</strong> has paid Fees for the{" "}
-                <strong>Term1</strong>
-              </span>
-            </div>
-            <button className="text-green-600 hover:text-green-800">
-              ✕
+            <button className="px-4 py-2 bg-gray-100 rounded-lg text-sm">
+              Fees Details
             </button>
           </div>
-
-          {/* WELCOME BANNER */}
-          <div className="relative bg-gradient-to-r from-[#0F0C29] via-[#302B63] to-[#24243E] text-white rounded-xl p-6 mb-6 overflow-hidden">
-            <div className="relative flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold">
-                  Welcome Back, Mr. Praga
-                </h3>
-                <p className="text-sm text-gray-300 mt-1">
-                  Have a Good day at work
-                </p>
-              </div>
-
-              <p className="text-xs text-gray-300">
-                ⏱ Updated Recently
+        </div>
+  
+        {/* SUCCESS NOTIFICATION */}
+        <div className="flex items-center justify-between bg-green-50 border border-green-300 text-green-700 rounded-lg px-4 py-2 mb-4">
+          <div className="flex items-center gap-2 text-sm">
+            <img src={A1} className="w-6 h-6 rounded-full" alt="student" />
+            <span>
+              <strong>Fahed III.C</strong> has paid Fees for the{" "}
+              <strong>Term1</strong>
+            </span>
+          </div>
+          <button className="text-green-600 hover:text-green-800">✕</button>
+        </div>
+  
+        {/* WELCOME BANNER */}
+        <div className="relative bg-gradient-to-r from-[#0F0C29] via-[#302B63] to-[#24243E] text-white rounded-xl p-6 mb-6 overflow-hidden">
+          <div className="relative flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold">
+                Welcome Back, Mr. Praga
+              </h3>
+              <p className="text-sm text-gray-300 mt-1">
+                Have a Good day at work
               </p>
             </div>
+            <p className="text-xs text-gray-300">⏱ Updated Recently</p>
           </div>
-
+        </div>
           {/* STAT CARDS */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
             <StatCard
@@ -226,9 +184,6 @@ export default function Dashboard() {
           <div className="mb-6">
             <LastDashboardWidgets />
           </div>
-
-        </main>
-      </div>
-    </div>
+   </>
   );
 }

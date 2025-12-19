@@ -14,6 +14,7 @@ import C4 from "../../assets/c4.png";
 import { X, Asterisk } from "lucide-react";
 import { useRef } from "react";
 import { CalendarDays } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 
 import {
@@ -25,21 +26,30 @@ import {
 } from "lucide-react";
 
 export default function StudentDashboard() {
+  const navigate = useNavigate();
   return (
     <DashboardLayout>
-
-      {/* ================= HEADER ================= */}
+    <>
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-semibold">Student Dashboard</h2>
-          <p className="text-sm text-gray-500">Dashboard / Students Dashboard</p>
+          <p className="text-sm text-gray-500">
+            Dashboard / Students Dashboard
+          </p>
         </div>
 
         <div className="flex gap-3">
-          <button className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg">
+          <button
+            onClick={() => navigate("/student/exam-results")}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+          >
             Exam Result
           </button>
-          <button className="px-4 py-2 text-sm bg-gray-100 rounded-lg">
+
+          <button
+            onClick={() => navigate("/student/fees")}
+            className="px-4 py-2 bg-gray-100 rounded-lg"
+          >
             Fees Details
           </button>
         </div>
@@ -1096,6 +1106,7 @@ export default function StudentDashboard() {
 
 </div>
 
-    </DashboardLayout>
+  </> 
+  </DashboardLayout>
   );
 }

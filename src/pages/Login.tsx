@@ -55,10 +55,20 @@ export default function Login() {
   
     // Save auth info
     localStorage.setItem("isAuth", "true");
-    localStorage.setItem("role", user.role);
-  
-    // Redirect by role
-    navigate(`/${user.role}/dashboard`);
+localStorage.setItem("role", user.role);
+
+if (user.role === "admin") {
+  navigate("/admin/dashboard");
+}
+if (user.role === "student") {
+  navigate("/student/dashboard");
+}
+if (user.role === "teacher") {
+  navigate("/teacher/dashboard");
+}
+if (user.role === "parent") {
+  navigate("/parent/dashboard");
+}
 
   };
   
