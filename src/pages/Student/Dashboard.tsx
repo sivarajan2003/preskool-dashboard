@@ -15,18 +15,116 @@ import { X, Asterisk } from "lucide-react";
 import { useRef } from "react";
 import { CalendarDays } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import s1 from "../../assets/gif/s1.gif";
+import s2 from "../../assets/gif/s2.gif";
+import s3 from "../../assets/gif/s3.gif";
+import s4 from "../../assets/gif/s4.gif";
 
-
-import {
-  Bus,
-  Book,
-  FileText,
-  Utensils,
-  Building,
-} from "lucide-react";
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
+  const [showMonthDetails, setShowMonthDetails] = useState<boolean>(false);
+/* ================== CALENDAR STATE ================== */
+const [currentMonth, setCurrentMonth] = useState(6); // July (0-based)
+const [currentYear, setCurrentYear] = useState(2025);
+const [showAddExam, setShowAddExam] = useState(false);
+
+/* ================== EXAMS STATE ================== */
+const [exams, setExams] = useState([
+  {
+    title: "1st Quarterly",
+    subject: "Mathematics",
+    date: new Date(2025, 6, 6),
+    time: "01:30 - 02:15 PM",
+    room: "15",
+  },
+  {
+    title: "2nd Quarterly",
+    subject: "Physics",
+    date: new Date(2025, 6, 12),
+    time: "01:30 - 02:15 PM",
+    room: "15",
+  },
+]);
+/* ================= ATTENDANCE DATA ================= */
+
+const attendanceData = [
+  { date: "2025-05-14", status: "Present" },
+  { date: "2025-05-15", status: "Present" },
+  { date: "2025-05-16", status: "Absent" },
+  { date: "2025-05-17", status: "Present" },
+  { date: "2025-05-18", status: "Halfday" },
+  { date: "2025-05-19", status: "Present" },
+  { date: "2025-05-20", status: "Late" },
+];
+
+const [showAttendanceDetails, setShowAttendanceDetails] = useState(false);
+
+/* ================= MONTH FILTER ================= */
+const selectedMonth = 4; // May (0-based)
+const selectedYear = 2025;
+
+const monthAttendance = attendanceData.filter(d => {
+  const dt = new Date(d.date);
+  return dt.getMonth() === selectedMonth && dt.getFullYear() === selectedYear;
+});
+
+/* ================= CALCULATIONS ================= */
+const presentDays = monthAttendance.filter(d => d.status === "Present").length;
+const absentDays = monthAttendance.filter(d => d.status === "Absent").length;
+const halfDays = monthAttendance.filter(d => d.status === "Halfday").length;
+const lateDays = monthAttendance.filter(d => d.status === "Late").length;
+
+const totalWorkingDays = 26;
+
+const attendancePercent = Math.round(
+  (presentDays / totalWorkingDays) * 100
+);
+
+/* ================== CALENDAR HELPERS ================== */
+const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+
+const examDays = exams
+  .filter(
+    e =>
+      e.date.getMonth() === currentMonth &&
+      e.date.getFullYear() === currentYear
+  )
+  .map(e => e.date.getDate());
+
+/* ================== MONTH NAVIGATION ================== */
+const changeMonth = (dir: "prev" | "next") => {
+  if (dir === "prev") {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(y => y - 1);
+    } else setCurrentMonth(m => m - 1);
+  } else {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(y => y + 1);
+    } else setCurrentMonth(m => m + 1);
+  }
+};
+
+/* ================== ADD EXAM ================== */
+const handleAddExam = (dateValue: string) => {
+  setExams(prev => [
+    ...prev,
+    {
+      title: "Unit Test",
+      subject: "Biology",
+      date: new Date(dateValue),
+      time: "10:00 - 11:00 AM",
+      room: "12",
+    },
+  ]);
+  setShowAddExam(false);
+};
+
+  
   return (
     <DashboardLayout>
     <>
@@ -62,7 +160,9 @@ export default function StudentDashboard() {
         <div className="space-y-6">
 
           {/* PROFILE CARD */}
-          <div className="rounded-xl p-5 text-white bg-[#0E1333] relative overflow-hidden">
+          <div className="rounded-xl p-5 bg-[#0E1333] text-white
+                animate-card card-interactive">
+
 
   {/* TOP SECTION */}
   <div className="flex items-start gap-4">
@@ -114,10 +214,11 @@ export default function StudentDashboard() {
 
 
           {/* TODAY'S CLASS */}
-          <div className="bg-white border rounded-xl p-4">
+          <div className="bg-white border rounded-xl p-9
+                animate-card card-hover">
             <div className="flex justify-between mb-3">
               <h4 className="text-sm font-semibold">Today’s Class</h4>
-              <span className="text-xs text-gray-400">16 May 2024</span>
+              <span className="text-xs text-gray-400">16 May 2025</span>
             </div>
 
             {[
@@ -166,38 +267,44 @@ export default function StudentDashboard() {
 
         {/* ================= CENTER (ATTENDANCE) ================= */}
         {/* ================= ATTENDANCE ================= */}
-<div className="bg-white border rounded-xl p-5">
-
-
-
+        <div className="bg-white border rounded-xl p-5
+                animate-card card-hover">
   {/* Header */}
   <div className="flex items-center justify-between mb-3">
     <h4 className="text-sm font-semibold">Attendance</h4>
-    <span className="text-xs text-gray-500 flex items-center gap-1">
-      📅 This Month
-    </span>
-  </div>
+    <button
+  onClick={() => setShowAttendanceDetails(!showAttendanceDetails)}
+  className="text-xs text-blue-600 flex items-center gap-1"
+>
+  📅 This Month
+</button>
+</div>
 
   {/* Working Days */}
-  <p className="text-xs text-gray-500 mb-4 flex items-center gap-1">
-    📘 No of total working days <b className="text-gray-700">28 Days</b>
-  </p>
+<p className="text-xs text-gray-500 mb-4 flex items-center gap-1">
+  📘 No of total working days
+  <b className="text-gray-700 ml-1">{totalWorkingDays} Days</b>
+</p>
 
-  {/* Stats */}
-  <div className="grid grid-cols-3 gap-3 text-center text-xs mb-6">
-    <div className="border rounded-lg py-3">
-      <p className="font-semibold text-sm">25</p>
-      <p className="text-gray-500">Present</p>
-    </div>
-    <div className="border rounded-lg py-3">
-      <p className="font-semibold text-sm">2</p>
-      <p className="text-gray-500">Absent</p>
-    </div>
-    <div className="border rounded-lg py-3">
-      <p className="font-semibold text-sm">0</p>
-      <p className="text-gray-500">Halfday</p>
-    </div>
+{/* Stats */}
+<div className="grid grid-cols-4 gap-3 text-center text-xs mb-6">
+  <div className="border rounded-lg py-3">
+    <p className="font-semibold text-sm">{presentDays}</p>
+    <p className="text-gray-500">Present</p>
   </div>
+  <div className="border rounded-lg py-3">
+    <p className="font-semibold text-sm">{absentDays}</p>
+    <p className="text-gray-500">Absent</p>
+  </div>
+  <div className="border rounded-lg py-3">
+    <p className="font-semibold text-sm">{halfDays}</p>
+    <p className="text-gray-500">Halfday</p>
+  </div>
+  <div className="border rounded-lg py-3">
+    <p className="font-semibold text-sm">{lateDays}</p>
+    <p className="text-gray-500">Late</p>
+  </div>
+</div>
 
   {/* ===== FULL CIRCLE DONUT ===== */}
   <div className="flex justify-center mb-5">
@@ -262,7 +369,7 @@ export default function StudentDashboard() {
       {/* Center Text */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <p className="text-xs text-gray-500">Attendance</p>
-        <p className="text-2xl font-bold">95%</p>
+<p className="text-2xl font-bold">{attendancePercent}%</p>
       </div>
     </div>
   </div>
@@ -287,7 +394,7 @@ export default function StudentDashboard() {
   <div className="border rounded-lg p-3">
     <div className="flex justify-between text-xs text-gray-500 mb-2">
       <p className="font-medium">Last 7 Days</p>
-      <p>14 May 2024 - 21 May 2024</p>
+      <p>14 May 2025 - 21 May 2025</p>
     </div>
 
     <div className="flex gap-2">
@@ -311,142 +418,167 @@ export default function StudentDashboard() {
 </div>
 
 
-        {/* ================= RIGHT (SCHEDULES) ================= */}
-        <div className="bg-white border rounded-xl p-4 xl:row-span-2">
+ {/* ================= SCHEDULE CARD ================= */}
+ <div className="bg-white border rounded-xl p-4 xl:row-span-2 animate-card card-hover">
 
-  {/* Header */}
-  <div className="flex items-center justify-between mb-4">
-    <h4 className="text-sm font-semibold">Schedules</h4>
-    <button className="text-xs text-blue-600 flex items-center gap-1">
-      ➕ Add New
+{/* Header */}
+<div className="flex items-center justify-between mb-4">
+  <h4 className="text-sm font-semibold">Schedules</h4>
+  <button
+    onClick={() => setShowAddExam(true)}
+    className="text-xs text-blue-600 flex items-center gap-1"
+  >
+    ➕ Add New
+  </button>
+</div>
+
+{/* Month Navigation */}
+<div className="flex items-center justify-between mb-3">
+  <p className="text-sm font-medium">
+    {new Date(currentYear, currentMonth).toLocaleString("default", {
+      month: "long",
+    })}{" "}
+    {currentYear}
+  </p>
+
+  <div className="flex gap-2">
+    <button
+      onClick={() => changeMonth("prev")}
+      className="w-7 h-7 rounded-full border text-gray-400"
+    >
+      ‹
+    </button>
+    <button
+      onClick={() => changeMonth("next")}
+      className="w-7 h-7 rounded-full bg-black text-white"
+    >
+      ›
     </button>
   </div>
+</div>
 
-  {/* Month + Navigation */}
-  <div className="flex items-center justify-between mb-3">
-    <p className="text-sm font-medium">July 2024</p>
-    <div className="flex gap-2">
-      <button className="w-7 h-7 rounded-full border text-gray-400 flex items-center justify-center">
-        ‹
-      </button>
-      <button className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center">
-        ›
-      </button>
-    </div>
-  </div>
+{/* Weekdays */}
+<div className="grid grid-cols-7 text-xs text-center text-gray-400 mb-2">
+  {["S", "M", "T", "W", "T", "F", "S"].map(d => (
+    <span key={d}>{d}</span>
+  ))}
+</div>
 
-  {/* Week Days */}
-  <div className="grid grid-cols-7 text-xs text-center text-gray-400 mb-2">
-    {["S","M","T","W","T","F","S"].map(d => (
-      <span key={d}>{d}</span>
-    ))}
-  </div>
+{/* Calendar */}
+<div className="grid grid-cols-7 gap-2 text-xs text-center mb-5">
+  {[...Array(firstDay)].map((_, i) => (
+    <div key={"e" + i} />
+  ))}
 
-  {/* Dates */}
-  <div className="grid grid-cols-7 gap-2 text-xs text-center mb-5">
-    {Array.from({ length: 30 }, (_, i) => i + 1).map(day => (
-      <div
-        key={day}
-        className={`w-8 h-8 flex items-center justify-center rounded-lg
-          ${[6,7,12,27].includes(day)
+  {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => (
+    <div
+      key={day}
+      className={`w-8 h-8 flex items-center justify-center rounded-lg
+        ${
+          examDays.includes(day)
             ? "bg-blue-600 text-white font-medium"
-            : "text-gray-600"
-          }`}
-      >
-        {day}
-      </div>
-    ))}
-  </div>
-
-  {/* Exams */}
-  <h5 className="text-sm font-semibold mb-3">Exams</h5>
-
-  <div className="space-y-3">
-
-    {/* Exam Card */}
-    <div className="border rounded-lg p-3">
-      <div className="flex items-center justify-between mb-1">
-        <p className="text-sm font-medium">1st Quarterly</p>
-        <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
-          19 Days More
-        </span>
-      </div>
-
-      <p className="text-xs font-medium">Mathematics</p>
-      <p className="text-xs text-gray-500 flex items-center gap-1">
-        🕒 01:30 - 02:15 PM
-      </p>
-      <p className="text-xs text-blue-600 mt-1">
-        📍 Room No : 15
-      </p>
+            : "text-gray-600 hover:bg-gray-100"
+        }`}
+    >
+      {day}
     </div>
+  ))}
+</div>
 
-    {/* Exam Card */}
-    <div className="border rounded-lg p-3">
-      <div className="flex items-center justify-between mb-1">
-        <p className="text-sm font-medium">2nd Quarterly</p>
-        <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
-          20 Days More
-        </span>
-      </div>
+{/* Exams */}
+<h5 className="text-sm font-semibold mb-3">Exams</h5>
 
-      <p className="text-xs font-medium">Physics</p>
-      <p className="text-xs text-gray-500 flex items-center gap-1">
-        🕒 01:30 - 02:15 PM
-      </p>
-      <p className="text-xs text-blue-600 mt-1">
-        📍 Room No : 15
-      </p>
-    </div>
+<div className="space-y-3">
+  {exams
+    .filter(
+      e =>
+        e.date.getMonth() === currentMonth &&
+        e.date.getFullYear() === currentYear
+    )
+    .map((e, i) => {
+      const daysLeft = Math.ceil(
+        (e.date.getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+      );
 
-  </div>
+      return (
+        <div key={i} className="border rounded-lg p-3">
+          <div className="flex items-center justify-between mb-1">
+            <p className="text-sm font-medium">{e.title}</p>
+            <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
+              {daysLeft} Days More
+            </span>
+          </div>
+
+          <p className="text-xs font-medium">{e.subject}</p>
+          <p className="text-xs text-gray-500">
+            🕒 {e.time}
+          </p>
+          <p className="text-xs text-blue-600">
+            📍 Room No : {e.room}
+          </p>
+        </div>
+      );
+    })}
+</div>
 </div>
 
 
         {/* ================= QUICK ACTIONS (HALF WIDTH) ================= */}
-        <div className="xl:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4">
+<div className="xl:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4">
 
 {[
-  { title: "Pay Fees", icon: "💳", color: "blue" },
-  { title: "Exam Result", icon: "📄", color: "green" },
-  { title: "Calendar", icon: "📅", color: "yellow" },
-  { title: "Attendance", icon: "📊", color: "slate" },
-].map((a, i) => (
-  <div
-    key={i}
-    className={`
-      bg-white rounded-xl
-      border border-gray-200
-      border-b-4
-      ${a.color === "blue" && "border-b-blue-600"}
-      ${a.color === "green" && "border-b-green-600"}
-      ${a.color === "yellow" && "border-b-yellow-500"}
-      ${a.color === "slate" && "border-b-slate-800"}
-      p-4 flex items-center gap-4
-    `}
-  >
-    {/* ICON */}
+    { title: "Pay Fees", gif: s1, color: "blue" },
+    { title: "Exam Result", gif: s2, color: "green" },
+    { title: "Calendar", gif: s3, color: "yellow" },
+    { title: "Attendance", gif: s4, color: "slate" },
+  ].map((a, i) => (
     <div
+      key={i}
       className={`
-        w-11 h-11 rounded-lg flex items-center justify-center
-        text-white text-lg
-        ${a.color === "blue" && "bg-blue-600"}
-        ${a.color === "green" && "bg-green-600"}
-        ${a.color === "yellow" && "bg-yellow-500"}
-        ${a.color === "slate" && "bg-slate-800"}
+        group
+        bg-white rounded-xl
+        border border-gray-200
+        border-b-4
+        ${a.color === "blue" && "border-b-blue-600"}
+        ${a.color === "green" && "border-b-green-600"}
+        ${a.color === "yellow" && "border-b-yellow-500"}
+        ${a.color === "slate" && "border-b-slate-800"}
+        p-4 flex items-center gap-4
+
+        /* 🔥 ANIMATION */
+        animate-card card-interactive
+        cursor-pointer
+        transition-all duration-300
+        hover:-translate-y-1 hover:shadow-md
       `}
     >
-      {a.icon}
-    </div>
+      {/* GIF ICON */}
+      <div
+        className={`
+          w-11 h-11 rounded-lg
+          flex items-center justify-center
+          bg-white
+          transition-transform duration-300
+          group-hover:scale-110
+        `}
+      >
+        <img
+          src={a.gif}
+          alt={a.title}
+          className="w-8 h-8 object-contain"
+        />
+      </div>
 
-    {/* TEXT */}
-    <p className="text-sm font-medium text-gray-800">
-      {a.title}
-    </p>
-  </div>
-))}
+      {/* TEXT */}
+      <p className="text-sm font-medium text-gray-800 transition-colors duration-300">
+        {a.title}
+      </p>
+    </div>
+  ))}
+
 
 </div>
+
 
       </div>
 {/* ================= PERFORMANCE + HOME WORK ================= */}
@@ -516,7 +648,7 @@ export default function StudentDashboard() {
 
     {/* TOOLTIP */}
     <div className="absolute top-8 left-1/2 -translate-x-1/2 bg-white border rounded-lg px-4 py-2 shadow text-xs">
-      <p className="font-medium mb-1">Oct 2024</p>
+      <p className="font-medium mb-1">Oct 2025</p>
       <p className="text-indigo-600">Exam Score <b>80%</b></p>
       <p className="text-sky-500">Attendance <b>40%</b></p>
     </div>
@@ -544,7 +676,8 @@ export default function StudentDashboard() {
   </div>
 </div>
 {/* ================= HOME WORK (RIGHT) ================= */}
-<div className="bg-white rounded-xl border p-5">
+<div className="bg-white rounded-xl border p-5
+                animate-card card-hover">
 
   {/* Header */}
   <div className="flex items-center justify-between mb-4">
@@ -675,7 +808,8 @@ export default function StudentDashboard() {
 
 {/* ================= LEAVE STATUS ================= */}
 
-<div className="bg-white rounded-xl border">
+<div className="bg-white rounded-xl border
+                animate-card card-hover">
 
   {/* Header */}
   <div className="flex justify-between items-center px-5 py-4 border-b">
@@ -689,10 +823,10 @@ export default function StudentDashboard() {
 
   <div className="px-5 py-3 pb-2">
     {[
-      { title: "Emergency Leave", date: "15 Jun 2024", status: "Pending", icon: X, iconBg: "bg-red-100 text-red-500", badge: "bg-blue-500" },
-      { title: "Medical Leave", date: "15 Jun 2024", status: "Approved", icon: Asterisk, iconBg: "bg-blue-100 text-blue-500", badge: "bg-green-500" },
-      { title: "Medical Leave", date: "15 Jun 2024", status: "Declined", icon: Asterisk, iconBg: "bg-blue-100 text-blue-500", badge: "bg-red-500" },
-      { title: "Fever", date: "15 Jun 2024", status: "Approved", icon: X, iconBg: "bg-red-100 text-red-500", badge: "bg-green-500" },
+      { title: "Emergency Leave", date: "15 Jun 2025", status: "Pending", icon: X, iconBg: "bg-red-100 text-red-500", badge: "bg-blue-500" },
+      { title: "Medical Leave", date: "15 Jun 2025", status: "Approved", icon: Asterisk, iconBg: "bg-blue-100 text-blue-500", badge: "bg-green-500" },
+      { title: "Medical Leave", date: "15 Jun 2025", status: "Declined", icon: Asterisk, iconBg: "bg-blue-100 text-blue-500", badge: "bg-red-500" },
+      { title: "Fever", date: "15 Jun 2025", status: "Approved", icon: X, iconBg: "bg-red-100 text-red-500", badge: "bg-green-500" },
     ].map((l, i) => {
       const Icon = l.icon;
       return (
@@ -724,7 +858,8 @@ export default function StudentDashboard() {
 </div>
 
 {/* ================= EXAM RESULT ================= */}
-<div className="bg-white rounded-xl border">
+<div className="bg-white rounded-xl border
+                animate-card card-hover">
 
   {/* Header */}
   <div className="flex items-center justify-between px-5 py-4 border-b">
@@ -799,7 +934,8 @@ export default function StudentDashboard() {
   </div>
 </div>
 {/* ================= FEES REMINDER ================= */}
-<div className="bg-white rounded-xl border">
+<div className="bg-white rounded-xl border
+                animate-card card-hover">
 
   {/* Header */}
   <div className="flex items-center justify-between px-5 py-4 border-b">
@@ -816,21 +952,21 @@ export default function StudentDashboard() {
       {
         title: "Transport Fees",
         amount: "$2500",
-        date: "25 May 2024",
+        date: "25 May 2025",
         icon: "🚌",
         iconBg: " text-blue-600",
       },
       {
         title: "Book Fees",
         amount: "$2500",
-        date: "25 May 2024",
+        date: "25 May 2025",
         icon: "📘",
         iconBg: "text-green-600",
       },
       {
         title: "Exam Fees",
         amount: "$2500",
-        date: "25 May 2024",
+        date: "25 May 2025",
         icon: "📝",
         iconBg: "text-purple-600",
       },
@@ -844,7 +980,7 @@ export default function StudentDashboard() {
       {
         title: "Hostel",
         amount: "$2500",
-        date: "25 May 2024",
+        date: "25 May 2025",
         icon: "🏨",
         iconBg: "text-yellow-600",
       },
@@ -898,7 +1034,8 @@ export default function StudentDashboard() {
 
 {/* ================= CLASS FACULTIES ================= */}
 {/* ================= CLASS FACULTIES ================= */}
-<div className="bg-white rounded-xl border p-5 mt-6">
+<div className="bg-white rounded-xl border p-5 mt-6
+                animate-card card-hover">
 
   {/* Header */}
   <div className="flex items-center justify-between mb-4">
@@ -980,7 +1117,8 @@ export default function StudentDashboard() {
 
   {/* ================= NOTICE BOARD ================= */}
   {/* ================= NOTICE BOARD ================= */}
-<div className="bg-white rounded-xl border p-5">
+  <div className="bg-white rounded-xl border p-5
+                animate-card card-hover">
   <div className="flex items-center justify-between mb-4">
     <h4 className="text-sm font-semibold">Notice Board</h4>
     <span className="text-xs text-blue-600 cursor-pointer">View All</span>
@@ -989,31 +1127,31 @@ export default function StudentDashboard() {
   {[
     {
       title: "New Syllabus Instructions",
-      date: "11 Mar 2024",
+      date: "11 Mar 2025",
       icon: "📘",
       bg: "text-blue-600",
     },
     {
       title: "World Environment Day",
-      date: "21 Apr 2024",
+      date: "21 Apr 2025",
       icon: "🌱",
       bg: "text-green-600",
     },
     {
       title: "Exam Preparation Notification!",
-      date: "13 Mar 2024",
+      date: "13 Mar 2025",
       icon: "🔔",
       bg: " text-red-600",
     },
     {
       title: "Online Classes Preparation",
-      date: "24 May 2024",
+      date: "24 May 2025",
       icon: "💻",
       bg: " text-cyan-600",
     },
     {
       title: "Exam Time Table Release",
-      date: "24 May 2024",
+      date: "24 May 2025",
       icon: "📅",
       bg: "text-yellow-600",
     },
@@ -1040,7 +1178,8 @@ export default function StudentDashboard() {
   ))}
 </div>
 {/* ================= SYLLABUS ================= */}
-<div className="bg-white rounded-xl border p-5">
+<div className="bg-white rounded-xl border p-5
+                animate-card card-hover">
   <h4 className="text-sm font-semibold mb-4">Syllabus</h4>
 
   {/* Info box */}
@@ -1078,7 +1217,8 @@ export default function StudentDashboard() {
 
 
   {/* ================= TODO ================= */}
-  <div className="bg-white rounded-xl border p-5">
+  <div className="bg-white rounded-xl border p-5
+                animate-card card-hover">
     <div className="flex items-center justify-between mb-4">
       <h4 className="text-sm font-semibold">Todo</h4>
       <span className="text-xs text-gray-500">Today</span>
@@ -1107,6 +1247,26 @@ export default function StudentDashboard() {
 </div>
 
   </> 
+  {showAddExam && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-5 w-[300px]">
+            <h4 className="text-sm font-semibold mb-3">Add Exam</h4>
+
+            <input
+              type="date"
+              className="border rounded w-full text-xs px-2 py-2 mb-3"
+              onChange={e => handleAddExam(e.target.value)}
+            />
+
+            <button
+              onClick={() => setShowAddExam(false)}
+              className="w-full border text-xs py-2 rounded"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
   </DashboardLayout>
   );
 }

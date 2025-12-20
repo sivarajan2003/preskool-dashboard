@@ -1,66 +1,94 @@
 import {
-    CalendarCheck,
-    CalendarPlus,
-    BadgePercent,
-    Wallet,
-    ChevronRight,
-  } from "lucide-react";
-  
-  const actions = [
-    {
-      title: "View Attendance",
-      icon: CalendarCheck,
-      bg: "bg-yellow-50",
-      iconBg: "bg-yellow-500",
-    },
-    {
-      title: "New Events",
-      icon: CalendarPlus,
-      bg: "bg-green-50",
-      iconBg: "bg-green-500",
-    },
-    {
-      title: "Membership Plans",
-      icon: BadgePercent,
-      bg: "bg-red-50",
-      iconBg: "bg-red-500",
-    },
-    {
-      title: "Finance & Accounts",
-      icon: Wallet,
-      bg: "bg-cyan-50",
-      iconBg: "bg-cyan-500",
-    },
-  ];
-  
-  export default function QuickActionCards() {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {actions.map((item, index) => {
-          const Icon = item.icon;
-          return (
+  ChevronRight,
+} from "lucide-react";
+
+import q1 from "../assets/gif/q1.gif";
+import q2 from "../assets/gif/q2.gif";
+import q3 from "../assets/gif/q3.gif";
+import q4 from "../assets/gif/q4.gif";
+
+/* ================= QUICK ACTION DATA ================= */
+
+const actions = [
+  {
+    title: "View Attendance",
+    gif: q1,
+    bg: "bg-yellow-50",
+  },
+  {
+    title: "New Events",
+    gif: q2,
+    bg: "bg-green-50",
+  },
+  {
+    title: "Membership Plans",
+    gif: q3,
+    bg: "bg-red-50",
+  },
+  {
+    title: "Finance & Accounts",
+    gif: q4,
+    bg: "bg-cyan-50",
+  },
+];
+
+export default function QuickActionCards() {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {actions.map((item, index) => (
+        <div
+          key={index}
+          className={`
+            group flex items-center justify-between p-4 rounded-xl
+            border border-gray-200 ${item.bg}
+            cursor-pointer
+            transition-all duration-300
+            hover:-translate-y-1 hover:shadow-md
+            active:scale-95
+          `}
+        >
+          {/* LEFT */}
+          <div className="flex items-center gap-3">
+
+            {/* GIF ICON */}
             <div
-              key={index}
-              className={`flex items-center justify-between p-4 rounded-xl 
-                border border-gray-200 ${item.bg}`}
+              className="
+                w-11 h-11 rounded-lg
+                flex items-center justify-center
+                bg-white
+                transition-all duration-300
+                group-hover:scale-110
+              "
             >
-              <div className="flex items-center gap-3">
-                <div
-                  className={`w-10 h-10 rounded-lg flex items-center justify-center ${item.iconBg}`}
-                >
-                  <Icon className="w-5 h-5 text-white" />
-                </div>
-  
-                <p className="text-sm font-medium text-gray-800">
-                  {item.title}
-                </p>
-              </div>
-  
-              <ChevronRight className="w-4 h-4 text-gray-400" />
+              <img
+                src={item.gif}
+                alt={item.title}
+                className="w-7 h-7 object-contain"
+              />
             </div>
-          );
-        })}
-      </div>
-    );
-  }
-  
+
+            {/* TITLE */}
+            <p
+              className="
+                text-sm font-medium text-gray-800
+                transition-colors duration-300
+                group-hover:text-gray-900
+              "
+            >
+              {item.title}
+            </p>
+          </div>
+
+          {/* RIGHT ARROW */}
+          <ChevronRight
+            className="
+              w-4 h-4 text-gray-400
+              transition-all duration-300
+              group-hover:translate-x-1 group-hover:text-gray-600
+            "
+          />
+        </div>
+      ))}
+    </div>
+  );
+}

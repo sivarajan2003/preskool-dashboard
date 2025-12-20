@@ -20,10 +20,10 @@ import FeeSummaryCards from "../components/FeeSummaryCards";
 import QuickActionCards from "../components/QuickActionCards";
 import LastDashboardWidgets from "../components/LastDashboardWidgets";
 
-import D1 from "../assets/D1.png";
-import D2 from "../assets/D2.png";
-import D3 from "../assets/D3.png";
-import D4 from "../assets/D4.png";
+import StudGif from "../assets/gif/stud1.gif";
+import TeacherGif from "../assets/gif/students.gif";
+import StaffGif from "../assets/gif/staff.gif";
+import SubjectGif from "../assets/gif/sub.gif";
 
 import StudentTable from "../components/tables/StudentTable";
 import FeesTable from "../components/tables/FeesTable";
@@ -49,9 +49,12 @@ export default function Dashboard() {
   Add New Student
 </button>
 
-            <button className="px-4 py-2 bg-gray-100 rounded-lg text-sm">
-              Fees Details
-            </button>
+<button
+  onClick={() => navigate("/admin/dashboard/fees")}
+  className="px-4 py-2 bg-gray-100 rounded-lg text-sm"
+>
+  Fees Details
+</button>
           </div>
         </div>
   
@@ -81,57 +84,61 @@ export default function Dashboard() {
             <p className="text-xs text-gray-300">⏱ Updated Recently</p>
           </div>
         </div>
-          {/* STAT CARDS */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            <StatCard
-              icon={D1}
-              title="Total Students"
-              value="3654"
-              percent="+10%"
-              percentBg="bg-red-100"
-              percentText="text-red-600"
-              active="3643"
-              inactive="11"
-              iconBg="bg-pink-50"
-            />
+{/* STAT CARDS */}
+{/* STAT CARDS */}
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+  <StatCard
+    icon={StudGif}
+    title="Total Students"
+    value="3654"
+    percent="+10%"
+    percentBg="bg-red-100"
+    percentText="text-red-600"
+    active="3643"
+    inactive="11"
+    iconBg="bg-pink-50"
+    delay={0.1}
+  />
 
-            <StatCard
-              icon={D2}
-              title="Total Teachers"
-              value="284"
-              percent="+5%"
-              percentBg="bg-blue-100"
-              percentText="text-blue-600"
-              active="254"
-              inactive="30"
-              iconBg="bg-cyan-50"
-            />
+  <StatCard
+    icon={TeacherGif}
+    title="Total Teachers"
+    value="284"
+    percent="+5%"
+    percentBg="bg-blue-100"
+    percentText="text-blue-600"
+    active="254"
+    inactive="30"
+    iconBg="bg-cyan-50"
+    delay={0.2}
+  />
 
-            <StatCard
-              icon={D3}
-              title="Total Staff"
-              value="162"
-              percent="+2%"
-              percentBg="bg-yellow-100"
-              percentText="text-yellow-600"
-              active="161"
-              inactive="02"
-              iconBg="bg-yellow-50"
-            />
+  <StatCard
+    icon={StaffGif}
+    title="Total Staff"
+    value="162"
+    percent="+2%"
+    percentBg="bg-yellow-100"
+    percentText="text-yellow-600"
+    active="161"
+    inactive="02"
+    iconBg="bg-yellow-50"
+    delay={0.3}
+  />
 
-            <StatCard
-              icon={D4}
-              title="Total Subjects"
-              value="82"
-              percent="+15%"
-              percentBg="bg-green-100"
-              percentText="text-green-600"
-              active="81"
-              inactive="01"
-              iconBg="bg-green-50"
-            />
-          </div>
-          
+  <StatCard
+    icon={SubjectGif}
+    title="Total Subjects"
+    value="82"
+    percent="+15%"
+    percentBg="bg-green-100"
+    percentText="text-green-600"
+    active="81"
+    inactive="01"
+    iconBg="bg-green-50"
+    delay={0.4}
+  />
+</div>
 
           {/* FEES + LEAVE */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">

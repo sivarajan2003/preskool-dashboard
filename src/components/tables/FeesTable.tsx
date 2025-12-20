@@ -1,53 +1,99 @@
-import { Eye } from "lucide-react";
+import { useState } from "react";
+
+type Fee = {
+  id: string;
+  student: string;
+  class: string;
+  term: string;
+  amount: number;
+  status: "Paid" | "Pending";
+  date: string;
+};
+
+const feesData: Fee[] = [
+  {
+    id: "F001",
+    student: "Fahed III.C",
+    class: "III-C",
+    term: "Term 1",
+    amount: 25000,
+    status: "Paid",
+    date: "15 Jun 2024",
+  },
+  {
+    id: "F002",
+    student: "Rahul V.A",
+    class: "V-A",
+    term: "Term 1",
+    amount: 23000,
+    status: "Pending",
+    date: "—",
+  },
+  {
+    id: "F003",
+    student: "Anu IX.B",
+    class: "IX-B",
+    term: "Term 2",
+    amount: 28000,
+    status: "Paid",
+    date: "02 Jun 2024",
+  },
+];
 
 export default function FeesTable() {
-  const fees = [
-    { id: 1, name: "Fahed", term: "Term 1", amount: "₹15,000", status: "Paid" },
-    { id: 2, name: "Ayaan", term: "Term 2", amount: "₹12,000", status: "Pending" },
-    { id: 3, name: "Sara", term: "Term 1", amount: "₹10,000", status: "Paid" },
-  ];
+  const [fees] = useState<Fee[]>(feesData);
 
   return (
-    <div className="bg-white rounded-xl border p-6">
+    <div className="bg-white rounded-xl border overflow-hidden">
       {/* HEADER */}
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold">Fees Details</h3>
+      <div className="p-4 border-b">
+        <h3 className="text-sm font-semibold">Fees Details</h3>
+        <p className="text-xs text-gray-500">
+          Student fee payment information
+        </p>
       </div>
 
       {/* TABLE */}
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead>
-            <tr className="text-left text-gray-500 border-b">
-              <th className="py-3">Student</th>
-              <th>Term</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th className="text-right">View</th>
+          <thead className="bg-gray-50 text-gray-600">
+            <tr>
+              <th className="px-4 py-3 text-left">Student</th>
+              <th className="px-4 py-3 text-left">Class</th>
+              <th className="px-4 py-3 text-left">Term</th>
+              <th className="px-4 py-3 text-left">Amount</th>
+              <th className="px-4 py-3 text-left">Status</th>
+              <th className="px-4 py-3 text-left">Paid Date</th>
             </tr>
           </thead>
 
           <tbody>
-            {fees.map((f) => (
-              <tr key={f.id} className="border-b last:border-0">
-                <td className="py-3 font-medium">{f.name}</td>
-                <td>{f.term}</td>
-                <td>{f.amount}</td>
-                <td>
+            {fees.map((fee) => (
+              <tr
+                key={fee.id}
+                className="border-t hover:bg-gray-50 transition"
+              >
+                <td className="px-4 py-3 font-medium">
+                  {fee.student}
+                </td>
+                <td className="px-4 py-3">{fee.class}</td>
+                <td className="px-4 py-3">{fee.term}</td>
+                <td className="px-4 py-3">₹{fee.amount}</td>
+                <td className="px-4 py-3">
                   <span
-                    className={`px-2 py-1 rounded text-xs ${
-                      f.status === "Paid"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-yellow-100 text-yellow-700"
-                    }`}
+                    className={`px-2 py-1 rounded-full text-xs font-medium
+                      ${
+                        fee.status === "Paid"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-yellow-100 text-yellow-700"
+                      }
+                    `}
                   >
-                    {f.status}
+                    {fee.status}
                   </span>
                 </td>
-                <td className="text-right">
-                  <button className="p-1 text-blue-600 hover:bg-blue-50 rounded">
-                    <Eye size={16} />
-                  </button>
+                <td className="px-4 py-3 text-gray-500">
+                  {fee.date}
                 </td>
               </tr>
             ))}

@@ -30,11 +30,18 @@ export default function UpcomingEvents() {
   ];
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-gray-200">
+    <div className="bg-white rounded-xl p-6 border border-gray-200 transition hover:shadow-md">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Upcoming Events</h3>
-        <span className="text-sm text-blue-600 font-medium cursor-pointer">
+        <h3 className="text-lg font-semibold text-gray-900">
+          Upcoming Events
+        </h3>
+        <span
+          className="
+            text-sm text-blue-600 font-medium cursor-pointer
+            transition hover:underline hover:scale-105 active:scale-95
+          "
+        >
           See All
         </span>
       </div>
@@ -44,17 +51,27 @@ export default function UpcomingEvents() {
         {events.map((event, index) => (
           <div
             key={index}
-            className={`relative bg-white rounded-lg border border-gray-200 shadow-sm p-4 pl-5`}
+            className="
+              group relative bg-white rounded-lg border border-gray-200
+              shadow-sm p-4 pl-5
+              transition-all duration-300
+              hover:-translate-y-1 hover:shadow-md hover:bg-gray-50
+              cursor-pointer
+            "
           >
             {/* LEFT COLOR LINE */}
             <span
-              className={`absolute left-0 top-0 h-full w-1 rounded-l-lg ${
-                event.color === "blue"
-                  ? "bg-blue-500"
-                  : event.color === "indigo"
-                  ? "bg-indigo-500"
-                  : "bg-red-500"
-              }`}
+              className={`
+                absolute left-0 top-0 h-full w-1 rounded-l-lg
+                transition-all duration-300
+                ${
+                  event.color === "blue"
+                    ? "bg-blue-500 group-hover:shadow-[0_0_8px_rgba(59,130,246,0.7)]"
+                    : event.color === "indigo"
+                    ? "bg-indigo-500 group-hover:shadow-[0_0_8px_rgba(99,102,241,0.7)]"
+                    : "bg-red-500 group-hover:shadow-[0_0_8px_rgba(239,68,68,0.7)]"
+                }
+              `}
             />
 
             {/* TOP ROW */}
@@ -62,13 +79,18 @@ export default function UpcomingEvents() {
               <div className="flex items-center gap-3">
                 {/* ICON BOX */}
                 <div
-                  className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                    event.color === "blue"
-                      ? "bg-blue-50 text-blue-600"
-                      : event.color === "indigo"
-                      ? "bg-indigo-50 text-indigo-600"
-                      : "bg-red-50 text-red-600"
-                  }`}
+                  className={`
+                    w-10 h-10 rounded-lg flex items-center justify-center
+                    transition-all duration-300
+                    group-hover:scale-110 group-hover:rotate-6
+                    ${
+                      event.color === "blue"
+                        ? "bg-blue-50 text-blue-600"
+                        : event.color === "indigo"
+                        ? "bg-indigo-50 text-indigo-600"
+                        : "bg-red-50 text-red-600"
+                    }
+                  `}
                 >
                   <Users className="w-5 h-5" />
                 </div>
@@ -93,18 +115,18 @@ export default function UpcomingEvents() {
               </div>
 
               {/* AVATARS */}
-              <div className="flex -space-x-2">
+              <div className="flex -space-x-2 group-hover:space-x-1 transition-all">
                 <img
                   src="https://i.pravatar.cc/30?img=1"
-                  className="w-7 h-7 rounded-full border-2 border-white"
+                  className="w-7 h-7 rounded-full border-2 border-white transition group-hover:scale-105"
                 />
                 <img
                   src="https://i.pravatar.cc/30?img=2"
-                  className="w-7 h-7 rounded-full border-2 border-white"
+                  className="w-7 h-7 rounded-full border-2 border-white transition group-hover:scale-105"
                 />
                 <img
                   src="https://i.pravatar.cc/30?img=3"
-                  className="w-7 h-7 rounded-full border-2 border-white"
+                  className="w-7 h-7 rounded-full border-2 border-white transition group-hover:scale-105"
                 />
               </div>
             </div>

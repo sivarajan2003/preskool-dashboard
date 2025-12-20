@@ -5,12 +5,12 @@ import topImg from "../assets/top.png";
 export default function TopPerformers() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      
+
       {/* ================= BEST PERFORMER ================= */}
-      <div className="rounded-xl overflow-hidden bg-green-500 text-white relative">
-        
+      <div className="rounded-xl overflow-hidden bg-green-500 text-white flex flex-col h-[520px]">
+
         {/* TOP CONTENT */}
-        <div className="p-5 relative z-10">
+        <div className="p-5">
           <div className="flex items-center justify-between mb-3">
             <h4 className="font-semibold">Best Performer</h4>
             <div className="flex gap-2">
@@ -27,25 +27,21 @@ export default function TopPerformers() {
           <p className="text-sm opacity-90">Physics Teacher</p>
         </div>
 
-        {/* IMAGE (BOTTOM) */}
-        <div className="h-[220px]">
-         {/* IMAGE (BOTTOM) */}
-<div className="h-[220px]">
-  <img
-    src={bestImg}
-    alt="Best Performer"
-    className="w-full h-full object-cover"
-  />
-</div>
-
+        {/* IMAGE – FILLS REMAINING SPACE */}
+        <div className="flex-1 overflow-hidden">
+          <img
+            src={bestImg}
+            alt="Best Performer"
+            className="w-full h-full object-cover scale-110 origin-top"
+          />
         </div>
       </div>
 
       {/* ================= STAR STUDENTS ================= */}
-      <div className="rounded-xl overflow-hidden bg-blue-600 text-white relative">
-        
+      <div className="rounded-xl overflow-hidden bg-blue-600 text-white flex flex-col h-[520px]">
+
         {/* TOP CONTENT */}
-        <div className="p-5 relative z-10">
+        <div className="p-5">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <Star size={18} />
@@ -66,16 +62,14 @@ export default function TopPerformers() {
           <p className="text-sm opacity-90">XII, A</p>
         </div>
 
-        {/* IMAGE (BOTTOM) */}
-        {/* IMAGE (BOTTOM) */}
-<div className="h-[220px]">
-  <img
-    src={topImg}
-    alt="Star Student"
-    className="w-full h-full object-cover"
-  />
-</div>
-
+        {/* IMAGE – FILLS REMAINING SPACE */}
+        <div className="flex-1 overflow-hidden">
+          <img
+            src={topImg}
+            alt="Star Student"
+            className="w-full h-full object-cover scale-110 origin-top"
+          />
+        </div>
       </div>
 
     </div>

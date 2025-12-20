@@ -10,11 +10,25 @@ import JA from "../../assets/ja.png";
 import JO from "../../assets/jo.png";
 import GoodRightImg from "../../assets/good1.png";
 import GoodImg from "../../assets/good.png";
+import { useState } from "react";
 
 import { CalendarDays, FolderOpen, ChevronDown } from "lucide-react";
 
 
+
 export default function TeacherDashboard() {
+  const [openSection, setOpenSection] = useState(false);
+const [selectedClass, setSelectedClass] = useState("All");
+
+const classes = ["All","I","II","III","IV","V","VI","VII","VIII","IX","X"];
+
+  const [open, setOpen] = useState(false);
+const [tab, setTab] = useState("Present");
+const [openSyllabus, setOpenSyllabus] = useState(false);
+const [openReschedule, setOpenReschedule] = useState(false);
+const [selectedTopic, setSelectedTopic] = useState(null);
+
+  const [openBestPerformers, setOpenBestPerformers] = useState(false);
   const studentImages: Record<string, string> = {
     Janet: J1,
     Joann: J2,
@@ -22,7 +36,116 @@ export default function TeacherDashboard() {
     Gifford: JA,
     Lisa: JO,
   };
-  
+  const cardAnim = (i = 0) =>
+  `animate-card card-hover [animation-delay:${i * 80}ms]`;
+
+  const [events, setEvents] = useState([
+    {
+      title: "Vacation Meeting",
+      date: "01 Dec 2025",
+      time: "09:10 AM - 10:50 PM",
+      bar: "bg-red-500",
+      iconBg: "bg-red-100",
+      teachers: [1, 2, 3],
+    },
+    {
+      title: "Staff Meet",
+      date: "15 Dec 2025",
+      time: "09:10 AM - 10:50 PM",
+      bar: "bg-cyan-500",
+      iconBg: "bg-cyan-100",
+      teachers: [14, 25],
+    },
+    {
+      title: "Principal Meet",
+      date: "12 Dec 2025",
+      time: "09:10 AM - 10:50 PM",
+      bar: "bg-cyan-500",
+      iconBg: "bg-cyan-100",
+      teachers: [10,12],
+    },
+    {
+      title: "Parents, Teacher Meet",
+      date: "15 Dec 2025",
+      time: "09:10 AM - 10:50 PM",
+      bar: "bg-cyan-500",
+      iconBg: "bg-cyan-100",
+      teachers: [4, 5],
+    },
+  ]);
+  const [openAddEvent, setOpenAddEvent] = useState(false);
+
+  const [newEvent, setNewEvent] = useState({
+    title: "",
+    date: "",
+    time: "",
+  });
+    
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+const year = currentDate.getFullYear();
+const month = currentDate.getMonth();
+
+const monthNames = [
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December"
+];
+
+// first day of month (Mon based)
+const firstDay = new Date(year, month, 1).getDay();
+const startOffset = firstDay === 0 ? 6 : firstDay - 1;
+
+// total days
+const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+// calendar cells
+const days = [
+  ...Array(startOffset).fill(null),
+  ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+];
+
+// today
+const today = new Date();
+const isToday = (day: number) =>
+  day === today.getDate() &&
+  month === today.getMonth() &&
+  year === today.getFullYear();
+
+// month navigation
+const prevMonth = () =>
+  setCurrentDate(new Date(year, month - 1, 1));
+
+const nextMonth = () =>
+  setCurrentDate(new Date(year, month + 1, 1));
+
+  const bestStudents = [
+    {
+      class: "Class IV, C",
+      students: [
+        { name: "Janet", score: "92%", img: "https://i.pravatar.cc/40?img=1" },
+        { name: "Joann", score: "90%", img: "https://i.pravatar.cc/40?img=2" },
+      ],
+    },
+    {
+      class: "Class III, B",
+      students: [
+        { name: "Kathleen", score: "88%", img: "https://i.pravatar.cc/40?img=3" },
+        { name: "Gifford", score: "85%", img: "https://i.pravatar.cc/40?img=4" },
+      ],
+    },
+    {
+      class: "Class V, A",
+      students: [
+        { name: "Lisa", score: "91%", img: "https://i.pravatar.cc/40?img=5" },
+      ],
+    },
+  ];
+  const data = {
+    Present: ["Janet", "Joann"],
+    Absent: ["Gifford", "Lisa"],
+    Late: ["Thomas"],
+    "Half Day": [],
+  };
   
   return (
     <DashboardLayout>
@@ -71,7 +194,8 @@ export default function TeacherDashboard() {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-x-6 gap-y-6 ">
         {/* ========== PROFILE (LEFT) ========== */}
         <div>
-          <div className="relative overflow-hidden rounded-xl p-5 text-white bg-gradient-to-r from-[#0F1025] to-[#1A1C3A]">
+        <div className={`relative overflow-hidden rounded-xl p-5 text-white 
+bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,200,255,0.15)_0%,transparent_40%)]" />
             <div className="relative flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -99,7 +223,7 @@ export default function TeacherDashboard() {
 
         {/* ========== SYLLABUS (CENTER) ========== */}
         <div>
-          <div className="bg-white rounded-xl border p-6 flex items-center gap-6">
+        <div className={`bg-white rounded-xl border p-6 flex items-center gap-6 ${cardAnim(1)}`}>
             <div className="relative w-20 h-20">
               <svg className="w-full h-full rotate-[-90deg]">
                 <circle cx="40" cy="40" r="34" stroke="#E5E7EB" strokeWidth="6" fill="none" />
@@ -134,7 +258,7 @@ export default function TeacherDashboard() {
           </div>
         </div>
         <div className="xl:col-span-2">
-  <div className="bg-white rounded-xl border p-4">
+        <div className={`bg-white rounded-xl border p-4 ${cardAnim(2)}`}>
     <div className="flex justify-between mb-3">
       <h4 className="text-sm font-semibold">Today's Class</h4>
       <span className="text-xs text-gray-500">16 May 2025</span>
@@ -162,133 +286,203 @@ export default function TeacherDashboard() {
     </div>
   </div>
 </div>
+         {/* ================= SCHEDULES CARD ================= */}
+         <div className="xl:row-span-3 sticky top-6 self-start">
+        <div className="bg-white rounded-xl border px-5 py-5 min-h-[30px] flex flex-col">
 
-      {/* ================= SCHEDULES + UPCOMING EVENTS ================= */}
-      <div className="xl:row-span-3 sticky top-6 self-start h-fit">
-  <div className="bg-white rounded-xl border px-4 py-4">
-
-    {/* Header */}
-    <div className="flex items-center justify-between mb-3">
-      <h4 className="text-sm font-semibold">Schedules</h4>
-      <span className="text-xs text-blue-600 cursor-pointer">Add New</span>
-    </div>
-
-    {/* Month + Arrows */}
-    <div className="flex items-center justify-between mb-2">
-      <p className="text-sm font-medium">July 2024</p>
-      <div className="flex gap-1">
-        <button className="w-6 h-6 flex items-center justify-center rounded-full border text-xs">
-          ‹
-        </button>
-        <button className="w-6 h-6 flex items-center justify-center rounded-full bg-black text-white text-xs">
-          ›
-        </button>
-      </div>
-    </div>
-
-    {/* Week days */}
-    <div className="grid grid-cols-7 text-center text-[11px] text-gray-400 mb-1">
-      {["S", "M", "T", "W", "T", "F", "S"].map(d => (
-        <span key={d}>{d}</span>
-      ))}
-    </div>
-
-    {/* Calendar */}
-    <div className="grid grid-cols-7 gap-1 text-xs text-center mb-4">
-      {Array.from({ length: 30 }, (_, i) => (
-        <div
-          key={i}
-          className={`py-1.5 rounded cursor-pointer ${
-            [6, 7, 12, 27].includes(i + 1)
-              ? "bg-blue-600 text-white"
-              : "text-gray-500 hover:bg-gray-100"
-          }`}
-        >
-          {i + 1}
-        </div>
-      ))}
-    </div>
-
-    {/* Upcoming Events */}
-    <h4 className="text-sm font-semibold mb-3">Upcoming Events</h4>
-
-    {[
-      {
-        title: "Vacation Meeting",
-        date: "07 July 2024",
-        bar: "bg-red-500",
-        iconBg: "bg-red-100",
-      },
-      {
-        title: "Parents, Teacher Meet",
-        date: "15 July 2024",
-        bar: "bg-cyan-500",
-        iconBg: "bg-cyan-100",
-      },
-      {
-        title: "Staff Meeting",
-        date: "10 July 2024",
-        bar: "bg-blue-500",
-        iconBg: "bg-blue-100",
-      },
-    ].map((e, i) => (
-      <div key={i} className="flex gap-3 mb-3">
-        
-        {/* Vertical color bar */}
-        <div className={`w-1 rounded-full ${e.bar}`} />
-
-        {/* Event content */}
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
-            <div
-              className={`w-9 h-9 rounded-lg flex items-center justify-center ${e.iconBg}`}
+          {/* Header */}
+          <div className="flex items-center justify-between mb-4">
+            <h4 className="text-sm font-semibold">Schedules</h4>
+            <button
+              onClick={() => setOpenAddEvent(true)}
+              className="text-xs text-blue-600 font-medium"
             >
-              📅
-            </div>
-
-            <div className="flex-1">
-              <p className="text-sm font-medium leading-tight">
-                {e.title}
-              </p>
-              <p className="text-xs text-gray-500">
-                {e.date}
-              </p>
-            </div>
+              Add New
+            </button>
           </div>
 
-          <div className="flex items-center justify-between pl-11 mt-1">
-            <p className="text-xs text-gray-500">
-              ⏰ 09:10 AM - 10:50 PM
+          {/* Month + Arrows */}
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-sm font-medium">
+              {monthNames[month]} {year}
             </p>
-
-            {/* Avatars */}
-            <div className="flex -space-x-2">
-              <img src="https://i.pravatar.cc/24?img=1" className="w-6 h-6 rounded-full border border-white" />
-              <img src="https://i.pravatar.cc/24?img=2" className="w-6 h-6 rounded-full border border-white" />
-              <img src="https://i.pravatar.cc/24?img=3" className="w-6 h-6 rounded-full border border-white" />
+            <div className="flex gap-1">
+              <button
+                onClick={prevMonth}
+                className="w-7 h-7 rounded-full border flex items-center justify-center text-xs"
+              >
+                ‹
+              </button>
+              <button
+                onClick={nextMonth}
+                className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center text-xs"
+              >
+                ›
+              </button>
             </div>
           </div>
+
+          {/* Week Days */}
+          <div className="grid grid-cols-7 text-center text-[11px] text-gray-400 mb-2">
+            {["M","T","W","T","F","S","S"].map(d => (
+              <span key={d}>{d}</span>
+            ))}
+          </div>
+
+          {/* Calendar */}
+          <div className="grid grid-cols-7 gap-1 text-xs text-center mb-6">
+            {days.map((day, i) => (
+              <div
+                key={i}
+                className={`py-2 rounded-lg transition
+                  ${day ? "cursor-pointer hover:bg-gray-100" : ""}
+                  ${isToday(day)
+                    ? "bg-blue-600 text-white font-semibold"
+                    : "text-gray-500"}
+                `}
+              >
+                {day}
+              </div>
+            ))}
+          </div>
+
+          {/* Upcoming Events */}
+          <h4 className="text-sm font-semibold mb-4">
+            Upcoming Events
+          </h4>
+
+          <div className="space-y-4 overflow-y-auto pr-1">
+            {events.map((e, i) => (
+              <div key={i} className="flex gap-3">
+
+                <div className={`w-1 rounded-full ${e.bar}`} />
+
+                <div className="flex-1">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${e.iconBg}`}>
+                      📅
+                    </div>
+
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{e.title}</p>
+                      <p className="text-xs text-gray-500">{e.date}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pl-12 mt-1">
+                    <p className="text-xs text-gray-500">
+                      ⏰ {e.time}
+                    </p>
+
+                    <div className="flex -space-x-2">
+                      {e.teachers.map((t, idx) => (
+                        <img
+                          key={idx}
+                          src={`https://i.pravatar.cc/24?img=${t}`}
+                          className="w-6 h-6 rounded-full border border-white"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
         </div>
       </div>
-    ))}
 
-  </div>
-</div>
+      {/* ================= ADD EVENT MODAL ================= */}
+      {openAddEvent && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl w-[360px] p-6">
+
+            <h3 className="text-base font-semibold mb-4">
+              Add New Event
+            </h3>
+
+            <div className="space-y-3">
+              <input
+                placeholder="Event Title"
+                className="w-full border rounded-lg px-3 py-2 text-sm"
+                value={newEvent.title}
+                onChange={(e) =>
+                  setNewEvent({ ...newEvent, title: e.target.value })
+                }
+              />
+
+              <input
+                type="date"
+                className="w-full border rounded-lg px-3 py-2 text-sm"
+                value={newEvent.date}
+                onChange={(e) =>
+                  setNewEvent({ ...newEvent, date: e.target.value })
+                }
+              />
+
+              <input
+                placeholder="09:00 AM - 10:30 AM"
+                className="w-full border rounded-lg px-3 py-2 text-sm"
+                value={newEvent.time}
+                onChange={(e) =>
+                  setNewEvent({ ...newEvent, time: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                onClick={() => setOpenAddEvent(false)}
+                className="px-4 py-2 text-sm border rounded-lg"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={() => {
+                  setEvents([
+                    {
+                      title: newEvent.title,
+                      date: newEvent.date,
+                      time: newEvent.time,
+                      bar: "bg-blue-500",
+                      iconBg: "bg-blue-100",
+                      teachers: [9, 10],
+                    },
+                    ...events,
+                  ]);
+                  setOpenAddEvent(false);
+                  setNewEvent({ title: "", date: "", time: "" });
+                }}
+                className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg"
+              >
+                Save
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+
+
 
 {/* ================= ATTENDANCE + PERFORMANCE SECTION ================= */}
 <div className="xl:col-span-2 xl:row-start-3 grid grid-cols-1 md:grid-cols-2 gap-5">
-{/* ================= ATTENDANCE (IMAGE-2 – CORRECT PADDING) ================= */}
-<div className="bg-white rounded-xl border p-4">
+<div className={`bg-white rounded-xl border p-4 ${cardAnim(4)}`}>
 
   {/* Header */}
   <div className="flex items-center justify-between mb-5">
     <h4 className="text-sm font-semibold">Attendance</h4>
 
     <div className="flex items-center gap-1 text-xs text-gray-500">
-      <span>This Month</span>
-      <svg width="12" height="12" fill="none" viewBox="0 0 24 24">
-        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2"/>
-      </svg>
+      <button
+  onClick={() => setOpen(true)}
+  className="flex items-center gap-1 text-xs text-gray-500"
+>
+  This Month ▼
+</button>
+
     </div>
   </div>
 
@@ -409,17 +603,19 @@ export default function TeacherDashboard() {
   </div>
 
 </div>
-
-  {/* ========== CENTER COLUMN (STACKED) ========== */}
   <div className="space-y-6">
 {/* ================= BEST PERFORMERS (CLASS LEFT, BAR RIGHT) ================= */}
-<div className="bg-white rounded-xl border p-5">
+<div className={`bg-white rounded-xl border p-5 ${cardAnim(5)}`}>
   {/* Header */}
   <div className="flex items-center justify-between mb-4">
     <h4 className="text-sm font-semibold">Best Performers</h4>
-    <span className="text-xs text-blue-600 cursor-pointer">
-      View All
-    </span>
+    <span
+  onClick={() => setOpenBestPerformers(true)}
+  className="text-xs text-blue-600 cursor-pointer hover:underline"
+>
+  View All
+</span>
+
   </div>
 
   {[
@@ -468,17 +664,19 @@ export default function TeacherDashboard() {
 
     {/* STUDENT PROGRESS */}
     
-<div className="bg-white rounded-xl border p-5">
+    <div className={`bg-white rounded-xl border p-5 ${cardAnim(6)}`}>
   {/* Header */}
   <div className="flex items-center justify-between mb-4">
     <h4 className="text-sm font-semibold">Student Progress</h4>
 
-    <div className="flex items-center gap-1 text-xs text-gray-500">
-      <span>This Month</span>
-      <svg width="12" height="12" fill="none" viewBox="0 0 24 24">
-        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" />
-      </svg>
-    </div>
+    <button
+  onClick={() => setOpenBestPerformers(true)}
+  className="flex items-center gap-1 text-xs text-gray-500 hover:text-blue-600"
+>
+  This Month
+  <ChevronDown className="w-3 h-3" />
+</button>
+
   </div>
 
   {/* Student rows */}
@@ -541,25 +739,24 @@ export default function TeacherDashboard() {
     </div>
   ))}
 </div>
-
-
-
   </div>
 </div>
-
-
-
-      </div>
+    </div>
       {/* ================= SYLLABUS / LESSON PLAN ================= */}
       <div className="xl:col-span-3 mt-8">
-  <div className="bg-white rounded-xl border p-5">
+      <div className={`bg-white rounded-xl border p-5 ${cardAnim(7)}`}>
+
 
     {/* Header */}
     <div className="flex items-center justify-between mb-5">
       <h4 className="text-sm font-semibold">Syllabus / Lesson Plan</h4>
-      <span className="text-xs text-blue-600 cursor-pointer">
-        View All
-      </span>
+      <span
+  onClick={() => setOpenSyllabus(true)}
+  className="text-xs text-blue-600 cursor-pointer hover:underline"
+>
+  View All
+</span>
+
     </div>
 
     {/* Cards */}
@@ -592,9 +789,9 @@ export default function TeacherDashboard() {
         },
       ].map((item, i) => (
         <div
-          key={i}
-          className="border rounded-xl p-4 bg-white flex flex-col justify-between"
-        >
+        key={i}
+        className={`border rounded-xl p-4 bg-white flex flex-col justify-between ${cardAnim(8 + i)}`}
+      >      
           {/* Top */}
           <div>
             {/* Class pill */}
@@ -618,13 +815,9 @@ export default function TeacherDashboard() {
 
           {/* Actions */}
           <div className="flex items-center justify-between pt-2 border-t text-xs text-gray-500">
-            <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600">
-              ✎ Reschedule
-            </span>
-            <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600">
-              ⤴ Share
-            </span>
-          </div>
+
+</div>
+
         </div>
       ))}
 
@@ -633,26 +826,50 @@ export default function TeacherDashboard() {
 </div>
 {/* ================= STUDENT MARKS + LEAVE STATUS ================= */}
 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-8">
-
-  {/* ================= STUDENT MARKS (LEFT – TABLE) ================= */}
-  <div className="xl:col-span-2 bg-white rounded-xl border p-5">
+<div className={`xl:col-span-2 bg-white rounded-xl border p-5 ${cardAnim(12)}`}>
 
     {/* Header */}
     <div className="flex items-center justify-between mb-4">
       <h4 className="text-sm font-semibold">Student Marks</h4>
 
       <div className="flex items-center gap-4 text-xs text-gray-500">
-      <span className="flex items-center gap-1 text-xs text-gray-500 cursor-pointer">
-  <CalendarDays className="w-4 h-4" />
+      <button
+  onClick={() => setOpenBestPerformers(true)}
+  className="flex items-center gap-1 text-xs text-gray-500 hover:text-blue-600"
+>
   This Month
   <ChevronDown className="w-3 h-3" />
-</span>
+</button>
 
-<span className="flex items-center gap-1 text-xs text-gray-500 cursor-pointer">
-  <FolderOpen className="w-4 h-4" />
-  All Sections
-  <ChevronDown className="w-3 h-3" />
-</span>
+
+<div className="relative">
+  <button
+    onClick={() => setOpenSection(!openSection)}
+    className="flex items-center gap-1 text-xs text-gray-500 hover:text-blue-600"
+  >
+    <FolderOpen className="w-4 h-4" />
+    {selectedClass === "All" ? "All Sections" : `Class ${selectedClass}`}
+    <ChevronDown className="w-3 h-3" />
+  </button>
+
+  {openSection && (
+    <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow w-28 z-20">
+      {classes.map(c => (
+        <div
+          key={c}
+          onClick={() => {
+            setSelectedClass(c);
+            setOpenSection(false);
+          }}
+          className="px-3 py-1.5 text-xs hover:bg-gray-100 cursor-pointer"
+        >
+          {c === "All" ? "All Classes" : `Class ${c}`}
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
 
       </div>
     </div>
@@ -702,12 +919,16 @@ export default function TeacherDashboard() {
               <td>{s.cgpa}</td>
 
               <td>
-                <span
-                  className={`px-2 py-0.5 rounded text-white text-[11px] font-medium
-                  ${s.status === "Pass" ? "bg-green-500" : "bg-red-500"}`}
-                >
-                  {s.status}
-                </span>
+              <span
+  className={`inline-flex items-center justify-center
+    min-w-[48px] px-2 py-0.5
+    rounded text-white text-[11px] font-medium
+    ${s.status === "Pass" ? "bg-green-500" : "bg-red-500"}
+  `}
+>
+  {s.status}
+</span>
+
               </td>
 
             </tr>
@@ -734,7 +955,7 @@ export default function TeacherDashboard() {
   </div>
 
   {/* ================= LEAVE STATUS (RIGHT – CARDS) ================= */}
-  <div className="bg-white rounded-xl border p-5">
+  <div className={`bg-white rounded-xl border p-5 ${cardAnim(13)}`}>
 
     {/* Header */}
     <div className="flex items-center justify-between mb-4">
@@ -810,6 +1031,130 @@ export default function TeacherDashboard() {
   </div>
 
 </div>
+
+{openBestPerformers && (
+  <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+    
+    <div className="bg-white w-[460px] rounded-xl p-5 animate-card">
+
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="text-sm font-semibold">
+          Best Performers – All Classes
+        </h4>
+        <button
+          onClick={() => setOpenBestPerformers(false)}
+          className="text-gray-400 hover:text-black"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="space-y-5 max-h-[400px] overflow-y-auto pr-1">
+
+        {bestStudents.map((cls, i) => (
+          <div key={i}>
+            
+            {/* Class Name */}
+            <p className="text-xs font-semibold text-gray-500 mb-2">
+              {cls.class}
+            </p>
+
+            {/* Students */}
+            {cls.students.map((s, j) => (
+              <div
+                key={j}
+                className="flex items-center justify-between border rounded-lg p-3 mb-2 hover:bg-gray-50"
+              >
+                <div className="flex items-center gap-3">
+                  <img
+                    src={s.img}
+                    className="w-9 h-9 rounded-full object-cover"
+                  />
+                  <p className="text-sm font-medium">{s.name}</p>
+                </div>
+
+                <span className="text-xs font-semibold text-white bg-blue-600 px-2 py-0.5 rounded">
+                  {s.score}
+                </span>
+              </div>
+            ))}
+
+          </div>
+        ))}
+
+      </div>
+    </div>
+  </div>
+)}
+{openSyllabus && (
+  <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+
+    <div className="bg-white w-[520px] rounded-xl p-5 animate-card">
+
+      {/* Header */}
+      <div className="flex justify-between mb-4">
+        <h4 className="text-sm font-semibold">
+          Syllabus / Lesson Plan
+        </h4>
+        <button onClick={() => setOpenSyllabus(false)}>✕</button>
+      </div>
+
+      {/* List */}
+      <div className="space-y-3 max-h-[400px] overflow-y-auto">
+        {[
+          { cls: "Class V, B", topic: "Physics – Today’s Tech" },
+          { cls: "Class V, A", topic: "Biometric Functionality" },
+          { cls: "Class IV, C", topic: "Literary Text Analysis" },
+          { cls: "Class IV, C", topic: "Grammar & Vocabulary" },
+        ].map((t, i) => (
+          <div key={i} className="border rounded-lg p-3">
+            <p className="text-xs text-gray-500">{t.cls}</p>
+            <p className="text-sm font-medium">{t.topic}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
+{openReschedule && (
+  <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+
+    <div className="bg-white w-[360px] rounded-xl p-5 animate-card">
+
+      <h4 className="text-sm font-semibold mb-4">
+        Reschedule Lesson
+      </h4>
+
+      <input
+        type="date"
+        className="w-full border rounded-lg px-3 py-2 text-sm mb-3"
+      />
+
+      <input
+        placeholder="09:00 AM - 10:00 AM"
+        className="w-full border rounded-lg px-3 py-2 text-sm mb-4"
+      />
+
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setOpenReschedule(false)}
+          className="text-sm px-3 py-1 border rounded"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={() => setOpenReschedule(false)}
+          className="text-sm px-3 py-1 bg-blue-600 text-white rounded"
+        >
+          Save
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
 
     </DashboardLayout>
   );

@@ -14,10 +14,13 @@ import H4 from "../../assets/h4.png";
 import J1 from "../../assets/j1.png";
 import J2 from "../../assets/j2.png";
 import J3 from "../../assets/j3.png";
+import { useState } from "react";
 
 
 
 export default function ParentDashboard() {
+  const [statsRange, setStatsRange] = useState<"month" | "year">("month");
+
   const homeWorks = [
     {
       sub: "Physics",
@@ -66,6 +69,55 @@ export default function ParentDashboard() {
     Kathleen: J3,
     Gifford: JaImg,
     Lisa: JoImg,
+  };
+  const events = [
+    {
+      title: "Parents, Teacher Meet",
+      date: "15 July 2024",
+      type: "Full Day",
+      color: "bg-red-100 text-red-600",
+      img: Event2,
+    },
+    {
+      title: "Farewell",
+      date: "11 Mar 2024",
+      type: "Half Day",
+      color: "bg-blue-100 text-blue-600",
+      img: Event3,
+    },
+    {
+      title: "Annual Day",
+      date: "15 July 2024",
+      type: "Half Day",
+      color: "bg-blue-100 text-blue-600",
+      img: Event4,
+    },
+    {
+      title: "Holi Celebration",
+      date: "15 July 2024",
+      type: "Full Day",
+      color: "bg-red-100 text-red-600",
+      img: Event5,
+    },
+    {
+      title: "Exam Result",
+      date: "15 July 2024",
+      type: "Half Day",
+      color: "bg-blue-100 text-blue-600",
+      img: Event6,
+    },
+  ];
+  
+  const [showAllEvents, setShowAllEvents] = useState(false);
+  const statisticsData = {
+    month: {
+      exam: [65, 68, 70, 72, 75, 73, 78, 80, 79, 81, 83, 85],
+      attendance: [70, 72, 71, 69, 68, 75, 85, 40, 88, 90, 92, 95],
+    },
+    year: {
+      exam: [60, 62, 65, 67, 70, 72, 74, 76, 78, 80, 82, 85],
+      attendance: [65, 67, 70, 72, 75, 78, 80, 82, 85, 88, 90, 92],
+    },
   };
   
   return (
@@ -237,9 +289,18 @@ export default function ParentDashboard() {
   {/* Header */}
   <div className="flex items-center justify-between mb-4">
     <h4 className="text-sm font-semibold">Events List</h4>
-    <span className="text-xs text-blue-600 cursor-pointer">
-      View All
-    </span>
+    <button
+  onClick={() =>
+    setStatsRange(prev => (prev === "month" ? "year" : "month"))
+  }
+  className="flex items-center gap-1 text-xs text-gray-500"
+>
+  {statsRange === "month" ? "This Month" : "This Year"}
+  <svg width="12" height="12" viewBox="0 0 24 24">
+    <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" />
+  </svg>
+</button>
+
   </div>
 
   {[

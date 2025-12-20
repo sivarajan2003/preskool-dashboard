@@ -25,8 +25,10 @@ import HomeWorkPage from "./pages/Academic/HomeWorkPage";
 
 import AddStudentPage from "./pages/People/AddStudentPage";
 //import StudentDashboard from "./pages/Student/Dashboard";
-import ExamResults from "./pages/Student/ExamResults";
-import FeesDetails from "./pages/Student/FeesDetails";
+import ExamResults from "./pages/Student/StudentsExamResults";
+import FeesDetails from "./pages/Student/StudentFees";
+import FeesPage from "./pages/Admin/FeesPage";
+
 
 // Auth
 import Login from "./pages/Login";
@@ -51,7 +53,11 @@ export default function App() {
         }
         
       >
+
         <Route index element={<Dashboard />} />
+        <Route path="fees" element={<FeesPage />} />
+        
+
         <Route path="/admin/dashboard/people/students/add" element={<AddStudentPage />} />
          
          
