@@ -130,7 +130,7 @@ const handleAddExam = (dateValue: string) => {
     <>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-semibold">Student Dashboard</h2>
+          <h2 className="text-2xl font-semibold">Student Dashboard</h2>
           <p className="text-sm text-gray-500">
             Dashboard / Students Dashboard
           </p>
@@ -217,7 +217,7 @@ const handleAddExam = (dateValue: string) => {
           <div className="bg-white border rounded-xl p-9
                 animate-card card-hover">
             <div className="flex justify-between mb-3">
-              <h4 className="text-sm font-semibold">Today’s Class</h4>
+              <h4 className="text-18px font-medium">Today’s Class</h4>
               <span className="text-xs text-gray-400">16 May 2025</span>
             </div>
 
@@ -271,7 +271,7 @@ const handleAddExam = (dateValue: string) => {
                 animate-card card-hover">
   {/* Header */}
   <div className="flex items-center justify-between mb-3">
-    <h4 className="text-sm font-semibold">Attendance</h4>
+    <h4 className="text-18px font-medium">Attendance</h4>
     <button
   onClick={() => setShowAttendanceDetails(!showAttendanceDetails)}
   className="text-xs text-blue-600 flex items-center gap-1"
@@ -423,7 +423,7 @@ const handleAddExam = (dateValue: string) => {
 
 {/* Header */}
 <div className="flex items-center justify-between mb-4">
-  <h4 className="text-sm font-semibold">Schedules</h4>
+  <h4 className="text-18px font-medium">Schedules</h4>
   <button
     onClick={() => setShowAddExam(true)}
     className="text-xs text-blue-600 flex items-center gap-1"
@@ -486,7 +486,7 @@ const handleAddExam = (dateValue: string) => {
 </div>
 
 {/* Exams */}
-<h5 className="text-sm font-semibold mb-3">Exams</h5>
+<h5 className="text-18px font-medium">Exams</h5>
 
 <div className="space-y-3">
   {exams
@@ -588,7 +588,7 @@ const handleAddExam = (dateValue: string) => {
 
   {/* Header */}
   <div className="flex items-center justify-between mb-2">
-    <h4 className="text-sm font-semibold">Performance</h4>
+    <h4 className="text-18px font-medium">Performance</h4>
     <span className="text-xs text-gray-500 flex items-center gap-1">
       <CalendarDays className="w-4 h-4 text-indigo-500" />
       2024 - 2025
@@ -681,7 +681,7 @@ const handleAddExam = (dateValue: string) => {
 
   {/* Header */}
   <div className="flex items-center justify-between mb-4">
-  <h4 className="text-sm font-semibold">Home Works</h4>
+  <h4 className="text-18px font-medium">Home Works</h4>
   <span className="text-xs text-gray-500">📚 All Subject</span>
 </div>
 
@@ -813,7 +813,7 @@ const handleAddExam = (dateValue: string) => {
 
   {/* Header */}
   <div className="flex justify-between items-center px-5 py-4 border-b">
-    <h4 className="text-sm font-semibold">Leave Status</h4>
+    <h4 className="text-18px font-medium">Leave Status</h4>
     <span className="text-xs text-gray-500 flex items-center gap-1">
   <CalendarDays className="w-4 h-4 text-indigo-500" />
   This Year
@@ -863,7 +863,7 @@ const handleAddExam = (dateValue: string) => {
 
   {/* Header */}
   <div className="flex items-center justify-between px-5 py-4 border-b">
-    <h4 className="text-sm font-semibold">Exam Result</h4>
+    <h4 className="text-18px font-medium">Exam Result</h4>
     <span className="text-xs text-gray-500 flex items-center gap-1">
   <CalendarDays className="w-4 h-4 text-indigo-500" />
   1st Quarter
@@ -939,7 +939,7 @@ const handleAddExam = (dateValue: string) => {
 
   {/* Header */}
   <div className="flex items-center justify-between px-5 py-4 border-b">
-    <h4 className="text-sm font-semibold">Fees Reminder</h4>
+    <h4 className="text-18px font-medium">Fees Reminder</h4>
     <span className="text-xs text-gray-500 flex items-center gap-1">
   <CalendarDays className="w-4 h-4 text-indigo-500" />
   2024-2025
@@ -1033,13 +1033,13 @@ const handleAddExam = (dateValue: string) => {
 </div>
 
 {/* ================= CLASS FACULTIES ================= */}
-{/* ================= CLASS FACULTIES ================= */}
+
 <div className="bg-white rounded-xl border p-5 mt-6
                 animate-card card-hover">
 
   {/* Header */}
   <div className="flex items-center justify-between mb-4">
-    <h4 className="text-sm font-semibold">Class Faculties</h4>
+    <h4 className="text-18px font-medium">Class Faculties</h4>
 
     <div className="flex gap-2">
       <button className="w-7 h-7 rounded-full border text-gray-400 flex items-center justify-center">
@@ -1055,27 +1055,36 @@ const handleAddExam = (dateValue: string) => {
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
     {[
-      {
-        name: "Aaron",
-        subject: "Chemistry",
-        img: C1,
-      },
-      {
-        name: "Hellana",
-        subject: "English",
-        img: C2,
-      },
-      {
-        name: "Morgan",
-        subject: "Physics",
-        img: C3,
-      },
-      {
-        name: "Daniel Josua",
-        subject: "Spanish",
-        img: C4,
-      },
-    ].map((f, i) => (
+  {
+    name: "Aaron",
+    subject: "Chemistry",
+    img: C1,
+    email: "aaron@gmail.com",
+    phone: "919876543210", // with country code
+  },
+  {
+    name: "Hellana",
+    subject: "English",
+    img: C2,
+    email: "hellana@gmail.com",
+    phone: "919812345678",
+  },
+  {
+    name: "Morgan",
+    subject: "Physics",
+    img: C3,
+    email: "morgan@gmail.com",
+    phone: "919834567890",
+  },
+  {
+    name: "Daniel Josua",
+    subject: "Spanish",
+    img: C4,
+    email: "daniel@gmail.com",
+    phone: "919845612378",
+  },
+]
+.map((f, i) => (
       <div
         key={i}
         className="border rounded-lg p-4"
@@ -1100,13 +1109,27 @@ const handleAddExam = (dateValue: string) => {
 
         {/* Actions */}
         <div className="flex gap-2">
-          <button className="flex-1 flex items-center justify-center gap-1 text-xs border rounded-md py-1.5 text-gray-600 hover:bg-gray-50">
-            ✉️ Email
-          </button>
-          <button className="flex-1 flex items-center justify-center gap-1 text-xs border rounded-md py-1.5 text-gray-600 hover:bg-gray-50">
-            💬 Chat
-          </button>
-        </div>
+  <a
+    href={`mailto:${f.email}`}
+    className="flex-1 flex items-center justify-center gap-1
+               text-xs border rounded-md py-1.5
+               text-gray-600 hover:bg-gray-50"
+  >
+    ✉️ Email
+  </a>
+
+  <a
+    href={`https://wa.me/${f.phone}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex-1 flex items-center justify-center gap-1
+               text-xs border rounded-md py-1.5
+               text-gray-600 hover:bg-gray-50"
+  >
+    💬 Chat
+  </a>
+</div>
+
       </div>
     ))}
 
@@ -1120,7 +1143,7 @@ const handleAddExam = (dateValue: string) => {
   <div className="bg-white rounded-xl border p-5
                 animate-card card-hover">
   <div className="flex items-center justify-between mb-4">
-    <h4 className="text-sm font-semibold">Notice Board</h4>
+    <h4 className="text-18px font-medium">Notice Board</h4>
     <span className="text-xs text-blue-600 cursor-pointer">View All</span>
   </div>
 
@@ -1180,7 +1203,7 @@ const handleAddExam = (dateValue: string) => {
 {/* ================= SYLLABUS ================= */}
 <div className="bg-white rounded-xl border p-5
                 animate-card card-hover">
-  <h4 className="text-sm font-semibold mb-4">Syllabus</h4>
+  <h4 className="text-18px font-medium">Syllabus</h4>
 
   {/* Info box */}
   <div className="border border-blue-400 bg-blue-50 text-blue-600 text-xs rounded-lg px-4 py-3 mb-4 flex gap-2">
@@ -1220,7 +1243,7 @@ const handleAddExam = (dateValue: string) => {
   <div className="bg-white rounded-xl border p-5
                 animate-card card-hover">
     <div className="flex items-center justify-between mb-4">
-      <h4 className="text-sm font-semibold">Todo</h4>
+      <h4 className="text-18px font-medium">Todo</h4>
       <span className="text-xs text-gray-500">Today</span>
     </div>
 

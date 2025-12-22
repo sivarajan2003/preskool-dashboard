@@ -151,7 +151,7 @@ const nextMonth = () =>
     <DashboardLayout>
 
       {/* ================= PAGE TITLE ================= */}
-      <h2 className="text-xl font-semibold mb-1">Teacher Dashboard</h2>
+      <h2 className="text-2xl font-semibold">Teacher Dashboard</h2>
       <p className="text-sm text-gray-500 mb-6">
         Dashboard / Teacher Dashboard
       </p>
@@ -245,7 +245,7 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold mb-2">Syllabus</h4>
+              <h4 className="text-18px font-medium">Syllabus</h4>
               <div className="flex items-center gap-2 text-xs mb-1">
                 <span className="w-2 h-2 bg-green-500 rounded-full" />
                 Completed : 95%
@@ -257,10 +257,34 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
             </div>
           </div>
         </div>
+        <div className={`bg-white rounded-xl border p-6 flex items-center gap-4 ${cardAnim(2)}`}>
+  {/* Avatar */}
+  <img
+    src="https://i.pravatar.cc/100?img=32"
+    alt="Best Teacher"
+    className="w-14 h-14 rounded-lg object-cover"
+  />
+
+  {/* Info */}
+  <div className="flex-1">
+    <h4 className="text-18px font-medium">Best Teacher</h4>
+    <p className="text-xs text-gray-500 mt-1">Ms. Malar</p>
+
+    <div className="flex items-center gap-2 mt-2">
+      <span className="px-2 py-0.5 text-xs bg-green-100 text-green-700 rounded-full">
+        ⭐ 4.9 Rating
+      </span>
+      <span className="px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">
+        Physics
+      </span>
+    </div>
+  </div>
+</div>
+
         <div className="xl:col-span-2">
         <div className={`bg-white rounded-xl border p-4 ${cardAnim(2)}`}>
     <div className="flex justify-between mb-3">
-      <h4 className="text-sm font-semibold">Today's Class</h4>
+      <h4 className="text-18px font-medium">Today's Class</h4>
       <span className="text-xs text-gray-500">16 May 2025</span>
     </div>
 
@@ -284,15 +308,17 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
         </div>
       ))}
     </div>
+    
   </div>
+  
 </div>
          {/* ================= SCHEDULES CARD ================= */}
          <div className="xl:row-span-3 sticky top-6 self-start">
-        <div className="bg-white rounded-xl border px-5 py-5 min-h-[30px] flex flex-col">
+        <div className="bg-white rounded-xl border px-5 py-5 min-h-[20px] flex flex-col">
 
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-sm font-semibold">Schedules</h4>
+            <h4 className="text-18px font-medium">Schedules</h4>
             <button
               onClick={() => setOpenAddEvent(true)}
               className="text-xs text-blue-600 font-medium"
@@ -473,7 +499,7 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
 
   {/* Header */}
   <div className="flex items-center justify-between mb-5">
-    <h4 className="text-sm font-semibold">Attendance</h4>
+    <h4 className="text-18px font-medium">Attendance</h4>
 
     <div className="flex items-center gap-1 text-xs text-gray-500">
       <button
@@ -608,7 +634,7 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
 <div className={`bg-white rounded-xl border p-5 ${cardAnim(5)}`}>
   {/* Header */}
   <div className="flex items-center justify-between mb-4">
-    <h4 className="text-sm font-semibold">Best Performers</h4>
+    <h4 className="text-18px font-medium">Best Performers</h4>
     <span
   onClick={() => setOpenBestPerformers(true)}
   className="text-xs text-blue-600 cursor-pointer hover:underline"
@@ -667,7 +693,7 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
     <div className={`bg-white rounded-xl border p-5 ${cardAnim(6)}`}>
   {/* Header */}
   <div className="flex items-center justify-between mb-4">
-    <h4 className="text-sm font-semibold">Student Progress</h4>
+    <h4 className="text-18px font-medium">Student Progress</h4>
 
     <button
   onClick={() => setOpenBestPerformers(true)}
@@ -749,7 +775,7 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
 
     {/* Header */}
     <div className="flex items-center justify-between mb-5">
-      <h4 className="text-sm font-semibold">Syllabus / Lesson Plan</h4>
+      <h4 className="text-18px font-medium">Syllabus / Lesson Plan</h4>
       <span
   onClick={() => setOpenSyllabus(true)}
   className="text-xs text-blue-600 cursor-pointer hover:underline"
@@ -830,7 +856,7 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
 
     {/* Header */}
     <div className="flex items-center justify-between mb-4">
-      <h4 className="text-sm font-semibold">Student Marks</h4>
+      <h4 className="text-18px font-medium">Student Marks</h4>
 
       <div className="flex items-center gap-4 text-xs text-gray-500">
       <button
@@ -959,7 +985,7 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
 
     {/* Header */}
     <div className="flex items-center justify-between mb-4">
-      <h4 className="text-sm font-semibold">Leave Status</h4>
+      <h4 className="text-18px font-medium">Leave Status</h4>
       <span className="flex items-center gap-1 text-xs text-gray-500 cursor-pointer">
   <CalendarDays className="w-4 h-4" />
   This Year
@@ -1095,7 +1121,7 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
 
       {/* Header */}
       <div className="flex justify-between mb-4">
-        <h4 className="text-sm font-semibold">
+        <h4 className="text-18px font-medium">
           Syllabus / Lesson Plan
         </h4>
         <button onClick={() => setOpenSyllabus(false)}>✕</button>

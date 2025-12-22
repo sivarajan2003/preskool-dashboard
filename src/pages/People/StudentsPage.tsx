@@ -16,129 +16,129 @@ import AddStudentModal from "../../components/AddStudentModal";
 import { MoreVertical, Eye, Pencil, Trash2 } from "lucide-react";
 
 /* ================= STUDENT DATA ================= */
-
 const students = [
   {
     id: "AD9982434",
-    name: "Janet Daniel",
+    name: "Ananya Sharma",
     class: "VIII, A",
     rollNo: "35013",
-    gender: "Female",
+    gender: "Female", // Hindu
     joined: "10 Jan 2015",
     status: "Active",
     image: "https://i.pravatar.cc/150?img=47",
   },
   {
     id: "AD9982433",
-    name: "Joann Michael",
+    name: "Mohammed Arif",
     class: "IV, B",
     rollNo: "35012",
-    gender: "Male",
+    gender: "Male", // Muslim
     joined: "19 Aug 2014",
     status: "Active",
     image: "https://i.pravatar.cc/150?img=12",
   },
   {
     id: "AD9982432",
-    name: "Kathleen Dison",
+    name: "Kavya ",
     class: "III, A",
     rollNo: "35011",
-    gender: "Female",
+    gender: "Female", // Hindu
     joined: "5 Dec 2017",
     status: "Active",
     image: "https://i.pravatar.cc/150?img=32",
   },
   {
     id: "AD9982431",
-    name: "Gifford Smith",
+    name: "Joseph Mathew",
     class: "I, B",
     rollNo: "35010",
-    gender: "Male",
+    gender: "Male", // Christian
     joined: "22 Mar 2018",
     status: "Active",
     image: "https://i.pravatar.cc/150?img=20",
   },
   {
     id: "AD9982430",
-    name: "Lisa Gourley",
+    name: "Ayesha Khan",
     class: "II, B",
     rollNo: "35009",
-    gender: "Female",
+    gender: "Female", // Muslim
     joined: "13 May 2017",
     status: "Inactive",
     image: "https://i.pravatar.cc/150?img=44",
   },
   {
     id: "AD9982429",
-    name: "Ralph Claudia",
+    name: "Rohit Verma",
     class: "III, B",
     rollNo: "35008",
-    gender: "Male",
+    gender: "Male", // Hindu
     joined: "20 Jun 2015",
     status: "Active",
     image: "https://i.pravatar.cc/150?img=15",
   },
   {
     id: "AD9982428",
-    name: "Julie Scott",
+    name: "Maria ",
     class: "V, A",
     rollNo: "35007",
-    gender: "Female",
+    gender: "Female", // Christian
     joined: "18 Jan 2023",
     status: "Active",
     image: "https://i.pravatar.cc/150?img=36",
   },
   {
     id: "AD9982427",
-    name: "Ryan Clement",
+    name: "Suresh Kumar",
     class: "VI, A",
     rollNo: "35006",
-    gender: "Male",
+    gender: "Male", // Hindu
     joined: "26 Nov 2012",
     status: "Active",
     image: "https://i.pravatar.cc/150?img=18",
   },
   {
     id: "AD9982426",
-    name: "Susan Boswell",
+    name: "Fatima Noor",
     class: "VIII, B",
     rollNo: "35005",
-    gender: "Female",
+    gender: "Female", // Muslim
     joined: "26 May 2020",
     status: "Inactive",
     image: "https://i.pravatar.cc/150?img=25",
   },
   {
     id: "AD9982425",
-    name: "Richard Mayes",
+    name: "Arvind Choudhary",
     class: "VII, B",
     rollNo: "35004",
-    gender: "Male",
+    gender: "Male", // Hindu
     joined: "6 Oct 2022",
     status: "Active",
     image: "https://i.pravatar.cc/150?img=14",
   },
   {
     id: "AD9982424",
-    name: "Veronica Randle",
+    name: "Rebecca Thomas",
     class: "IX, A",
     rollNo: "35003",
-    gender: "Female",
+    gender: "Female", // Christian
     joined: "27 Dec 2009",
     status: "Active",
     image: "https://i.pravatar.cc/150?img=29",
   },
   {
     id: "AD9982423",
-    name: "Thomas Hunt",
+    name: "Imran Sheikh",
     class: "X, A",
     rollNo: "35002",
-    gender: "Male",
+    gender: "Male", // Muslim
     joined: "11 Aug 2008",
     status: "Active",
     image: "https://i.pravatar.cc/150?img=11",
   },
 ];
+
 
 /* ================= MAIN PAGE ================= */
 
@@ -150,7 +150,17 @@ export default function StudentsPage() {
     const [openMenuId, setOpenMenuId] = useState<string | null>(null);
     const [studentList, setStudentList] = useState(students);
     const [openAddStudent, setOpenAddStudent] = useState(false);
-  
+    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+    const [openFilter, setOpenFilter] = useState(false);
+    const [statusFilter, setStatusFilter] = useState<"All" | "Active" | "Inactive">("All");
+    const [genderFilter, setGenderFilter] = useState<"All" | "Male" | "Female">("All");
+    const [startDate, setStartDate] = useState<string>(() =>
+  new Date().toISOString().split("T")[0]
+);
+const [endDate, setEndDate] = useState<string>(() =>
+  new Date().toISOString().split("T")[0]
+);
+
     /* ✅ REAL TIME DATE */
     const today = new Date().toLocaleDateString("en-GB", {
       day: "2-digit",
@@ -189,6 +199,35 @@ export default function StudentsPage() {
       link.download = "students_list.csv";
       link.click();
     };
+    const handleSortByName = () => {
+      const sorted = [...studentList].sort((a, b) => {
+        if (sortOrder === "asc") {
+          return a.name.localeCompare(b.name);
+        } else {
+          return b.name.localeCompare(a.name);
+        }
+      });
+    
+      setStudentList(sorted);
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    };
+    const filteredStudents = studentList.filter((s) => {
+      const joinedDate = new Date(s.joined).getTime();
+      const start = new Date(startDate).getTime();
+      const end = new Date(endDate).getTime();
+    
+      const dateMatch = joinedDate >= start && joinedDate <= end;
+    
+      const statusMatch =
+        statusFilter === "All" || s.status === statusFilter;
+    
+      const genderMatch =
+        genderFilter === "All" || s.gender === genderFilter;
+    
+      return dateMatch && statusMatch && genderMatch;
+    });
+    
+    
   return (
     <div className="space-y-6">
 
@@ -198,7 +237,7 @@ export default function StudentsPage() {
         {/* TOP ROW */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold">Students</h2>
+            <h2 className="text-2xl font-semibold">Students</h2>
             <p className="text-sm text-gray-500">
               Dashboard / People / Students
             </p>
@@ -236,15 +275,91 @@ export default function StudentsPage() {
         <div className="flex flex-wrap items-center justify-between gap-3">
 
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm text-gray-600">
-              <CalendarDays size={16} />
-              {today} - {today}
-            </div>
+          <div className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm text-gray-600">
+  <CalendarDays size={16} />
 
-            <button className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm hover:bg-gray-50">
-              <Filter size={16} />
-              Filter
-            </button>
+  <input
+    type="date"
+    value={startDate}
+    onChange={(e) => setStartDate(e.target.value)}
+    className="outline-none text-sm cursor-pointer"
+  />
+
+  <span>-</span>
+
+  <input
+    type="date"
+    value={endDate}
+    onChange={(e) => setEndDate(e.target.value)}
+    className="outline-none text-sm cursor-pointer"
+  />
+</div>
+
+
+            <button
+  onClick={() => setOpenFilter((prev) => !prev)}
+  className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm hover:bg-gray-50"
+>
+  <Filter size={16} />
+  Filter
+</button>
+{openFilter && (
+  <div className="absolute mt-2 w-56 bg-white border rounded-lg shadow-lg p-4 z-30">
+    
+    {/* STATUS FILTER */}
+    <div className="mb-3">
+      <p className="text-xs font-semibold text-gray-500 mb-1">Status</p>
+      <select
+        value={statusFilter}
+        onChange={(e) =>
+          setStatusFilter(e.target.value as any)
+        }
+        className="w-full border rounded-lg px-2 py-1 text-sm"
+      >
+        <option value="All">All</option>
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+    </div>
+
+    {/* GENDER FILTER */}
+    <div className="mb-3">
+      <p className="text-xs font-semibold text-gray-500 mb-1">Gender</p>
+      <select
+        value={genderFilter}
+        onChange={(e) =>
+          setGenderFilter(e.target.value as any)
+        }
+        className="w-full border rounded-lg px-2 py-1 text-sm"
+      >
+        <option value="All">All</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+    </div>
+
+    {/* ACTIONS */}
+    <div className="flex justify-between">
+      <button
+        onClick={() => {
+          setStatusFilter("All");
+          setGenderFilter("All");
+        }}
+        className="text-xs text-gray-500 hover:underline"
+      >
+        Reset
+      </button>
+
+      <button
+        onClick={() => setOpenFilter(false)}
+        className="text-xs text-blue-600 hover:underline"
+      >
+        Apply
+      </button>
+    </div>
+  </div>
+)}
+
           </div>
 
           <div className="flex items-center gap-2">
@@ -270,10 +385,14 @@ export default function StudentsPage() {
               <List size={16} />
             </button>
 
-            <button className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm hover:bg-gray-50">
-              <ArrowUpDown size={16} />
-              Sort By A-Z
-            </button>
+            <button
+  onClick={handleSortByName}
+  className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm hover:bg-gray-50"
+>
+  <ArrowUpDown size={16} />
+  Sort By {sortOrder === "asc" ? "A-Z" : "Z-A"}
+</button>
+
           </div>
         </div>
       </div>

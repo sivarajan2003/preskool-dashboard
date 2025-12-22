@@ -172,7 +172,7 @@ export default function GuardianPage() {
       <div className="bg-white border rounded-xl p-4 space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold">Guardian</h2>
+            <h2 className="text-2xl font-semibold">Guardian</h2>
             <p className="text-sm text-gray-500">
               Dashboard / People / Guardian
             </p>

@@ -126,7 +126,7 @@ export default function ParentDashboard() {
       {/* ================= PAGE TITLE ================= */}
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h2 className="text-xl font-semibold">Parent Dashboard</h2>
+          <h2 className="text-2xl font-semibold">Parent Dashboard</h2>
           <p className="text-sm text-gray-500">
             Dashboard / Parent Dashboard
           </p>
@@ -288,7 +288,7 @@ export default function ParentDashboard() {
 
   {/* Header */}
   <div className="flex items-center justify-between mb-4">
-    <h4 className="text-sm font-semibold">Events List</h4>
+    <h4 className="text-18px font-medium">Events List</h4>
     <button
   onClick={() =>
     setStatsRange(prev => (prev === "month" ? "year" : "month"))
@@ -388,7 +388,7 @@ export default function ParentDashboard() {
 
   {/* Header */}
   <div className="flex items-center justify-between mb-4">
-    <h4 className="text-sm font-semibold">Statistics</h4>
+    <h4 className="text-18px font-medium">Statistics</h4>
 
     <div className="flex items-center gap-1 text-xs text-gray-500">
       <span>This Month</span>
@@ -482,7 +482,7 @@ export default function ParentDashboard() {
 
 {/* Header */}
 <div className="flex items-center justify-between mb-4">
-  <h4 className="text-sm font-semibold">Leave Status</h4>
+  <h4 className="text-18px font-medium">Leave Status</h4>
   <span className="flex items-center gap-1 text-xs text-gray-500">
     📅 This Year
   </span>
@@ -522,7 +522,7 @@ export default function ParentDashboard() {
 <div className="bg-white rounded-xl border p-5">
 
   <div className="flex items-center justify-between mb-4">
-    <h4 className="text-sm font-semibold">Home Works</h4>
+    <h4 className="text-18px font-medium">Home Works</h4>
     <span className="text-xs text-gray-500 flex items-center gap-1">
       📚 All Subject
     </span>
@@ -562,7 +562,7 @@ export default function ParentDashboard() {
 
   {/* Header */}
   <div className="flex items-center justify-between mb-4">
-    <h4 className="text-sm font-semibold">Fees Reminder</h4>
+    <h4 className="text-18px font-medium">Fees Reminder</h4>
     <span className="text-xs text-blue-600 cursor-pointer">View All</span>
   </div>
 
@@ -616,7 +616,7 @@ export default function ParentDashboard() {
 
     {/* Header */}
     <div className="flex items-center justify-between px-5 py-4 border-b">
-      <h4 className="text-sm font-semibold">Exam Result</h4>
+      <h4 className="text-18px font-medium">Exam Result</h4>
 
       <div className="flex items-center gap-3 text-xs text-gray-500">
         <span className="flex items-center gap-1 cursor-pointer">
@@ -697,7 +697,7 @@ export default function ParentDashboard() {
 
   {/* Header */}
   <div className="flex items-center justify-between px-5 py-4 border-b">
-    <h4 className="text-sm font-semibold">Notice Board</h4>
+    <h4 className="text-18px font-medium">Notice Board</h4>
     <span className="text-xs text-blue-600 cursor-pointer">View All</span>
   </div>
 

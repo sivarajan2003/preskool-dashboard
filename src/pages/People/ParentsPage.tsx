@@ -16,37 +16,37 @@ import AddStudentModal from "../../components/AddStudentModal";
 const parents = [
     {
       id: "P124556",
-      name: "Thomas",
+      name: "Ravi Kumar",
       added: "25 Mar 2024",
-      email: "tom@example.com",
+      email: "ravi@example.com",
       phone: "+1 65738 58937",
       image: "https://i.pravatar.cc/150?img=12",
       student: {
-        name: "Joann",
+        name: "Ananya Sharma",
         image: "https://i.pravatar.cc/150?img=8",
       },
     },
     {
       id: "P124555",
-      name: "Marquita",
+      name: "Shabana",
       added: "18 Mar 2024",
-      email: "mar@example.com",
+      email: "shabana@example.com",
       phone: "+1 65738 58937",
       image: "https://i.pravatar.cc/150?img=47",
       student: {
-        name: "Joann",
+        name: "Mohammed Arif",
         image: "https://i.pravatar.cc/150?img=8",
       },
     },
     {
       id: "P124554",
-      name: "Johnson",
+      name: "Ravi kumar",
       added: "14 Mar 2024",
       email: "john@example.com",
       phone: "+1 65738 58937",
       image: "https://i.pravatar.cc/150?img=33",
       student: {
-        name: "Joann",
+        name: "kavya",
         image: "https://i.pravatar.cc/150?img=8",
       },
     },
@@ -163,14 +163,40 @@ const parents = [
 /* ================= PAGE ================= */
 
 export default function ParentsPage() {
+  const [openFilter, setOpenFilter] = useState(false);
 
   const today = "15 May 2020 - 24 May 2024";
   const [view, setView] = useState<"grid" | "list">("grid");
   const [showCalendar, setShowCalendar] = useState(false);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [openAddStudent, setOpenAddStudent] = useState(false);
-const [studentsData, setStudentsData] = useState([]);
-
+  const [parentsData, setParentsData] = useState(parents);
+  const handleExport = () => {
+    const headers = ["ID", "Name", "Email", "Phone", "Added"];
+    const rows = parentsData.map((p) =>
+      [p.id, p.name, p.email, p.phone, p.added].join(",")
+    );
+  
+    const csv =
+      "data:text/csv;charset=utf-8," +
+      [headers.join(","), ...rows].join("\n");
+  
+    const link = document.createElement("a");
+    link.href = encodeURI(csv);
+    link.download = "parents.csv";
+    link.click();
+  };
+  const handleSort = () => {
+    const sorted = [...parentsData].sort((a, b) =>
+      sortOrder === "asc"
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name)
+    );
+  
+    setParentsData(sorted);
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+  
   return (
     <div className="space-y-6">
 
@@ -178,22 +204,34 @@ const [studentsData, setStudentsData] = useState([]);
       <div className="bg-white border rounded-xl p-4 space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold">Parents</h2>
+            <h2 className="text-2xl font-semibold">Parents</h2>
             <p className="text-sm text-gray-500">
               Dashboard / People / Parents
             </p>
           </div>
 
           <div className="flex items-center gap-2">
-            <button className="p-2 border rounded-lg hover:bg-gray-50">
-              <RefreshCcw size={16} />
-            </button>
-            <button className="p-2 border rounded-lg hover:bg-gray-50">
-              <Printer size={16} />
-            </button>
-            <button className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50">
-              Export
-            </button>
+          <button
+  onClick={() => setParentsData(parents)}
+  className="p-2 border rounded-lg hover:bg-gray-50"
+>
+  <RefreshCcw size={16} />
+</button>
+
+<button
+  onClick={() => window.print()}
+  className="p-2 border rounded-lg hover:bg-gray-50"
+>
+  <Printer size={16} />
+</button>
+
+<button
+  onClick={handleExport}
+  className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50"
+>
+  Export
+</button>
+
             <button
   onClick={() => setOpenAddStudent(true)}
   className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg"
@@ -210,10 +248,26 @@ const [studentsData, setStudentsData] = useState([]);
               <CalendarDays size={16} />
               {today}
             </div>
-            <button className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm hover:bg-gray-50">
-              <Filter size={16} />
-              Filter
-            </button>
+            <button
+  onClick={() => setOpenFilter(!openFilter)}
+  className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm hover:bg-gray-50"
+>
+  <Filter size={16} />
+  Filter
+</button>
+{openFilter && (
+  <div className="absolute mt-2 w-40 bg-white border rounded-lg shadow p-3 z-20">
+    <p className="text-xs text-gray-500 mb-2">Filter coming soon</p>
+    <button
+      onClick={() => setOpenFilter(false)}
+      className="text-xs text-blue-600"
+    >
+      Close
+    </button>
+  </div>
+)}
+
+
           </div>
 
           <div className="flex items-center gap-2">
@@ -233,16 +287,21 @@ const [studentsData, setStudentsData] = useState([]);
             >
               <List size={16} />
             </button>
-            <button className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm hover:bg-gray-50">
-              <ArrowUpDown size={16} />
-              Sort By A-Z
-            </button>
+            <button
+  onClick={handleSort}
+  className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm hover:bg-gray-50"
+>
+  <ArrowUpDown size={16} />
+  Sort {sortOrder === "asc" ? "A-Z" : "Z-A"}
+</button>
+
           </div>
         </div>
       </div>
 
       {/* ================= GRID ================= */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {view === "grid" && (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {parents.map((p) => (
           <div key={p.id} className="bg-white border rounded-2xl p-5">
 
@@ -314,6 +373,34 @@ const [studentsData, setStudentsData] = useState([]);
           </div>
         ))}
       </div>
+
+)}
+{view === "list" && (
+  <div className="bg-white border rounded-xl overflow-hidden">
+    <table className="w-full text-sm">
+      <thead className="bg-gray-50">
+        <tr>
+          <th className="px-4 py-3 text-left">ID</th>
+          <th className="px-4 py-3">Name</th>
+          <th className="px-4 py-3">Email</th>
+          <th className="px-4 py-3">Phone</th>
+          <th className="px-4 py-3">Added</th>
+        </tr>
+      </thead>
+      <tbody>
+        {parentsData.map((p) => (
+          <tr key={p.id} className="border-t">
+            <td className="px-4 py-3">{p.id}</td>
+            <td className="px-4 py-3">{p.name}</td>
+            <td className="px-4 py-3">{p.email}</td>
+            <td className="px-4 py-3">{p.phone}</td>
+            <td className="px-4 py-3">{p.added}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
 
       {/* LOAD MORE */}
       <div className="flex justify-center">
