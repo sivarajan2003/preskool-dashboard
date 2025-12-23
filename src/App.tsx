@@ -33,6 +33,13 @@ import ExamResults from "./pages/Student/StudentsExamResults";
 import FeesDetails from "./pages/Student/StudentFees";
 import FeesPage from "./pages/Admin/FeesPage";
 
+// Management
+import FeesCollection from "./pages/Management/FeesCollection";
+import LibraryMembers from "./pages/Management/LibraryMembers";
+import Sports from "./pages/Management/Sports";
+import Hostel from "./pages/Management/Hostel";
+import Transport from "./pages/Management/Transport";
+
 
 // Auth
 import Login from "./pages/Login";
@@ -93,6 +100,39 @@ export default function App() {
     element={<GradePage />}
   />
       </Route>
+      <Route
+  path="/admin/dashboard"
+  element={
+    <ProtectedRoute>
+      <DashboardLayout />
+    </ProtectedRoute>
+  }
+>
+  {/* EXISTING ROUTES */}
+  <Route index element={<Dashboard />} />
+
+  {/* ================= MANAGEMENT ================= */}
+  <Route
+    path="management/fees"
+    element={<FeesCollection />}
+  />
+  <Route
+    path="management/library"
+    element={<LibraryMembers />}
+  />
+  <Route
+    path="management/sports"
+    element={<Sports />}
+  />
+  <Route
+    path="management/hostel"
+    element={<Hostel />}
+  />
+  <Route
+    path="management/transport"
+    element={<Transport />}
+  />
+</Route>
 
       {/* STUDENT */}
       <Route

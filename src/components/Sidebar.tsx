@@ -480,9 +480,12 @@ const [openLeaves, setOpenLeaves] = useState(false);
 
     {/* ================= FEES COLLECTION ================= */}
     <button
-      onClick={() => setOpenFees(!openFees)}
-      className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
-    >
+  onClick={() =>
+    navigate("/admin/dashboard/management/fees")
+  }
+  className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
+>
+
       <div className="flex items-center gap-3">
       <span className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center">
   <Wallet className="w-4 h-4 text-gray-600" />
@@ -509,9 +512,12 @@ const [openLeaves, setOpenLeaves] = useState(false);
 
     {/* ================= LIBRARY ================= */}
     <button
-      onClick={() => setOpenLibrary(!openLibrary)}
-      className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
-    >
+  onClick={() =>
+    navigate("/admin/dashboard/management/library")
+  }
+  className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
+>
+
       <div className="flex items-center gap-3">
       <span className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center">
   <Book className="w-4 h-4 text-gray-600" />
@@ -536,7 +542,12 @@ const [openLeaves, setOpenLeaves] = useState(false);
     )}*/}
 
     {/* ================= SPORTS (NO CHILD) ================= */}
-    <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50">
+    <button
+  onClick={() =>
+    navigate("/admin/dashboard/management/sports")
+  }
+  className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50"
+>
     <span className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center">
   <Activity className="w-4 h-4 text-gray-600" />
 </span>
@@ -546,9 +557,12 @@ const [openLeaves, setOpenLeaves] = useState(false);
 
     {/* ================= HOSTEL ================= */}
     <button
-      onClick={() => setOpenHostel(!openHostel)}
-      className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
-    >
+  onClick={() =>
+    navigate("/admin/dashboard/management/hostel")
+  }
+  className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
+>
+
       <div className="flex items-center gap-3">
       <span className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center">
   <Building className="w-4 h-4 text-gray-600" />
@@ -573,9 +587,12 @@ const [openLeaves, setOpenLeaves] = useState(false);
 
     {/* ================= TRANSPORT ================= */}
     <button
-      onClick={() => setOpenTransport(!openTransport)}
-      className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
-    >
+  onClick={() =>
+    navigate("/admin/dashboard/management/transport")
+  }
+  className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
+>
+
       <div className="flex items-center gap-3">
       <span className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center">
   <Bus className="w-4 h-4 text-gray-600" />
