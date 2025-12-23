@@ -23,6 +23,10 @@ import SyllabusPage from "./pages/Academic/SyllabusPage";
 import TimeTablePage from "./pages/Academic/TimeTablePage";
 import HomeWorkPage from "./pages/Academic/HomeWorkPage";
 
+import ExamPage from "./pages/Academic/ExamPage";
+import ExamSchedulePage from "./pages/Academic/ExamSchedulePage";
+import GradePage from "./pages/Academic/GradePage";
+
 import AddStudentPage from "./pages/People/AddStudentPage";
 //import StudentDashboard from "./pages/Student/Dashboard";
 import ExamResults from "./pages/Student/StudentsExamResults";
@@ -58,8 +62,9 @@ export default function App() {
         <Route path="fees" element={<FeesPage />} />
         
 
-        <Route path="/admin/dashboard/people/students/add" element={<AddStudentPage />} />
-         
+        <Route path="people/students/add" element={<AddStudentPage />} />
+
+
          
         <Route path="people/students" element={<StudentsPage />} />
         <Route path="people/parents" element={<ParentsPage />} />
@@ -74,6 +79,19 @@ export default function App() {
         <Route path="academic/syllabus" element={<SyllabusPage />} />
         <Route path="academic/time-table" element={<TimeTablePage />} />
         <Route path="academic/home-work" element={<HomeWorkPage />} />
+       {/* ✅ EXAMINATIONS */}
+  <Route
+    path="academic/examinations/exam"
+    element={<ExamPage />}
+  />
+  <Route
+    path="academic/examinations/schedule"
+    element={<ExamSchedulePage />}
+  />
+  <Route
+    path="academic/examinations/grade"
+    element={<GradePage />}
+  />
       </Route>
 
       {/* STUDENT */}

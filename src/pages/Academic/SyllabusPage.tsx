@@ -41,7 +41,16 @@ export default function SyllabusPage() {
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const [openAdd, setOpenAdd] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
- 
+  const [openCalendar, setOpenCalendar] = useState(false);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  useEffect(() => {
+    const handleOutside = () => setOpenCalendar(false);
+    window.addEventListener("click", handleOutside);
+  
+    return () => window.removeEventListener("click", handleOutside);
+  }, []);
+    
   useEffect(() => {
     const handleClickOutside = () => {
       setOpenFilter(false);
@@ -91,11 +100,20 @@ export default function SyllabusPage() {
   };
 
   /* 🔍 FILTER + SEARCH */
-  const filtered = data.filter(
-    (d) =>
+  const filtered = data.filter((d) => {
+    const matchSearch =
       d.group.toLowerCase().includes(search.toLowerCase()) ||
-      d.class.toLowerCase().includes(search.toLowerCase())
-  );
+      d.class.toLowerCase().includes(search.toLowerCase());
+  
+    if (!startDate || !endDate) return matchSearch;
+  
+    const rowDate = new Date(d.date);
+    const from = new Date(startDate);
+    const to = new Date(endDate);
+  
+    return matchSearch && rowDate >= from && rowDate <= to;
+  });
+  
 
   /* 📄 PAGINATION */
   const totalPages = Math.ceil(filtered.length / rowsPerPage);
@@ -172,10 +190,58 @@ export default function SyllabusPage() {
     <div className="flex items-center gap-3">
 
       {/* DATE */}
-      <div className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm text-gray-700">
-        <CalendarDays size={14} />
-        15 May 2020 - 24 May 2024
+      <div className="relative">
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setOpenCalendar(!openCalendar);
+    }}
+    className="flex items-center gap-2 px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+  >
+    <CalendarDays size={14} />
+    {startDate && endDate
+      ? `${startDate} - ${endDate}`
+      : "Select Date Range"}
+  </button>
+
+  {/* DATE RANGE POPUP */}
+  {openCalendar && (
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="absolute right-0 mt-2 w-72 bg-white border rounded-xl shadow-lg p-4 z-30"
+    >
+      <div className="space-y-3">
+        <div>
+          <label className="text-xs text-gray-500">Start Date</label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="w-full border rounded-lg px-3 py-2 text-sm"
+          />
+        </div>
+
+        <div>
+          <label className="text-xs text-gray-500">End Date</label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="w-full border rounded-lg px-3 py-2 text-sm"
+          />
+        </div>
+
+        <button
+          onClick={() => setOpenCalendar(false)}
+          className="w-full bg-blue-600 text-white py-2 rounded-lg text-sm"
+        >
+          Apply
+        </button>
       </div>
+    </div>
+  )}
+</div>
+
 
       {/* FILTER */}
 <div className="relative">
@@ -291,18 +357,34 @@ onClick={(e) => {
                   </span>
                 </td>
                 <td className="px-4 py-3 text-center relative">
-                  <button onClick={() => setOpenMenu(openMenu === d.id ? null : d.id)}>
-                    <MoreVertical size={16} />
-                  </button>
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setOpenMenu(openMenu === d.id ? null : d.id);
+    }}
+    className="p-1 rounded hover:bg-gray-100"
+  >
+    <MoreVertical size={16} />
+  </button>
 
-                  {openMenu === d.id && (
-                    <div className="absolute right-6 top-8 bg-white border rounded-lg shadow z-20 min-w-[120px] flex flex-col">
-                      <button className="dropdown-btn">View</button>
-                      <button className="dropdown-btn">Edit</button>
-                      <button className="dropdown-btn text-red-600">Delete</button>
-                    </div>
-                  )}
-                </td>
+  {openMenu === d.id && (
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="absolute right-0 mt-3 bg-white border rounded-lg shadow-lg z-30 min-w-[140px]"
+    >
+      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">
+        View
+      </button>
+      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">
+        Edit
+      </button>
+      <button className="block w-full px-4 py-2 text-sm hover:bg-red-50 text-red-600 text-left">
+        Delete
+      </button>
+    </div>
+  )}
+</td>
+
               </tr>
             ))}
           </tbody>

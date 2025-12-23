@@ -8,6 +8,7 @@ import {
   CalendarDays,
 } from "lucide-react";
 import AddSubjectModal from "../../components/AddSubjectModal";
+import { useEffect } from "react";
 
 /* ================= DATA ================= */
 
@@ -32,8 +33,23 @@ export default function SubjectPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortAsc, setSortAsc] = useState(true);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  
   const [openAdd, setOpenAdd] = useState(false);
- 
+const [openDate, setOpenDate] = useState(false);
+const [startDate, setStartDate] = useState("2020-05-15");
+const [endDate, setEndDate] = useState("2024-05-24");
+
+useEffect(() => {
+  const closeMenu = () => {
+    setOpenMenu(null);
+    setOpenDate(false);
+  };
+
+  window.addEventListener("click", closeMenu);
+  return () => window.removeEventListener("click", closeMenu);
+}, []);
+
+  
 
   /* 🔄 REFRESH */
   const handleRefresh = () => {
@@ -90,98 +106,152 @@ export default function SubjectPage() {
     <div className="space-y-6">
 
       {/* ================= HEADER ================= */}
-      {/* ================= HEADER ================= */}
 <div className="bg-white border border-gray-200 rounded-2xl px-6 py-5 space-y-5">
 
 {/* TOP ROW */}
 <div className="flex items-center justify-between">
   <div>
-    <h2 className="text-2xl font-semibold
-">
-      Subject
-    </h2>
+    <h2 className="text-2xl font-semibold">Subject</h2>
     <p className="text-sm text-gray-500 mt-1">
       Dashboard / Academic / Subject
     </p>
   </div>
 
-  {/* ACTION BUTTONS */}
   <div className="flex items-center gap-3">
-    <button className="p-2.5 border border-gray-200 rounded-lg hover:bg-gray-50">
+    {/* REFRESH */}
+    <button
+      onClick={handleRefresh}
+      className="p-2.5 border rounded-lg hover:bg-gray-50"
+    >
       <RefreshCcw size={16} />
     </button>
 
-    <button className="p-2.5 border border-gray-200 rounded-lg hover:bg-gray-50">
+    {/* PRINT */}
+    <button
+      onClick={() => window.print()}
+      className="p-2.5 border rounded-lg hover:bg-gray-50"
+    >
       <Printer size={16} />
     </button>
 
+    {/* EXPORT */}
     <button
       onClick={handleExport}
-      className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50"
+      className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
     >
       Export
     </button>
 
+    {/* ADD SUBJECT */}
     <button
-  onClick={() => setOpenAdd(true)}
-  className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-1"
->
-  <Plus size={14} />
-  Add Subject
-</button>
-
+      onClick={() => setOpenAdd(true)}
+      className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-1"
+    >
+      <Plus size={14} />
+      Add Subject
+    </button>
   </div>
 </div>
+</div>
+{/* ================= SUB HEADER ================= */}
+<div className="bg-white border border-gray-200 rounded-xl px-6 py-4 space-y-4">
 
-{/* SECOND ROW */}
-<div className="flex items-center justify-between">
+  {/* TOP ROW */}
+  <div className="flex items-center justify-between">
+    <h3 className="text-base font-semibold text-gray-900">
+      Subject List
+    </h3>
 
-  {/* DATE FILTER */}
-  <div className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700">
-    <CalendarDays size={16} />
-    15 May 2020 - 24 May 2024
-  </div>
-
-  {/* SORT */}
+    <div className="flex items-center gap-3">
+      {/* DATE */}
+      <div className="relative">
   <button
-    onClick={handleSort}
-    className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50"
+    onClick={(e) => {
+      e.stopPropagation();
+      setOpenDate(!openDate);
+    }}
+    className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm hover:bg-gray-50"
   >
-    <ArrowUpDown size={16} />
-    Sort By A-Z
+    <CalendarDays size={14} />
+    {startDate} - {endDate}
   </button>
-</div>
-</div>
 
-      {/* ROW PER PAGE + SEARCH */}
-      <div className="flex justify-between px-4">
-        <div className="flex items-center gap-2 text-sm">
-          Row Per Page
-          <select
-            value={rowsPerPage}
-            onChange={(e) => {
-              setRowsPerPage(Number(e.target.value));
-              setCurrentPage(1);
-            }}
-            className="border rounded px-2 py-1"
-          >
-            <option>10</option>
-            <option>25</option>
-            <option>50</option>
-          </select>
-          Entries
+  {openDate && (
+    <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow-lg p-4 z-30 w-64">
+      <div className="space-y-3">
+        <div>
+          <label className="text-xs text-gray-500">Start Date</label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="w-full border rounded px-2 py-1 text-sm"
+          />
         </div>
 
-        <input
-          placeholder="Search"
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setCurrentPage(1);
-          }}
-          className="border rounded-lg px-3 py-1.5 text-sm w-52"
-        />
+        <div>
+          <label className="text-xs text-gray-500">End Date</label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="w-full border rounded px-2 py-1 text-sm"
+          />
+        </div>
+
+        <button
+          onClick={() => setOpenDate(false)}
+          className="w-full bg-blue-600 text-white text-sm py-1.5 rounded mt-2"
+        >
+          Apply
+        </button>
       </div>
+    </div>
+  )}
+</div>
+
+
+      {/* SORT */}
+      <button
+        onClick={handleSort}
+        className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm hover:bg-gray-50"
+      >
+        <ArrowUpDown size={14} />
+        Sort By A-Z
+      </button>
+    </div>
+  </div>
+
+  {/* BOTTOM ROW */}
+  <div className="flex items-center justify-between">
+    <div className="flex items-center gap-2 text-sm text-gray-600">
+      Row Per Page
+      <select
+        value={rowsPerPage}
+        onChange={(e) => {
+          setRowsPerPage(Number(e.target.value));
+          setCurrentPage(1);
+        }}
+        className="border rounded px-2 py-1"
+      >
+        <option value={10}>10</option>
+        <option value={25}>25</option>
+        <option value={50}>50</option>
+      </select>
+      Entries
+    </div>
+
+    <input
+      placeholder="Search"
+      value={search}
+      onChange={(e) => {
+        setSearch(e.target.value);
+        setCurrentPage(1);
+      }}
+      className="border rounded-lg px-3 py-2 text-sm w-52"
+    />
+  </div>
+</div>
 
       {/* ================= TABLE ================= */}
       <div className="bg-white border rounded-xl overflow-hidden">
@@ -216,9 +286,15 @@ export default function SubjectPage() {
                   </span>
                 </td>
                 <td className="px-4 py-3 text-center relative">
-                  <button onClick={() => setOpenMenu(openMenu === s.id ? null : s.id)}>
-                    <MoreVertical size={16} />
-                  </button>
+               
+<button
+  onClick={(e) => {
+    e.stopPropagation();
+    setOpenMenu(openMenu === s.id ? null : s.id);
+  }}
+>
+  <MoreVertical size={16} />
+</button>
 
                   {openMenu === s.id && (
                     <div className="absolute right-6 top-8 bg-white border rounded-lg shadow z-20 min-w-[120px] flex flex-col">

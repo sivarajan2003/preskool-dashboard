@@ -7,6 +7,9 @@ import {
   Clock,
   CalendarDays,
 } from "lucide-react";
+import AddTimeTableModal, {
+  TimeTableItem,
+} from "../../components/AddTimeTableModal";
 
 
 /* ================= DATA ================= */
@@ -73,10 +76,39 @@ const timetable: Record<string, any[]> = {
 /* ================= PAGE ================= */
 
 export default function TimeTablePage() {
+  const [openAdd, setOpenAdd] = useState(false);
+  
+
   const [openClass, setOpenClass] = useState(false);
   const [openWeek, setOpenWeek] = useState(false);
   const [selectedClass, setSelectedClass] = useState("Class I-A");
   const [selectedWeek, setSelectedWeek] = useState("This Week");
+  /* 📤 EXPORT TIME TABLE */
+const handleExport = () => {
+  const rows: string[] = [];
+
+  // CSV Header
+  rows.push("Day,Time,Subject,Teacher");
+
+  Object.entries(timetable).forEach(([day, sessions]) => {
+    sessions.forEach((item) => {
+      rows.push(
+        `${day},${item.time},${item.subject},${item.teacher}`
+      );
+    });
+  });
+
+  const csvContent =
+    "data:text/csv;charset=utf-8," + rows.join("\n");
+
+  const link = document.createElement("a");
+  link.href = encodeURI(csvContent);
+  link.download = "time_table.csv";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
   return (
     <div className="space-y-6">
 
@@ -116,18 +148,22 @@ export default function TimeTablePage() {
 
       {/* EXPORT */}
       <button
-        className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50"
-      >
-        Export
-      </button>
+  onClick={handleExport}
+  className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50"
+>
+  Export
+</button>
+
 
       {/* ADD TIME TABLE */}
       <button
-        className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 flex items-center gap-1"
-      >
-        <Plus size={14} />
-        Add Time Table
-      </button>
+  onClick={() => setOpenAdd(true)}
+  className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 flex items-center gap-1"
+>
+  <Plus size={14} />
+  Add Time Table
+</button>
+
     </div>
   </div>
 </div>
@@ -250,6 +286,21 @@ export default function TimeTablePage() {
           </div>
         ))}
       </div>
+      {openAdd && (
+  <AddTimeTableModal
+    onClose={() => setOpenAdd(false)}
+    onSave={(newItem: TimeTableItem) => {
+      timetable[newItem.day].unshift({
+        time: newItem.time,
+        subject: newItem.subject,
+        teacher: newItem.teacher,
+        color: "bg-blue-50",
+      });
+      setOpenAdd(false);
+    }}
+  />
+)}
+
     </div>
   );
 }

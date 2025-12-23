@@ -9,7 +9,7 @@ import {
   CalendarDays,
 } from "lucide-react";
 import AddClassRoomModal from "../../components/AddClassRoomModal";
-
+import { useEffect } from "react";
 /* ================= CLASS ROOM DATA ================= */
 
 const initialRooms = [
@@ -33,8 +33,21 @@ export default function ClassRoomPage() {
   const [openFilter, setOpenFilter] = useState(false);
   const [statusFilter, setStatusFilter] =
     useState<"All" | "Active" | "Inactive">("All");
+    const [openDate, setOpenDate] = useState(false);
     const [startDate, setStartDate] = useState("2020-05-15");
     const [endDate, setEndDate] = useState("2024-05-24");
+    useEffect(() => {
+      const handleClickOutside = () => setOpenDate(false);
+    
+      if (openDate) {
+        document.addEventListener("click", handleClickOutside);
+      }
+    
+      return () => {
+        document.removeEventListener("click", handleClickOutside);
+      };
+    }, [openDate]);
+    
     
   const [search, setSearch] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -100,132 +113,217 @@ export default function ClassRoomPage() {
   return (
     <div className="space-y-6">
 
-      {/* ================= HEADER ================= */}
-      <div className="bg-white border rounded-xl p-5 space-y-4">
+      {/* ================= MAIN HEADER ================= */}
+<div className="bg-white border border-gray-200 rounded-2xl px-6 py-6">
+  <div className="flex items-center justify-between">
 
-        {/* TOP */}
-        <div className="flex justify-between">
-          <div>
-            <h2 className="ttext-2xl font-semibold
-">Class Room</h2>
-            <p className="text-sm text-gray-500">
-              Dashboard / Academic / Class Room
-            </p>
-          </div>
+    {/* LEFT */}
+    <div>
+      <h2 className="text-2xl font-semibold text-gray-900">
+        Class Room
+      </h2>
+      <p className="text-sm text-gray-500 mt-1">
+        Dashboard / Academic / Class Room
+      </p>
+    </div>
 
-          <div className="flex gap-2">
-            <button onClick={handleRefresh} className="p-2 border rounded-lg">
-              <RefreshCcw size={16} />
-            </button>
-            <button onClick={() => window.print()} className="p-2 border rounded-lg">
-              <Printer size={16} />
-            </button>
-            <button onClick={handleExport} className="px-4 py-2 border rounded-lg text-sm">
-              Export
-            </button>
-            <button
-  onClick={() => setOpenAddRoom(true)}
-  className="px-4 py-2 bg-blue-600 text-white rounded-lg"
->
-  Add Class Room
-</button>
+    {/* RIGHT ACTIONS */}
+    <div className="flex items-center gap-3">
+      <button
+        onClick={handleRefresh}
+        className="p-2.5 border rounded-lg hover:bg-gray-50"
+      >
+        <RefreshCcw size={16} />
+      </button>
 
+      <button
+        onClick={() => window.print()}
+        className="p-2.5 border rounded-lg hover:bg-gray-50"
+      >
+        <Printer size={16} />
+      </button>
 
-          </div>
-        </div>
+      <button
+        onClick={handleExport}
+        className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+      >
+        Export
+      </button>
 
-        {/* FILTER ROW */}
-        <div className="flex justify-between flex-wrap gap-3">
-          <div className="flex gap-2">
-          <div className="flex items-center gap-2 border rounded-lg px-3 py-2 text-sm">
-  <CalendarDays size={16} />
+      <button
+        onClick={() => setOpenAddRoom(true)}
+        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium"
+      >
+        + Add Class Room
+      </button>
+    </div>
 
-  <input
-    type="date"
-    value={startDate}
-    onChange={(e) => setStartDate(e.target.value)}
-    className="outline-none text-sm"
-  />
+  </div>
+  </div>
+  {/* ================= SUB HEADER ================= */}
+<div className="bg-white border border-gray-200 rounded-2xl px-6 py-5 mt-6 space-y-4">
 
-  <span>-</span>
+  {/* TOP ROW */}
+  <div className="flex items-center justify-between">
+    <h3 className="text-lg font-semibold text-gray-900">
+      Class Room List
+    </h3>
 
-  <input
-    type="date"
-    value={endDate}
-    onChange={(e) => setEndDate(e.target.value)}
-    className="outline-none text-sm"
-  />
+    <div className="flex items-center gap-3">
+    <div className="relative">
+  <button
+    onClick={(e) => {
+      e.stopPropagation();   // 🔥 REQUIRED
+      setOpenDate(!openDate);
+    }}
+    className="flex items-center gap-2 px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+  >
+    <CalendarDays size={16} />
+    {startDate} - {endDate}
+  </button>
+  {openDate && (
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="absolute left-0 top-full mt-2 w-72 bg-white border rounded-xl shadow-lg z-30 p-4"
+    >
+      <label className="text-sm text-gray-600 block mb-1">
+        Start Date
+      </label>
+      <input
+        type="date"
+        value={startDate}
+        onChange={(e) => setStartDate(e.target.value)}
+        className="w-full border rounded-lg px-3 py-2 text-sm mb-4"
+      />
+
+      <label className="text-sm text-gray-600 block mb-1">
+        End Date
+      </label>
+      <input
+        type="date"
+        value={endDate}
+        onChange={(e) => setEndDate(e.target.value)}
+        className="w-full border rounded-lg px-3 py-2 text-sm mb-4"
+      />
+
+      <button
+        onClick={() => setOpenDate(false)}
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm font-medium"
+      >
+        Apply
+      </button>
+    </div>
+  )}
 </div>
 
+<div className="relative">
+  <button
+    onClick={() => setOpenFilter(!openFilter)}
+    className="flex items-center gap-2 px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+  >
+    <Filter size={16} />
+    Filter
+  </button>
 
-            <div className="relative">
-              <button
-                onClick={() => setOpenFilter(!openFilter)}
-                className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm"
-              >
-                <Filter size={16} /> Filter
-              </button>
+  {/* DROPDOWN GOES HERE */}
+  {openFilter && (
+  <div className="absolute left-0 top-full mt-2 w-40 bg-white border rounded-lg shadow-lg z-30">
+    
+    <button
+      onClick={() => {
+        setStatusFilter("All");
+        setOpenFilter(false);
+        setCurrentPage(1);
+      }}
+      className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${
+        statusFilter === "All" ? "font-medium text-blue-600" : ""
+      }`}
+    >
+      All
+    </button>
 
-              {openFilter && (
-                <div className="absolute mt-2 bg-white border rounded-lg shadow p-2 z-20">
-                  {["All", "Active", "Inactive"].map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => {
-                        setStatusFilter(s as any);
-                        setOpenFilter(false);
-                        setCurrentPage(1);
-                      }}
-                      className="block px-3 py-1.5 text-sm hover:bg-gray-100 rounded w-full text-left"
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+    <button
+      onClick={() => {
+        setStatusFilter("Active");
+        setOpenFilter(false);
+        setCurrentPage(1);
+      }}
+      className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${
+        statusFilter === "Active" ? "font-medium text-blue-600" : ""
+      }`}
+    >
+      Active
+    </button>
 
-          <button
-            onClick={handleSort}
-            className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm"
-          >
-            <ArrowUpDown size={16} />
-            Sort {sortOrder === "asc" ? "A-Z" : "Z-A"}
-          </button>
-        </div>
-      </div>
+    <button
+      onClick={() => {
+        setStatusFilter("Inactive");
+        setOpenFilter(false);
+        setCurrentPage(1);
+      }}
+      className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${
+        statusFilter === "Inactive" ? "font-medium text-blue-600" : ""
+      }`}
+    >
+      Inactive
+    </button>
 
-      {/* ROW PER PAGE + SEARCH */}
-      <div className="flex justify-between px-4 py-3 border-b">
-        <div className="flex items-center gap-2 text-sm">
-          Row Per Page
-          <select
-            value={rowsPerPage}
-            onChange={(e) => {
-              setRowsPerPage(Number(e.target.value));
-              setCurrentPage(1);
-            }}
-            className="border rounded px-2 py-1"
-          >
-            <option value={10}>10</option>
-            <option value={25}>25</option>
-            <option value={50}>50</option>
-          </select>
-          Entries
-        </div>
+    <div className="border-t my-1"></div>
 
-        <input
-          placeholder="Search"
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setCurrentPage(1);
-          }}
-          className="border rounded-lg px-3 py-1.5 text-sm w-52"
-        />
-      </div>
+    <button
+      onClick={() => {
+        setStatusFilter("All");
+        setOpenFilter(false);
+        setCurrentPage(1);
+      }}
+      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+    >
+      Clear Filter
+    </button>
+  </div>
+)}
 
+</div>
+      <button
+        onClick={handleSort}
+        className="flex items-center gap-2 px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+      >
+        <ArrowUpDown size={16} />
+        Sort {sortOrder === "asc" ? "A-Z" : "Z-A"}
+      </button>
+    </div>
+  </div>
+
+  {/* BOTTOM ROW */}
+  <div className="flex items-center justify-between">
+    <div className="flex items-center gap-2 text-sm text-gray-600">
+      Row Per Page
+      <select
+        value={rowsPerPage}
+        onChange={(e) => {
+          setRowsPerPage(Number(e.target.value));
+          setCurrentPage(1);
+        }}
+        className="border rounded px-2 py-1 text-sm"
+      >
+        <option value={10}>10</option>
+        <option value={25}>25</option>
+        <option value={50}>50</option>
+      </select>
+      Entries
+    </div>
+
+    <input
+      placeholder="Search"
+      value={search}
+      onChange={(e) => {
+        setSearch(e.target.value);
+        setCurrentPage(1);
+      }}
+      className="border rounded-lg px-4 py-2 text-sm w-60"
+    />
+  </div>
+</div>
       {/* ================= TABLE ================= */}
       <div className="bg-white border rounded-xl overflow-hidden">
         <table className="w-full text-sm">

@@ -24,6 +24,13 @@ export default function Sidebar() {
   
   const isActive = (path: string) =>
     location.pathname === path;
+    
+    
+    const isPeopleActive = location.pathname.startsWith(
+      "/admin/dashboard/people"
+      
+    );
+    
   
   const role = localStorage.getItem("role");
   const logout = () => {
@@ -33,13 +40,22 @@ export default function Sidebar() {
   const [openDashboard, setOpenDashboard] = useState(true);
   const [openApplications, setOpenApplications] = useState(false);
  
-  const [openPeople, setOpenPeople] = useState(false);
+  const [openPeople, setOpenPeople] = useState(
+    location.pathname.startsWith("/admin/dashboard/people")
+  );
+  
 const [openStudents, setOpenStudents] = useState(false);
 const [openTeachers, setOpenTeachers] = useState(false);
 const [activeItem, setActiveItem] = useState<string | null>(null);
-const [openAcademic, setOpenAcademic] = useState(true);
+const [openAcademic, setOpenAcademic] = useState(
+  location.pathname.startsWith("/admin/dashboard/academic")
+);
+
 const [openClasses, setOpenClasses] = useState(false);
-const [openExams, setOpenExams] = useState(false);
+const [openExams, setOpenExams] = useState(
+  location.pathname.startsWith("/admin/dashboard/academic/examinations")
+);
+
 const [openManagement, setOpenManagement] = useState(true);
 const [openFees, setOpenFees] = useState(false);
 const [openLibrary, setOpenLibrary] = useState(false);
@@ -164,11 +180,14 @@ const [openLeaves, setOpenLeaves] = useState(false);
 {/* ================= PEOPLE ================= */}
 <button
   onClick={() => setOpenPeople(!openPeople)}
-  className="w-full flex items-center px-4 py-3 rounded-lg hover:bg-gray-100"
+  className={`w-full flex items-center px-4 py-3 rounded-lg
+    ${
+      isPeopleActive
+        ? "bg-blue-50 text-blue-600"
+        : "hover:bg-gray-100 text-gray-700"
+    }`}
 >
-  <span className="text-sm font-medium text-gray-700">
-    People
-  </span>
+  <span className="text-sm font-medium">People</span>
 </button>
 
 {openPeople && (
@@ -176,10 +195,7 @@ const [openLeaves, setOpenLeaves] = useState(false);
 
     {/* ================= STUDENTS ================= */}
     <button
-  onClick={() => {
-    navigate("/admin/dashboard/people/students");
-    setActiveItem("students");
-  }}
+  onClick={() => navigate("/admin/dashboard/people/students")}
   className={`w-full flex items-center justify-between px-3 py-2 rounded-lg
     ${
       isActive("/admin/dashboard/people/students")
@@ -187,24 +203,22 @@ const [openLeaves, setOpenLeaves] = useState(false);
         : "hover:bg-gray-50 text-gray-700"
     }`}
 >
-
-      <div className="flex items-center gap-3">
-        {/* ICON */}
-        <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
-          <GraduationCap className="w-4 h-4 text-gray-700" />
-        </span>
-
-        <span className="text-sm font-medium text-gray-700">
-          Students
-        </span>
-      </div>
-
-      <ChevronDown
-        className={`w-4 h-4 transition-transform ${
-          openStudents ? "rotate-180" : ""
+  <div className="flex items-center gap-3">
+    <span
+      className={`w-8 h-8 rounded-lg flex items-center justify-center
+        ${
+          isActive("/admin/dashboard/people/students")
+            ? "bg-white/20"
+            : "bg-gray-100"
         }`}
-      />
-    </button>
+    >
+      <GraduationCap className="w-4 h-4" />
+    </span>
+
+    <span className="text-sm font-medium">Students</span>
+  </div>
+</button>
+
 
        {/*{openStudents && (
       <div className="ml-11 space-y-1">
@@ -328,13 +342,23 @@ const [openLeaves, setOpenLeaves] = useState(false);
     <button
   onClick={() => navigate("/admin/dashboard/academic/classes")}
   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
-    ${isActive("/admin/dashboard/academic/classes")
-      ? "bg-blue-600 text-white"
-      : "hover:bg-gray-50 text-gray-700"}
-  `}
+    ${
+      location.pathname === "/admin/dashboard/academic/classes"
+        ? "bg-blue-600 text-white"
+        : "hover:bg-gray-50 text-gray-700"
+    }`}
 >
-  <GraduationCap className="w-4 h-4" />
-  Classes
+  <span
+    className={`w-8 h-8 rounded-lg flex items-center justify-center
+      ${
+        location.pathname === "/admin/dashboard/academic/classes"
+          ? "bg-white/20"
+          : "bg-gray-100"
+      }`}
+  >
+    <GraduationCap className="w-4 h-4" />
+  </span>
+  <span className="text-sm font-medium">Classes</span>
 </button>
 
 
@@ -346,56 +370,44 @@ const [openLeaves, setOpenLeaves] = useState(false);
     )}*/}
 
     {/* ================= SINGLE MENUS ================= */}
-    <MainItem
+    <AcademicItem
   label="Class Room"
   icon={DoorOpen}
-  onClick={() =>
-    navigate("/admin/dashboard/academic/class-room")
-  }
+  path="/admin/dashboard/academic/class-room"
 />
-<MainItem
+<AcademicItem
   label="Class Routine"
   icon={CalendarDays}
-  onClick={() =>
-    navigate("/admin/dashboard/academic/class-routine")
-  }
-/>
-<MainItem
-  label="Section"
-  icon={Layers}
-  onClick={() =>
-    navigate("/admin/dashboard/academic/section")
-  }
-/>
-<MainItem
-  label="Subject"
-  icon={BookOpen}
-  onClick={() =>
-    navigate("/admin/dashboard/academic/subject")
-  }
-/>
-<MainItem
-  label="Syllabus"
-  icon={FileText}
-  onClick={() =>
-    navigate("/admin/dashboard/academic/syllabus")
-  }
-/>
-<MainItem
-  label="Time Table"
-  icon={Table}
-  onClick={() =>
-    navigate("/admin/dashboard/academic/time-table")
-  }
-/>
-<MainItem
-  label="Home Work"
-  icon={ClipboardList}
-  onClick={() =>
-    navigate("/admin/dashboard/academic/home-work")
-  }
+  path="/admin/dashboard/academic/class-routine"
 />
 
+ {/*<AcademicItem
+  label="Section"
+  icon={Layers}
+  path="/admin/dashboard/academic/section"
+/>*/}
+
+<AcademicItem
+  label="Subject"
+  icon={BookOpen}
+  path="/admin/dashboard/academic/subject"
+/>
+<AcademicItem
+  label="Syllabus"
+  icon={FileText}
+  path="/admin/dashboard/academic/syllabus"
+/>
+<AcademicItem
+  label="Time Table"
+  icon={Table}
+  path="/admin/dashboard/academic/time-table"
+/>
+ {/* <AcademicItem
+  label="Home Work"
+  icon={ClipboardList}
+  path="/admin/dashboard/academic/home-work"
+/> 
+*/}
 
     {/* ================= EXAMINATIONS (HAS CHILD) ================= */}
     <button
@@ -417,14 +429,35 @@ const [openLeaves, setOpenLeaves] = useState(false);
     </button>
 
     {openExams && (
-      <div className="ml-11 space-y-1">
-        <ChildItem label="Exam" />
-        <ChildItem label="Exam Schedule" />
-        <ChildItem label="Grade" />
-        <ChildItem label="Exam Attendance" />
-        <ChildItem label="Exam Results" />
-      </div>
-    )}
+  <div className="ml-11 space-y-1">
+
+    <ChildItem
+      label="Exam"
+      active={location.pathname === "/admin/dashboard/academic/examinations/exam"}
+      onClick={() =>
+        navigate("/admin/dashboard/academic/examinations/exam")
+      }
+    />
+
+    <ChildItem
+      label="Exam Schedule"
+      active={location.pathname === "/admin/dashboard/academic/examinations/schedule"}
+      onClick={() =>
+        navigate("/admin/dashboard/academic/examinations/schedule")
+      }
+    />
+
+    <ChildItem
+      label="Grade"
+      active={location.pathname === "/admin/dashboard/academic/examinations/grade"}
+      onClick={() =>
+        navigate("/admin/dashboard/academic/examinations/grade")
+      }
+    />
+
+  </div>
+)}
+
 
     {/* ================= SINGLE MENU ================= */}
     <MainItem label="Reasons" icon={HelpCircle} />
@@ -464,7 +497,7 @@ const [openLeaves, setOpenLeaves] = useState(false);
       />
     </button>
 
-    {openFees && (
+   {/* {openFees && (
       <div className="ml-11 space-y-1">
         <ChildItem label="Fees Group" />
         <ChildItem label="Fees Type" />
@@ -472,7 +505,7 @@ const [openLeaves, setOpenLeaves] = useState(false);
         <ChildItem label="Fees Assign" />
         <ChildItem label="Collect Fees" />
       </div>
-    )}
+    )}*/}
 
     {/* ================= LIBRARY ================= */}
     <button
@@ -484,7 +517,7 @@ const [openLeaves, setOpenLeaves] = useState(false);
   <Book className="w-4 h-4 text-gray-600" />
 </span>
 
-        <span className="text-sm text-gray-700">Library</span>
+        <span className="text-sm text-gray-700">Library Members</span>
       </div>
       <ChevronDown
         className={`w-4 h-4 transition-transform ${
@@ -493,14 +526,14 @@ const [openLeaves, setOpenLeaves] = useState(false);
       />
     </button>
 
-    {openLibrary && (
+    {/*{openLibrary && (
       <div className="ml-11 space-y-1">
         <ChildItem label="Library Members" />
         <ChildItem label="Books" />
         <ChildItem label="Issue Book" />
         <ChildItem label="Return" />
       </div>
-    )}
+    )}*/}
 
     {/* ================= SPORTS (NO CHILD) ================= */}
     <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50">
@@ -530,13 +563,13 @@ const [openLeaves, setOpenLeaves] = useState(false);
       />
     </button>
 
-    {openHostel && (
+     {/*{openHostel && (
       <div className="ml-11 space-y-1">
         <ChildItem label="Hostel List" />
         <ChildItem label="Hostel Rooms" />
         <ChildItem label="Room Type" />
       </div>
-    )}
+    )}*/}
 
     {/* ================= TRANSPORT ================= */}
     <button
@@ -557,7 +590,7 @@ const [openLeaves, setOpenLeaves] = useState(false);
       />
     </button>
 
-    {openTransport && (
+    {/*{openTransport && (
       <div className="ml-11 space-y-1">
         <ChildItem label="Routes" />
         <ChildItem label="Pickup Points" />
@@ -565,10 +598,11 @@ const [openLeaves, setOpenLeaves] = useState(false);
         <ChildItem label="Vehicles" />
         <ChildItem label="Assign Vehicle" />
       </div>
-    )}
+    )}*/}
 
   </div>
 )}
+
 {/* ================= HRM ================= */}
 <button
   onClick={() => setOpenHRM(!openHRM)}
@@ -708,6 +742,49 @@ function LayoutItem({ icon, label }: { icon: JSX.Element; label: string }) {
     </div>
   );
 }
+function AcademicItem({
+  label,
+  icon: Icon,
+  path,
+}: {
+  label: string;
+  icon: any;
+  path: string;
+}) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const active = location.pathname === path;
+
+  return (
+    <button
+      onClick={() => navigate(path)}
+      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition
+        ${
+          active
+            ? "bg-blue-600 text-white"
+            : "text-gray-700 hover:bg-gray-50"
+        }`}
+    >
+      <span
+        className={`w-9 h-9 rounded-xl flex items-center justify-center
+          ${
+            active
+              ? "bg-blue-500"
+              : "bg-gray-100"
+          }`}
+      >
+        <Icon
+          className={`w-4 h-4 ${
+            active ? "text-white" : "text-gray-600"
+          }`}
+        />
+      </span>
+
+      <span className="font-medium">{label}</span>
+    </button>
+  );
+}
+
 
 function MenuItem({
   icon: Icon,

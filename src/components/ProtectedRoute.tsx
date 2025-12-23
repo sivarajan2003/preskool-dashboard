@@ -1,10 +1,10 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 export default function ProtectedRoute({
   children,
   role,
 }: {
-  children: JSX.Element;
+  children?: JSX.Element; // ✅ MUST be optional
   role?: string;
 }) {
   const isAuth = localStorage.getItem("isAuth");
@@ -18,5 +18,6 @@ export default function ProtectedRoute({
     return <Navigate to="/login" replace />;
   }
 
-  return children;
+  // ✅ THIS allows nested routes (Exam / Schedule / Grade)
+  return children ?? <Outlet />;
 }
