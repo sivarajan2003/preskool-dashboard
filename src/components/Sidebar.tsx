@@ -64,6 +64,13 @@ const [openTransport, setOpenTransport] = useState(false);
 const [openHRM, setOpenHRM] = useState(true);
 const [openAttendance, setOpenAttendance] = useState(false);
 const [openLeaves, setOpenLeaves] = useState(false);
+/* MANAGEMENT ACTIVE CHECK */
+const isManagementActive = location.pathname.startsWith(
+  "/admin/dashboard/management"
+);
+
+const isManagementItemActive = (path: string) =>
+  location.pathname === path;
 
 
   return (
@@ -412,7 +419,7 @@ const [openLeaves, setOpenLeaves] = useState(false);
     {/* ================= EXAMINATIONS (HAS CHILD) ================= */}
     <button
       onClick={() => setOpenExams(!openExams)}
-      className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
+      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg"
     >
       <div className="flex items-center gap-3">
         <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
@@ -481,24 +488,32 @@ const [openLeaves, setOpenLeaves] = useState(false);
     {/* ================= FEES COLLECTION ================= */}
     <button
   onClick={() =>
-    navigate("/admin/dashboard/management/fees")
+    navigate("/admin/dashboard/management/fees-collection")
   }
-  className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
+  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
+    ${
+      isManagementItemActive(
+        "/admin/dashboard/management/fees-collection"
+      )
+        ? "bg-blue-600 text-white"
+        : "hover:bg-gray-50 text-gray-700"
+    }`}
 >
+  <span className={`w-9 h-9 rounded-xl flex items-center justify-center
+    ${
+      isManagementItemActive(
+        "/admin/dashboard/management/fees-collection"
+      )
+        ? "bg-white/20"
+        : "bg-gray-100"
+    }`}
+  >
+    <Wallet className="w-4 h-4" />
+  </span>
 
-      <div className="flex items-center gap-3">
-      <span className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center">
-  <Wallet className="w-4 h-4 text-gray-600" />
-</span>
+  <span className="text-sm">Fees Collection</span>
+</button>
 
-        <span className="text-sm text-gray-700">Fees Collection</span>
-      </div>
-      <ChevronDown
-        className={`w-4 h-4 transition-transform ${
-          openFees ? "rotate-180" : ""
-        }`}
-      />
-    </button>
 
    {/* {openFees && (
       <div className="ml-11 space-y-1">
@@ -515,22 +530,29 @@ const [openLeaves, setOpenLeaves] = useState(false);
   onClick={() =>
     navigate("/admin/dashboard/management/library")
   }
-  className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
+  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
+    ${
+      isManagementItemActive(
+        "/admin/dashboard/management/library"
+      )
+        ? "bg-blue-600 text-white"
+        : "hover:bg-gray-50 text-gray-700"
+    }`}
 >
+  <span className={`w-9 h-9 rounded-xl flex items-center justify-center
+    ${
+      isManagementItemActive(
+        "/admin/dashboard/management/library"
+      )
+        ? "bg-white/20"
+        : "bg-gray-100"
+    }`}
+  >
+    <Book className="w-4 h-4" />
+  </span>
 
-      <div className="flex items-center gap-3">
-      <span className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center">
-  <Book className="w-4 h-4 text-gray-600" />
-</span>
-
-        <span className="text-sm text-gray-700">Library Members</span>
-      </div>
-      <ChevronDown
-        className={`w-4 h-4 transition-transform ${
-          openLibrary ? "rotate-180" : ""
-        }`}
-      />
-    </button>
+  <span className="text-sm">Library Members</span>
+</button>
 
     {/*{openLibrary && (
       <div className="ml-11 space-y-1">
@@ -546,36 +568,60 @@ const [openLeaves, setOpenLeaves] = useState(false);
   onClick={() =>
     navigate("/admin/dashboard/management/sports")
   }
-  className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50"
+  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
+    ${
+      isManagementItemActive(
+        "/admin/dashboard/management/sports"
+      )
+        ? "bg-blue-600 text-white"
+        : "hover:bg-gray-50 text-gray-700"
+    }`}
 >
-    <span className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center">
-  <Activity className="w-4 h-4 text-gray-600" />
-</span>
+  <span className={`w-9 h-9 rounded-xl flex items-center justify-center
+    ${
+      isManagementItemActive(
+        "/admin/dashboard/management/sports"
+      )
+        ? "bg-white/20"
+        : "bg-gray-100"
+    }`}
+  >
+    <Activity className="w-4 h-4" />
+  </span>
 
-      <span className="text-sm text-gray-700">Sports</span>
-    </button>
+  <span className="text-sm">Sports</span>
+</button>
+
 
     {/* ================= HOSTEL ================= */}
     <button
   onClick={() =>
     navigate("/admin/dashboard/management/hostel")
   }
-  className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
+  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
+    ${
+      isManagementItemActive(
+        "/admin/dashboard/management/hostel"
+      )
+        ? "bg-blue-600 text-white"
+        : "hover:bg-gray-50 text-gray-700"
+    }`}
 >
+  <span className={`w-9 h-9 rounded-xl flex items-center justify-center
+    ${
+      isManagementItemActive(
+        "/admin/dashboard/management/hostel"
+      )
+        ? "bg-white/20"
+        : "bg-gray-100"
+    }`}
+  >
+    <Building className="w-4 h-4" />
+  </span>
 
-      <div className="flex items-center gap-3">
-      <span className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center">
-  <Building className="w-4 h-4 text-gray-600" />
-</span>
+  <span className="text-sm">Hostel</span>
+</button>
 
-        <span className="text-sm text-gray-700">Hostel</span>
-      </div>
-      <ChevronDown
-        className={`w-4 h-4 transition-transform ${
-          openHostel ? "rotate-180" : ""
-        }`}
-      />
-    </button>
 
      {/*{openHostel && (
       <div className="ml-11 space-y-1">
@@ -590,22 +636,29 @@ const [openLeaves, setOpenLeaves] = useState(false);
   onClick={() =>
     navigate("/admin/dashboard/management/transport")
   }
-  className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
+  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
+    ${
+      isManagementItemActive(
+        "/admin/dashboard/management/transport"
+      )
+        ? "bg-blue-600 text-white"
+        : "hover:bg-gray-50 text-gray-700"
+    }`}
 >
+  <span className={`w-9 h-9 rounded-xl flex items-center justify-center
+    ${
+      isManagementItemActive(
+        "/admin/dashboard/management/transport"
+      )
+        ? "bg-white/20"
+        : "bg-gray-100"
+    }`}
+  >
+    <Bus className="w-4 h-4" />
+  </span>
 
-      <div className="flex items-center gap-3">
-      <span className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center">
-  <Bus className="w-4 h-4 text-gray-600" />
-</span>
-
-        <span className="text-sm text-gray-700">Transport</span>
-      </div>
-      <ChevronDown
-        className={`w-4 h-4 transition-transform ${
-          openTransport ? "rotate-180" : ""
-        }`}
-      />
-    </button>
+  <span className="text-sm">Transport</span>
+</button>
 
     {/*{openTransport && (
       <div className="ml-11 space-y-1">
@@ -631,14 +684,24 @@ const [openLeaves, setOpenLeaves] = useState(false);
 {openHRM && (
   <div className="ml-4 mt-2 space-y-1">
 
-    {/* ===== Staffs ===== */}
-    <HRMItem icon={Users} label="Staffs" />
+<HRMItem
+  icon={Users}
+  label="Staffs"
+  path="/admin/dashboard/hrm/staffs"
+/>
 
-    {/* ===== Departments ===== */}
-    <HRMItem icon={Layers} label="Departments" />
+<HRMItem
+  icon={Layers}
+  label="Departments"
+  path="/admin/dashboard/hrm/departments"
+/>
 
-    {/* ===== Designation ===== */}
-    <HRMItem icon={UserCog} label="Designation" />
+<HRMItem
+  icon={UserCog}
+  label="Designation"
+  path="/admin/dashboard/hrm/designation"
+/>
+
 
     {/* ===== Attendance (HAS CHILD) ===== */}
     <button
@@ -658,9 +721,30 @@ const [openLeaves, setOpenLeaves] = useState(false);
 
     {openAttendance && (
       <div className="ml-11 space-y-1">
-        <ChildItem label="Student Attendance" />
-        <ChildItem label="Teacher Attendance" />
-        <ChildItem label="Staff Attendance" />
+       <ChildItem
+  label="Student Attendance"
+  active={location.pathname === "/admin/dashboard/hrm/attendance/student"}
+  onClick={() =>
+    navigate("/admin/dashboard/hrm/attendance/student")
+  }
+/>
+
+<ChildItem
+  label="Teacher Attendance"
+  active={location.pathname === "/admin/dashboard/hrm/attendance/teacher"}
+  onClick={() =>
+    navigate("/admin/dashboard/hrm/attendance/teacher")
+  }
+/>
+
+<ChildItem
+  label="Staff Attendance"
+  active={location.pathname === "/admin/dashboard/hrm/attendance/staff"}
+  onClick={() =>
+    navigate("/admin/dashboard/hrm/attendance/staff")
+  }
+/>
+
       </div>
     )}
 
@@ -682,16 +766,38 @@ const [openLeaves, setOpenLeaves] = useState(false);
 
     {openLeaves && (
       <div className="ml-11 space-y-1">
-        <ChildItem label="List of Leaves" />
-        <ChildItem label="Approve Request" />
+        <ChildItem
+  label="List of Leaves"
+  active={location.pathname === "/admin/dashboard/hrm/leaves/list"}
+  onClick={() =>
+    navigate("/admin/dashboard/hrm/leaves/list")
+  }
+/>
+
+<ChildItem
+  label="Approve Request"
+  active={location.pathname === "/admin/dashboard/hrm/leaves/approve"}
+  onClick={() =>
+    navigate("/admin/dashboard/hrm/leaves/approve")
+  }
+/>
+
       </div>
     )}
 
     {/* ===== Holidays ===== */}
-    <HRMItem icon={Briefcase} label="Holidays" />
+    <HRMItem
+  icon={Briefcase}
+  label="Holidays"
+  path="/admin/dashboard/hrm/holidays"
+/>
 
-    {/* ===== Payroll ===== */}
-    <HRMItem icon={Wallet} label="Payroll" />
+<HRMItem
+  icon={Wallet}
+  label="Payroll"
+  path="/admin/dashboard/hrm/payroll"
+/>
+
 
   </div>
 )}
@@ -878,14 +984,28 @@ function IconBox({ Icon }: { Icon: any }) {
 function HRMItem({
   icon: Icon,
   label,
+  path,
 }: {
   icon: any;
   label: string;
+  path: string;
 }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const active = location.pathname === path;
+
   return (
-    <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50">
+    <button
+      onClick={() => navigate(path)}
+      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
+        ${
+          active
+            ? "bg-blue-600 text-white"
+            : "hover:bg-gray-50 text-gray-700"
+        }`}
+    >
       <IconBox Icon={Icon} />
-      <span className="text-sm text-gray-700">{label}</span>
+      <span className="text-sm">{label}</span>
     </button>
   );
 }

@@ -13,6 +13,9 @@ import {
 import A1 from "../assets/a1.png";
 import IN_FLAG from "../assets/in.png";
 import US_FLAG from "../assets/us.png";
+import { useNavigate } from "react-router-dom";
+import { User, LogOut } from "lucide-react";
+import { useEffect } from "react";
 
 export default function Header() {
   const [dark, setDark] = useState(false);
@@ -20,7 +23,14 @@ export default function Header() {
   const [full, setFull] = useState(false);
 
   const [country, setCountry] = useState<"IN" | "US">("IN");
-
+  const [profileOpen, setProfileOpen] = useState(false);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const close = () => setProfileOpen(false);
+    window.addEventListener("click", close);
+    return () => window.removeEventListener("click", close);
+  }, []);
+    
   // 🔹 Fullscreen toggle
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -113,7 +123,7 @@ export default function Header() {
             {full ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </IconBtn>
 
-          {/* Profile */}
+          {/* Profile
           <div
             onClick={() => alert("Profile clicked")}
             className="w-6 h-6 rounded-full overflow-hidden border cursor-pointer"
@@ -123,7 +133,52 @@ export default function Header() {
   className="w-6 h-6 rounded-full"
   alt="student"
 />
-          </div>
+          </div> */}
+          <div className="relative">
+  {/* PROFILE AVATAR */}
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setProfileOpen(!profileOpen);
+    }}
+    className="w-8 h-8 rounded-full overflow-hidden border"
+  >
+    <img src={A1} className="w-full h-full object-cover" alt="profile" />
+  </button>
+
+  {/* DROPDOWN */}
+  {profileOpen && (
+    <div className="absolute right-0 mt-2 w-44 bg-white border rounded-xl shadow-lg z-50">
+      
+      {/* PROFILE */}
+      <button
+        onClick={() => {
+          setProfileOpen(false);
+          navigate("/admin/profile"); // change if needed
+        }}
+        className="flex items-center gap-2 w-full px-4 py-2 text-sm hover:bg-gray-50"
+      >
+        <User size={16} />
+        Profile
+      </button>
+
+      <div className="h-px bg-gray-200 my-1" />
+
+      {/* LOGOUT */}
+      <button
+        onClick={() => {
+          localStorage.clear();     // ✅ clear login
+          navigate("/login");       // ✅ redirect
+        }}
+        className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+      >
+        <LogOut size={16} />
+        Logout
+      </button>
+    </div>
+  )}
+</div>
+
         </div>
       </div>
     </header>

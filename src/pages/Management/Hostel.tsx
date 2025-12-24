@@ -1,9 +1,487 @@
-export default function FeesCollection() {
-    return (
-      <div>
-        <h2 className="text-xl font-semibold mb-1">Hostel</h2>
-        <p className="text-sm text-gray-500">Management / Fees Collection</p>
-      </div>
+import { useEffect, useState } from "react";
+import {
+  RefreshCcw,
+  Printer,
+  ArrowUpDown,
+  MoreVertical,
+  CalendarDays,
+  Filter,
+  Plus,
+} from "lucide-react";
+import AddHostelModal from "../../components/tables/AddHostelModal";
+
+/* ================= DATA ================= */
+const INITIAL_DATA = [
+  {
+    id: "H823828",
+    name: "Phoenix Residence",
+    type: "Boys",
+    address: "25 Crowfield Road, Phoenix",
+    intake: 150,
+    description: "Rising to nurture young minds",
+  },
+  {
+    id: "H823827",
+    name: "Tranquil Haven",
+    type: "Girls",
+    address: "81 Hartland Avenue, Milwaukee",
+    intake: 200,
+    description: "Where peace meets academic pursuits",
+  },
+  {
+    id: "H823826",
+    name: "Radiant Towers",
+    type: "Boys",
+    address: "School Campus",
+    intake: 180,
+    description: "Illuminating minds with knowledge and warmth",
+  },
+  {
+    id: "H823825",
+    name: "Nova Nest",
+    type: "Girls",
+    address: "School Campus",
+    intake: 100,
+    description: "A nestling ground for budding intellectuals",
+  },
+  {
+    id: "H823824",
+    name: "Vista Villa",
+    type: "Boys",
+    address: "65 Braxton Street, Sheffield",
+    intake: 250,
+    description: "Overlooking the vast landscape of knowledge",
+  },
+  {
+    id: "H823823",
+    name: "Zenith Zone",
+    type: "Girls",
+    address: "School Campus",
+    intake: 150,
+    description: "Living at the peak of academic achievement",
+  },
+  {
+    id: "H823822",
+    name: "Summit Springs",
+    type: "Boys",
+    address: "55 Upton Avenue, Monson",
+    intake: 300,
+    description: "Drawing from the wellspring of knowledge",
+  },
+  {
+    id: "H823821",
+    name: "Beacon Breeze",
+    type: "Girls",
+    address: "School Campus",
+    intake: 280,
+    description: "Riding the winds of educational inspiration",
+  },
+  {
+    id: "H823820",
+    name: "Empyrean Estate",
+    type: "Boys",
+    address: "45 Cinnamon Lane, San Antonio",
+    intake: 200,
+    description: "Infusing energy into scholarly endeavors",
+  },
+  {
+    id: "H823819",
+    name: "Nexus Nook",
+    type: "Girls",
+    address: "School Campus",
+    intake: 350,
+    description: "A communal hub for academic excellence",
+  },
+];
+
+/* ================= PAGE ================= */
+export default function Hostel() {
+  const [data, setData] = useState(INITIAL_DATA);
+  const [search, setSearch] = useState("");
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortAsc, setSortAsc] = useState(true);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [openCalendar, setOpenCalendar] = useState(false);
+  const [openFilter, setOpenFilter] = useState(false);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [openAdd, setOpenAdd] = useState(false);
+
+  useEffect(() => {
+    const close = () => {
+      setOpenMenu(null);
+      setOpenCalendar(false);
+      setOpenFilter(false);
+    };
+    window.addEventListener("click", close);
+    return () => window.removeEventListener("click", close);
+  }, []);
+
+  /* 🔄 REFRESH */
+  const handleRefresh = () => {
+    setData(INITIAL_DATA);
+    setSearch("");
+    setCurrentPage(1);
+  };
+
+  /* 📤 EXPORT CSV */
+  const handleExport = () => {
+    const csv =
+      "data:text/csv;charset=utf-8," +
+      ["ID,Hostel Name,Hostel Type,Address,Intake,Description"]
+        .concat(
+          data.map(
+            (d) =>
+              `${d.id},${d.name},${d.type},${d.address},${d.intake},${d.description}`
+          )
+        )
+        .join("\n");
+
+    const link = document.createElement("a");
+    link.href = encodeURI(csv);
+    link.download = "hostel_list.csv";
+    link.click();
+  };
+
+  /* 🔃 SORT */
+  const handleSort = () => {
+    setData((prev) =>
+      [...prev].sort((a, b) =>
+        sortAsc
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name)
+      )
     );
-  }
+    setSortAsc(!sortAsc);
+  };
+
+  /* 🔍 SEARCH */
+  const filtered = data.filter((d) => {
+    const matchSearch =
+      d.name.toLowerCase().includes(search.toLowerCase()) ||
+      d.id.toLowerCase().includes(search.toLowerCase());
   
+    if (!startDate || !endDate) return matchSearch;
+  
+    const from = new Date(startDate);
+    const to = new Date(endDate);
+    const today = new Date(); // since hostel has no date field
+  
+    return matchSearch && today >= from && today <= to;
+  });
+  
+
+  /* 📄 PAGINATION */
+  const totalPages = Math.ceil(filtered.length / rowsPerPage);
+  const paginated = filtered.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
+  return (
+    <div className="space-y-6">
+
+      {/* ================= HEADER ================= */}
+      <div className="bg-white border rounded-2xl px-6 py-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-semibold">Hostel</h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Dashboard / Management / Hostel
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button onClick={handleRefresh} className="p-2.5 border rounded-lg hover:bg-gray-50">
+              <RefreshCcw size={16} />
+            </button>
+            <button onClick={() => window.print()} className="p-2.5 border rounded-lg hover:bg-gray-50">
+              <Printer size={16} />
+            </button>
+            <button onClick={handleExport} className="px-4 py-2 border rounded-lg text-sm">
+              Export
+            </button>
+            <button
+  onClick={() => setOpenAdd(true)}
+  className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-1"
+>
+  <Plus size={14} /> Add Hostel
+</button>
+
+          </div>
+        </div>
+      </div>
+
+      {/* ================= SUB HEADER ================= */}
+      <div className="bg-white border rounded-xl px-6 py-4 space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-base font-semibold">Hostel List</h3>
+
+          <div className="flex items-center gap-3">
+          <div className="relative">
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setOpenCalendar(!openCalendar);
+      setOpenFilter(false);
+    }}
+    className="flex items-center gap-2 px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+  >
+    <CalendarDays size={14} />
+    Select Date Range
+  </button>
+
+  {openCalendar && (
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="absolute right-0 mt-2 w-72 bg-white border rounded-xl shadow-lg p-4 z-30"
+    >
+      <div className="space-y-3">
+        <div>
+          <label className="text-xs text-gray-500">Start Date</label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="w-full border rounded-lg px-3 py-2 text-sm"
+          />
+        </div>
+
+        <div>
+          <label className="text-xs text-gray-500">End Date</label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="w-full border rounded-lg px-3 py-2 text-sm"
+          />
+        </div>
+
+        <button
+          onClick={() => setOpenCalendar(false)}
+          className="w-full bg-blue-600 text-white py-2 rounded-lg text-sm"
+        >
+          Apply
+        </button>
+      </div>
+    </div>
+  )}
+</div>
+
+<div className="relative">
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setOpenFilter(!openFilter);
+      setOpenCalendar(false);
+    }}
+    className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm hover:bg-gray-50"
+  >
+    <Filter size={14} />
+    Filter
+  </button>
+
+  {openFilter && (
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="absolute right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg z-30"
+    >
+      <button
+        onClick={() => {
+          setData([...data].sort((a, b) => a.intake - b.intake));
+          setOpenFilter(false);
+        }}
+        className="w-full px-4 py-2 text-sm text-left hover:bg-gray-50"
+      >
+        Intake (Low → High)
+      </button>
+
+      <button
+        onClick={() => {
+          setData([...data].sort((a, b) => b.intake - a.intake));
+          setOpenFilter(false);
+        }}
+        className="w-full px-4 py-2 text-sm text-left hover:bg-gray-50"
+      >
+        Intake (High → Low)
+      </button>
+
+      <button
+        onClick={() => {
+          setData([...data].sort((a, b) => a.type.localeCompare(b.type)));
+          setOpenFilter(false);
+        }}
+        className="w-full px-4 py-2 text-sm text-left hover:bg-gray-50"
+      >
+        Hostel Type (Boys / Girls)
+      </button>
+    </div>
+  )}
+</div>
+
+            <button onClick={handleSort} className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm">
+              <ArrowUpDown size={14} /> Sort By A-Z
+            </button>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm">
+            Row Per Page
+            <select
+              value={rowsPerPage}
+              onChange={(e) => setRowsPerPage(Number(e.target.value))}
+              className="border rounded px-2 py-1"
+            >
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+            </select>
+            Entries
+          </div>
+
+          <input
+            placeholder="Search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="border rounded-lg px-3 py-2 text-sm w-52"
+          />
+        </div>
+      </div>
+
+      {/* ================= TABLE ================= */}
+      <div className="bg-white border rounded-xl overflow-hidden">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-4 py-3 text-center">ID</th>
+              <th className="px-4 py-3 text-center">Hostel Name</th>
+              <th className="px-4 py-3 text-center">Hostel Type</th>
+              <th className="px-4 py-3 text-center">Address</th>
+              <th className="px-4 py-3 text-center">Intake</th>
+              <th className="px-4 py-3 text-center">Description</th>
+              <th className="px-4 py-3 text-center">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {paginated.map((d) => (
+              <tr key={d.id} className="border-t hover:bg-gray-50">
+                <td className="px-4 py-3 text-center text-blue-600">{d.id}</td>
+                <td className="px-4 py-3 text-center">{d.name}</td>
+                <td className="px-4 py-3 text-center">{d.type}</td>
+                <td className="px-4 py-3 text-center">{d.address}</td>
+                <td className="px-4 py-3 text-center">{d.intake}</td>
+                <td className="px-4 py-3 text-center">{d.description}</td>
+
+                <td className="px-4 py-3 text-center relative">
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setOpenMenu(openMenu === d.id ? null : d.id);
+    }}
+    className="p-1 rounded hover:bg-gray-100"
+  >
+    <MoreVertical size={16} />
+  </button>
+
+  {openMenu === d.id && (
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30"
+    >
+      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">
+        View
+      </button>
+
+      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">
+        Edit
+      </button>
+
+      <button
+        onClick={() => {
+          setConfirmDeleteId(d.id);
+          setOpenMenu(null);
+        }}
+        className="block w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-left"
+      >
+        Delete
+      </button>
+    </div>
+  )}
+</td>
+             </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* PAGINATION */}
+        <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
+          <button disabled={currentPage === 1} onClick={() => setCurrentPage((p) => p - 1)}>
+            Prev
+          </button>
+
+          {Array.from({ length: totalPages }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-3 py-1 rounded ${
+                currentPage === i + 1 ? "bg-blue-600 text-white" : ""
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage((p) => p + 1)}>
+            Next
+          </button>
+        </div>
+      </div>
+      {confirmDeleteId && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white rounded-xl p-6 w-80">
+      <h3 className="text-lg font-semibold mb-2">
+        Confirm Delete
+      </h3>
+
+      <p className="text-sm text-gray-600 mb-6">
+        Are you sure you want to delete this hostel?
+      </p>
+
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setConfirmDeleteId(null)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData((prev) =>
+              prev.filter((x) => x.id !== confirmDeleteId)
+            );
+            setConfirmDeleteId(null);
+          }}
+          className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{openAdd && (
+  <AddHostelModal
+    onClose={() => setOpenAdd(false)}
+    onAdd={(newHostel) =>
+      setData((prev) => [newHostel, ...prev])
+    }
+  />
+)}
+
+    </div>
+  );
+}

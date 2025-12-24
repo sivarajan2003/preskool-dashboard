@@ -39,6 +39,17 @@ import LibraryMembers from "./pages/Management/LibraryMembers";
 import Sports from "./pages/Management/Sports";
 import Hostel from "./pages/Management/Hostel";
 import Transport from "./pages/Management/Transport";
+// HRM
+import Staffs from "./pages/HRM/Staffs";
+import Departments from "./pages/HRM/Departments";
+import Designation from "./pages/HRM/Designation";
+import StudentAttendance from "./pages/HRM/Attendance/StudentAttendance";
+import TeacherAttendance from "./pages/HRM/Attendance/TeacherAttendance";
+import StaffAttendance from "./pages/HRM/Attendance/StaffAttendance";
+import LeaveList from "./pages/HRM/Leaves/LeaveList";
+import ApproveLeave from "./pages/HRM/Leaves/ApproveLeave";
+import Holidays from "./pages/HRM/Holidays";
+import Payroll from "./pages/HRM/Payroll";
 
 
 // Auth
@@ -53,53 +64,6 @@ export default function App() {
       <Route path="/signup" element={<Signup />} />
 
       {/* ADMIN */}
-      
-
-      <Route
-        path="/admin/dashboard"
-        element={
-          <ProtectedRoute>
-            <DashboardLayout />
-          </ProtectedRoute>
-        }
-        
-      >
-
-        <Route index element={<Dashboard />} />
-        <Route path="fees" element={<FeesPage />} />
-        
-
-        <Route path="people/students/add" element={<AddStudentPage />} />
-
-
-         
-        <Route path="people/students" element={<StudentsPage />} />
-        <Route path="people/parents" element={<ParentsPage />} />
-        <Route path="people/guardians" element={<GuardiansPage />} />
-        <Route path="people/teachers" element={<TeachersPage />} />
-
-        <Route path="academic/classes" element={<ClassesPage />} />
-        <Route path="academic/class-room" element={<ClassRoomPage />} />
-        <Route path="academic/class-routine" element={<ClassRoutinePage />} />
-        <Route path="academic/section" element={<SectionPage />} />
-        <Route path="academic/subject" element={<SubjectPage />} />
-        <Route path="academic/syllabus" element={<SyllabusPage />} />
-        <Route path="academic/time-table" element={<TimeTablePage />} />
-        <Route path="academic/home-work" element={<HomeWorkPage />} />
-       {/* ✅ EXAMINATIONS */}
-  <Route
-    path="academic/examinations/exam"
-    element={<ExamPage />}
-  />
-  <Route
-    path="academic/examinations/schedule"
-    element={<ExamSchedulePage />}
-  />
-  <Route
-    path="academic/examinations/grade"
-    element={<GradePage />}
-  />
-      </Route>
       <Route
   path="/admin/dashboard"
   element={
@@ -108,31 +72,57 @@ export default function App() {
     </ProtectedRoute>
   }
 >
-  {/* EXISTING ROUTES */}
+  {/* DASHBOARD */}
   <Route index element={<Dashboard />} />
+  <Route path="fees" element={<FeesPage />} />
 
-  {/* ================= MANAGEMENT ================= */}
+  {/* PEOPLE */}
+  <Route path="people/students/add" element={<AddStudentPage />} />
+  <Route path="people/students" element={<StudentsPage />} />
+  <Route path="people/parents" element={<ParentsPage />} />
+  <Route path="people/guardians" element={<GuardiansPage />} />
+  <Route path="people/teachers" element={<TeachersPage />} />
+
+  {/* ACADEMIC */}
+  <Route path="academic/classes" element={<ClassesPage />} />
+  <Route path="academic/class-room" element={<ClassRoomPage />} />
+  <Route path="academic/class-routine" element={<ClassRoutinePage />} />
+  <Route path="academic/section" element={<SectionPage />} />
+  <Route path="academic/subject" element={<SubjectPage />} />
+  <Route path="academic/syllabus" element={<SyllabusPage />} />
+  <Route path="academic/time-table" element={<TimeTablePage />} />
+  <Route path="academic/home-work" element={<HomeWorkPage />} />
+
+  {/* EXAMINATIONS */}
+  <Route path="academic/examinations/exam" element={<ExamPage />} />
+  <Route path="academic/examinations/schedule" element={<ExamSchedulePage />} />
+  <Route path="academic/examinations/grade" element={<GradePage />} />
+{/* HRM */}
+<Route path="hrm/staffs" element={<Staffs />} />
+<Route path="hrm/departments" element={<Departments />} />
+<Route path="hrm/designation" element={<Designation />} />
+
+<Route path="hrm/attendance/student" element={<StudentAttendance />} />
+<Route path="hrm/attendance/teacher" element={<TeacherAttendance />} />
+<Route path="hrm/attendance/staff" element={<StaffAttendance />} />
+
+<Route path="hrm/leaves/list" element={<LeaveList />} />
+<Route path="hrm/leaves/approve" element={<ApproveLeave />} />
+
+<Route path="hrm/holidays" element={<Holidays />} />
+<Route path="hrm/payroll" element={<Payroll />} />
+
+  {/* MANAGEMENT ✅ THIS IS WHERE IT GOES */}
   <Route
-    path="management/fees"
+    path="management/fees-collection"
     element={<FeesCollection />}
   />
-  <Route
-    path="management/library"
-    element={<LibraryMembers />}
-  />
-  <Route
-    path="management/sports"
-    element={<Sports />}
-  />
-  <Route
-    path="management/hostel"
-    element={<Hostel />}
-  />
-  <Route
-    path="management/transport"
-    element={<Transport />}
-  />
+  <Route path="management/library" element={<LibraryMembers />} />
+  <Route path="management/sports" element={<Sports />} />
+  <Route path="management/hostel" element={<Hostel />} />
+  <Route path="management/transport" element={<Transport />} />
 </Route>
+
 
       {/* STUDENT */}
       <Route

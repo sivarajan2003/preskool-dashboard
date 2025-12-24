@@ -3,6 +3,7 @@ import { Facebook } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import LoginIllustration from "../assets/login-illustration.png";
 import { Eye, EyeOff, Mail } from "lucide-react";
+import LeftIllustration from "../assets/login-left.png";
 
 //import LoginImg from '../assets/login.png';
 import Logo from '../assets/logo.png';
@@ -76,19 +77,36 @@ if (user.role === "parent") {
   };
   return (
     <div className="min-h-screen flex bg-white">
-  {/* LEFT ILLUSTRATION SECTION */}
-<div className="hidden lg:flex lg:w-1/2 bg-[#F7FAFF] relative overflow-hidden h-screen">
+{/* LEFT ILLUSTRATION SECTION — SVG WAVE */}
+<div className="hidden lg:flex w-1/2 relative overflow-hidden bg-white">
 
-{/* CENTER IMAGE */}
-<div className="absolute inset-0 flex items-center justify-center -translate-y-12">
-  <img
-    src={LoginIllustration}
-    alt="Login Illustration"
-    className="w-[520px] object-contain"
-  />
+  {/* SVG WAVE BACKGROUND */}
+  <svg
+    viewBox="0 0 1043 769"
+    className="absolute inset-0 w-full h-full"
+    preserveAspectRatio="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M0 0H321.603C321.603 0 572.5 162 659.5 369C746.5 576 1043 769 1043 769H0V0Z"
+      fill="#E1E6FF"
+    />
+  </svg>
+
+  {/* ILLUSTRATION CONTENT */}
+  <div className="relative z-10 flex items-center justify-center w-full">
+    <img
+      src={LeftIllustration}
+      alt="Education Illustration"
+      className="w-[520px] object-contain -translate-x-6"
+    />
+  </div>
+
 </div>
 
-{/* HALF PAGE WAVE */}
+
+
+{/* HALF PAGE WAVE 
 <div className="absolute bottom-0 left-0 w-full h-1/2">
   <svg
     viewBox="0 0 1440 320"
@@ -102,7 +120,9 @@ if (user.role === "parent") {
   </svg>
 </div>
 
-</div>
+*/}
+
+
 
 
 {/* ONLY ONE BOTTOM WAVE
