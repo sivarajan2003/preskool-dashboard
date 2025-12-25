@@ -51,6 +51,15 @@ import ApproveLeave from "./pages/HRM/Leaves/ApproveLeave";
 import Holidays from "./pages/HRM/Holidays";
 import Payroll from "./pages/HRM/Payroll";
 
+import AttendanceReport from "./pages/Reports/AttendanceReport";
+import ClassReport from "./pages/Reports/ClassReport";
+import StudentReport from "./pages/Reports/StudentReport";
+import GradeReport from "./pages/Reports/GradeReport";
+import LeaveReport from "./pages/Reports/LeaveReport";
+import FeesReport from "./pages/Reports/FeesReport";
+//import AttendanceReport from "./pages/Reports/AttendanceReport";
+import StudentAttendanceType from "./pages/Reports/StudentAttendanceType";
+//import DailyAttendance from "./pages/Reports/DailyAttendance";
 
 // Auth
 import Login from "./pages/Login";
@@ -111,6 +120,17 @@ export default function App() {
 
 <Route path="hrm/holidays" element={<Holidays />} />
 <Route path="hrm/payroll" element={<Payroll />} />
+<Route path="reports/attendance" element={<AttendanceReport />} />
+  <Route path="reports/attendance/student-type" element={<StudentAttendanceType />} />
+  <Route path="reports/class" element={<ClassReport />} />
+  <Route path="reports/student" element={<StudentReport />} />
+  <Route path="reports/grade" element={<GradeReport />} />
+  <Route path="reports/leave" element={<LeaveReport />} />
+  <Route path="reports/fees" element={<FeesReport />} />
+
+
+
+
 
   {/* MANAGEMENT ✅ THIS IS WHERE IT GOES */}
   <Route

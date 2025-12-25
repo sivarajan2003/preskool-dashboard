@@ -91,6 +91,7 @@ if (user.role === "parent") {
       d="M0 0H321.603C321.603 0 572.5 162 659.5 369C746.5 576 1043 769 1043 769H0V0Z"
       fill="#E1E6FF"
     />
+
   </svg>
 
   {/* ILLUSTRATION CONTENT */}
@@ -98,7 +99,7 @@ if (user.role === "parent") {
     <img
       src={LeftIllustration}
       alt="Education Illustration"
-      className="w-[520px] object-contain -translate-x-6"
+      className="w-[820px] object-contain -translate-x-6"
     />
   </div>
 
@@ -116,6 +117,10 @@ if (user.role === "parent") {
     <path
       fill="#4361EE"
       d="M0,160L48,170.7C96,181,192,203,288,213.3C384,224,480,224,576,213.3C672,203,768,181,864,176C960,171,1056,181,1152,192C1248,203,1344,213,1392,218.7L1440,224L1440,320L0,320Z"
+    />
+    <path
+      d="M0 0H321.603C321.603 0 572.5 162 659.5 369C746.5 576 1043 769 1043 769H0V0Z"
+      fill="#E1E6FF"
     />
   </svg>
 </div>

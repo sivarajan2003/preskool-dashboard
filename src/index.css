@@ -69,6 +69,11 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
+.wave-svg {
+  transform: scaleX(1.25) translateX(40px);
+  transform-origin: left;
+}
+
 /* ================= DISABLE HOVER ON TOUCH DEVICES ================= */
 @media (hover: none) {
   .card-interactive:hover {
