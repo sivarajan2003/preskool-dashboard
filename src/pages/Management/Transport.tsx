@@ -3,11 +3,14 @@ import {
   RefreshCcw,
   Printer,
   ArrowUpDown,
-  MoreVertical,
   CalendarDays,
   Filter,
   Plus,
+  Eye,
+  Pencil,
+  Trash2,
 } from "lucide-react";
+
 import AddRouteModal from "../../components/tables/AddRouteModal";
 
 /* ================= DATA ================= */
@@ -31,7 +34,7 @@ export default function Transport() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortAsc, setSortAsc] = useState(true);
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
+ // const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [openCalendar, setOpenCalendar] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [startDate, setStartDate] = useState("");
@@ -41,13 +44,13 @@ export default function Transport() {
 
   useEffect(() => {
     const close = () => {
-      setOpenMenu(null);
       setOpenCalendar(false);
       setOpenFilter(false);
     };
     window.addEventListener("click", close);
     return () => window.removeEventListener("click", close);
   }, []);
+  
 
   /* 🔄 REFRESH */
   const handleRefresh = () => {
@@ -312,35 +315,38 @@ export default function Transport() {
                 </td>
                 <td className="px-4 py-3 text-center">{d.date}</td>
 
-                <td className="px-4 py-3 text-center relative">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setOpenMenu(openMenu === d.id ? null : d.id);
-                    }}
-                    className="p-1 rounded hover:bg-gray-100"
-                  >
-                    <MoreVertical size={16} />
-                  </button>
+                <td className="px-4 py-3 text-center">
+  <div className="flex items-center justify-center gap-3">
 
-                  {openMenu === d.id && (
-                    <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow-lg z-30">
-                      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">View</button>
-                      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">Edit</button>
-                      <button
-  onClick={() => {
-    setConfirmDeleteId(d.id);
-    setOpenMenu(null);
-  }}
-  className="block w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-left"
->
-  Delete
-</button>
+    {/* VIEW */}
+    <button
+      title="View"
+      onClick={() => alert(`View Route ${d.id}`)}
+      className="text-gray-600 hover:text-blue-600"
+    >
+      <Eye size={16} />
+    </button>
 
+    {/* EDIT */}
+    <button
+      title="Edit"
+      onClick={() => alert(`Edit Route ${d.id}`)}
+      className="text-gray-600 hover:text-green-600"
+    >
+      <Pencil size={16} />
+    </button>
 
-                    </div>
-                  )}
-                </td>
+    {/* DELETE */}
+    <button
+      title="Delete"
+      onClick={() => setConfirmDeleteId(d.id)}
+      className="text-red-500 hover:text-red-700"
+    >
+      <Trash2 size={16} />
+    </button>
+
+  </div>
+</td>
               </tr>
             ))}
           </tbody>

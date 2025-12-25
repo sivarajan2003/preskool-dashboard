@@ -5,9 +5,10 @@ import {
   ArrowUpDown,
   MoreVertical,
   CalendarDays,
-  Filter,
+  Filter,Eye, Pencil, Trash2,
   Plus,
 } from "lucide-react";
+
 import AddFeesGroupModal from "../../components/tables/AddFeesGroupModal";
 
 /* ================= DATA ================= */
@@ -93,7 +94,7 @@ export default function FeesCollection() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortAsc, setSortAsc] = useState(true);
 
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  //const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [openCalendar, setOpenCalendar] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
@@ -108,7 +109,6 @@ export default function FeesCollection() {
   /* CLOSE DROPDOWNS */
   useEffect(() => {
     const close = () => {
-      setOpenMenu(null);
       setOpenCalendar(false);
       setOpenFilter(false);
     };
@@ -367,34 +367,39 @@ export default function FeesCollection() {
                   </span>
                 </td>
 
-                <td className="px-4 py-3 text-center relative">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setOpenMenu(openMenu === d.id ? null : d.id);
-                    }}
-                    className="p-1 rounded hover:bg-gray-100"
-                  >
-                    <MoreVertical size={16} />
-                  </button>
+                <td className="px-4 py-3 text-center">
+  <div className="flex items-center justify-center gap-3">
 
-                  {openMenu === d.id && (
-                    <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow-lg z-30">
-                      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">View</button>
-                      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">Edit</button>
-                      <button
-  onClick={() => {
-    setConfirmDeleteId(d.id);
-    setOpenMenu(null);
-  }}
-  className="block w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-left"
->
-  Delete
-</button>
+    {/* VIEW */}
+    <button
+      title="View"
+      onClick={() => alert(`View ${d.id}`)}
+      className="text-gray-600 hover:text-blue-600"
+    >
+      <Eye size={16} />
+    </button>
 
-                    </div>
-                  )}
-                </td>
+    {/* EDIT */}
+    <button
+      title="Edit"
+      onClick={() => alert(`Edit ${d.id}`)}
+      className="text-gray-600 hover:text-green-600"
+    >
+      <Pencil size={16} />
+    </button>
+
+    {/* DELETE */}
+    <button
+      title="Delete"
+      onClick={() => setConfirmDeleteId(d.id)}
+      className="text-red-500 hover:text-red-700"
+    >
+      <Trash2 size={16} />
+    </button>
+
+  </div>
+</td>
+
               </tr>
             ))}
           </tbody>

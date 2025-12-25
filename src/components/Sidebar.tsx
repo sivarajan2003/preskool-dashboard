@@ -5,7 +5,9 @@ import {
   DoorOpen,CalendarDays,
   Layers,Table,ClipboardList,
   FileCheck,HelpCircle, Wallet,Book, Activity,
-  Building,Bus,UserCog,CalendarCheck,Briefcase,
+  Building,Bus,UserCog,CalendarCheck,Briefcase, FileBarChart2,
+  ClipboardCheck,
+  CalendarOff,
 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +17,7 @@ import {
   Users,
 } from "lucide-react";
 import {  useLocation } from "react-router-dom";
+
 
 export default function Sidebar() {
   
@@ -64,10 +67,17 @@ const [openTransport, setOpenTransport] = useState(false);
 const [openHRM, setOpenHRM] = useState(true);
 const [openAttendance, setOpenAttendance] = useState(false);
 const [openLeaves, setOpenLeaves] = useState(false);
+const [openReports, setOpenReports] = useState(
+  location.pathname.startsWith("/admin/dashboard/reports")
+);
+
+
 /* MANAGEMENT ACTIVE CHECK */
 const isManagementActive = location.pathname.startsWith(
   "/admin/dashboard/management"
 );
+
+
 
 const isManagementItemActive = (path: string) =>
   location.pathname === path;
@@ -801,7 +811,62 @@ const isManagementItemActive = (path: string) =>
 
   </div>
 )}
+{/* ================= REPORTS ================= */}
+<button
+  onClick={() => setOpenReports(!openReports)}
+  className="w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-100"
+>
+  <span className="text-sm font-semibold text-gray-700">
+    Reports
+  </span>
+  <ChevronDown
+    className={`w-4 h-4 transition-transform ${
+      openReports ? "rotate-180" : ""
+    }`}
+  />
+</button>
 
+{openReports && (
+  <div className="ml-4 mt-2 space-y-1">
+
+    <ReportItem
+      icon={ClipboardCheck}
+      label="Attendance Report"
+      path="/admin/dashboard/reports/attendance"
+    />
+
+    <ReportItem
+      icon={GraduationCap}
+      label="Class Report"
+      path="/admin/dashboard/reports/class"
+    />
+
+    <ReportItem
+      icon={Users}
+      label="Student Report"
+      path="/admin/dashboard/reports/student"
+    />
+
+    <ReportItem
+      icon={FileBarChart2}
+      label="Grade Report"
+      path="/admin/dashboard/reports/grade"
+    />
+
+    <ReportItem
+      icon={CalendarOff}
+      label="Leave Report"
+      path="/admin/dashboard/reports/leave"
+    />
+
+    <ReportItem
+      icon={Wallet}
+      label="Fees Report"
+      path="/admin/dashboard/reports/fees"
+    />
+
+  </div>
+)}
 
         {/* ================= OTHER MENUS ================= */}
         <div className="pt-3 space-y-1">
@@ -1006,6 +1071,40 @@ function HRMItem({
     >
       <IconBox Icon={Icon} />
       <span className="text-sm">{label}</span>
+    </button>
+  );
+}
+function ReportItem({
+  icon: Icon,
+  label,
+  path,
+}: {
+  icon: any;
+  label: string;
+  path: string;
+}) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const active = location.pathname === path;
+
+  return (
+    <button
+      onClick={() => navigate(path)}
+      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm
+        ${
+          active
+            ? "bg-blue-600 text-white"
+            : "text-gray-700 hover:bg-gray-50"
+        }`}
+    >
+      <span className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center">
+        <Icon
+          className={`w-4 h-4 ${
+            active ? "text-blue-600" : "text-gray-500"
+          }`}
+        />
+      </span>
+      {label}
     </button>
   );
 }

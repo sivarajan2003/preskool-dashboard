@@ -3,7 +3,7 @@ import {
   RefreshCcw,
   Printer,
   ArrowUpDown,
-  MoreVertical,
+  Eye, Pencil, Trash2,
   Plus,
   CalendarDays,
   Filter,
@@ -86,7 +86,8 @@ export default function GradePage() {
   const [openFilter, setOpenFilter] = useState(false);
   const [statusFilter, setStatusFilter] = useState<"Active" | null>(null);
   const [pointsFilter, setPointsFilter] = useState<"High" | "Low" | null>(null);
-  
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   
   const [dateFilter, setDateFilter] = useState<
@@ -487,31 +488,38 @@ useEffect(() => {
       </td>
 
       {/* Action */}
-      <td className="px-4 py-3 text-center relative">
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setOpenMenu(openMenu === d.id ? null : d.id);
-          }}
-          className="p-1 rounded hover:bg-gray-100"
-        >
-          <MoreVertical size={16} />
-        </button>
+      <td className="px-4 py-3 text-center">
+  <div className="flex justify-center gap-3">
 
-        {openMenu === d.id && (
-          <div className="absolute right-6 top-8 bg-white border rounded-lg shadow z-30 w-32">
-            <button className="w-full px-4 py-2 text-left hover:bg-gray-100">
-              View
-            </button>
-            <button className="w-full px-4 py-2 text-left hover:bg-gray-100">
-              Edit
-            </button>
-            <button className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50">
-              Delete
-            </button>
-          </div>
-        )}
-      </td>
+    {/* VIEW */}
+    <button
+      title="View"
+      className="p-2 rounded hover:bg-gray-100 text-gray-600"
+      onClick={() => console.log("View", d.id)}
+    >
+      <Eye size={16} />
+    </button>
+
+    {/* EDIT */}
+    <button
+      title="Edit"
+      className="p-2 rounded hover:bg-gray-100 text-gray-600"
+      onClick={() => console.log("Edit", d.id)}
+    >
+      <Pencil size={16} />
+    </button>
+
+    {/* DELETE */}
+    <button
+      title="Delete"
+      className="p-2 rounded hover:bg-red-100 text-red-600"
+      onClick={() => setDeleteId(d.id)}
+    >
+      <Trash2 size={16} />
+    </button>
+
+  </div>
+</td>
 
     </tr>
   ))}
@@ -557,6 +565,42 @@ useEffect(() => {
       setData((prev) => [newGrade, ...prev])
     }
   />
+)}
+{deleteId && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white rounded-xl w-[380px] p-6">
+
+      <h3 className="text-lg font-semibold mb-2">
+        Confirm Delete
+      </h3>
+
+      <p className="text-sm text-gray-600 mb-6">
+        Are you sure you want to delete this record?
+        <br />
+        This action cannot be undone.
+      </p>
+
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setDeleteId(null)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData(prev => prev.filter(item => item.id !== deleteId));
+            setDeleteId(null);
+          }}
+          className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
+        >
+          Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
 )}
 
     </div>

@@ -3,7 +3,10 @@ import {
   RefreshCcw,
   Printer,
   ArrowUpDown,
-  MoreVertical,
+  //MoreVertical,
+  Eye,
+  Pencil,
+  Trash2,
   CalendarDays,
   Filter,
   Plus,
@@ -101,7 +104,7 @@ export default function Hostel() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortAsc, setSortAsc] = useState(true);
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  //const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [openCalendar, setOpenCalendar] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [startDate, setStartDate] = useState("");
@@ -111,13 +114,13 @@ export default function Hostel() {
 
   useEffect(() => {
     const close = () => {
-      setOpenMenu(null);
       setOpenCalendar(false);
       setOpenFilter(false);
     };
     window.addEventListener("click", close);
     return () => window.removeEventListener("click", close);
   }, []);
+  
 
   /* 🔄 REFRESH */
   const handleRefresh = () => {
@@ -375,42 +378,39 @@ export default function Hostel() {
                 <td className="px-4 py-3 text-center">{d.intake}</td>
                 <td className="px-4 py-3 text-center">{d.description}</td>
 
-                <td className="px-4 py-3 text-center relative">
-  <button
-    onClick={(e) => {
-      e.stopPropagation();
-      setOpenMenu(openMenu === d.id ? null : d.id);
-    }}
-    className="p-1 rounded hover:bg-gray-100"
-  >
-    <MoreVertical size={16} />
-  </button>
+                <td className="px-4 py-3 text-center">
+  <div className="flex items-center justify-center gap-3">
 
-  {openMenu === d.id && (
-    <div
-      onClick={(e) => e.stopPropagation()}
-      className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30"
+    {/* VIEW */}
+    <button
+      title="View"
+      onClick={() => alert(`View Hostel ${d.id}`)}
+      className="text-gray-600 hover:text-blue-600"
     >
-      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">
-        View
-      </button>
+      <Eye size={16} />
+    </button>
 
-      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">
-        Edit
-      </button>
+    {/* EDIT */}
+    <button
+      title="Edit"
+      onClick={() => alert(`Edit Hostel ${d.id}`)}
+      className="text-gray-600 hover:text-green-600"
+    >
+      <Pencil size={16} />
+    </button>
 
-      <button
-        onClick={() => {
-          setConfirmDeleteId(d.id);
-          setOpenMenu(null);
-        }}
-        className="block w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-left"
-      >
-        Delete
-      </button>
-    </div>
-  )}
+    {/* DELETE */}
+    <button
+      title="Delete"
+      onClick={() => setConfirmDeleteId(d.id)}
+      className="text-red-500 hover:text-red-700"
+    >
+      <Trash2 size={16} />
+    </button>
+
+  </div>
 </td>
+
              </tr>
             ))}
           </tbody>

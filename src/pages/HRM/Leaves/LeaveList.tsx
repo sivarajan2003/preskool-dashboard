@@ -3,11 +3,12 @@ import {
   RefreshCcw,
   Printer,
   ArrowUpDown,
-  MoreVertical,
+  Eye, Pencil, Trash2 ,
   CalendarDays,
   Filter,
   Plus,
 } from "lucide-react";
+import AddLeaveModal from "../../../components/tables/AddLeaveModal";
 
 /* ================= DATA ================= */
 const INITIAL_DATA = [
@@ -25,16 +26,19 @@ export default function LeaveList() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortAsc, setSortAsc] = useState(true);
+  const [openAddLeave, setOpenAddLeave] = useState(false);
 
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
+ // const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [openCalendar, setOpenCalendar] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
-
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  
   /* CLOSE DROPDOWNS */
   useEffect(() => {
     const close = () => {
-      setOpenMenu(null);
+      //setOpenMenu(null);
       setOpenCalendar(false);
       setOpenFilter(false);
     };
@@ -112,9 +116,13 @@ export default function LeaveList() {
             <button onClick={handleExport} className="px-4 py-2 border rounded-lg text-sm">
               Export
             </button>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-1">
-              <Plus size={14} /> Add Leave
-            </button>
+            <button
+  onClick={() => setOpenAddLeave(true)}
+  className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-1"
+>
+  <Plus size={14} /> Add Leave
+</button>
+
           </div>
         </div>
       </div>
@@ -127,18 +135,77 @@ export default function LeaveList() {
           <div className="flex items-center gap-3">
 
             {/* DATE RANGE */}
-            <div className="relative">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setOpenCalendar(!openCalendar);
-                }}
-                className="flex items-center gap-2 px-4 py-2 border rounded-lg text-sm"
-              >
-                <CalendarDays size={14} />
-                15 May 2020 - 24 May 2024
-              </button>
-            </div>
+            {/* DATE RANGE */}
+<div className="relative">
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setOpenCalendar(!openCalendar);
+    }}
+    className="flex items-center gap-2 px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+  >
+    <CalendarDays size={14} />
+    {startDate && endDate
+      ? `${startDate} - ${endDate}`
+      : "Select Date Range"}
+  </button>
+
+  {/* DROPDOWN */}
+  {openCalendar && (
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="absolute left-0 mt-2 w-72 bg-white border rounded-xl shadow-lg z-40 p-5"
+    >
+      {/* START DATE */}
+      <div className="mb-4">
+        <label className="text-sm font-medium text-gray-600">
+          Start Date
+        </label>
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          className="mt-1 w-full border rounded-lg px-3 py-2 text-sm"
+        />
+      </div>
+
+      {/* END DATE */}
+      <div className="mb-5">
+        <label className="text-sm font-medium text-gray-600">
+          End Date
+        </label>
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          className="mt-1 w-full border rounded-lg px-3 py-2 text-sm"
+        />
+      </div>
+
+      {/* APPLY */}
+      <button
+        onClick={() => {
+          if (!startDate || !endDate) return;
+
+          const filteredByDate = INITIAL_DATA.filter((d) => {
+            const rowDate = new Date(d.date);
+            return (
+              rowDate >= new Date(startDate) &&
+              rowDate <= new Date(endDate)
+            );
+          });
+
+          setData(filteredByDate);
+          setCurrentPage(1);
+          setOpenCalendar(false);
+        }}
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm font-semibold"
+      >
+        Apply
+      </button>
+    </div>
+  )}
+</div>
 
             {/* FILTER */}
             <div className="relative">
@@ -235,38 +302,43 @@ export default function LeaveList() {
                   </span>
                 </td>
 
-                <td className="px-4 py-3 text-center relative">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setOpenMenu(openMenu === d.id ? null : d.id);
-                    }}
-                    className="p-1 rounded hover:bg-gray-100"
-                  >
-                    <MoreVertical size={16} />
-                  </button>
+                <td className="px-4 py-3 text-center">
+  <div className="flex items-center justify-center gap-3">
 
-                  {openMenu === d.id && (
-                    <div className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30">
-                      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">
-                        View
-                      </button>
-                      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => {
-                          setConfirmDeleteId(d.id);
-                          setOpenMenu(null);
-                        }}
-                        className="block w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-left"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  )}
-                </td>
-              </tr>
+    {/* VIEW */}
+    <button
+      title="View"
+      className="p-2 rounded-full hover:bg-gray-100 text-gray-700"
+      onClick={() => {
+        console.log("View", d.id);
+      }}
+    >
+      <Eye size={16} />
+    </button>
+
+    {/* EDIT */}
+    <button
+      title="Edit"
+      className="p-2 rounded-full hover:bg-gray-100 text-gray-700"
+      onClick={() => {
+        console.log("Edit", d.id);
+      }}
+    >
+      <Pencil size={16} />
+    </button>
+
+    {/* DELETE */}
+    <button
+      title="Delete"
+      className="p-2 rounded-full hover:bg-red-100 text-red-600"
+      onClick={() => setConfirmDeleteId(d.id)}
+    >
+      <Trash2 size={16} />
+    </button>
+
+  </div>
+</td>
+             </tr>
             ))}
           </tbody>
         </table>
@@ -333,6 +405,14 @@ export default function LeaveList() {
           </div>
         </div>
       )}
+{openAddLeave && (
+  <AddLeaveModal
+    onClose={() => setOpenAddLeave(false)}
+    onAdd={(newLeave) =>
+      setData((prev) => [newLeave, ...prev])
+    }
+  />
+)}
 
     </div>
   );

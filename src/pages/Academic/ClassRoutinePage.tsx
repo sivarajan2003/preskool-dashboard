@@ -4,10 +4,13 @@ import {
   Printer,
   Filter,
   ArrowUpDown,
-  MoreVertical,
   Plus,
   CalendarDays,
+  Eye,
+  Pencil,
+  Trash2,
 } from "lucide-react";
+
 import AddRoutineModal from "../../components/AddRoutineModal";
 import { useEffect } from "react";
 /* ================= DATA ================= */
@@ -140,11 +143,12 @@ const ROUTINES = [
 
 export default function ClassRoutinePage() {
   const [data, setData] = useState(ROUTINES);
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  //const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [sortAsc, setSortAsc] = useState(true);
   const [dayFilter, setDayFilter] = useState<string | null>(null);
   const [openAddRoutine, setOpenAddRoutine] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const [startDate, setStartDate] = useState("2024-05-15");
   const [endDate, setEndDate] = useState("2024-05-24");
@@ -438,26 +442,39 @@ const paginatedData = filteredData.slice(
                 <td className="px-4 py-3 text-center">{r.end}</td>
                 <td className="px-4 py-3 text-center">{r.room}</td>
 
-                <td className="px-4 py-3 text-center relative">
-                  <button onClick={() => setOpenMenu(openMenu === r.id ? null : r.id)}>
-                    <MoreVertical size={16} />
-                  </button>
+                <td className="px-4 py-3 text-center">
+  <div className="flex items-center justify-center gap-4">
 
-                  {openMenu === r.id && (
-                    <div className="absolute right-6 top-8 bg-white border rounded-lg shadow z-20 text-sm">
-                      <button className="block px-4 py-2 hover:bg-gray-50 w-full text-left">
-                        View
-                      </button>
-                      <button className="block px-4 py-2 hover:bg-gray-50 w-full text-left">
-                        Edit
-                      </button>
-                      <button className="block px-4 py-2 hover:bg-red-50 text-red-600 w-full text-left">
-                        Delete
-                      </button>
-                    </div>
-                  )}
-                </td>
-              </tr>
+    {/* VIEW */}
+    <button
+      title="View"
+      onClick={() => alert(`View ${r.id}`)}
+      className="text-gray-600 hover:text-blue-600"
+    >
+      <Eye size={18} />
+    </button>
+
+    {/* EDIT */}
+    <button
+      title="Edit"
+      onClick={() => alert(`Edit ${r.id}`)}
+      className="text-gray-600 hover:text-green-600"
+    >
+      <Pencil size={18} />
+    </button>
+
+    {/* DELETE */}
+    <button
+      title="Delete"
+      onClick={() => setConfirmDeleteId(r.id)}
+      className="text-red-600 hover:text-red-700"
+    >
+      <Trash2 size={18} />
+    </button>
+
+  </div>
+</td>
+ </tr>
             ))}
           </tbody>
         </table>
@@ -520,6 +537,43 @@ const paginatedData = filteredData.slice(
       ])
     }
   />
+)}
+{confirmDeleteId && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-sm p-6">
+
+      <h3 className="text-lg font-semibold mb-2">
+        Confirm Delete
+      </h3>
+
+      <p className="text-sm text-gray-600 mb-6">
+        Are you sure you want to delete this block?
+        <br />
+        This action cannot be undone.
+      </p>
+
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setConfirmDeleteId(null)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData((prev) =>
+              prev.filter((item) => item.id !== confirmDeleteId)
+            );
+            setConfirmDeleteId(null);
+          }}
+          className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
 )}
 
     </div>

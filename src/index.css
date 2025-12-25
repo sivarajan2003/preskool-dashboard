@@ -101,3 +101,20 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   transform: translateY(-3px) scale(1.01);
   box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+
+  .print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}

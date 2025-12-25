@@ -3,7 +3,9 @@ import {
   RefreshCcw,
   Printer,
   ArrowUpDown,
-  MoreVertical,
+  Eye,
+  Pencil,
+  Trash2,
   Plus,
   CalendarDays,
   Filter,
@@ -34,6 +36,8 @@ const INITIAL_DATA = [
 
 export default function SyllabusPage() {
   const [data, setData] = useState(INITIAL_DATA);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+
   const [search, setSearch] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -356,34 +360,39 @@ onClick={(e) => {
                     ● {d.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-center relative">
-  <button
-    onClick={(e) => {
-      e.stopPropagation();
-      setOpenMenu(openMenu === d.id ? null : d.id);
-    }}
-    className="p-1 rounded hover:bg-gray-100"
-  >
-    <MoreVertical size={16} />
-  </button>
+                <td className="px-4 py-3 text-center">
+  <div className="flex items-center justify-center gap-3">
 
-  {openMenu === d.id && (
-    <div
-      onClick={(e) => e.stopPropagation()}
-      className="absolute right-0 mt-3 bg-white border rounded-lg shadow-lg z-30 min-w-[140px]"
+    {/* VIEW */}
+    <button
+      onClick={() => console.log("View", d.id)}
+      className="text-gray-600 hover:text-blue-600"
+      title="View"
     >
-      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">
-        View
-      </button>
-      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">
-        Edit
-      </button>
-      <button className="block w-full px-4 py-2 text-sm hover:bg-red-50 text-red-600 text-left">
-        Delete
-      </button>
-    </div>
-  )}
+      <Eye size={16} />
+    </button>
+
+    {/* EDIT */}
+    <button
+      onClick={() => console.log("Edit", d.id)}
+      className="text-gray-600 hover:text-green-600"
+      title="Edit"
+    >
+      <Pencil size={16} />
+    </button>
+
+    {/* DELETE */}
+    <button
+      onClick={() => setDeleteId(d.id)}
+      className="text-gray-600 hover:text-red-600"
+      title="Delete"
+    >
+      <Trash2 size={16} />
+    </button>
+
+  </div>
 </td>
+
 
               </tr>
             ))}
@@ -419,6 +428,42 @@ onClick={(e) => {
       setData((prev) => [group, ...prev])
     }
   />
+)}
+{deleteId !== null && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-sm p-6">
+
+      <h3 className="text-lg font-semibold mb-2">
+        Confirm Delete
+      </h3>
+
+      <p className="text-sm text-gray-600 mb-6">
+        Are you sure you want to delete this block?
+        <br />
+        This action cannot be undone.
+      </p>
+
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setDeleteId(null)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData(prev => prev.filter(item => item.id !== deleteId));
+            setDeleteId(null);
+          }}
+          className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
+        >
+          Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
 )}
 
     </div>

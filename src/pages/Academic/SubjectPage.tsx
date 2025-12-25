@@ -3,7 +3,7 @@ import {
   RefreshCcw,
   Printer,
   ArrowUpDown,
-  MoreVertical,
+  Eye, Pencil, Trash2,
   Plus,
   CalendarDays,
 } from "lucide-react";
@@ -32,8 +32,9 @@ export default function SubjectPage() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortAsc, setSortAsc] = useState(true);
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
-  
+  //const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+
   const [openAdd, setOpenAdd] = useState(false);
 const [openDate, setOpenDate] = useState(false);
 const [startDate, setStartDate] = useState("2020-05-15");
@@ -41,16 +42,12 @@ const [endDate, setEndDate] = useState("2024-05-24");
 
 useEffect(() => {
   const closeMenu = () => {
-    setOpenMenu(null);
-    setOpenDate(false);
+    setOpenDate(false); // keep this if you still use date dropdown
   };
 
   window.addEventListener("click", closeMenu);
   return () => window.removeEventListener("click", closeMenu);
 }, []);
-
-  
-
   /* 🔄 REFRESH */
   const handleRefresh = () => {
     setData(INITIAL_DATA);
@@ -285,35 +282,39 @@ useEffect(() => {
                     ● {s.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-center relative">
-               
-<button
-  onClick={(e) => {
-    e.stopPropagation();
-    setOpenMenu(openMenu === s.id ? null : s.id);
-  }}
->
-  <MoreVertical size={16} />
-</button>
+                <td className="px-4 py-3 text-center">
+  <div className="flex items-center justify-center gap-4">
 
-                  {openMenu === s.id && (
-                    <div className="absolute right-6 top-8 bg-white border rounded-lg shadow z-20 min-w-[120px] flex flex-col">
-                      <button className="px-4 py-2 text-sm text-left hover:bg-gray-100">
-  View
-</button>
+    {/* VIEW */}
+    <button
+      title="View"
+      onClick={() => alert(`View ${s.id}`)}
+      className="text-gray-600 hover:text-blue-600"
+    >
+      <Eye size={18} />
+    </button>
 
-<button className="px-4 py-2 text-sm text-left hover:bg-gray-100">
-  Edit
-</button>
+    {/* EDIT */}
+    <button
+      title="Edit"
+      onClick={() => alert(`Edit ${s.id}`)}
+      className="text-gray-600 hover:text-green-600"
+    >
+      <Pencil size={18} />
+    </button>
 
-<button className="px-4 py-2 text-sm text-left hover:bg-red-50 text-red-600">
-  Delete
-</button>
+    {/* DELETE */}
+    <button
+      title="Delete"
+      onClick={() => setConfirmDeleteId(s.id)}
+      className="text-red-600 hover:text-red-700"
+    >
+      <Trash2 size={18} />
+    </button>
 
-                    </div>
-                  )}
-                </td>
-              </tr>
+  </div>
+</td>
+ </tr>
             ))}
           </tbody>
         </table>
@@ -355,6 +356,44 @@ useEffect(() => {
           onAdd={(subject) => setData((prev) => [subject, ...prev])}
         />
       )}*/}
+      {confirmDeleteId && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-sm p-6">
+
+      <h3 className="text-lg font-semibold mb-2">
+        Confirm Delete
+      </h3>
+
+      <p className="text-sm text-gray-600 mb-6">
+        Are you sure you want to delete this subject?
+        <br />
+        This action cannot be undone.
+      </p>
+
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setConfirmDeleteId(null)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData((prev) =>
+              prev.filter((item) => item.id !== confirmDeleteId)
+            );
+            setConfirmDeleteId(null);
+          }}
+          className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

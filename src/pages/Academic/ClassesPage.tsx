@@ -4,10 +4,13 @@ import {
   Printer,
   Filter,
   ArrowUpDown,
-  MoreVertical,
   Plus,
   CalendarDays,
+  Eye,
+  Pencil,
+  Trash2,
 } from "lucide-react";
+
 import AddClassModal from "../../components/AddClassModal";
 import { useEffect } from "react";
 /* ================= CLASSES DATA ================= */
@@ -28,8 +31,10 @@ const initialClasses = [
 /* ================= PAGE ================= */
 
 export default function ClassesPage() {
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+
   const [data, setData] = useState(initialClasses);
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  //const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [openFilter, setOpenFilter] = useState(false);
   const [statusFilter, setStatusFilter] = useState<"All" | "Active" | "Inactive">("All");
@@ -318,25 +323,39 @@ export default function ClassesPage() {
                     {c.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-center relative">
-                  <button onClick={() => setOpenMenu(openMenu === c.id ? null : c.id)}>
-                    <MoreVertical size={16} />
-                  </button>
+                <td className="px-4 py-3 text-center">
+  <div className="flex items-center justify-center gap-3">
 
-                  {openMenu === c.id && (
-                    <div className="absolute right-6 top-8 bg-white border rounded-lg shadow text-sm z-20">
-                      <button className="block px-4 py-2 hover:bg-gray-50 w-full text-left">
-                        View
-                      </button>
-                      <button className="block px-4 py-2 hover:bg-gray-50 w-full text-left">
-                        Edit
-                      </button>
-                      <button className="block px-4 py-2 hover:bg-red-50 text-red-600 w-full text-left">
-                        Delete
-                      </button>
-                    </div>
-                  )}
-                </td>
+    {/* VIEW */}
+    <button
+      title="View"
+      onClick={() => alert(`View class ${c.id}`)}
+      className="text-gray-600 hover:text-blue-600"
+    >
+      <Eye size={16} />
+    </button>
+
+    {/* EDIT */}
+    <button
+      title="Edit"
+      onClick={() => alert(`Edit class ${c.id}`)}
+      className="text-gray-600 hover:text-green-600"
+    >
+      <Pencil size={16} />
+    </button>
+
+    {/* DELETE */}
+    <button
+      title="Delete"
+      onClick={() => setConfirmDeleteId(c.id)}
+      className="text-red-500 hover:text-red-700"
+    >
+      <Trash2 size={16} />
+    </button>
+
+  </div>
+</td>
+
               </tr>
             ))}
           </tbody>
@@ -387,6 +406,44 @@ export default function ClassesPage() {
     onClose={() => setOpenAddClass(false)}
     onAdd={(newClass) => setData((prev) => [newClass, ...prev])}
   />
+)}
+{confirmDeleteId && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-sm p-6">
+
+      <h3 className="text-lg font-semibold mb-2">
+        Confirm Delete
+      </h3>
+
+      <p className="text-sm text-gray-600 mb-6">
+        Are you sure you want to delete this class?
+        <br />
+        This action cannot be undone.
+      </p>
+
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setConfirmDeleteId(null)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData(prev =>
+              prev.filter(item => item.id !== confirmDeleteId)
+            );
+            setConfirmDeleteId(null);
+          }}
+          className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
+        >
+          Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
 )}
 
     </div>

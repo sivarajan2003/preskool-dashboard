@@ -3,7 +3,7 @@ import {
   RefreshCcw,
   Printer,
   ArrowUpDown,
-  MoreVertical,
+  Eye, Pencil, Trash2,
   CalendarDays,
   Filter,
   Plus,
@@ -31,7 +31,7 @@ export default function Designation() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortAsc, setSortAsc] = useState(true);
 
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  //const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [openCalendar, setOpenCalendar] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
@@ -43,7 +43,7 @@ export default function Designation() {
   /* CLOSE DROPDOWNS */
   useEffect(() => {
     const close = () => {
-      setOpenMenu(null);
+     
       setOpenCalendar(false);
       setOpenFilter(false);
     };
@@ -295,39 +295,37 @@ export default function Designation() {
                   </span>
                 </td>
 
-                <td className="px-4 py-3 text-center relative">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setOpenMenu(openMenu === d.id ? null : d.id);
-                    }}
-                    className="p-1 rounded hover:bg-gray-100"
-                  >
-                    <MoreVertical size={16} />
-                  </button>
+                <td className="px-4 py-3 text-center">
+  <div className="flex items-center justify-center gap-3">
 
-                  {openMenu === d.id && (
-                    <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow-lg z-30">
-                      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">
-                        View
-                      </button>
-                      <button className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left">
-                        Edit
-                      </button>
-                      <button
-  onClick={() => {
-    setConfirmDeleteId(d.id);
-    setOpenMenu(null);
-  }}
-  className="block w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-left"
->
-  Delete
-</button>
+    {/* VIEW */}
+    <button
+      className="p-1.5 rounded hover:bg-blue-50 text-gray-600 hover:text-blue-600"
+      title="View"
+    >
+      <Eye size={16} />
+    </button>
 
-                    </div>
-                  )}
-                </td>
-              </tr>
+    {/* EDIT */}
+    <button
+      className="p-1.5 rounded hover:bg-green-50 text-gray-600 hover:text-green-600"
+      title="Edit"
+    >
+      <Pencil size={16} />
+    </button>
+
+    {/* DELETE */}
+    <button
+      onClick={() => setConfirmDeleteId(d.id)}
+      className="p-1.5 rounded hover:bg-red-50 text-red-600 hover:text-red-700"
+      title="Delete"
+    >
+      <Trash2 size={16} />
+    </button>
+
+  </div>
+</td>
+    </tr>
             ))}
           </tbody>
         </table>
@@ -371,7 +369,7 @@ export default function Designation() {
       </h3>
 
       <p className="text-sm text-gray-600 mb-6">
-        Are you sure you want to delete this hostel?
+        Are you sure you want to delete this block?
         <br />
         This action cannot be undone.
       </p>

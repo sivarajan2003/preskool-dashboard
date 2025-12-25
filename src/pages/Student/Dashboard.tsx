@@ -1137,8 +1137,6 @@ const handleAddExam = (dateValue: string) => {
 </div>
 {/* ================= NOTICE + SYLLABUS + TODO ================= */}
 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6">
-
-  {/* ================= NOTICE BOARD ================= */}
   {/* ================= NOTICE BOARD ================= */}
   <div className="bg-white rounded-xl border p-5
                 animate-card card-hover">
@@ -1206,7 +1204,7 @@ const handleAddExam = (dateValue: string) => {
   <h4 className="text-18px font-medium">Syllabus</h4>
 
   {/* Info box */}
-  <div className="border border-blue-400 bg-blue-50 text-blue-600 text-xs rounded-lg px-4 py-3 mb-4 flex gap-2">
+  <div className="border border-blue-400 bg-blue-50 text-blue-600 text-xs rounded-lg px-4 py-2 mb-4 flex gap-2">
     ℹ️ These Result are obtained from the syllabus completion on the respective Class
   </div>
 

@@ -3,7 +3,10 @@ import {
   RefreshCcw,
   Printer,
   ArrowUpDown,
-  MoreVertical,
+  Eye,
+Pencil,
+Trash2,
+
   Plus,
   CalendarDays,
   Filter,
@@ -94,6 +97,7 @@ export default function ExamPage() {
   const [toDate, setToDate] = useState("");
   const [openCalendar, setOpenCalendar] = useState(false);
   const [openAddExam, setOpenAddExam] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const [filterType, setFilterType] = useState<string | null>(null);
 const [filterDate, setFilterDate] = useState<
@@ -105,7 +109,7 @@ const [filterDate, setFilterDate] = useState<
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortAsc, setSortAsc] = useState(true);
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  //const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [openFilter, setOpenFilter] = useState(false);
 
   useEffect(() => {
@@ -113,6 +117,7 @@ const [filterDate, setFilterDate] = useState<
     window.addEventListener("click", close);
     return () => window.removeEventListener("click", close);
   }, []);
+  
 
   /* 🔄 REFRESH */
   const handleRefresh = () => {
@@ -470,59 +475,43 @@ const [filterDate, setFilterDate] = useState<
               </td>
             
               {/* Action */}
-              <td className="px-4 py-3 text-center relative">
-  <button
-    onClick={(e) => {
-      e.stopPropagation();
-      setOpenMenu(openMenu === d.id ? null : d.id);
-    }}
-    className="p-1 rounded hover:bg-gray-100"
-  >
-    <MoreVertical size={16} />
-  </button>
+              <td className="px-4 py-3 text-center">
+  <div className="flex items-center justify-center gap-3">
 
-  {/* ACTION DROPDOWN */}
-  {openMenu === d.id && (
-    <div className="absolute right-6 top-8 bg-white border rounded-lg shadow-lg z-30 w-32 overflow-hidden">
-      
-      {/* VIEW */}
-      <button
-        onClick={() => {
-          navigate(`/admin/dashboard/academic/examinations/view/${d.id}`);
-          setOpenMenu(null);
-        }}
-        className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-      >
-        View
-      </button>
+    {/* VIEW */}
+    <button
+      onClick={() =>
+        navigate(`/admin/dashboard/academic/examinations/view/${d.id}`)
+      }
+      className="text-gray-600 hover:text-blue-600"
+      title="View"
+    >
+      <Eye size={16} />
+    </button>
 
-      {/* EDIT */}
-      <button
-        onClick={() => {
-          navigate(`/admin/dashboard/academic/examinations/edit/${d.id}`);
-          setOpenMenu(null);
-        }}
-        className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-      >
-        Edit
-      </button>
+    {/* EDIT */}
+    <button
+      onClick={() =>
+        navigate(`/admin/dashboard/academic/examinations/edit/${d.id}`)
+      }
+      className="text-gray-600 hover:text-green-600"
+      title="Edit"
+    >
+      <Pencil size={16} />
+    </button>
 
-      {/* DELETE */}
-      <button
-        onClick={() => {
-          if (window.confirm("Are you sure you want to delete this exam?")) {
-            setData((prev) => prev.filter((item) => item.id !== d.id));
-          }
-          setOpenMenu(null);
-        }}
-        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-      >
-        Delete
-      </button>
-    </div>
-  )}
+    {/* DELETE */}
+    <button
+  onClick={() => setDeleteId(d.id)}
+  className="text-red-600 hover:text-red-700 hover:bg-red-50 p-1.5 rounded"
+  title="Delete"
+>
+  <Trash2 size={16} />
+</button>
+
+
+  </div>
 </td>
-
             </tr>
             
             ))}
@@ -587,6 +576,44 @@ const [filterDate, setFilterDate] = useState<
       setData((prev) => [newExam, ...prev])
     }
   />
+)}
+{deleteId && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-sm p-6">
+
+      <h3 className="text-lg font-semibold mb-2">
+        Confirm Delete
+      </h3>
+
+      <p className="text-sm text-gray-600 mb-6">
+        Are you sure you want to delete this block?
+        <br />
+        This action cannot be undone.
+      </p>
+
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setDeleteId(null)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData(prev =>
+              prev.filter(item => item.id !== deleteId)
+            );
+            setDeleteId(null);
+          }}
+          className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
+        >
+          Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
 )}
 
     </div>
