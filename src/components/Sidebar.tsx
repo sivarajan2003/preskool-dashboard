@@ -835,7 +835,7 @@ const isManagementItemActive = (path: string) =>
       path="/admin/dashboard/reports/attendance"
     />
 
-    <ReportItem
+   {/* <ReportItem
       icon={GraduationCap}
       label="Class Report"
       path="/admin/dashboard/reports/class"
@@ -863,7 +863,7 @@ const isManagementItemActive = (path: string) =>
       icon={Wallet}
       label="Fees Report"
       path="/admin/dashboard/reports/fees"
-    />
+    /> */}
 
   </div>
 )}

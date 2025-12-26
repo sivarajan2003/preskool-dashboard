@@ -58,12 +58,21 @@ import GradeReport from "./pages/Reports/GradeReport";
 import LeaveReport from "./pages/Reports/LeaveReport";
 import FeesReport from "./pages/Reports/FeesReport";
 //import AttendanceReport from "./pages/Reports/AttendanceReport";
-import StudentAttendanceType from "./pages/Reports/StudentAttendanceType";
+//import StudentAttendanceType from "./pages/Reports/StudentAttendanceType";
 //import DailyAttendance from "./pages/Reports/DailyAttendance";
+import AttendanceMain from "./pages/Reports/AttendanceTabs/AttendanceMain";
+import StudentAttendanceType from "./pages/Reports/AttendanceTabs/StudentAttendanceType";
+import DailyAttendance from "./pages/Reports/AttendanceTabs/DailyAttendance";
+import StudentDayWise from "./pages/Reports/AttendanceTabs/StudentDayWise";
+import TeacherDayWise from "./pages/Reports/AttendanceTabs/TeacherDayWise";
+import TeacherReport from "./pages/Reports/AttendanceTabs/TeacherReport";
+import StaffDayWise from "./pages/Reports/AttendanceTabs/StaffDayWise";
+import StaffReport from "./pages/Reports/AttendanceTabs/StaffReport";
 
 // Auth
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import ForgotPassword from "./pages/ForgotPassword";
 
 export default function App() {
   return (
@@ -71,6 +80,8 @@ export default function App() {
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+
 
       {/* ADMIN */}
       <Route
@@ -120,13 +131,16 @@ export default function App() {
 
 <Route path="hrm/holidays" element={<Holidays />} />
 <Route path="hrm/payroll" element={<Payroll />} />
-<Route path="reports/attendance" element={<AttendanceReport />} />
-  <Route path="reports/attendance/student-type" element={<StudentAttendanceType />} />
-  <Route path="reports/class" element={<ClassReport />} />
-  <Route path="reports/student" element={<StudentReport />} />
-  <Route path="reports/grade" element={<GradeReport />} />
-  <Route path="reports/leave" element={<LeaveReport />} />
-  <Route path="reports/fees" element={<FeesReport />} />
+<Route path="reports/attendance" element={<AttendanceReport />}>
+  <Route index element={<AttendanceMain />} />
+  <Route path="student-type" element={<StudentAttendanceType />} />
+  <Route path="daily" element={<DailyAttendance />} />
+  <Route path="student-day-wise" element={<StudentDayWise />} />
+  <Route path="teacher-day-wise" element={<TeacherDayWise />} />
+  <Route path="teacher-report" element={<TeacherReport />} />
+  <Route path="staff-day-wise" element={<StaffDayWise />} />
+  <Route path="staff-report" element={<StaffReport />} />
+</Route>
 
 
 

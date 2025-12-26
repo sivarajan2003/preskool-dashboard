@@ -74,6 +74,14 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   transform-origin: left;
 }
 
+.btn-outline {
+  @apply flex items-center gap-2 px-3 py-2 border rounded-lg text-sm text-gray-600 hover:bg-gray-100;
+}
+
+.btn-primary {
+  @apply flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700;
+}
+
 /* ================= DISABLE HOVER ON TOUCH DEVICES ================= */
 @media (hover: none) {
   .card-interactive:hover {

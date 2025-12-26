@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import LoginIllustration from "../assets/login-illustration.png";
 import { Eye, EyeOff, Mail } from "lucide-react";
 import LeftIllustration from "../assets/login-left.png";
+import SampleLogin from "../assets/samplelogin.png";
 
 //import LoginImg from '../assets/login.png';
 import Logo from '../assets/logo.png';
@@ -41,7 +42,7 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -237,9 +238,12 @@ if (user.role === "parent") {
                 <input type="checkbox" />
                 Remember me
               </label>
-              <span className="text-blue-600 cursor-pointer">
-                Forgot password?
-              </span>
+              <p
+    onClick={() => navigate("/forgot-password")}
+    className="text-blue-600 cursor-pointer hover:underline"
+  >
+    Forgot password?
+  </p>
             </div>
   
             <button
