@@ -694,11 +694,11 @@ const isManagementItemActive = (path: string) =>
 {openHRM && (
   <div className="ml-4 mt-2 space-y-1">
 
-<HRMItem
+{/*<HRMItem
   icon={Users}
   label="Staffs"
   path="/admin/dashboard/hrm/staffs"
-/>
+/>*/}
 
 <HRMItem
   icon={Layers}

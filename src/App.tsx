@@ -32,6 +32,8 @@ import AddStudentPage from "./pages/People/AddStudentPage";
 import ExamResults from "./pages/Student/StudentsExamResults";
 import FeesDetails from "./pages/Student/StudentFees";
 import FeesPage from "./pages/Admin/FeesPage";
+//import StudentExamResult from "./pages/Student/StudentExamResult";
+import StudentFees from "./pages/Student/StudentFees";
 
 // Management
 import FeesCollection from "./pages/Management/FeesCollection";
@@ -170,6 +172,9 @@ export default function App() {
   <Route path="dashboard" element={<StudentDashboard />} />
   <Route path="exam-results" element={<ExamResults />} />
   <Route path="fees" element={<FeesDetails />} />
+  
+<Route path="/student/fees" element={<StudentFees />} />
+
 </Route>
 
 
