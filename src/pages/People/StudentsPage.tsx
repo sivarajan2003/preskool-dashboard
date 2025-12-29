@@ -14,6 +14,16 @@ import {
 import AddFeesModal from "../../components/AddFeesModal";
 import AddStudentModal from "../../components/AddStudentModal";
 import { MoreVertical, Eye, Pencil, Trash2 } from "lucide-react";
+import s1 from "../../assets/stud/s1.png";
+import s2 from "../../assets/stud/s2.png";
+import s3 from "../../assets/stud/s3.png";
+import s4 from "../../assets/stud/s4.png";
+import s5 from "../../assets/stud/s5.png";
+import s6 from "../../assets/stud/s6.png";
+import s7 from "../../assets/stud/s7.png";
+import s8 from "../../assets/stud/s8.png";
+import s9 from "../../assets/stud/s9.png";
+import s10 from "../../assets/stud/s10.png";
 
 /* ================= STUDENT DATA ================= */
 const students = [
@@ -22,124 +32,102 @@ const students = [
     name: "Ananya Sharma",
     class: "VIII, A",
     rollNo: "35013",
-    gender: "Female", // Hindu
+    gender: "Female",
     joined: "10 Jan 2015",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=47",
+    image: s1,
   },
   {
     id: "AD9982433",
     name: "Mohammed Arif",
     class: "IV, B",
     rollNo: "35012",
-    gender: "Male", // Muslim
+    gender: "Male",
     joined: "19 Aug 2014",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=12",
+    image: s2,
   },
   {
     id: "AD9982432",
-    name: "Kavya ",
+    name: "Kavya",
     class: "III, A",
     rollNo: "35011",
-    gender: "Female", // Hindu
+    gender: "Female",
     joined: "5 Dec 2017",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=32",
+    image: s3,
   },
   {
     id: "AD9982431",
     name: "Joseph Mathew",
     class: "I, B",
     rollNo: "35010",
-    gender: "Male", // Christian
+    gender: "Male",
     joined: "22 Mar 2018",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=20",
+    image: s4,
   },
   {
     id: "AD9982430",
     name: "Ayesha Khan",
     class: "II, B",
     rollNo: "35009",
-    gender: "Female", // Muslim
+    gender: "Female",
     joined: "13 May 2017",
     status: "Inactive",
-    image: "https://i.pravatar.cc/150?img=44",
+    image: s5,
   },
   {
     id: "AD9982429",
     name: "Rohit Verma",
     class: "III, B",
     rollNo: "35008",
-    gender: "Male", // Hindu
+    gender: "Male",
     joined: "20 Jun 2015",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=15",
+    image: s6,
   },
   {
     id: "AD9982428",
-    name: "Maria ",
+    name: "Maria",
     class: "V, A",
     rollNo: "35007",
-    gender: "Female", // Christian
+    gender: "Female",
     joined: "18 Jan 2023",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=36",
+    image: s7,
   },
   {
     id: "AD9982427",
     name: "Suresh Kumar",
     class: "VI, A",
     rollNo: "35006",
-    gender: "Male", // Hindu
+    gender: "Male",
     joined: "26 Nov 2012",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=18",
+    image: s8,
   },
   {
     id: "AD9982426",
     name: "Fatima Noor",
     class: "VIII, B",
     rollNo: "35005",
-    gender: "Female", // Muslim
+    gender: "Female",
     joined: "26 May 2020",
     status: "Inactive",
-    image: "https://i.pravatar.cc/150?img=25",
+    image: s9,
   },
   {
     id: "AD9982425",
     name: "Arvind Choudhary",
     class: "VII, B",
     rollNo: "35004",
-    gender: "Male", // Hindu
+    gender: "Male",
     joined: "6 Oct 2022",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=14",
-  },
-  {
-    id: "AD9982424",
-    name: "Rebecca Thomas",
-    class: "IX, A",
-    rollNo: "35003",
-    gender: "Female", // Christian
-    joined: "27 Dec 2009",
-    status: "Active",
-    image: "https://i.pravatar.cc/150?img=29",
-  },
-  {
-    id: "AD9982423",
-    name: "Imran Sheikh",
-    class: "X, A",
-    rollNo: "35002",
-    gender: "Male", // Muslim
-    joined: "11 Aug 2008",
-    status: "Active",
-    image: "https://i.pravatar.cc/150?img=11",
+    image: s10,
   },
 ];
-
-
 /* ================= MAIN PAGE ================= */
 
 export default function StudentsPage() {
@@ -154,12 +142,16 @@ export default function StudentsPage() {
     const [openFilter, setOpenFilter] = useState(false);
     const [statusFilter, setStatusFilter] = useState<"All" | "Active" | "Inactive">("All");
     const [genderFilter, setGenderFilter] = useState<"All" | "Male" | "Female">("All");
-    const [startDate, setStartDate] = useState<string>(() =>
-  new Date().toISOString().split("T")[0]
-);
-const [endDate, setEndDate] = useState<string>(() =>
-  new Date().toISOString().split("T")[0]
-);
+//   const [startDate, setStartDate] = useState<string>(() =>
+//   new Date().toISOString().split("T")[0]
+// );
+// const [endDate, setEndDate] = useState<string>(() =>
+//   new Date().toISOString().split("T")[0]
+// );
+const [openDate, setOpenDate] = useState(false);
+
+const [startDate, setStartDate] = useState("2020-05-15");
+const [endDate, setEndDate] = useState("2024-05-24");
 
     /* ✅ REAL TIME DATE */
     const today = new Date().toLocaleDateString("en-GB", {
@@ -230,172 +222,203 @@ const [endDate, setEndDate] = useState<string>(() =>
     
   return (
     <div className="space-y-6">
+{/* ================= HEADER ================= */}
+<div className="bg-white border rounded-xl px-5 py-4">
 
-      {/* ================= HEADER (IMG-1 MATCH) ================= */}
-      <div className="bg-white border rounded-xl p-4 space-y-4">
-
-        {/* TOP ROW */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold">Students</h2>
-            <p className="text-sm text-gray-500">
-              Dashboard / People / Students
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button className="p-2 border rounded-lg hover:bg-gray-50">
-              <RefreshCcw size={16} />
-            </button>
-
-            <button
-              onClick={() => window.print()}
-              className="p-2 border rounded-lg hover:bg-gray-50"
-            >
-              <Printer size={16} />
-            </button>
-
-            <button
-              onClick={handleExport}
-              className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50"
-            >
-              Export
-            </button>
-
-            <button
-              onClick={() => setOpenAddStudent(true)}
-              className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg"
-            >
-              Add Student
-            </button>
-          </div>
-        </div>
-
-        {/* SECOND ROW */}
-        <div className="flex flex-wrap items-center justify-between gap-3">
-
-          <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm text-gray-600">
-  <CalendarDays size={16} />
-
-  <input
-    type="date"
-    value={startDate}
-    onChange={(e) => setStartDate(e.target.value)}
-    className="outline-none text-sm cursor-pointer"
-  />
-
-  <span>-</span>
-
-  <input
-    type="date"
-    value={endDate}
-    onChange={(e) => setEndDate(e.target.value)}
-    className="outline-none text-sm cursor-pointer"
-  />
-</div>
-
-
-            <button
-  onClick={() => setOpenFilter((prev) => !prev)}
-  className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm hover:bg-gray-50"
->
-  <Filter size={16} />
-  Filter
-</button>
-{openFilter && (
-  <div className="absolute mt-2 w-56 bg-white border rounded-lg shadow-lg p-4 z-30">
-    
-    {/* STATUS FILTER */}
-    <div className="mb-3">
-      <p className="text-xs font-semibold text-gray-500 mb-1">Status</p>
-      <select
-        value={statusFilter}
-        onChange={(e) =>
-          setStatusFilter(e.target.value as any)
-        }
-        className="w-full border rounded-lg px-2 py-1 text-sm"
-      >
-        <option value="All">All</option>
-        <option value="Active">Active</option>
-        <option value="Inactive">Inactive</option>
-      </select>
+  {/* ===== TOP ROW ===== */}
+  <div className="flex items-center justify-between">
+    {/* LEFT */}
+    <div>
+    <h2 className="text-2xl font-semibold text-gray-900">
+        Students
+      </h2>
+      <p className="text-sm text-gray-500 mt-1">
+        Dashboard / People / Students Grid
+      </p>
     </div>
 
-    {/* GENDER FILTER */}
-    <div className="mb-3">
-      <p className="text-xs font-semibold text-gray-500 mb-1">Gender</p>
-      <select
-        value={genderFilter}
-        onChange={(e) =>
-          setGenderFilter(e.target.value as any)
-        }
-        className="w-full border rounded-lg px-2 py-1 text-sm"
-      >
-        <option value="All">All</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-      </select>
-    </div>
-
-    {/* ACTIONS */}
-    <div className="flex justify-between">
-      <button
-        onClick={() => {
-          setStatusFilter("All");
-          setGenderFilter("All");
-        }}
-        className="text-xs text-gray-500 hover:underline"
-      >
-        Reset
+    {/* RIGHT */}
+    <div className="flex items-center gap-2">
+      <button className="p-2 border rounded-lg hover:bg-gray-50">
+        <RefreshCcw size={14} />
       </button>
 
       <button
-        onClick={() => setOpenFilter(false)}
-        className="text-xs text-blue-600 hover:underline"
+        onClick={() => window.print()}
+        className="p-2 border rounded-lg hover:bg-gray-50"
       >
-        Apply
+        <Printer size={14} />
+      </button>
+
+      <button
+        onClick={handleExport}
+        className="px-3 py-1.5 text-xs border rounded-lg hover:bg-gray-50"
+      >
+        Export
+      </button>
+
+      <button
+        onClick={() => setOpenAddStudent(true)}
+        className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg"
+      >
+        Add Student
       </button>
     </div>
   </div>
-)}
 
-          </div>
+  {/* DIVIDER */}
+  <div className="border-t my-3" />
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setView("grid")}
-              className={`p-2 rounded-lg border ${
-                view === "grid"
-                  ? "bg-blue-600 text-white"
-                  : "bg-white text-gray-600"
-              }`}
-            >
-              <LayoutGrid size={16} />
-            </button>
+  {/* ===== SUB HEADER ===== */}
+  <div className="flex items-center justify-between">
 
-            <button
-              onClick={() => setView("table")}
-              className={`p-2 rounded-lg border ${
-                view === "table"
-                  ? "bg-blue-600 text-white"
-                  : "bg-white text-gray-600"
-              }`}
-            >
-              <List size={16} />
-            </button>
+    {/* LEFT */}
+    <div className="flex items-center gap-4">
+    <h3 className="text-lg font-semibold text-gray-900">
+        Students Grid
+      </h3>
+    </div>
 
-            <button
-  onClick={handleSortByName}
-  className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm hover:bg-gray-50"
->
-  <ArrowUpDown size={16} />
-  Sort By {sortOrder === "asc" ? "A-Z" : "Z-A"}
-</button>
+    {/* RIGHT */}
+    <div className="flex items-center gap-3">
+      {/* CALENDAR */}
+<div className="relative">
+  <button
+    onClick={() => setOpenDate((prev) => !prev)}
+    className="flex items-center gap-2 px-3 py-1.5 border rounded-lg text-xs text-gray-500 hover:bg-gray-50"
+  >
+    <CalendarDays size={14} />
+    {startDate} - {endDate}
+  </button>
 
-          </div>
-        </div>
+  {openDate && (
+    <div className="absolute right-0 mt-2 w-64 bg-white border rounded-lg shadow-lg p-3 z-30">
+      
+      <label className="text-xs text-gray-500">Start Date</label>
+      <input
+        type="date"
+        value={startDate}
+        onChange={(e) => setStartDate(e.target.value)}
+        className="w-full border rounded px-2 py-1 text-xs mb-2"
+      />
+
+      <label className="text-xs text-gray-500">End Date</label>
+      <input
+        type="date"
+        value={endDate}
+        onChange={(e) => setEndDate(e.target.value)}
+        className="w-full border rounded px-2 py-1 text-xs mb-3"
+      />
+
+      <div className="flex justify-between">
+        <button
+          onClick={() => setOpenDate(false)}
+          className="text-xs text-gray-500"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => setOpenDate(false)}
+          className="text-xs text-blue-600 font-medium"
+        >
+          Apply
+        </button>
       </div>
+    </div>
+  )}
+</div>
+
+      {/* FILTER */}
+<div className="relative">
+  <button
+    onClick={() => setOpenFilter((prev) => !prev)}
+    className="flex items-center gap-1 text-xs border px-3 py-1.5 rounded-lg hover:bg-gray-50"
+  >
+    <Filter size={14} />
+    Filter
+  </button>
+
+  {/* FILTER DROPDOWN */}
+  {openFilter && (
+    <div className="absolute right-0 mt-2 w-44 bg-white border rounded-lg shadow-lg p-3 z-30">
+
+      {/* STATUS OPTIONS */}
+      <div className="space-y-2">
+        {["All", "Active", "Inactive"].map((s) => (
+          <label
+            key={s}
+            className="flex items-center gap-2 text-xs cursor-pointer"
+          >
+            <input
+              type="radio"
+              checked={statusFilter === s}
+              onChange={() => setStatusFilter(s as any)}
+            />
+            {s}
+          </label>
+        ))}
+      </div>
+
+      {/* ACTIONS */}
+      <div className="flex justify-between mt-4 text-xs">
+        <button
+          onClick={() => {
+            setStatusFilter("All");
+            setOpenFilter(false);
+          }}
+          className="text-gray-500 hover:underline"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => setOpenFilter(false)}
+          className="text-blue-600 hover:underline"
+        >
+          Apply
+        </button>
+      </div>
+    </div>
+  )}
+</div>
+
+      {/* GRID / LIST */}
+      <div className="flex border rounded-lg overflow-hidden">
+        <button
+          onClick={() => setView("grid")}
+          className={`p-2 ${
+            view === "grid"
+              ? "bg-blue-600 text-white"
+              : "bg-white text-gray-600"
+          }`}
+        >
+          <LayoutGrid size={14} />
+        </button>
+
+        <button
+          onClick={() => setView("table")}
+          className={`p-2 ${
+            view === "table"
+              ? "bg-blue-600 text-white"
+              : "bg-white text-gray-600"
+          }`}
+        >
+          <List size={14} />
+        </button>
+      </div>
+      <button
+        onClick={handleSortByName}
+        className="flex items-center gap-1 text-xs border px-3 py-1.5 rounded-lg hover:bg-gray-50"
+      >
+        <ArrowUpDown size={14} />
+        Sort By A-Z
+      </button>
+    </div>
+
+  </div>
+</div>
+
       {/* ================= GRID VIEW ================= */}
      
 {view === "grid" && (

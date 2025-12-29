@@ -16,6 +16,7 @@ import US_FLAG from "../assets/us.png";
 import { useNavigate } from "react-router-dom";
 import { User, LogOut } from "lucide-react";
 import { useEffect } from "react";
+import { CalendarDays } from "lucide-react";
 
 export default function Header() {
   const [dark, setDark] = useState(false);
@@ -31,6 +32,13 @@ export default function Header() {
     return () => window.removeEventListener("click", close);
   }, []);
     
+  const [selectedYear, setSelectedYear] = useState("2024 / 2025");
+
+const academicYears = Array.from({ length: 6 }, (_, i) => {
+  const start = 2020 + i;
+  return `${start} / ${start + 1}`;
+});
+
   // 🔹 Fullscreen toggle
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -59,20 +67,35 @@ export default function Header() {
 
         {/* ACADEMIC YEAR */}
         <div className="relative">
-          <button
-            onClick={() => setYearOpen(!yearOpen)}
-            className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50"
-          >
-            📅 Academic Year : 2024 / 2025
-            <ChevronDown className="w-4 h-4 text-gray-400" />
-          </button>
+        <button
+  onClick={() => setYearOpen(!yearOpen)}
+  className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50"
+>
+  <CalendarDays className="w-4 h-4 text-gray-500" />
+  <span>Academic Year : {selectedYear}</span>
+  <ChevronDown className="w-4 h-4 text-gray-400" />
+</button>
 
-          {yearOpen && (
-            <div className="absolute top-11 left-0 w-full bg-white border rounded-lg shadow text-sm z-50">
-              <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">2023 / 2024</div>
-              <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">2024 / 2025</div>
-            </div>
-          )}
+
+{yearOpen && (
+  <div className="absolute top-11 left-0 w-full bg-white border rounded-lg shadow text-sm z-50">
+    {academicYears.map((year) => (
+      <div
+        key={year}
+        onClick={() => {
+          setSelectedYear(year);
+          setYearOpen(false);
+        }}
+        className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
+          selectedYear === year ? "bg-blue-50 font-medium" : ""
+        }`}
+      >
+        {year}
+      </div>
+    ))}
+  </div>
+)}
+
         </div>
 
         {/* ICONS */}

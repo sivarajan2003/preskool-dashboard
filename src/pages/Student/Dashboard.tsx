@@ -590,7 +590,7 @@ const handleAddExam = (dateValue: string) => {
   <div className="flex items-center justify-between mb-2">
     <h4 className="text-18px font-medium">Performance</h4>
     <span className="text-xs text-gray-500 flex items-center gap-1">
-      <CalendarDays className="w-4 h-4 text-indigo-500" />
+      <CalendarDays className="w-4 h-4 text-gray-500" />
       2024 - 2025
     </span>
   </div>
@@ -649,7 +649,7 @@ const handleAddExam = (dateValue: string) => {
     {/* TOOLTIP */}
     <div className="absolute top-8 left-1/2 -translate-x-1/2 bg-white border rounded-lg px-4 py-2 shadow text-xs">
       <p className="font-medium mb-1">Oct 2025</p>
-      <p className="text-indigo-600">Exam Score <b>80%</b></p>
+      <p className="text-gray-400">Exam Score <b>80%</b></p>
       <p className="text-sky-500">Attendance <b>40%</b></p>
     </div>
 
@@ -666,7 +666,7 @@ const handleAddExam = (dateValue: string) => {
   {/* LEGEND */}
   <div className="flex gap-6 mt-3 text-xs text-gray-500">
     <span className="flex items-center gap-2">
-      <span className="w-2 h-2 rounded-full bg-indigo-600" />
+      <span className="w-2 h-2 rounded-full bg-gray-400" />
       Avg Score : 72%
     </span>
     <span className="flex items-center gap-2">
@@ -815,7 +815,7 @@ const handleAddExam = (dateValue: string) => {
   <div className="flex justify-between items-center px-5 py-4 border-b">
     <h4 className="text-18px font-medium">Leave Status</h4>
     <span className="text-xs text-gray-500 flex items-center gap-1">
-  <CalendarDays className="w-4 h-4 text-indigo-500" />
+  <CalendarDays className="w-4 h-4 text-gray-400" />
   This Year
 </span>
 
@@ -865,7 +865,7 @@ const handleAddExam = (dateValue: string) => {
   <div className="flex items-center justify-between px-5 py-4 border-b">
     <h4 className="text-18px font-medium">Exam Result</h4>
     <span className="text-xs text-gray-500 flex items-center gap-1">
-  <CalendarDays className="w-4 h-4 text-indigo-500" />
+  <CalendarDays className="w-4 h-4 text-gray-400" />
   1st Quarter
 </span>
   </div>
@@ -941,7 +941,7 @@ const handleAddExam = (dateValue: string) => {
   <div className="flex items-center justify-between px-5 py-4 border-b">
     <h4 className="text-18px font-medium">Fees Reminder</h4>
     <span className="text-xs text-gray-500 flex items-center gap-1">
-  <CalendarDays className="w-4 h-4 text-indigo-500" />
+  <CalendarDays className="w-4 h-4 text-gray-400" />
   2024-2025
 </span>
   </div>

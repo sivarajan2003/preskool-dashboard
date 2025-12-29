@@ -11,10 +11,24 @@ import {
   Phone,
   Plus,
   Eye,
-  Pencil,
+  Pencil,CalendarDays,
   Trash2,
 } from "lucide-react";
+import { useEffect } from "react";
+
 import AddTeacherModal from "../../components/AddTeacherModal";
+import t1 from "../../assets/tech/t1.png";
+import t2 from "../../assets/tech/t2.png";
+import t3 from "../../assets/tech/t3.png";
+import t4 from "../../assets/tech/t4.png";
+import t5 from "../../assets/tech/t5.png";
+import t6 from "../../assets/tech/t6.png";
+import t7 from "../../assets/tech/t7.png";
+import t8 from "../../assets/tech/t8.png";
+import t9 from "../../assets/tech/t9.png";
+import t10 from "../../assets/tech/t10.png";
+import t11 from "../../assets/tech/t11.png";
+import t12 from "../../assets/tech/t12.png";
 
 /* ================= TEACHERS DATA ================= */
 
@@ -27,7 +41,7 @@ const teachers = [
     email: "teresa@example.com",
     phone: "+91 82932 7359",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=47",
+    image: t1,
   },
   {
     id: "T849126",
@@ -37,7 +51,7 @@ const teachers = [
     email: "daniel@example.com",
     phone: "+91 56752 8642",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=12",
+    image: t2,
   },
   {
     id: "T849125",
@@ -47,7 +61,7 @@ const teachers = [
     email: "hellana@example.com",
     phone: "+91 23566 52683",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=36",
+    image: t3,
   },
   {
     id: "T849124",
@@ -57,7 +71,7 @@ const teachers = [
     email: "erickson@example.com",
     phone: "+91 42598 85573",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=18",
+    image: t4,
   },
   {
     id: "T849123",
@@ -67,7 +81,7 @@ const teachers = [
     email: "morgan@example.com",
     phone: "+91 63204 35730",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=15",
+    image: t5,
   },
   {
     id: "T849122",
@@ -77,7 +91,7 @@ const teachers = [
     email: "aaron@example.com",
     phone: "+91 26267 80542",
     status: "Inactive",
-    image: "https://i.pravatar.cc/150?img=11",
+    image: t6,
   },
   {
     id: "T849121",
@@ -87,7 +101,7 @@ const teachers = [
     email: "jacqueline@example.com",
     phone: "+91 77502 54845",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=29",
+    image: t7,
   },
   {
     id: "T849120",
@@ -97,7 +111,7 @@ const teachers = [
     email: "raul@example.com",
     phone: "+91 67845 78784",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=21",
+    image: t8,
   },
   {
     id: "T849119",
@@ -107,7 +121,7 @@ const teachers = [
     email: "elizabeth@example.com",
     phone: "+91 23566 52683",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=48",
+    image: t9,
   },
   {
     id: "T849118",
@@ -117,7 +131,7 @@ const teachers = [
     email: "edward@example.com",
     phone: "+91 14259 85573",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=33",
+    image: t10,
   },
   {
     id: "T849117",
@@ -127,7 +141,7 @@ const teachers = [
     email: "maria@example.com",
     phone: "+91 97846 84518",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=25",
+    image: t11,
   },
   {
     id: "T849116",
@@ -137,7 +151,7 @@ const teachers = [
     email: "jacky@example.com",
     phone: "+91 98392 37378",
     status: "Active",
-    image: "https://i.pravatar.cc/150?img=41",
+    image: t12,
   },
 ];
 
@@ -156,7 +170,11 @@ const [statusFilter, setStatusFilter] = useState<"All" | "Active" | "Inactive">(
   const [visibleCount, setVisibleCount] = useState(12);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [openDate, setOpenDate] = useState(false);
 
+  const [startDate, setStartDate] = useState("2020-05-15");
+  const [endDate, setEndDate] = useState("2024-05-24");
+  
   /* SORT */
   const handleSort = () => {
     const sorted = [...data].sort((a, b) =>
@@ -186,101 +204,194 @@ const [statusFilter, setStatusFilter] = useState<"All" | "Active" | "Inactive">(
   statusFilter === "All"
     ? data
     : data.filter((t) => t.status === statusFilter);
-
+    useEffect(() => {
+      const today = new Date();
+      const past = new Date();
+      past.setDate(today.getDate() - 30);
+    
+      setStartDate(past.toISOString().split("T")[0]);
+      setEndDate(today.toISOString().split("T")[0]);
+    }, []);
+    
   return (
     <div className="space-y-6">
+{/* ================= HEADER + SUBHEADER ================= */}
+<div className="bg-white border border-gray-200 rounded-2xl px-6 py-5 space-y-4">
 
-      {/* ================= HEADER ================= */}
-      <div className="bg-white border rounded-xl p-4 space-y-4">
-        <div className="flex justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold">Teachers</h2>
-            <p className="text-sm text-gray-500">
-              Dashboard / People / Teachers
-            </p>
-          </div>
+  {/* ===== TOP HEADER ===== */}
+  <div className="flex items-center justify-between">
+    {/* LEFT */}
+    <div>
+      <h2 className="text-xl font-semibold text-gray-900">
+        Teachers
+      </h2>
+      <p className="text-sm text-gray-500 mt-1">
+        Dashboard / People / Teachers
+      </p>
+    </div>
 
-          <div className="flex gap-2">
-            <button onClick={() => setData(teachers)} className="p-2 border rounded-lg">
-              <RefreshCcw size={16} />
-            </button>
-            <button onClick={() => window.print()} className="p-2 border rounded-lg">
-              <Printer size={16} />
-            </button>
-            <button onClick={handleExport} className="px-4 py-2 border rounded-lg text-sm">
-              Export
-            </button>
-            <button
-  onClick={() => setOpenAddTeacher(true)}
-  className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-1"
->
-  <Plus size={14} />
-  Add Teacher
-</button>
+    {/* RIGHT ACTIONS */}
+    <div className="flex items-center gap-2">
+      <button
+        onClick={() => setData(teachers)}
+        className="p-2 border rounded-lg hover:bg-gray-50"
+      >
+        <RefreshCcw size={14} />
+      </button>
 
-          </div>
-        </div>
+      <button
+        onClick={() => window.print()}
+        className="p-2 border rounded-lg hover:bg-gray-50"
+      >
+        <Printer size={14} />
+      </button>
 
-        <div className="flex justify-between">
-        <div className="relative">
+      <button
+        onClick={handleExport}
+        className="px-3 py-1.5 text-xs border rounded-lg hover:bg-gray-50"
+      >
+        Export
+      </button>
+
+      <button
+        onClick={() => setOpenAddTeacher(true)}
+        className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg font-medium"
+      >
+        Add Teacher
+      </button>
+    </div>
+  </div>
+
+  {/* DIVIDER */}
+  <div className="border-t" />
+
+  {/* ===== SUB HEADER ===== */}
+  <div className="flex items-center justify-between">
+
+    {/* LEFT */}
+    <div className="flex items-center gap-4">
+    <h4 className="text-lg font-semibold text-gray-900">
+        Teachers Grid
+      </h4>
+
+      
+    </div>
+
+    {/* RIGHT */}
+    <div className="flex items-center gap-2">
+    {/* CALENDAR */}
+<div className="relative">
   <button
-    onClick={() => setOpenFilter((prev) => !prev)}
-    className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm hover:bg-gray-50"
+    onClick={() => setOpenDate((prev) => !prev)}
+    className="flex items-center gap-2 px-3 py-1.5 border rounded-lg text-xs text-gray-500 hover:bg-gray-50"
   >
-    <Filter size={16} />
-    Filter
+    <CalendarDays size={14} />
+    {startDate} - {endDate}
   </button>
 
-  {openFilter && (
-    <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg p-3 z-20">
-      <p className="text-xs text-gray-500 mb-2">Status</p>
+  {openDate && (
+    <div className="absolute right-0 mt-2 w-64 bg-white border rounded-lg shadow-lg p-3 z-30">
+      
+      <label className="text-xs text-gray-500">Start Date</label>
+      <input
+        type="date"
+        value={startDate}
+        onChange={(e) => setStartDate(e.target.value)}
+        className="w-full border rounded px-2 py-1 text-xs mb-2"
+      />
 
-      <button
-        onClick={() => {
-          setStatusFilter("All");
-          setOpenFilter(false);
-        }}
-        className="w-full text-left text-sm px-2 py-1 hover:bg-gray-100 rounded"
-      >
-        All
-      </button>
+      <label className="text-xs text-gray-500">End Date</label>
+      <input
+        type="date"
+        value={endDate}
+        onChange={(e) => setEndDate(e.target.value)}
+        className="w-full border rounded px-2 py-1 text-xs mb-3"
+      />
 
-      <button
-        onClick={() => {
-          setStatusFilter("Active");
-          setOpenFilter(false);
-        }}
-        className="w-full text-left text-sm px-2 py-1 hover:bg-gray-100 rounded"
-      >
-        Active
-      </button>
+      <div className="flex justify-between">
+        <button
+          onClick={() => setOpenDate(false)}
+          className="text-xs text-gray-500"
+        >
+          Cancel
+        </button>
 
-      <button
-        onClick={() => {
-          setStatusFilter("Inactive");
-          setOpenFilter(false);
-        }}
-        className="w-full text-left text-sm px-2 py-1 hover:bg-gray-100 rounded"
-      >
-        Inactive
-      </button>
+        <button
+          onClick={() => setOpenDate(false)}
+          className="text-xs text-blue-600 font-medium"
+        >
+          Apply
+        </button>
+      </div>
     </div>
   )}
 </div>
 
-          <div className="flex gap-2">
-            <button onClick={() => setView("grid")} className={`p-2 border rounded-lg ${view === "grid" && "bg-blue-600 text-white"}`}>
-              <LayoutGrid size={16} />
-            </button>
-            <button onClick={() => setView("table")} className={`p-2 border rounded-lg ${view === "table" && "bg-blue-600 text-white"}`}>
-              <List size={16} />
-            </button>
-            <button onClick={handleSort} className="flex gap-2 px-3 py-2 border rounded-lg text-sm">
-              <ArrowUpDown size={16} /> Sort {sortOrder === "asc" ? "A-Z" : "Z-A"}
-            </button>
+      {/* FILTER */}
+      <div className="relative">
+        <button
+          onClick={() => setOpenFilter((prev) => !prev)}
+          className="flex items-center gap-1 px-3 py-1.5 border rounded-lg text-xs hover:bg-gray-50"
+        >
+          <Filter size={14} />
+          Filter
+        </button>
+
+        {openFilter && (
+          <div className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg p-2 z-20">
+            {["All", "Active", "Inactive"].map((s) => (
+              <button
+                key={s}
+                onClick={() => {
+                  setStatusFilter(s as any);
+                  setOpenFilter(false);
+                }}
+                className="block w-full text-left px-3 py-1.5 text-xs rounded hover:bg-gray-100"
+              >
+                {s}
+              </button>
+            ))}
           </div>
-        </div>
+        )}
       </div>
+
+      {/* GRID / LIST */}
+      <div className="flex border rounded-lg overflow-hidden">
+        <button
+          onClick={() => setView("grid")}
+          className={`p-2 ${
+            view === "grid"
+              ? "bg-blue-600 text-white"
+              : "text-gray-600"
+          }`}
+        >
+          <LayoutGrid size={14} />
+        </button>
+
+        <button
+          onClick={() => setView("table")}
+          className={`p-2 ${
+            view === "table"
+              ? "bg-blue-600 text-white"
+              : "text-gray-600"
+          }`}
+        >
+          <List size={14} />
+        </button>
+      </div>
+
+      {/* SORT */}
+      <button
+        onClick={handleSort}
+        className="flex items-center gap-1 px-3 py-1.5 border rounded-lg text-xs hover:bg-gray-50"
+      >
+        <ArrowUpDown size={14} />
+        Sort By A-Z
+      </button>
+    </div>
+  </div>
+</div>
+
 
       {/* ================= GRID ================= */}
       

@@ -38,16 +38,26 @@ export default function LeaveRequests() {
 
   const endOfWeek = new Date(startOfWeek);
   endOfWeek.setDate(startOfWeek.getDate() + 6);
-
+  const [leaves, setLeaves] = useState(leaveData);
+  const [confirmReject, setConfirmReject] = useState<number | null>(null);
+  const [successMsg, setSuccessMsg] = useState("");
+  
   const filteredLeaves = thisWeekOnly
-    ? leaveData.filter((item) => {
-        const leaveDate = new Date(item.leaveFrom);
-        return leaveDate >= startOfWeek && leaveDate <= endOfWeek;
-      })
-    : leaveData;
+  ? leaves.filter((item) => {
+      const leaveDate = new Date(item.leaveFrom);
+      return leaveDate >= startOfWeek && leaveDate <= endOfWeek;
+    })
+  : leaves;
+
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6 h-full transition hover:shadow-md">
+      {successMsg && (
+  <div className="mb-4 bg-green-50 border border-green-300 text-green-700 px-4 py-2 rounded-lg text-sm">
+    ✅ {successMsg}
+  </div>
+)}
+
       {/* HEADER */}
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-lg font-semibold text-gray-900">
@@ -124,33 +134,75 @@ export default function LeaveRequests() {
 
             {/* ACTIONS */}
             <div className="flex gap-2">
-              <button
-                className="
-                  w-8 h-8 flex items-center justify-center rounded
-                  bg-green-500 text-white
-                  transition-all duration-200
-                  hover:bg-green-600 hover:scale-110
-                  active:scale-95
-                "
-              >
-                <Check size={16} />
-              </button>
-
-              <button
-                className="
-                  w-8 h-8 flex items-center justify-center rounded
-                  bg-red-500 text-white
-                  transition-all duration-200
-                  hover:bg-red-600 hover:scale-110
-                  active:scale-95
-                "
-              >
-                <X size={16} />
-              </button>
+            <button
+  onClick={() => {
+    setLeaves((prev) => prev.filter((l) => l.id !== item.id));
+    setSuccessMsg(`Leave approved for ${item.name}`);
+    setTimeout(() => setSuccessMsg(""), 3000);
+  }}
+  className="
+    w-8 h-8 flex items-center justify-center rounded
+    bg-green-500 text-white
+    transition-all duration-200
+    hover:bg-green-600 hover:scale-110
+    active:scale-95
+  "
+>
+  <Check size={16} />
+</button>
+<button
+  onClick={() => setConfirmReject(item.id)}
+  className="
+    w-8 h-8 flex items-center justify-center rounded
+    bg-red-500 text-white
+    transition-all duration-200
+    hover:bg-red-600 hover:scale-110
+    active:scale-95
+  "
+>
+  <X size={16} />
+</button>
             </div>
           </div>
         ))}
       </div>
+      {confirmReject !== null && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white rounded-xl p-6 w-[360px] shadow-lg">
+      <h3 className="text-lg font-semibold mb-2">
+        Reject Leave Request?
+      </h3>
+
+      <p className="text-sm text-gray-600 mb-5">
+        Are you sure you want to reject this leave request?
+      </p>
+
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setConfirmReject(null)}
+          className="px-4 py-2 text-sm border rounded-lg"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setLeaves((prev) =>
+              prev.filter((l) => l.id !== confirmReject)
+            );
+            setConfirmReject(null);
+            setSuccessMsg("Leave request rejected");
+            setTimeout(() => setSuccessMsg(""), 3000);
+          }}
+          className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg"
+        >
+          Remove
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

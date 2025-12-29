@@ -121,8 +121,7 @@ export default function ClassesPage() {
     <div className="space-y-6">
 
       {/* ================= HEADER ================= */}
-      {/* ================= MAIN HEADER ================= */}
-<div className="bg-white border border-gray-200 rounded-2xl px-6 py-6">
+      <div className="bg-white border border-gray-200 rounded-2xl px-6 py-6">
   <div className="flex items-center justify-between">
 
     {/* LEFT */}

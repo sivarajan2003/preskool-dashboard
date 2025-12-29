@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import StudentFeesTable from "../components/tables/StudentFeesTable";
 
 export default function FeesPageHeader() {
   const navigate = useNavigate();

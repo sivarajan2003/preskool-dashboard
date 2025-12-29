@@ -28,8 +28,12 @@ import SubjectGif from "../assets/gif/sub.gif";
 import StudentTable from "../components/tables/StudentTable";
 import FeesTable from "../components/tables/FeesTable";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function Dashboard() {
+  const [showAlert, setShowAlert] = useState(true);
+const [confirmOpen, setConfirmOpen] = useState(false);
+
   const navigate = useNavigate();
     return (
       <>
@@ -59,16 +63,56 @@ export default function Dashboard() {
         </div>
   
         {/* SUCCESS NOTIFICATION */}
-        <div className="flex items-center justify-between bg-green-50 border border-green-300 text-green-700 rounded-lg px-4 py-2 mb-4">
-          <div className="flex items-center gap-2 text-sm">
-            <img src={A1} className="w-6 h-6 rounded-full" alt="student" />
-            <span>
-              <strong>Fahed III.C</strong> has paid Fees for the{" "}
-              <strong>Term1</strong>
-            </span>
-          </div>
-          <button className="text-green-600 hover:text-green-800">✕</button>
-        </div>
+        {showAlert && (
+  <div className="flex items-center justify-between bg-green-50 border border-green-300 text-green-700 rounded-lg px-4 py-2 mb-4">
+    <div className="flex items-center gap-2 text-sm">
+      <img src={A1} className="w-6 h-6 rounded-full" alt="student" />
+      <span>
+        <strong>Fahed III.C</strong> has paid Fees for the{" "}
+        <strong>Term1</strong>
+      </span>
+    </div>
+
+    <button
+      onClick={() => setConfirmOpen(true)}
+      className="text-green-600 hover:text-green-800 text-lg"
+    >
+      ✕
+    </button>
+  </div>
+)}
+{confirmOpen && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white rounded-xl p-6 w-[350px] shadow-lg">
+      <h3 className="text-lg font-semibold mb-2">
+        Remove Notification?
+      </h3>
+      <p className="text-sm text-gray-600 mb-5">
+        Are you sure you want to remove this notification?
+      </p>
+
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setConfirmOpen(false)}
+          className="px-4 py-2 text-sm border rounded-lg"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setShowAlert(false);
+            setConfirmOpen(false);
+          }}
+          className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg"
+        >
+          Remove
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
   
         {/* WELCOME BANNER */}
         <div className="relative bg-gradient-to-r from-[#0F0C29] via-[#302B63] to-[#24243E] text-white rounded-xl p-6 mb-6 overflow-hidden">
@@ -84,7 +128,6 @@ export default function Dashboard() {
             <p className="text-xs text-gray-300">⏱ Updated Recently</p>
           </div>
         </div>
-{/* STAT CARDS */}
 {/* STAT CARDS */}
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
   <StatCard
