@@ -136,7 +136,7 @@ const handleAddExam = (dateValue: string) => {
           </p>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <button
             onClick={() => navigate("/student/exam-results")}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg"
@@ -287,7 +287,7 @@ const handleAddExam = (dateValue: string) => {
 </p>
 
 {/* Stats */}
-<div className="grid grid-cols-4 gap-3 text-center text-xs mb-6">
+<div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs mb-6">
   <div className="border rounded-lg py-3">
     <p className="font-semibold text-sm">{presentDays}</p>
     <p className="text-gray-500">Present</p>
@@ -465,7 +465,7 @@ const handleAddExam = (dateValue: string) => {
 </div>
 
 {/* Calendar */}
-<div className="grid grid-cols-7 gap-2 text-xs text-center mb-5">
+<div className="grid grid-cols-7 gap-1 sm:gap-2 text-xs text-center mb-5">
   {[...Array(firstDay)].map((_, i) => (
     <div key={"e" + i} />
   ))}
@@ -604,7 +604,7 @@ const handleAddExam = (dateValue: string) => {
         <span key={v}>{v}</span>
       ))}
     </div>
-
+    <div className="overflow-x-auto">
     <svg viewBox="0 0 500 220" className="ml-8 w-full h-49">
 
       {/* GRID */}
@@ -645,7 +645,7 @@ const handleAddExam = (dateValue: string) => {
         strokeWidth="2"
       />
     </svg>
-
+    </div>
     {/* TOOLTIP */}
     <div className="absolute top-8 left-1/2 -translate-x-1/2 bg-white border rounded-lg px-4 py-2 shadow text-xs">
       <p className="font-medium mb-1">Oct 2025</p>

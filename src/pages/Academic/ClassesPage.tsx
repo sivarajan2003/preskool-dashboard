@@ -298,8 +298,9 @@ export default function ClassesPage() {
               <th className="px-4 py-3">Section</th>
               <th className="px-4 py-3">No of Students</th>
               <th className="px-4 py-3">No of Subjects</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Action</th>
+              <th className="px-4 py-3 hidden sm:table-cell">Status</th>
+<th className="px-4 py-3 hidden sm:table-cell">Action</th>
+
             </tr>
           </thead>
 
@@ -311,7 +312,7 @@ export default function ClassesPage() {
                 <td className="px-4 py-3 text-center">{c.section}</td>
                 <td className="px-4 py-3 text-center">{c.students}</td>
                 <td className="px-4 py-3 text-center">{c.subjects}</td>
-                <td className="px-4 py-3 text-center">
+                <td className="px-4 py-3 text-center hidden sm:table-cell">
                   <span
                     className={`px-2 py-1 text-xs rounded-full ${
                       c.status === "Active"
@@ -322,7 +323,7 @@ export default function ClassesPage() {
                     {c.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-center">
+                <td className="px-4 py-3 text-center hidden sm:table-cell">
   <div className="flex items-center justify-center gap-3">
 
     {/* VIEW */}

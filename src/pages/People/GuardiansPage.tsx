@@ -373,7 +373,14 @@ const filteredGuardians = guardians.filter((g) => {
       {/* GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {filteredGuardians.map((g) => (
-          <div key={g.id} className="bg-white border rounded-2xl p-5">
+        <div
+  key={g.id}
+  className="
+    bg-white border rounded-2xl p-3
+    transition-all duration-300
+    hover:-translate-y-1 hover:shadow-lg
+  "
+>
 
             <div className="flex items-center justify-between text-xs text-blue-600 mb-4">
               <span>{g.id}</span>
@@ -423,7 +430,7 @@ const filteredGuardians = guardians.filter((g) => {
 </div>
             </div>
 
-            <div className="flex items-center gap-4 mb-5">
+            <div className="flex items-center gap-3 mb-3">
               <img src={g.image} className="w-12 h-12 rounded-full" />
               <div>
                 <h4 className="text-sm font-semibold">{g.name}</h4>
@@ -433,7 +440,7 @@ const filteredGuardians = guardians.filter((g) => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 text-xs pb-4 border-b">
+            <div className="grid grid-cols-2 gap-3 text-xs pb-3 border-b">
               <div>
                 <p className="text-gray-500 mb-1">Email</p>
                 <p className="font-medium">{g.email}</p>
@@ -444,7 +451,7 @@ const filteredGuardians = guardians.filter((g) => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between mt-4">
+            <div className="flex items-center justify-between mt-3">
               <div className="flex items-center gap-2">
                 <img src={g.child.image} className="w-7 h-7 rounded-full" />
                 <span className="text-xs font-medium">{g.child.name}</span>

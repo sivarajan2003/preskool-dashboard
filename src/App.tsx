@@ -75,9 +75,12 @@ import StaffReport from "./pages/Reports/AttendanceTabs/StaffReport";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   return (
+    <>
     <Routes>
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/login" element={<Login />} />
@@ -142,6 +145,7 @@ export default function App() {
   <Route path="teacher-report" element={<TeacherReport />} />
   <Route path="staff-day-wise" element={<StaffDayWise />} />
   <Route path="staff-report" element={<StaffReport />} />
+  
 </Route>
 
 
@@ -200,5 +204,8 @@ export default function App() {
 
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
+    {/* ✅ Toast container (ONLY ONCE) */}
+    <ToastContainer position="top-right" autoClose={3000} />
+    </>
   );
 }

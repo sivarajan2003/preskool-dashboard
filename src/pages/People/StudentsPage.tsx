@@ -127,6 +127,26 @@ const students = [
     status: "Active",
     image: s10,
   },
+  {
+    id: "AD9982434",
+    name: "Ananya Sharma",
+    class: "VIII, A",
+    rollNo: "35013",
+    gender: "Female",
+    joined: "10 Jan 2015",
+    status: "Active",
+    image: s1,
+  },
+  {
+    id: "AD9982428",
+    name: "Maria",
+    class: "V, A",
+    rollNo: "35007",
+    gender: "Female",
+    joined: "18 Jan 2023",
+    status: "Active",
+    image: s7,
+  },
 ];
 /* ================= MAIN PAGE ================= */
 

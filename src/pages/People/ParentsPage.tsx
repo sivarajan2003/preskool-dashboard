@@ -402,7 +402,16 @@ const [selectedParent, setSelectedParent] = useState<Parent | null>(null);
       {view === "grid" && (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 {parentsData.map((p) => (
-          <div key={p.id} className="bg-white border rounded-2xl p-5">
+  <div
+  key={p.id}
+  className="
+    bg-white border rounded-2xl p-3
+    transition-all duration-300 ease-out
+    hover:-translate-y-1 hover:shadow-lg
+    active:scale-[0.98]
+    cursor-pointer
+  "
+>
 
             {/* ID + MENU */}
             <div className="flex items-center justify-between text-xs text-blue-600 mb-4">
@@ -456,10 +465,10 @@ const [selectedParent, setSelectedParent] = useState<Parent | null>(null);
             </div>
 
             {/* PROFILE */}
-            <div className="flex items-center gap-4 mb-5">
+            <div className="flex items-center gap-3 mb-4">
               <img
                 src={p.image}
-                className="w-12 h-12 rounded-full object-cover"
+                className="w-10 h-10 rounded-full object-cover"
               />
               <div>
                 <h4 className="text-sm font-semibold text-gray-900">
@@ -472,7 +481,7 @@ const [selectedParent, setSelectedParent] = useState<Parent | null>(null);
             </div>
 
             {/* CONTACT */}
-            <div className="grid grid-cols-2 gap-4 text-xs text-gray-600 pb-4 border-b">
+            <div className="grid grid-cols-2 gap-3 text-xs text-gray-600 pb-3 border-b">
               <div>
                 <p className="text-gray-500 mb-1">Email</p>
                 <p className="font-medium text-gray-800">{p.email}</p>

@@ -9,6 +9,8 @@ import SampleLogin from "../assets/samplelogin.png";
 //import LoginImg from '../assets/login.png';
 import Logo from '../assets/logo.png';
 import GoogleIcon from '../assets/google.png';
+import { toast } from "react-toastify";
+
 // 🔹 TEMP USERS (Frontend only)
 const USERS = [
   {
@@ -53,14 +55,17 @@ export default function Login() {
     );
   
     if (!user) {
-      setError("Invalid email or password");
+      toast.error("Invalid email or password ❌");
       setLoading(false);
       return;
     }
+    
   
     // Save auth info
     localStorage.setItem("isAuth", "true");
 localStorage.setItem("role", user.role);
+toast.success("Login successful ✅");
+
 
 if (user.role === "admin") {
   navigate("/admin/dashboard");

@@ -399,10 +399,20 @@ const [statusFilter, setStatusFilter] = useState<"All" | "Active" | "Inactive">(
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredData.slice(0, visibleCount).map((t) => (
-              <div key={t.id} className="bg-white border rounded-xl p-4">
+              <div
+  key={t.id}
+  className="
+    bg-white border rounded-2xl
+    p-3
+    transition-all duration-300 ease-out
+    hover:-translate-y-1 hover:shadow-lg
+    active:scale-[0.98]
+    cursor-pointer
+  "
+>
 
                 {/* TOP BAR */}
-                <div className="flex justify-between items-center border-b pb-2 mb-3">
+                <div className="flex justify-between items-center border-b pb-3 mb-3">
                   <span className="text-xs text-blue-600">{t.id}</span>
 
                   <span className={`text-xs px-2 py-0.5 rounded-full ${t.status === "Active" ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}>
@@ -440,7 +450,7 @@ const [statusFilter, setStatusFilter] = useState<"All" | "Active" | "Inactive">(
                 </div>
 
                 {/* CONTACT */}
-                <div className="border-t border-b py-2 text-xs text-gray-600 space-y-1 mb-3">
+                <div className="border-t border-b py-3 text-xs text-gray-600 space-y-1 mb-3">
                   <p className="flex gap-1 items-center">
                     <Mail size={12} /> {t.email}
                   </p>

@@ -84,7 +84,7 @@ const isManagementItemActive = (path: string) =>
 
 
   return (
-<div className="w-64 bg-white border-r h-full overflow-y-auto">
+<div className="w-64 bg-white border-r h-screen overflow-y-auto">
 
       {/* ================= HEADER ================= */}
       <div className="p-6 border-b">

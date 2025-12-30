@@ -18,7 +18,12 @@ import { User, LogOut } from "lucide-react";
 import { useEffect } from "react";
 import { CalendarDays } from "lucide-react";
 
-export default function Header() {
+export default function Header({
+  onMenuClick,
+}: {
+  onMenuClick?: () => void;
+}) {
+
   const [dark, setDark] = useState(false);
   const [yearOpen, setYearOpen] = useState(false);
   const [full, setFull] = useState(false);
@@ -51,19 +56,32 @@ const academicYears = Array.from({ length: 6 }, (_, i) => {
   };
 
   return (
-    <header className="bg-white border-b border-gray-200 px-6 py-2">
-      <div className="flex items-center justify-between">
+    <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-2">
+  <div className="flex items-center justify-between">
 
-        {/* SEARCH */}
-        <div className="relative w-[300px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search"
-            onChange={(e) => console.log("Search:", e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none"
-          />
-        </div>
+    {/* LEFT SECTION */}
+    <div className="flex items-center gap-3">
+
+      {/* 🍔 Mobile Menu */}
+      <button
+        onClick={onMenuClick}
+        className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
+      >
+        ☰
+      </button>
+
+      {/* SEARCH */}
+      <div className="relative w-[240px] hidden md:block">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <input
+          type="text"
+          placeholder="Search"
+          className="w-full pl-9 pr-4 py-2 text-sm border rounded-lg"
+        />
+      </div>
+    </div>
+
+    {/* RIGHT ICONS (your existing code stays same) */}
 
         {/* ACADEMIC YEAR */}
         <div className="relative">
