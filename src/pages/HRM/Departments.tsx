@@ -108,7 +108,7 @@ export default function Departments() {
 
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-5">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold">Department</h2>
             <p className="text-sm text-gray-500 mt-1">
@@ -281,107 +281,109 @@ export default function Departments() {
           />
         </div>
       </div>
+{/* ================= TABLE ================= */}
+<div className="bg-white border rounded-xl overflow-x-auto">
+  {/* 👇 THIS WRAPPER IS THE KEY FIX */}
+  <div className="min-w-[900px]">
 
-      {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-3 text-center">ID</th>
-              <th className="px-4 py-3 text-center">Department</th>
-              <th className="px-4 py-3 text-center">Status</th>
-              <th className="px-4 py-3 text-center">Action</th>
-            </tr>
-          </thead>
+    {/* TABLE */}
+    <table className="w-full text-sm">
+      <thead className="bg-gray-50">
+        <tr>
+          <th className="px-4 py-3 text-center">ID</th>
+          <th className="px-4 py-3 text-center">Department</th>
+          <th className="px-4 py-3 text-center">Status</th>
+          <th className="px-4 py-3 text-center">Action</th>
+        </tr>
+      </thead>
 
-          <tbody>
-            {paginated.map((d) => (
-              <tr key={d.id} className="border-t hover:bg-gray-50">
-                <td className="px-4 py-3 text-center text-blue-600">{d.id}</td>
-                <td className="px-4 py-3 text-center">{d.name}</td>
-                <td className="px-4 py-3 text-center">
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs ${
-                      d.status === "Active"
-                        ? "bg-green-100 text-green-600"
-                        : "bg-red-100 text-red-600"
-                    }`}
-                  >
-                    ● {d.status}
-                  </span>
-                </td>
-                <td className="px-4 py-3 text-center">
-  <div className="flex items-center justify-center gap-3">
+      <tbody>
+        {paginated.map((d) => (
+          <tr key={d.id} className="border-t hover:bg-gray-50">
+            <td className="px-4 py-3 text-center text-blue-600">{d.id}</td>
+            <td className="px-4 py-3 text-center">{d.name}</td>
+            <td className="px-4 py-3 text-center">
+              <span
+                className={`px-2 py-1 rounded-full text-xs ${
+                  d.status === "Active"
+                    ? "bg-green-100 text-green-600"
+                    : "bg-red-100 text-red-600"
+                }`}
+              >
+                ● {d.status}
+              </span>
+            </td>
+            <td className="px-4 py-3 text-center">
+  <div className="flex justify-center gap-3">
 
     {/* VIEW */}
     <button
-      className="p-1.5 rounded hover:bg-blue-50 text-gray-600 hover:text-blue-600"
       title="View"
+      className="p-1 rounded hover:bg-blue-50 text-gray-600 hover:text-blue-600"
     >
       <Eye size={16} />
     </button>
 
     {/* EDIT */}
     <button
-      className="p-1.5 rounded hover:bg-green-50 text-gray-600 hover:text-green-600"
       title="Edit"
+      className="p-1 rounded hover:bg-green-50 text-gray-600 hover:text-green-600"
     >
       <Pencil size={16} />
     </button>
 
-    {/* DELETE */}
+    {/* DELETE (✅ THIS IS THE IMPORTANT PART) */}
     <button
-      onClick={() => setConfirmDeleteId(d.id)}
-      className="p-1.5 rounded hover:bg-red-50 text-red-600 hover:text-red-700"
       title="Delete"
+      onClick={() => setConfirmDeleteId(d.id)}
+      className="p-1 rounded hover:bg-red-50 text-red-600 hover:text-red-700"
     >
       <Trash2 size={16} />
     </button>
 
   </div>
 </td>
-   </tr>
-            ))}
-          </tbody>
-        </table>
 
-        {/* PAGINATION */}
-        <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(p => p - 1)}
-          >
-            Prev
-          </button>
+          </tr>
+        ))}
+      </tbody>
+    </table>
 
-          {Array.from({ length: totalPages }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-3 py-1 rounded ${
-                currentPage === i + 1 ? "bg-blue-600 text-white" : ""
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
+    {/* ✅ PAGINATION — NOW INSIDE SAME WIDTH */}
+    <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
+      <button
+        disabled={currentPage === 1}
+        onClick={() => setCurrentPage((p) => p - 1)}
+        className="px-3 py-1 border rounded disabled:opacity-40"
+      >
+        Prev
+      </button>
 
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage(p => p + 1)}
-          >
-            Next
-          </button>
-        </div>
-      </div>
-      {openAddModal && (
-  <AddDepartmentModal
-    onClose={() => setOpenAddModal(false)}
-    onAdd={(newDepartment) =>
-      setData((prev) => [newDepartment, ...prev])
-    }
-  />
-)}
+      {Array.from({ length: totalPages }).map((_, i) => (
+        <button
+          key={i}
+          onClick={() => setCurrentPage(i + 1)}
+          className={`px-3 py-1 rounded ${
+            currentPage === i + 1
+              ? "bg-blue-600 text-white"
+              : "border"
+          }`}
+        >
+          {i + 1}
+        </button>
+      ))}
+
+      <button
+        disabled={currentPage === totalPages}
+        onClick={() => setCurrentPage((p) => p + 1)}
+        className="px-3 py-1 border rounded disabled:opacity-40"
+      >
+        Next
+      </button>
+    </div>
+
+  </div>
+</div>
 {confirmDeleteId && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
     <div className="bg-white rounded-xl w-full max-w-sm p-6">

@@ -412,8 +412,11 @@ const paginatedData = filteredData.slice(
   </div>
 </div>
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="min-w-[900px]">
+
+  <table className="min-w-[900px] w-full text-sm">
+
           <thead className="bg-gray-50">
             <tr>
               <th className="px-4 py-3 text-left">ID</th>
@@ -525,7 +528,7 @@ const paginatedData = filteredData.slice(
     Next
   </button>
 </div>
-
+</div>
       </div>
       {openAddRoutine && (
   <AddRoutineModal

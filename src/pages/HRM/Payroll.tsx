@@ -188,7 +188,7 @@ export default function Payroll() {
 
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-5">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold">Payroll</h2>
             <p className="text-sm text-gray-500 mt-1">
@@ -361,8 +361,8 @@ export default function Payroll() {
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white border rounded-xl overflow-x-auto">
+  <table className="min-w-[900px] w-full text-sm">
         <thead className="bg-gray-50">
   <tr>
     <th className="px-4 py-3 text-center">ID</th>

@@ -300,8 +300,10 @@ useEffect(() => {
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="min-w-[900px]">
+
+  <table className="min-w-[900px] w-full text-sm">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-4 py-3 text-center">ID</th>
@@ -363,31 +365,42 @@ useEffect(() => {
             ))}
           </tbody>
         </table>
+{/* ✅ PAGINATION — INSIDE SAME WIDTH */}
+<div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
+      <button
+        disabled={currentPage === 1}
+        onClick={() => setCurrentPage(p => p - 1)}
+        className="px-3 py-1 border rounded disabled:opacity-40"
+      >
+        Prev
+      </button>
 
-        {/* PAGINATION */}
-        <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage((p) => p - 1)}>
-            Prev
-          </button>
+      {Array.from({ length: totalPages }).map((_, i) => (
+        <button
+          key={i}
+          onClick={() => setCurrentPage(i + 1)}
+          className={`px-3 py-1 rounded ${
+            currentPage === i + 1
+              ? "bg-blue-600 text-white"
+              : "border"
+          }`}
+        >
+          {i + 1}
+        </button>
+      ))}
 
-          {Array.from({ length: totalPages }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-3 py-1 rounded ${
-                currentPage === i + 1 ? "bg-blue-600 text-white" : ""
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
+      <button
+        disabled={currentPage === totalPages}
+        onClick={() => setCurrentPage(p => p + 1)}
+        className="px-3 py-1 border rounded disabled:opacity-40"
+      >
+        Next
+      </button>
+    </div>
 
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage((p) => p + 1)}>
-            Next
-          </button>
-        </div>
-      </div>
-      {confirmDeleteId && (
+  </div>
+</div>     
+  {confirmDeleteId && (
   <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
     <div className="bg-white rounded-xl w-[340px] p-6">
       

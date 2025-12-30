@@ -289,8 +289,10 @@ export default function ClassesPage() {
 </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="min-w-[900px]">
+
+  <table className="min-w-[900px] w-full text-sm">
           <thead className="bg-gray-50 text-gray-600">
             <tr>
               <th className="px-4 py-3 text-left">ID</th>
@@ -298,8 +300,9 @@ export default function ClassesPage() {
               <th className="px-4 py-3">Section</th>
               <th className="px-4 py-3">No of Students</th>
               <th className="px-4 py-3">No of Subjects</th>
-              <th className="px-4 py-3 hidden sm:table-cell">Status</th>
-<th className="px-4 py-3 hidden sm:table-cell">Action</th>
+              <th className="px-4 py-3">Status</th>
+<th className="px-4 py-3">Action</th>
+
 
             </tr>
           </thead>
@@ -312,7 +315,7 @@ export default function ClassesPage() {
                 <td className="px-4 py-3 text-center">{c.section}</td>
                 <td className="px-4 py-3 text-center">{c.students}</td>
                 <td className="px-4 py-3 text-center">{c.subjects}</td>
-                <td className="px-4 py-3 text-center hidden sm:table-cell">
+                <td className="px-4 py-3 text-center">
                   <span
                     className={`px-2 py-1 text-xs rounded-full ${
                       c.status === "Active"
@@ -323,7 +326,7 @@ export default function ClassesPage() {
                     {c.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-center hidden sm:table-cell">
+                <td className="px-4 py-3 text-center">
   <div className="flex items-center justify-center gap-3">
 
     {/* VIEW */}
@@ -360,47 +363,41 @@ export default function ClassesPage() {
             ))}
           </tbody>
         </table>
-        <div className="flex items-center justify-end gap-2 px-4 py-3 border-t text-sm">
-
-  {/* PREV */}
-  <button
-    disabled={currentPage === 1}
-    onClick={() => setCurrentPage(currentPage - 1)}
-    className="px-3 py-1 border rounded disabled:opacity-40"
-  >
-    Prev
-  </button>
-
-  {/* PAGE NUMBERS */}
-  {Array.from({ length: totalPages }).map((_, i) => {
-    const page = i + 1;
-    return (
+        {/* PAGINATION */}
+    <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
       <button
-        key={page}
-        onClick={() => setCurrentPage(page)}
-        className={`px-3 py-1 border rounded ${
-          currentPage === page
-            ? "bg-blue-600 text-white"
-            : "hover:bg-gray-100"
-        }`}
+        disabled={currentPage === 1}
+        onClick={() => setCurrentPage(p => p - 1)}
+        className="px-3 py-1 border rounded disabled:opacity-40"
       >
-        {page}
+        Prev
       </button>
-    );
-  })}
 
-  {/* NEXT */}
-  <button
-    disabled={currentPage === totalPages}
-    onClick={() => setCurrentPage(currentPage + 1)}
-    className="px-3 py-1 border rounded disabled:opacity-40"
-  >
-    Next
-  </button>
+      {Array.from({ length: totalPages }).map((_, i) => (
+        <button
+          key={i}
+          onClick={() => setCurrentPage(i + 1)}
+          className={`px-3 py-1 rounded ${
+            currentPage === i + 1
+              ? "bg-blue-600 text-white"
+              : "border"
+          }`}
+        >
+          {i + 1}
+        </button>
+      ))}
 
-</div>
+      <button
+        disabled={currentPage === totalPages}
+        onClick={() => setCurrentPage(p => p + 1)}
+        className="px-3 py-1 border rounded disabled:opacity-40"
+      >
+        Next
+      </button>
+    </div>
 
-      </div>
+  </div>
+</div> 
       {openAddClass && (
   <AddClassModal
     onClose={() => setOpenAddClass(false)}

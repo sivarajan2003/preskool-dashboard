@@ -128,7 +128,7 @@ const handleAddExam = (dateValue: string) => {
   return (
     <DashboardLayout>
     <>
-      <div className="flex items-center justify-between mb-6">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
         <div>
           <h2 className="text-2xl font-semibold">Student Dashboard</h2>
           <p className="text-sm text-gray-500">
@@ -136,7 +136,7 @@ const handleAddExam = (dateValue: string) => {
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
           <button
             onClick={() => navigate("/student/exam-results")}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg"
@@ -160,7 +160,7 @@ const handleAddExam = (dateValue: string) => {
         <div className="space-y-6">
 
           {/* PROFILE CARD */}
-          <div className="rounded-xl p-5 bg-[#0E1333] text-white
+          <div className="rounded-xl p-4 sm:p-5 bg-[#0E1333] text-white
                 animate-card card-interactive">
 
 
@@ -214,7 +214,7 @@ const handleAddExam = (dateValue: string) => {
 
 
           {/* TODAY'S CLASS */}
-          <div className="bg-white border rounded-xl p-9
+          <div className="bg-white border rounded-xl p-6 sm:p-9
                 animate-card card-hover">
             <div className="flex justify-between mb-3">
               <h4 className="text-18px font-medium">Today’s Class</h4>
@@ -267,7 +267,7 @@ const handleAddExam = (dateValue: string) => {
 
         {/* ================= CENTER (ATTENDANCE) ================= */}
         {/* ================= ATTENDANCE ================= */}
-        <div className="bg-white border rounded-xl p-5
+        <div className="bg-white border rounded-xl p-4 sm:p-5
                 animate-card card-hover">
   {/* Header */}
   <div className="flex items-center justify-between mb-3">
@@ -524,7 +524,7 @@ const handleAddExam = (dateValue: string) => {
 
 
         {/* ================= QUICK ACTIONS (HALF WIDTH) ================= */}
-<div className="xl:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="xl:col-span-2 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
 
 {[
     { title: "Pay Fees", gif: s1, color: "blue" },
@@ -596,7 +596,7 @@ const handleAddExam = (dateValue: string) => {
   </div>
 
   {/* GRAPH CONTAINER */}
-  <div className="relative bg-[#F8FAFF] rounded-lg p-12">
+  <div className="relative bg-[#F8FAFF] rounded-lg p-4 sm:p-12">
 
     {/* Y Axis */}
     <div className="absolute left-2 top-3 bottom-8 flex flex-col justify-between text-xs text-gray-400">
@@ -605,7 +605,7 @@ const handleAddExam = (dateValue: string) => {
       ))}
     </div>
     <div className="overflow-x-auto">
-    <svg viewBox="0 0 500 220" className="ml-8 w-full h-49">
+    <svg viewBox="0 0 500 220" className="ml-6 w-full h-40 sm:h-49">
 
       {/* GRID */}
       {[40, 80, 120, 160, 200].map(y => (
@@ -676,7 +676,7 @@ const handleAddExam = (dateValue: string) => {
   </div>
 </div>
 {/* ================= HOME WORK (RIGHT) ================= */}
-<div className="bg-white rounded-xl border p-5
+<div className="bg-white rounded-xl border p-4 sm:p-5
                 animate-card card-hover">
 
   {/* Header */}
@@ -1034,14 +1034,14 @@ const handleAddExam = (dateValue: string) => {
 
 {/* ================= CLASS FACULTIES ================= */}
 
-<div className="bg-white rounded-xl border p-5 mt-6
+<div className="bg-white rounded-xl border p-4 sm:p-5 mt-6
                 animate-card card-hover">
 
   {/* Header */}
   <div className="flex items-center justify-between mb-4">
     <h4 className="text-18px font-medium">Class Faculties</h4>
 
-    <div className="flex gap-2">
+    <div className="hidden sm:flex gap-2">
       <button className="w-7 h-7 rounded-full border text-gray-400 flex items-center justify-center">
         ‹
       </button>
@@ -1138,7 +1138,7 @@ const handleAddExam = (dateValue: string) => {
 {/* ================= NOTICE + SYLLABUS + TODO ================= */}
 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6">
   {/* ================= NOTICE BOARD ================= */}
-  <div className="bg-white rounded-xl border p-5
+  <div className="bg-white rounded-xl border p-4 sm:p-5
                 animate-card card-hover">
   <div className="flex items-center justify-between mb-4">
     <h4 className="text-18px font-medium">Notice Board</h4>
@@ -1199,7 +1199,7 @@ const handleAddExam = (dateValue: string) => {
   ))}
 </div>
 {/* ================= SYLLABUS ================= */}
-<div className="bg-white rounded-xl border p-5
+<div className="bg-white rounded-xl border p-4 sm:p-5
                 animate-card card-hover">
   <h4 className="text-18px font-medium">Syllabus</h4>
 
@@ -1238,7 +1238,7 @@ const handleAddExam = (dateValue: string) => {
 
 
   {/* ================= TODO ================= */}
-  <div className="bg-white rounded-xl border p-5
+  <div className="bg-white rounded-xl border p-4 sm:p-5
                 animate-card card-hover">
     <div className="flex items-center justify-between mb-4">
       <h4 className="text-18px font-medium">Todo</h4>
@@ -1270,7 +1270,7 @@ const handleAddExam = (dateValue: string) => {
   </> 
   {showAddExam && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-5 w-[300px]">
+          <div className="bg-white rounded-xl p-4 sm:p-5 w-[300px]">
             <h4 className="text-sm font-semibold mb-3">Add Exam</h4>
 
             <input

@@ -105,7 +105,7 @@ export default function Designation() {
 
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-5">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold">Designation</h2>
             <p className="text-sm text-gray-500 mt-1">
@@ -269,8 +269,9 @@ export default function Designation() {
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="min-w-[900px]">
+  <table className="min-w-[900px] w-full text-sm">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-4 py-3 text-center">ID</th>
@@ -330,29 +331,41 @@ export default function Designation() {
           </tbody>
         </table>
 
-        {/* PAGINATION */}
-        <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>
-            Prev
-          </button>
+        {/* ✅ PAGINATION — INSIDE SAME WIDTH */}
+    <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
+      <button
+        disabled={currentPage === 1}
+        onClick={() => setCurrentPage(p => p - 1)}
+        className="px-3 py-1 border rounded disabled:opacity-40"
+      >
+        Prev
+      </button>
 
-          {Array.from({ length: totalPages }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-3 py-1 rounded ${
-                currentPage === i + 1 ? "bg-blue-600 text-white" : ""
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
+      {Array.from({ length: totalPages }).map((_, i) => (
+        <button
+          key={i}
+          onClick={() => setCurrentPage(i + 1)}
+          className={`px-3 py-1 rounded ${
+            currentPage === i + 1
+              ? "bg-blue-600 text-white"
+              : "border"
+          }`}
+        >
+          {i + 1}
+        </button>
+      ))}
 
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>
-            Next
-          </button>
-        </div>
-      </div>
+      <button
+        disabled={currentPage === totalPages}
+        onClick={() => setCurrentPage(p => p + 1)}
+        className="px-3 py-1 border rounded disabled:opacity-40"
+      >
+        Next
+      </button>
+    </div>
+
+  </div>
+</div>
       {openAdd && (
   <AddDesignationModal
     onClose={() => setOpenAdd(false)}

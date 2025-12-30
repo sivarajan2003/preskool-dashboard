@@ -276,8 +276,10 @@ export default function LeaveList() {
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="min-w-[900px]">
+
+  <table className="min-w-[900px] w-full text-sm">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-4 py-3 text-center">ID</th>
@@ -343,35 +345,41 @@ export default function LeaveList() {
           </tbody>
         </table>
 
-        {/* PAGINATION */}
-        <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(p => p - 1)}
-          >
-            Prev
-          </button>
+        {/* ✅ PAGINATION — INSIDE SAME WIDTH */}
+    <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
+      <button
+        disabled={currentPage === 1}
+        onClick={() => setCurrentPage(p => p - 1)}
+        className="px-3 py-1 border rounded disabled:opacity-40"
+      >
+        Prev
+      </button>
 
-          {Array.from({ length: totalPages }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-3 py-1 rounded ${
-                currentPage === i + 1 ? "bg-blue-600 text-white" : ""
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
+      {Array.from({ length: totalPages }).map((_, i) => (
+        <button
+          key={i}
+          onClick={() => setCurrentPage(i + 1)}
+          className={`px-3 py-1 rounded ${
+            currentPage === i + 1
+              ? "bg-blue-600 text-white"
+              : "border"
+          }`}
+        >
+          {i + 1}
+        </button>
+      ))}
 
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage(p => p + 1)}
-          >
-            Next
-          </button>
-        </div>
-      </div>
+      <button
+        disabled={currentPage === totalPages}
+        onClick={() => setCurrentPage(p => p + 1)}
+        className="px-3 py-1 border rounded disabled:opacity-40"
+      >
+        Next
+      </button>
+    </div>
+
+  </div>
+</div>
 
       {/* ================= DELETE CONFIRM ================= */}
       {confirmDeleteId && (
