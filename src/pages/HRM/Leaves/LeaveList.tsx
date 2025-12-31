@@ -27,7 +27,10 @@ export default function LeaveList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortAsc, setSortAsc] = useState(true);
   const [openAddLeave, setOpenAddLeave] = useState(false);
-
+  const [openView, setOpenView] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedLeave, setSelectedLeave] = useState<any>(null);
+  
  // const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [openCalendar, setOpenCalendar] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
@@ -308,26 +311,30 @@ export default function LeaveList() {
   <div className="flex items-center justify-center gap-3">
 
     {/* VIEW */}
-    <button
-      title="View"
-      className="p-2 rounded-full hover:bg-gray-100 text-gray-700"
-      onClick={() => {
-        console.log("View", d.id);
-      }}
-    >
-      <Eye size={16} />
-    </button>
+    {/* VIEW */}
+<button
+  title="View"
+  onClick={() => {
+    setSelectedLeave(d);
+    setOpenView(true);
+  }}
+  className="p-2 rounded-full hover:bg-blue-50 text-gray-700 hover:text-blue-600"
+>
+  <Eye size={16} />
+</button>
 
-    {/* EDIT */}
-    <button
-      title="Edit"
-      className="p-2 rounded-full hover:bg-gray-100 text-gray-700"
-      onClick={() => {
-        console.log("Edit", d.id);
-      }}
-    >
-      <Pencil size={16} />
-    </button>
+{/* EDIT */}
+<button
+  title="Edit"
+  onClick={() => {
+    setSelectedLeave(d);
+    setOpenEdit(true);
+  }}
+  className="p-2 rounded-full hover:bg-green-50 text-gray-700 hover:text-green-600"
+>
+  <Pencil size={16} />
+</button>
+
 
     {/* DELETE */}
     <button
@@ -420,6 +427,134 @@ export default function LeaveList() {
       setData((prev) => [newLeave, ...prev])
     }
   />
+)}
+{openView && selectedLeave && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Leave Details</h3>
+        <button onClick={() => setOpenView(false)}>✕</button>
+      </div>
+
+      {/* DETAILS */}
+      <div className="space-y-3 text-sm">
+        {[
+          ["Leave ID", selectedLeave.id],
+          ["Leave Type", selectedLeave.name],
+          ["Status", selectedLeave.status],
+          ["Created Date", selectedLeave.date],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            className="flex justify-between bg-gray-50 px-4 py-3 rounded-lg"
+          >
+            <span className="text-gray-500">{label}</span>
+            <span className="font-medium">{value}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenView(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Close
+        </button>
+
+        <button
+          onClick={() => {
+            const csv =
+              "data:text/csv;charset=utf-8," +
+              "ID,Leave Type,Status,Date\n" +
+              `${selectedLeave.id},${selectedLeave.name},${selectedLeave.status},${selectedLeave.date}`;
+
+            const link = document.createElement("a");
+            link.href = encodeURI(csv);
+            link.download = `leave_${selectedLeave.id}.csv`;
+            link.click();
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Download CSV
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{openEdit && selectedLeave && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Edit Leave</h3>
+        <button onClick={() => setOpenEdit(false)}>✕</button>
+      </div>
+
+      {/* FORM */}
+      <div className="space-y-4 text-sm">
+        <div>
+          <label className="text-gray-500">Leave Type</label>
+          <input
+            value={selectedLeave.name}
+            onChange={(e) =>
+              setSelectedLeave({ ...selectedLeave, name: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-500">Status</label>
+          <select
+            value={selectedLeave.status}
+            onChange={(e) =>
+              setSelectedLeave({
+                ...selectedLeave,
+                status: e.target.value,
+              })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          >
+            <option>Active</option>
+            <option>Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenEdit(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData(prev =>
+              prev.map(item =>
+                item.id === selectedLeave.id
+                  ? selectedLeave
+                  : item
+              )
+            );
+            setOpenEdit(false);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Update
+        </button>
+      </div>
+
+    </div>
+  </div>
 )}
 
     </div>

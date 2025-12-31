@@ -125,7 +125,23 @@ export default function SyllabusPage() {
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   );
-
+  const [openView, setOpenView] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<any>(null);
+  const handleDownloadSyllabus = (row: any) => {
+    const headers = ["Class,Section,Subject Group,Created Date,Status"];
+    const rowData = `${row.class},${row.section},${row.group},${row.date},${row.status}`;
+  
+    const csv =
+      "data:text/csv;charset=utf-8," +
+      [...headers, rowData].join("\n");
+  
+    const link = document.createElement("a");
+    link.href = encodeURI(csv);
+    link.download = `syllabus_${row.class}_${row.section}.csv`;
+    link.click();
+  };
+    
   return (
     <div className="space-y-6">
       {/* ================= HEADER ================= */}
@@ -339,50 +355,66 @@ onClick={(e) => {
       <div className="min-w-[900px]">
 
   <table className="min-w-[900px] w-full text-sm">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-3">Class</th>
-              <th className="px-4 py-3">Section</th>
-              <th className="px-4 py-3">Subject Group</th>
-              <th className="px-4 py-3">Created Date</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Action</th>
-            </tr>
-          </thead>
+  <thead className="bg-gray-50">
+  <tr>
+    <th className="px-4 py-3 text-center">Class</th>
+    <th className="px-4 py-3 text-center">Section</th>
+    <th className="px-4 py-3 text-left">Subject Group</th>
+    <th className="px-4 py-3 text-center">Created Date</th>
+    <th className="px-4 py-3 text-center">Status</th>
+    <th className="px-4 py-3 text-center">Action</th>
+  </tr>
+</thead>
+<tbody>
+  {paginated.map((d) => (
+    <tr key={d.id} className="border-t hover:bg-gray-50">
 
-          <tbody>
-            {paginated.map((d) => (
-              <tr key={d.id} className="border-t hover:bg-gray-50">
-                <td className="px-4 py-3 text-center">{d.class}</td>
-                <td className="px-4 py-3 text-center">{d.section}</td>
-                <td className="px-4 py-3">{d.group}</td>
-                <td className="px-4 py-3 text-center">{d.date}</td>
-                <td className="px-4 py-3 text-center">
-                  <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-600">
-                    ● {d.status}
-                  </span>
-                </td>
-                <td className="px-4 py-3 text-center">
-  <div className="flex items-center justify-center gap-3">
+      <td className="px-4 py-3 text-center">
+        {d.class}
+      </td>
+
+      <td className="px-4 py-3 text-center">
+        {d.section}
+      </td>
+
+      <td className="px-4 py-3 text-left">
+        {d.group}
+      </td>
+
+      <td className="px-4 py-3 text-center">
+        {d.date}
+      </td>
+
+      <td className="px-4 py-3 text-center">
+        <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-600">
+          ● {d.status}
+        </span>
+      </td>
+
+      <td className="px-4 py-3 text-center">
+        <div className="flex items-center justify-center gap-3">
 
     {/* VIEW */}
     <button
-      onClick={() => console.log("View", d.id)}
-      className="text-gray-600 hover:text-blue-600"
-      title="View"
-    >
-      <Eye size={16} />
-    </button>
-
-    {/* EDIT */}
-    <button
-      onClick={() => console.log("Edit", d.id)}
-      className="text-gray-600 hover:text-green-600"
-      title="Edit"
-    >
-      <Pencil size={16} />
-    </button>
-
+  title="View"
+  onClick={() => {
+    setSelectedRow(d);
+    setOpenView(true);
+  }}
+  className="text-gray-600 hover:text-blue-600"
+>
+  <Eye size={16} />
+</button>
+<button
+  title="Edit"
+  onClick={() => {
+    setSelectedRow(d);
+    setOpenEdit(true);
+  }}
+  className="text-gray-600 hover:text-green-600"
+>
+  <Pencil size={16} />
+</button>
     {/* DELETE */}
     <button
       onClick={() => setDeleteId(d.id)}
@@ -462,6 +494,133 @@ onClick={(e) => {
           className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
         >
           Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{openView && selectedRow && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Syllabus Details</h3>
+        <button onClick={() => setOpenView(false)}>✕</button>
+      </div>
+
+      {/* CONTENT */}
+      <div className="space-y-3 text-sm">
+        {[
+          ["Class", selectedRow.class],
+          ["Section", selectedRow.section],
+          ["Subject Group", selectedRow.group],
+          ["Created Date", selectedRow.date],
+          ["Status", selectedRow.status],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            className="flex justify-between px-4 py-3 bg-gray-50 rounded-lg"
+          >
+            <span className="text-gray-500">{label}</span>
+            <span className="font-medium">{value}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenView(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Close
+        </button>
+
+        <button
+          onClick={() => handleDownloadSyllabus(selectedRow)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Download
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{openEdit && selectedRow && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Edit Subject Group</h3>
+        <button onClick={() => setOpenEdit(false)}>✕</button>
+      </div>
+
+      {/* FORM */}
+      <div className="space-y-4 text-sm">
+        <input
+          value={selectedRow.class}
+          onChange={(e) =>
+            setSelectedRow({ ...selectedRow, class: e.target.value })
+          }
+          className="w-full border rounded-lg px-3 py-2"
+          placeholder="Class"
+        />
+
+        <input
+          value={selectedRow.section}
+          onChange={(e) =>
+            setSelectedRow({ ...selectedRow, section: e.target.value })
+          }
+          className="w-full border rounded-lg px-3 py-2"
+          placeholder="Section"
+        />
+
+        <input
+          value={selectedRow.group}
+          onChange={(e) =>
+            setSelectedRow({ ...selectedRow, group: e.target.value })
+          }
+          className="w-full border rounded-lg px-3 py-2"
+          placeholder="Subject Group"
+        />
+
+        <select
+          value={selectedRow.status}
+          onChange={(e) =>
+            setSelectedRow({ ...selectedRow, status: e.target.value })
+          }
+          className="w-full border rounded-lg px-3 py-2"
+        >
+          <option>Active</option>
+          <option>Inactive</option>
+        </select>
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenEdit(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData((prev) =>
+              prev.map((item) =>
+                item.id === selectedRow.id ? selectedRow : item
+              )
+            );
+            setOpenEdit(false);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Update
         </button>
       </div>
 

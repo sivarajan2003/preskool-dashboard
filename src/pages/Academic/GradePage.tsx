@@ -167,7 +167,23 @@ useEffect(() => {
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   );
-
+  const [openView, setOpenView] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedGrade, setSelectedGrade] = useState<any>(null);
+  const handleDownloadGrade = (grade: any) => {
+    const headers = ["ID,Grade,Percentage,Grade Points,Status"];
+    const row = `${grade.id},${grade.grade},${grade.percentage},${grade.points},${grade.status}`;
+  
+    const csv =
+      "data:text/csv;charset=utf-8," +
+      [...headers, row].join("\n");
+  
+    const link = document.createElement("a");
+    link.href = encodeURI(csv);
+    link.download = `grade_${grade.grade}.csv`;
+    link.click();
+  };
+    
   return (
     <div className="space-y-6">
 
@@ -493,24 +509,29 @@ useEffect(() => {
       {/* Action */}
       <td className="px-4 py-3 text-center">
   <div className="flex justify-center gap-3">
+{/* VIEW */}
+<button
+  title="View"
+  className="p-2 rounded hover:bg-gray-100 text-gray-600"
+  onClick={() => {
+    setSelectedGrade(d);
+    setOpenView(true);
+  }}
+>
+  <Eye size={16} />
+</button>
 
-    {/* VIEW */}
-    <button
-      title="View"
-      className="p-2 rounded hover:bg-gray-100 text-gray-600"
-      onClick={() => console.log("View", d.id)}
-    >
-      <Eye size={16} />
-    </button>
-
-    {/* EDIT */}
-    <button
-      title="Edit"
-      className="p-2 rounded hover:bg-gray-100 text-gray-600"
-      onClick={() => console.log("Edit", d.id)}
-    >
-      <Pencil size={16} />
-    </button>
+{/* EDIT */}
+<button
+  title="Edit"
+  className="p-2 rounded hover:bg-gray-100 text-gray-600"
+  onClick={() => {
+    setSelectedGrade(d);
+    setOpenEdit(true);
+  }}
+>
+  <Pencil size={16} />
+</button>
 
     {/* DELETE */}
     <button
@@ -604,6 +625,73 @@ useEffect(() => {
 
     </div>
   </div>
+)}
+{openView && selectedGrade && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-5">
+        <h3 className="text-lg font-semibold">Grade Details</h3>
+        <button onClick={() => setOpenView(false)}>✕</button>
+      </div>
+
+      {/* DETAILS */}
+      <div className="space-y-3 text-sm">
+        {[
+          ["Grade ID", selectedGrade.id],
+          ["Grade", selectedGrade.grade],
+          ["Percentage", selectedGrade.percentage],
+          ["Grade Points", selectedGrade.points],
+          ["Status", selectedGrade.status],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            className="flex justify-between bg-gray-50 px-4 py-3 rounded-lg"
+          >
+            <span className="text-gray-500">{label}</span>
+            <span className="font-medium">{value}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenView(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Close
+        </button>
+
+        <button
+          onClick={() => handleDownloadGrade(selectedGrade)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Download
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{openEdit && selectedGrade && (
+  <AddGradeModal
+    //initialData={selectedGrade}   // 👈 pass existing data
+    onClose={() => {
+      setOpenEdit(false);
+      setSelectedGrade(null);
+    }}
+    onAdd={(updatedGrade) => {
+      setData((prev) =>
+        prev.map((g) =>
+          g.id === selectedGrade.id ? updatedGrade : g
+        )
+      );
+      setOpenEdit(false);
+      setSelectedGrade(null);
+    }}
+  />
 )}
 
     </div>

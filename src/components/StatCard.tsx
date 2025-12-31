@@ -47,7 +47,7 @@ export default function StatCard({
 <img
   src={icon}
   alt={title}
-  className="w-7 h-7 object-contain mix-blend-multiply"
+  className="w-10 h-10 object-contain mix-blend-multiply"
 />
           </div>
 

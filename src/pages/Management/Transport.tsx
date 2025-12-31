@@ -35,6 +35,10 @@ export default function Transport() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortAsc, setSortAsc] = useState(true);
  // const [openMenu, setOpenMenu] = useState<string | null>(null);
+ const [openView, setOpenView] = useState(false);
+const [openEdit, setOpenEdit] = useState(false);
+const [selectedRoute, setSelectedRoute] = useState<any>(null);
+
   const [openCalendar, setOpenCalendar] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [startDate, setStartDate] = useState("");
@@ -320,22 +324,29 @@ export default function Transport() {
   <div className="flex items-center justify-center gap-3">
 
     {/* VIEW */}
-    <button
-      title="View"
-      onClick={() => alert(`View Route ${d.id}`)}
-      className="text-gray-600 hover:text-blue-600"
-    >
-      <Eye size={16} />
-    </button>
+    {/* VIEW */}
+<button
+  title="View"
+  onClick={() => {
+    setSelectedRoute(d);
+    setOpenView(true);
+  }}
+  className="p-2 rounded-full hover:bg-blue-50 text-gray-600 hover:text-blue-600"
+>
+  <Eye size={16} />
+</button>
 
-    {/* EDIT */}
-    <button
-      title="Edit"
-      onClick={() => alert(`Edit Route ${d.id}`)}
-      className="text-gray-600 hover:text-green-600"
-    >
-      <Pencil size={16} />
-    </button>
+{/* EDIT */}
+<button
+  title="Edit"
+  onClick={() => {
+    setSelectedRoute(d);
+    setOpenEdit(true);
+  }}
+  className="p-2 rounded-full hover:bg-green-50 text-gray-600 hover:text-green-600"
+>
+  <Pencil size={16} />
+</button>
 
     {/* DELETE */}
     <button
@@ -430,6 +441,129 @@ export default function Transport() {
       setData((prev) => [newRoute, ...prev])
     }
   />
+)}
+{openView && selectedRoute && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Route Details</h3>
+        <button onClick={() => setOpenView(false)}>✕</button>
+      </div>
+
+      {/* DETAILS */}
+      <div className="space-y-3 text-sm">
+        {[
+          ["Route ID", selectedRoute.id],
+          ["Route Name", selectedRoute.route],
+          ["Status", selectedRoute.status],
+          ["Added On", selectedRoute.date],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            className="flex justify-between bg-gray-50 px-4 py-3 rounded-lg"
+          >
+            <span className="text-gray-500">{label}</span>
+            <span className="font-medium">{value}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenView(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Close
+        </button>
+
+        <button
+          onClick={() => {
+            const csv =
+              "data:text/csv;charset=utf-8," +
+              "ID,Route,Status,Added On\n" +
+              `${selectedRoute.id},${selectedRoute.route},${selectedRoute.status},${selectedRoute.date}`;
+
+            const link = document.createElement("a");
+            link.href = encodeURI(csv);
+            link.download = `route_${selectedRoute.id}.csv`;
+            link.click();
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Download
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{openEdit && selectedRoute && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Edit Route</h3>
+        <button onClick={() => setOpenEdit(false)}>✕</button>
+      </div>
+
+      {/* FORM */}
+      <div className="space-y-4 text-sm">
+        <div>
+          <label className="text-gray-500">Route Name</label>
+          <input
+            value={selectedRoute.route}
+            onChange={(e) =>
+              setSelectedRoute({ ...selectedRoute, route: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-500">Status</label>
+          <select
+            value={selectedRoute.status}
+            onChange={(e) =>
+              setSelectedRoute({ ...selectedRoute, status: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          >
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenEdit(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData(prev =>
+              prev.map(item =>
+                item.id === selectedRoute.id ? selectedRoute : item
+              )
+            );
+            setOpenEdit(false);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Update
+        </button>
+      </div>
+
+    </div>
+  </div>
 )}
 
 

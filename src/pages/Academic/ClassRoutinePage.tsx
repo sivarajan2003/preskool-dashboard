@@ -150,6 +150,10 @@ export default function ClassRoutinePage() {
   const [openAddRoutine, setOpenAddRoutine] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
+  const [openViewRoutine, setOpenViewRoutine] = useState(false);
+const [openEditRoutine, setOpenEditRoutine] = useState(false);
+const [selectedRoutine, setSelectedRoutine] = useState<any>(null);
+
   const [startDate, setStartDate] = useState("2024-05-15");
   const [endDate, setEndDate] = useState("2024-05-24");
   const [currentPage, setCurrentPage] = useState(1);
@@ -226,6 +230,22 @@ const paginatedData = filteredData.slice(
   (currentPage - 1) * rowsPerPage,
   currentPage * rowsPerPage
 );
+const handleDownloadRoutine = (r: any) => {
+  const headers = [
+    "ID,Class,Section,Teacher,Subject,Day,Start,End,Room",
+  ];
+
+  const row = `${r.id},${r.className},${r.section},${r.teacher},${r.subject},${r.day},${r.start},${r.end},${r.room}`;
+
+  const csv =
+    "data:text/csv;charset=utf-8," +
+    [...headers, row].join("\n");
+
+  const link = document.createElement("a");
+  link.href = encodeURI(csv);
+  link.download = `${r.id}_class_routine.csv`;
+  link.click();
+};
 
   return (
     <div className="space-y-6">
@@ -450,21 +470,25 @@ const paginatedData = filteredData.slice(
 
     {/* VIEW */}
     <button
-      title="View"
-      onClick={() => alert(`View ${r.id}`)}
-      className="text-gray-600 hover:text-blue-600"
-    >
-      <Eye size={18} />
-    </button>
-
-    {/* EDIT */}
-    <button
-      title="Edit"
-      onClick={() => alert(`Edit ${r.id}`)}
-      className="text-gray-600 hover:text-green-600"
-    >
-      <Pencil size={18} />
-    </button>
+  title="View"
+  onClick={() => {
+    setSelectedRoutine(r);
+    setOpenViewRoutine(true);
+  }}
+  className="text-gray-600 hover:text-blue-600"
+>
+  <Eye size={18} />
+</button>
+<button
+  title="Edit"
+  onClick={() => {
+    setSelectedRoutine(r);
+    setOpenEditRoutine(true);
+  }}
+  className="text-gray-600 hover:text-green-600"
+>
+  <Pencil size={18} />
+</button>
 
     {/* DELETE */}
     <button
@@ -575,6 +599,146 @@ const paginatedData = filteredData.slice(
           Delete
         </button>
       </div>
+    </div>
+  </div>
+)}
+{openViewRoutine && selectedRoutine && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-lg p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Class Routine Details</h3>
+        <button onClick={() => setOpenViewRoutine(false)}>✕</button>
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-3 text-sm">
+        {[
+          ["Class", selectedRoutine.className],
+          ["Section", selectedRoutine.section],
+          ["Teacher", selectedRoutine.teacher],
+          ["Subject", selectedRoutine.subject],
+          ["Day", selectedRoutine.day],
+          ["Start Time", selectedRoutine.start],
+          ["End Time", selectedRoutine.end],
+          ["Room No", selectedRoutine.room],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            className="flex justify-between items-center px-4 py-3 bg-gray-50 rounded-lg"
+          >
+            <span className="text-gray-500">{label}</span>
+            <span className="font-medium">{value}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenViewRoutine(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Close
+        </button>
+
+        <button
+          onClick={() => handleDownloadRoutine(selectedRoutine)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Download
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{openEditRoutine && selectedRoutine && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-lg p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Edit Class Routine</h3>
+        <button onClick={() => setOpenEditRoutine(false)}>✕</button>
+      </div>
+
+      {/* FORM */}
+      <div className="grid grid-cols-2 gap-4 text-sm">
+
+        <input
+          value={selectedRoutine.teacher}
+          onChange={(e) =>
+            setSelectedRoutine({ ...selectedRoutine, teacher: e.target.value })
+          }
+          className="border rounded-lg px-3 py-2"
+          placeholder="Teacher"
+        />
+
+        <input
+          value={selectedRoutine.subject}
+          onChange={(e) =>
+            setSelectedRoutine({ ...selectedRoutine, subject: e.target.value })
+          }
+          className="border rounded-lg px-3 py-2"
+          placeholder="Subject"
+        />
+
+        <input
+          value={selectedRoutine.start}
+          onChange={(e) =>
+            setSelectedRoutine({ ...selectedRoutine, start: e.target.value })
+          }
+          className="border rounded-lg px-3 py-2"
+          placeholder="Start Time"
+        />
+
+        <input
+          value={selectedRoutine.end}
+          onChange={(e) =>
+            setSelectedRoutine({ ...selectedRoutine, end: e.target.value })
+          }
+          className="border rounded-lg px-3 py-2"
+          placeholder="End Time"
+        />
+
+        <input
+          value={selectedRoutine.room}
+          onChange={(e) =>
+            setSelectedRoutine({ ...selectedRoutine, room: e.target.value })
+          }
+          className="border rounded-lg px-3 py-2"
+          placeholder="Room"
+        />
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenEditRoutine(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData((prev) =>
+              prev.map((item) =>
+                item.id === selectedRoutine.id
+                  ? selectedRoutine
+                  : item
+              )
+            );
+            setOpenEditRoutine(false);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Update
+        </button>
+      </div>
+
     </div>
   </div>
 )}

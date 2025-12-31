@@ -99,7 +99,10 @@ export default function Designation() {
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   );
-
+  const [openView, setOpenView] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedDesignation, setSelectedDesignation] = useState<any>(null);
+  
   return (
     <div className="space-y-6">
 
@@ -299,21 +302,29 @@ export default function Designation() {
                 <td className="px-4 py-3 text-center">
   <div className="flex items-center justify-center gap-3">
 
-    {/* VIEW */}
-    <button
-      className="p-1.5 rounded hover:bg-blue-50 text-gray-600 hover:text-blue-600"
-      title="View"
-    >
-      <Eye size={16} />
-    </button>
+   {/* VIEW */}
+<button
+  title="View"
+  onClick={() => {
+    setSelectedDesignation(d);
+    setOpenView(true);
+  }}
+  className="p-1.5 rounded hover:bg-blue-50 text-gray-600 hover:text-blue-600"
+>
+  <Eye size={16} />
+</button>
 
-    {/* EDIT */}
-    <button
-      className="p-1.5 rounded hover:bg-green-50 text-gray-600 hover:text-green-600"
-      title="Edit"
-    >
-      <Pencil size={16} />
-    </button>
+{/* EDIT */}
+<button
+  title="Edit"
+  onClick={() => {
+    setSelectedDesignation(d);
+    setOpenEdit(true);
+  }}
+  className="p-1.5 rounded hover:bg-green-50 text-gray-600 hover:text-green-600"
+>
+  <Pencil size={16} />
+</button>
 
     {/* DELETE */}
     <button
@@ -405,6 +416,135 @@ export default function Designation() {
           className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
         >
           Delete
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{openView && selectedDesignation && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Designation Details</h3>
+        <button onClick={() => setOpenView(false)}>✕</button>
+      </div>
+
+      {/* CONTENT */}
+      <div className="space-y-3 text-sm">
+        {[
+          ["Designation ID", selectedDesignation.id],
+          ["Designation Name", selectedDesignation.name],
+          ["Status", selectedDesignation.status],
+          ["Created Date", selectedDesignation.date],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            className="flex justify-between bg-gray-50 px-4 py-3 rounded-lg"
+          >
+            <span className="text-gray-500">{label}</span>
+            <span className="font-medium">{value}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenView(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Close
+        </button>
+
+        <button
+          onClick={() => {
+            const csv =
+              "data:text/csv;charset=utf-8," +
+              "ID,Designation,Status,Date\n" +
+              `${selectedDesignation.id},${selectedDesignation.name},${selectedDesignation.status},${selectedDesignation.date}`;
+
+            const link = document.createElement("a");
+            link.href = encodeURI(csv);
+            link.download = `designation_${selectedDesignation.name}.csv`;
+            link.click();
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Download
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{openEdit && selectedDesignation && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Edit Designation</h3>
+        <button onClick={() => setOpenEdit(false)}>✕</button>
+      </div>
+
+      {/* FORM */}
+      <div className="space-y-4 text-sm">
+        <div>
+          <label className="text-gray-500">Designation Name</label>
+          <input
+            value={selectedDesignation.name}
+            onChange={(e) =>
+              setSelectedDesignation({
+                ...selectedDesignation,
+                name: e.target.value,
+              })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-500">Status</label>
+          <select
+            value={selectedDesignation.status}
+            onChange={(e) =>
+              setSelectedDesignation({
+                ...selectedDesignation,
+                status: e.target.value,
+              })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          >
+            <option>Active</option>
+            <option>Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenEdit(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData(prev =>
+              prev.map(item =>
+                item.id === selectedDesignation.id
+                  ? selectedDesignation
+                  : item
+              )
+            );
+            setOpenEdit(false);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Update
         </button>
       </div>
     </div>

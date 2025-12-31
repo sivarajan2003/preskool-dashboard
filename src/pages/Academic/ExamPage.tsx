@@ -202,7 +202,23 @@ const [filterDate, setFilterDate] = useState<
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   );
-
+  const [openView, setOpenView] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedExam, setSelectedExam] = useState<any>(null);
+  const handleDownloadExam = (exam: any) => {
+    const headers = ["ID,Exam Name,Exam Date,Start Time,End Time"];
+    const row = `${exam.id},${exam.name},${exam.date},${exam.start},${exam.end}`;
+  
+    const csv =
+      "data:text/csv;charset=utf-8," +
+      [...headers, row].join("\n");
+  
+    const link = document.createElement("a");
+    link.href = encodeURI(csv);
+    link.download = `exam_${exam.id}.csv`;
+    link.click();
+  };
+    
   return (
     <div className="space-y-6">
 
@@ -483,26 +499,25 @@ const [filterDate, setFilterDate] = useState<
 
     {/* VIEW */}
     <button
-      onClick={() =>
-        navigate(`/admin/dashboard/academic/examinations/view/${d.id}`)
-      }
-      className="text-gray-600 hover:text-blue-600"
-      title="View"
-    >
-      <Eye size={16} />
-    </button>
-
-    {/* EDIT */}
-    <button
-      onClick={() =>
-        navigate(`/admin/dashboard/academic/examinations/edit/${d.id}`)
-      }
-      className="text-gray-600 hover:text-green-600"
-      title="Edit"
-    >
-      <Pencil size={16} />
-    </button>
-
+  onClick={() => {
+    setSelectedExam(d);
+    setOpenView(true);
+  }}
+  className="text-gray-600 hover:text-blue-600"
+  title="View"
+>
+  <Eye size={16} />
+</button>
+<button
+  onClick={() => {
+    setSelectedExam(d);
+    setOpenEdit(true);
+  }}
+  className="text-gray-600 hover:text-green-600"
+  title="Edit"
+>
+  <Pencil size={16} />
+</button>
     {/* DELETE */}
     <button
   onClick={() => setDeleteId(d.id)}
@@ -612,6 +627,131 @@ const [filterDate, setFilterDate] = useState<
           className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
         >
           Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{openView && selectedExam && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Exam Details</h3>
+        <button onClick={() => setOpenView(false)}>✕</button>
+      </div>
+
+      {/* DETAILS */}
+      <div className="space-y-3 text-sm">
+        {[
+          ["Exam ID", selectedExam.id],
+          ["Exam Name", selectedExam.name],
+          ["Exam Date", selectedExam.date],
+          ["Start Time", selectedExam.start],
+          ["End Time", selectedExam.end],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            className="flex justify-between px-4 py-3 bg-gray-50 rounded-lg"
+          >
+            <span className="text-gray-500">{label}</span>
+            <span className="font-medium">{value}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenView(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Close
+        </button>
+
+        <button
+          onClick={() => handleDownloadExam(selectedExam)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Download
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{openEdit && selectedExam && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Edit Exam</h3>
+        <button onClick={() => setOpenEdit(false)}>✕</button>
+      </div>
+
+      {/* FORM */}
+      <div className="space-y-4 text-sm">
+        <input
+          value={selectedExam.name}
+          onChange={(e) =>
+            setSelectedExam({ ...selectedExam, name: e.target.value })
+          }
+          className="w-full border rounded-lg px-3 py-2"
+          placeholder="Exam Name"
+        />
+
+        <input
+          type="date"
+          value={selectedExam.date}
+          onChange={(e) =>
+            setSelectedExam({ ...selectedExam, date: e.target.value })
+          }
+          className="w-full border rounded-lg px-3 py-2"
+        />
+
+        <input
+          value={selectedExam.start}
+          onChange={(e) =>
+            setSelectedExam({ ...selectedExam, start: e.target.value })
+          }
+          className="w-full border rounded-lg px-3 py-2"
+          placeholder="Start Time"
+        />
+
+        <input
+          value={selectedExam.end}
+          onChange={(e) =>
+            setSelectedExam({ ...selectedExam, end: e.target.value })
+          }
+          className="w-full border rounded-lg px-3 py-2"
+          placeholder="End Time"
+        />
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenEdit(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData((prev) =>
+              prev.map((item) =>
+                item.id === selectedExam.id ? selectedExam : item
+              )
+            );
+            setOpenEdit(false);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Update
         </button>
       </div>
 

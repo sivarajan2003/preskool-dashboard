@@ -165,7 +165,10 @@ export default function Holidays() {
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   );
-
+  const [openView, setOpenView] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedHoliday, setSelectedHoliday] = useState<any>(null);
+  
   return (
     <div className="space-y-6">
 
@@ -395,8 +398,30 @@ export default function Holidays() {
 
                 <td className="px-4 py-3 text-center">
                   <div className="flex justify-center gap-3">
-                    <Eye size={16} className="cursor-pointer text-gray-600" />
-                    <Pencil size={16} className="cursor-pointer text-gray-600" />
+                    {/* VIEW */}
+<button
+  title="View"
+  onClick={() => {
+    setSelectedHoliday(d);
+    setOpenView(true);
+  }}
+  className="p-1 rounded hover:bg-blue-50 text-gray-600 hover:text-blue-600"
+>
+  <Eye size={16} />
+</button>
+
+{/* EDIT */}
+<button
+  title="Edit"
+  onClick={() => {
+    setSelectedHoliday(d);
+    setOpenEdit(true);
+  }}
+  className="p-1 rounded hover:bg-green-50 text-gray-600 hover:text-green-600"
+>
+  <Pencil size={16} />
+</button>
+
                     <Trash2
                       size={16}
                       className="cursor-pointer text-red-600"
@@ -486,6 +511,164 @@ export default function Holidays() {
       setData((prev) => [newHoliday, ...prev])
     }
   />
+)}
+{openView && selectedHoliday && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Holiday Details</h3>
+        <button onClick={() => setOpenView(false)}>✕</button>
+      </div>
+
+      {/* DETAILS */}
+      <div className="space-y-3 text-sm">
+        {[
+          ["Holiday ID", selectedHoliday.id],
+          ["Title", selectedHoliday.title],
+          ["Date", selectedHoliday.date],
+          ["Description", selectedHoliday.description],
+          ["Status", selectedHoliday.status],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            className="flex justify-between bg-gray-50 px-4 py-3 rounded-lg"
+          >
+            <span className="text-gray-500">{label}</span>
+            <span className="font-medium">{value}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenView(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Close
+        </button>
+
+        <button
+          onClick={() => {
+            const csv =
+              "data:text/csv;charset=utf-8," +
+              "ID,Title,Date,Description,Status\n" +
+              `${selectedHoliday.id},${selectedHoliday.title},${selectedHoliday.date},${selectedHoliday.description},${selectedHoliday.status}`;
+
+            const link = document.createElement("a");
+            link.href = encodeURI(csv);
+            link.download = `holiday_${selectedHoliday.title}.csv`;
+            link.click();
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Download
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{openEdit && selectedHoliday && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Edit Holiday</h3>
+        <button onClick={() => setOpenEdit(false)}>✕</button>
+      </div>
+
+      {/* FORM */}
+      <div className="space-y-4 text-sm">
+        <div>
+          <label className="text-gray-500">Holiday Title</label>
+          <input
+            value={selectedHoliday.title}
+            onChange={(e) =>
+              setSelectedHoliday({ ...selectedHoliday, title: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-500">Date</label>
+          <input
+            type="date"
+            value={new Date(selectedHoliday.date)
+              .toISOString()
+              .split("T")[0]}
+            onChange={(e) =>
+              setSelectedHoliday({
+                ...selectedHoliday,
+                date: e.target.value,
+              })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-500">Description</label>
+          <textarea
+            value={selectedHoliday.description}
+            onChange={(e) =>
+              setSelectedHoliday({
+                ...selectedHoliday,
+                description: e.target.value,
+              })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-500">Status</label>
+          <select
+            value={selectedHoliday.status}
+            onChange={(e) =>
+              setSelectedHoliday({
+                ...selectedHoliday,
+                status: e.target.value,
+              })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          >
+            <option>Active</option>
+            <option>Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenEdit(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData(prev =>
+              prev.map(item =>
+                item.id === selectedHoliday.id
+                  ? selectedHoliday
+                  : item
+              )
+            );
+            setOpenEdit(false);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
 )}
 
     </div>

@@ -215,7 +215,26 @@ export default function ExamSchedulePage() {
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   );
-
+  const [openView, setOpenView] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedSchedule, setSelectedSchedule] = useState<any>(null);
+  const handleDownloadSchedule = (row: any) => {
+    const headers = [
+      "Subject,Exam Date,Start Time,End Time,Duration,Room No,Max Marks,Min Marks",
+    ];
+  
+    const rowData = `${row.subject},${row.date},${row.start},${row.end},${row.duration},${row.room},${row.max},${row.min}`;
+  
+    const csv =
+      "data:text/csv;charset=utf-8," +
+      [...headers, rowData].join("\n");
+  
+    const link = document.createElement("a");
+    link.href = encodeURI(csv);
+    link.download = `exam_schedule_${row.subject}.csv`;
+    link.click();
+  };
+    
   return (
     <div className="space-y-6">
 
@@ -501,25 +520,29 @@ export default function ExamSchedulePage() {
 
                 <td className="px-4 py-3 text-center">
   <div className="flex items-center justify-center gap-3">
+{/* VIEW */}
+<button
+  onClick={() => {
+    setSelectedSchedule(d);
+    setOpenView(true);
+  }}
+  className="text-gray-600 hover:text-blue-600"
+  title="View"
+>
+  <Eye size={18} />
+</button>
 
-    {/* VIEW */}
-    <button
-      onClick={() => navigate(`/view/${d.id}`)}
-      className="text-gray-600 hover:text-blue-600"
-      title="View"
-    >
-      <Eye size={18} />
-    </button>
-
-    {/* EDIT */}
-    <button
-      onClick={() => navigate(`/edit/${d.id}`)}
-      className="text-gray-600 hover:text-green-600"
-      title="Edit"
-    >
-      <Pencil size={18} />
-    </button>
-
+{/* EDIT */}
+<button
+  onClick={() => {
+    setSelectedSchedule(d);
+    setOpenEdit(true);
+  }}
+  className="text-gray-600 hover:text-green-600"
+  title="Edit"
+>
+  <Pencil size={18} />
+</button>
     {/* DELETE */}
     <button
       onClick={() => setConfirmDeleteId(d.id)}
@@ -610,6 +633,170 @@ export default function ExamSchedulePage() {
           className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
         >
           Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{openView && selectedSchedule && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-lg p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Exam Schedule Details</h3>
+        <button onClick={() => setOpenView(false)}>✕</button>
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-4 text-sm">
+        {[
+          ["Subject", selectedSchedule.subject],
+          ["Exam Date", selectedSchedule.date],
+          ["Start Time", selectedSchedule.start],
+          ["End Time", selectedSchedule.end],
+          ["Duration", selectedSchedule.duration],
+          ["Room No", selectedSchedule.room],
+          ["Max Marks", selectedSchedule.max],
+          ["Min Marks", selectedSchedule.min],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            className="flex justify-between bg-gray-50 px-4 py-3 rounded-lg"
+          >
+            <span className="text-gray-500">{label}</span>
+            <span className="font-medium">{value}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenView(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Close
+        </button>
+
+        <button
+          onClick={() => handleDownloadSchedule(selectedSchedule)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Download
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{openEdit && selectedSchedule && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-lg p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Edit Exam Schedule</h3>
+        <button onClick={() => setOpenEdit(false)}>✕</button>
+      </div>
+
+      {/* FORM */}
+      <div className="grid grid-cols-2 gap-4 text-sm">
+        <input
+          value={selectedSchedule.subject}
+          onChange={(e) =>
+            setSelectedSchedule({ ...selectedSchedule, subject: e.target.value })
+          }
+          className="border rounded-lg px-3 py-2"
+          placeholder="Subject"
+        />
+
+        <input
+          type="date"
+          value={selectedSchedule.date}
+          onChange={(e) =>
+            setSelectedSchedule({ ...selectedSchedule, date: e.target.value })
+          }
+          className="border rounded-lg px-3 py-2"
+        />
+
+        <input
+          value={selectedSchedule.start}
+          onChange={(e) =>
+            setSelectedSchedule({ ...selectedSchedule, start: e.target.value })
+          }
+          className="border rounded-lg px-3 py-2"
+          placeholder="Start Time"
+        />
+
+        <input
+          value={selectedSchedule.end}
+          onChange={(e) =>
+            setSelectedSchedule({ ...selectedSchedule, end: e.target.value })
+          }
+          className="border rounded-lg px-3 py-2"
+          placeholder="End Time"
+        />
+
+        <input
+          value={selectedSchedule.duration}
+          onChange={(e) =>
+            setSelectedSchedule({ ...selectedSchedule, duration: e.target.value })
+          }
+          className="border rounded-lg px-3 py-2"
+          placeholder="Duration"
+        />
+
+        <input
+          value={selectedSchedule.room}
+          onChange={(e) =>
+            setSelectedSchedule({ ...selectedSchedule, room: e.target.value })
+          }
+          className="border rounded-lg px-3 py-2"
+          placeholder="Room No"
+        />
+
+        <input
+          value={selectedSchedule.max}
+          onChange={(e) =>
+            setSelectedSchedule({ ...selectedSchedule, max: e.target.value })
+          }
+          className="border rounded-lg px-3 py-2"
+          placeholder="Max Marks"
+        />
+
+        <input
+          value={selectedSchedule.min}
+          onChange={(e) =>
+            setSelectedSchedule({ ...selectedSchedule, min: e.target.value })
+          }
+          className="border rounded-lg px-3 py-2"
+          placeholder="Min Marks"
+        />
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenEdit(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData((prev) =>
+              prev.map((item) =>
+                item.id === selectedSchedule.id ? selectedSchedule : item
+              )
+            );
+            setOpenEdit(false);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Update
         </button>
       </div>
 

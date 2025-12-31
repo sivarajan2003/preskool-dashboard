@@ -124,7 +124,9 @@ export default function Payroll() {
   
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  
+  const [openView, setOpenView] = useState(false);
+const [selectedPayroll, setSelectedPayroll] = useState<any>(null);
+
   const [statusFilter, setStatusFilter] = useState<"Active" | "Inactive" | null>(null);
   useEffect(() => {
     const close = () => {
@@ -417,10 +419,17 @@ export default function Payroll() {
 
 
 <td className="px-4 py-3 text-center">
-  <button className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 rounded text-xs">
-    <FileText size={12} />
-    {d.status === "Paid" ? "View Payslip" : "View Details"}
-  </button>
+<button
+  onClick={() => {
+    setSelectedPayroll(d);
+    setOpenView(true);
+  }}
+  className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded text-xs"
+>
+  <FileText size={12} />
+  {d.status === "Paid" ? "View Payslip" : "View Details"}
+</button>
+
 </td>
 
               </tr>
@@ -449,6 +458,101 @@ export default function Payroll() {
           </button>
         </div>
       </div>
+      {openView && selectedPayroll && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-lg font-semibold">
+          {selectedPayroll.status === "Paid"
+            ? "Salary Payslip"
+            : "Payroll Details"}
+        </h3>
+        <button onClick={() => setOpenView(false)}>✕</button>
+      </div>
+
+      {/* RECEIPT */}
+      <div className="border rounded-lg p-4 space-y-3 text-sm">
+        <div className="flex justify-between">
+          <span className="text-gray-500">Payroll ID</span>
+          <span className="font-medium">{selectedPayroll.id}</span>
+        </div>
+
+        <div className="flex justify-between">
+          <span className="text-gray-500">Employee Name</span>
+          <span className="font-medium">{selectedPayroll.name}</span>
+        </div>
+
+        <div className="flex justify-between">
+          <span className="text-gray-500">Department</span>
+          <span className="font-medium">{selectedPayroll.department}</span>
+        </div>
+
+        <div className="flex justify-between">
+          <span className="text-gray-500">Designation</span>
+          <span className="font-medium">{selectedPayroll.designation}</span>
+        </div>
+
+        <div className="flex justify-between">
+          <span className="text-gray-500">Phone</span>
+          <span className="font-medium">{selectedPayroll.phone}</span>
+        </div>
+
+        <div className="flex justify-between border-t pt-3">
+          <span className="text-gray-500">Amount</span>
+          <span className="font-semibold text-green-600">
+            ${selectedPayroll.amount.toLocaleString()}
+          </span>
+        </div>
+
+        <div className="flex justify-between">
+          <span className="text-gray-500">Status</span>
+          <span
+            className={`font-medium ${
+              selectedPayroll.status === "Paid"
+                ? "text-green-600"
+                : "text-yellow-600"
+            }`}
+          >
+            {selectedPayroll.status}
+          </span>
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenView(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Close
+        </button>
+
+        <button
+          onClick={() => {
+            const csv =
+              "data:text/csv;charset=utf-8," +
+              "ID,Name,Department,Designation,Phone,Amount,Status\n" +
+              `${selectedPayroll.id},${selectedPayroll.name},${selectedPayroll.department},${selectedPayroll.designation},${selectedPayroll.phone},${selectedPayroll.amount},${selectedPayroll.status}`;
+
+            const link = document.createElement("a");
+            link.href = encodeURI(csv);
+            link.download =
+              selectedPayroll.status === "Paid"
+                ? `payslip_${selectedPayroll.id}.csv`
+                : `payroll_${selectedPayroll.id}.csv`;
+            link.click();
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Download
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

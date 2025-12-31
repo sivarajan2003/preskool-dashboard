@@ -16,8 +16,8 @@ import { useEffect } from "react";
 /* ================= CLASSES DATA ================= */
 
 const initialClasses = [
-  { id: "C138038", className: "I", section: "A", students: 30, subjects: 3, status: "Active" },
-  { id: "C138037", className: "I", section: "B", students: 25, subjects: 3, status: "Active" },
+  { id: "C138038", className: "I", section: "A", students: 30, subjects: 3, status: "Active",subjectList: ["Maths", "English", "Science"], },
+  { id: "C138037", className: "I", section: "B", students: 25, subjects: 3, status: "Active",subjectList: ["Maths", "English", "Science"], },
   { id: "C138036", className: "II", section: "A", students: 40, subjects: 3, status: "Active" },
   { id: "C138035", className: "II", section: "B", students: 35, subjects: 3, status: "Active" },
   { id: "C138034", className: "II", section: "C", students: 25, subjects: 3, status: "Inactive" },
@@ -35,6 +35,10 @@ export default function ClassesPage() {
 
   const [data, setData] = useState(initialClasses);
   //const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [openViewModal, setOpenViewModal] = useState(false);
+const [selectedClass, setSelectedClass] = useState<any>(null);
+const [openEditClass, setOpenEditClass] = useState(false);
+const [editingClass, setEditingClass] = useState<any>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [openFilter, setOpenFilter] = useState(false);
   const [statusFilter, setStatusFilter] = useState<"All" | "Active" | "Inactive">("All");
@@ -116,6 +120,34 @@ export default function ClassesPage() {
     currentPage * rowsPerPage
   );
   
+  const handleDownloadClass = (c: any) => {
+    const headers = [
+      "ID",
+      "Class",
+      "Section",
+      "No of Students",
+      "No of Subjects",
+      "Status",
+    ];
+  
+    const values = [
+      c.id,
+      c.className,
+      c.section,
+      c.students,
+      c.subjects,
+      c.status,
+    ];
+  
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers.join(","), values.join(",")].join("\n");
+  
+    const link = document.createElement("a");
+    link.href = encodeURI(csvContent);
+    link.download = `Class_${c.className}_${c.section}.csv`;
+    link.click();
+  };
   
   return (
     <div className="space-y-6">
@@ -331,21 +363,28 @@ export default function ClassesPage() {
 
     {/* VIEW */}
     <button
-      title="View"
-      onClick={() => alert(`View class ${c.id}`)}
-      className="text-gray-600 hover:text-blue-600"
-    >
-      <Eye size={16} />
-    </button>
+  title="View"
+  onClick={() => {
+    setSelectedClass(c);
+    setOpenViewModal(true);
+  }}
+  className="text-gray-600 hover:text-blue-600"
+>
+  <Eye size={16} />
+</button>
 
     {/* EDIT */}
     <button
-      title="Edit"
-      onClick={() => alert(`Edit class ${c.id}`)}
-      className="text-gray-600 hover:text-green-600"
-    >
-      <Pencil size={16} />
-    </button>
+  title="Edit"
+  onClick={() => {
+    setEditingClass(c);
+    setOpenEditClass(true);
+  }}
+  className="text-gray-600 hover:text-green-600"
+>
+  <Pencil size={16} />
+</button>
+
 
     {/* DELETE */}
     <button
@@ -436,6 +475,180 @@ export default function ClassesPage() {
           className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
         >
           Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{/* ================= VIEW CLASS MODAL ================= */}
+{openViewModal && selectedClass && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold">
+          Class Details
+        </h3>
+        <button
+          onClick={() => setOpenViewModal(false)}
+          className="text-gray-500 hover:text-red-500"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* CONTENT */}
+      <div className="space-y-3 text-sm">
+
+<div className="flex justify-between items-center px-4 py-3 rounded-lg bg-gray-50">
+  <span className="text-gray-500">Class ID</span>
+  <span className="font-medium">{selectedClass.id}</span>
+</div>
+
+<div className="flex justify-between items-center px-4 py-3 rounded-lg bg-gray-50">
+  <span className="text-gray-500">Class</span>
+  <span className="font-medium">{selectedClass.className}</span>
+</div>
+
+<div className="flex justify-between items-center px-4 py-3 rounded-lg bg-gray-50">
+  <span className="text-gray-500">Section</span>
+  <span className="font-medium">{selectedClass.section}</span>
+</div>
+
+<div className="flex justify-between items-center px-4 py-3 rounded-lg bg-gray-50">
+  <span className="text-gray-500">No of Students</span>
+  <span className="font-medium">{selectedClass.students}</span>
+</div>
+
+<div className="flex justify-between items-center px-4 py-3 rounded-lg bg-gray-50">
+  <span className="text-gray-500">No of Subjects</span>
+  <span className="font-medium">{selectedClass.subjects}</span>
+</div>
+
+<div className="flex justify-between items-center px-4 py-3 rounded-lg bg-gray-50">
+  <span className="text-gray-500">Status</span>
+  <span
+    className={`px-3 py-1 text-xs rounded-full ${
+      selectedClass.status === "Active"
+        ? "bg-green-100 text-green-600"
+        : "bg-red-100 text-red-600"
+    }`}
+  >
+    {selectedClass.status}
+  </span>
+</div>
+
+</div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-4 mt-8 pt-4 border-t">
+        <button
+          onClick={() => setOpenViewModal(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Close
+        </button>
+
+        <button
+          onClick={() => handleDownloadClass(selectedClass)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Download
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{openEditClass && editingClass && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-5">
+        <h3 className="text-lg font-semibold">Edit Class</h3>
+        <button onClick={() => setOpenEditClass(false)}>✕</button>
+      </div>
+
+      {/* FORM */}
+      <div className="space-y-4 text-sm">
+
+        <div>
+          <label className="text-gray-500">Class</label>
+          <input
+            value={editingClass.className}
+            onChange={(e) =>
+              setEditingClass({ ...editingClass, className: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-500">Section</label>
+          <input
+            value={editingClass.section}
+            onChange={(e) =>
+              setEditingClass({ ...editingClass, section: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-500">No of Students</label>
+          <input
+            type="number"
+            value={editingClass.students}
+            onChange={(e) =>
+              setEditingClass({
+                ...editingClass,
+                students: Number(e.target.value),
+              })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-500">Status</label>
+          <select
+            value={editingClass.status}
+            onChange={(e) =>
+              setEditingClass({ ...editingClass, status: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          >
+            <option>Active</option>
+            <option>Inactive</option>
+          </select>
+        </div>
+
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenEditClass(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData(prev =>
+              prev.map(item =>
+                item.id === editingClass.id ? editingClass : item
+              )
+            );
+            setOpenEditClass(false);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Update
         </button>
       </div>
 

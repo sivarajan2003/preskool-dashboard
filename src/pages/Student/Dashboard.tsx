@@ -29,6 +29,7 @@ export default function StudentDashboard() {
 const [currentMonth, setCurrentMonth] = useState(6); // July (0-based)
 const [currentYear, setCurrentYear] = useState(2025);
 const [showAddExam, setShowAddExam] = useState(false);
+const [showNextClass, setShowNextClass] = useState(false);
 
 /* ================== EXAMS STATE ================== */
 const [exams, setExams] = useState([
@@ -81,6 +82,8 @@ const totalWorkingDays = 26;
 const attendancePercent = Math.round(
   (presentDays / totalWorkingDays) * 100
 );
+const leaveDays = absentDays;
+const attendancePercentage = attendancePercent;
 
 /* ================== CALENDAR HELPERS ================== */
 const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -124,7 +127,47 @@ const handleAddExam = (dateValue: string) => {
   setShowAddExam(false);
 };
 
-  
+const todayClasses = [
+  {
+    sub: "English",
+    time: "09:00 - 09:45 AM",
+    img: Tc1,
+    status: "Completed",
+    c: "green",
+  },
+  {
+    sub: "Chemistry",
+    time: "10:45 - 11:30 AM",
+    img: Tc2,
+    status: "Completed",
+    c: "green",
+  },
+  {
+    sub: "Physics",
+    time: "11:30 - 12:15 AM",
+    img: Tc3,
+    status: "Inprogress",
+    c: "yellow",
+  },
+];
+
+const nextClasses = [
+  {
+    sub: "Mathematics",
+    time: "09:00 - 09:45 AM",
+    img: Tc1,
+    status: "Upcoming",
+    c: "blue",
+  },
+  {
+    sub: "Biology",
+    time: "10:45 - 11:30 AM",
+    img: Tc2,
+    status: "Upcoming",
+    c: "blue",
+  },
+];
+
   return (
     <DashboardLayout>
     <>
@@ -216,56 +259,54 @@ const handleAddExam = (dateValue: string) => {
           {/* TODAY'S CLASS */}
           <div className="bg-white border rounded-xl p-6 sm:p-9
                 animate-card card-hover">
-            <div className="flex justify-between mb-3">
-              <h4 className="text-18px font-medium">Today’s Class</h4>
-              <span className="text-xs text-gray-400">16 May 2025</span>
-            </div>
+            <div className="flex items-center justify-between mb-3">
+  <div>
+    <h4 className="text-18px font-medium">
+      {showNextClass ? "Next Class" : "Today’s Class"}
+    </h4>
+    <p className="text-xs text-gray-400">
+      16 May 2025
+    </p>
+  </div>
 
-            {[
-  {
-    sub: "English",
-    time: "09:00 - 09:45 AM",
-    img: Tc1,
-    status: "Completed",
-    c: "green",
-  },
-  {
-    sub: "Chemistry",
-    time: "10:45 - 11:30 AM",
-    img: Tc2,
-    status: "Completed",
-    c: "green",
-  },
-  {
-    sub: "Physics",
-    time: "11:30 - 12:15 AM",
-    img: Tc3,
-    status: "Inprogress",
-    c: "yellow",
-  },
-].map((c, i) => (
+  <button
+    onClick={() => setShowNextClass(!showNextClass)}
+    className="text-xs text-gray-600 hover:underline"
+  >
+    {showNextClass ? "‹ Today" : "Next ›"}
+  </button>
+</div>
 
-              <div key={i} className="flex items-center gap-3 border rounded-lg p-3 mb-2">
-                <img src={c.img} className="w-10 h-10 rounded-lg object-cover" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium">{c.sub}</p>
-                  <p className="text-xs text-gray-500">{c.time}</p>
-                </div>
-                <span
-                  className={`text-xs px-3 py-0.5 rounded-full ${
-                    c.c === "green"
-                      ? "bg-green-100 text-green-600"
-                      : "bg-yellow-100 text-yellow-600"
-                  }`}
-                >
-                  {c.status}
-                </span>
-              </div>
-            ))}
+{(showNextClass ? nextClasses : todayClasses).map((c, i) => (
+  <div
+    key={i}
+    className="flex items-center gap-3 border rounded-lg p-3 mb-2"
+  >
+    <img
+      src={c.img}
+      className="w-10 h-10 rounded-lg object-cover"
+    />
+
+    <div className="flex-1">
+      <p className="text-sm font-medium">{c.sub}</p>
+      <p className="text-xs text-gray-500">{c.time}</p>
+    </div>
+
+    <span
+      className={`text-xs px-3 py-0.5 rounded-full ${
+        c.c === "green"
+          ? "bg-green-100 text-green-600"
+          : c.c === "yellow"
+          ? "bg-yellow-100 text-yellow-600"
+          : "bg-blue-100 text-blue-600"
+      }`}
+    >
+      {c.status}
+    </span>
+  </div>
+))}
           </div>
         </div>
-
-        {/* ================= CENTER (ATTENDANCE) ================= */}
         {/* ================= ATTENDANCE ================= */}
         <div className="bg-white border rounded-xl p-4 sm:p-5
                 animate-card card-hover">
@@ -274,10 +315,11 @@ const handleAddExam = (dateValue: string) => {
     <h4 className="text-18px font-medium">Attendance</h4>
     <button
   onClick={() => setShowAttendanceDetails(!showAttendanceDetails)}
-  className="text-xs text-blue-600 flex items-center gap-1"
+  className="text-xs text-gray-600 flex items-center gap-1"
 >
   📅 This Month
 </button>
+
 </div>
 
   {/* Working Days */}
@@ -415,6 +457,7 @@ const handleAddExam = (dateValue: string) => {
       ))}
     </div>
   </div>
+  
 </div>
 
 
@@ -646,7 +689,7 @@ const handleAddExam = (dateValue: string) => {
       />
     </svg>
     </div>
-    {/* TOOLTIP */}
+    {/* TOOLTIP */} 
     <div className="absolute top-8 left-1/2 -translate-x-1/2 bg-white border rounded-lg px-4 py-2 shadow text-xs">
       <p className="font-medium mb-1">Oct 2025</p>
       <p className="text-gray-400">Exam Score <b>80%</b></p>
@@ -1288,6 +1331,99 @@ const handleAddExam = (dateValue: string) => {
           </div>
         </div>
       )}
+{/* ================= ATTENDANCE MONTH POPUP ================= */}
+{showAttendanceDetails && (
+  <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+    <div className="bg-white rounded-xl w-[380px] p-5">
+
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="text-sm font-semibold">
+          Monthly Attendance Summary
+        </h4>
+        <button
+          onClick={() => setShowAttendanceDetails(false)}
+          className="text-gray-500 hover:text-red-500"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* STUDENT INFO */}
+      <div className="flex items-center gap-3 border rounded-lg p-3 mb-4">
+        <img
+          src={StudentAvatar}
+          alt="Student"
+          className="w-10 h-10 rounded-lg object-cover"
+        />
+
+        <div>
+          <p className="text-sm font-semibold">
+            Angelo Riana
+          </p>
+          <p className="text-xs text-gray-500">
+            Class III • Section C
+          </p>
+        </div>
+      </div>
+
+      {/* ATTENDANCE STATS */}
+      <div className="grid grid-cols-2 gap-3 text-xs mb-4">
+        <div className="border rounded-lg p-3 text-center">
+          <p className="text-lg font-bold text-green-600">
+            {attendancePercentage}%
+          </p>
+          <p className="text-gray-500">
+            Attendance
+          </p>
+        </div>
+
+        <div className="border rounded-lg p-3 text-center">
+          <p className="text-lg font-bold text-red-600">
+            {leaveDays}
+          </p>
+          <p className="text-gray-500">
+            Leave Days
+          </p>
+        </div>
+      </div>
+
+      {/* EXTRA DETAILS */}
+      <div className="space-y-2 text-xs text-gray-600">
+        <div className="flex justify-between">
+          <span>Total Working Days</span>
+          <span className="font-medium">
+            {totalWorkingDays}
+          </span>
+        </div>
+
+        <div className="flex justify-between">
+          <span>Present Days</span>
+          <span className="font-medium text-green-600">
+            {presentDays}
+          </span>
+        </div>
+
+        <div className="flex justify-between">
+          <span>Late / Half Day</span>
+          <span className="font-medium text-blue-600">
+            {lateDays + halfDays}
+          </span>
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <button
+        onClick={() => setShowAttendanceDetails(false)}
+        className="mt-5 w-full border rounded-lg py-2 text-xs hover:bg-gray-50"
+      >
+        Close
+      </button>
+
+    </div>
+  </div>
+)}
+
   </DashboardLayout>
   );
 }

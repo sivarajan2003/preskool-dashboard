@@ -19,7 +19,7 @@ const notices = [
     desc: "Updated syllabus structure has been released for the academic year 2025.",
     icon: BookOpen,
     bg: "bg-blue-50",
-    color: "text-blue-600",
+    color: "text-gray-600",
   },
   {
     title: "World Environment Day Program",
@@ -82,10 +82,10 @@ export default function NoticeBoard() {
         </div>
 
         {/* LIST (SHORT VIEW) */}
-        <div className="relative space-y-6">
+        <div className="relative space-y-8">
 
           {/* Vertical dotted line */}
-          <div className="absolute left-[18px] top-6 bottom-6 border-l-2 border-dotted border-gray-200" />
+          <div className="absolute left-[14px] top-6 bottom-6 border-l-2 border-dotted border-gray-200" />
 
           {notices.slice(0, 3).map((item, index) => {
             const Icon = item.icon;
@@ -93,7 +93,7 @@ export default function NoticeBoard() {
               <div
                 key={index}
                 className="
-                  group flex items-start justify-between gap-4
+                  group flex items-start justify-between gap-6
                   transition-all duration-300
                   hover:-translate-y-0.5 hover:shadow-sm
                   cursor-pointer
@@ -115,10 +115,11 @@ export default function NoticeBoard() {
 
                 {/* TEXT */}
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition">
-                    {item.title}
-                  </p>
-                  <div className="flex items-center gap-1 text-xs text-gray-500 mt-1">
+                <p className="text-sm font-semibold text-gray-900 group-hover:text-gray-800 transition">
+  {item.title}
+</p>
+
+                  <div className="flex items-center gap-2 text-xs text-gray-500 mt-2">
                     <CalendarDays className="w-3.5 h-3.5" />
                     <span>Added on : {item.date}</span>
                   </div>
@@ -154,7 +155,7 @@ export default function NoticeBoard() {
             </div>
 
             {/* FULL NOTICE CONTENT */}
-            <div className="space-y-4">
+            <div className="space-y-6">
               {notices.map((item, index) => {
                 const Icon = item.icon;
                 return (

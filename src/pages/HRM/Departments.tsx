@@ -102,7 +102,10 @@ export default function Departments() {
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   );
-
+  const [openView, setOpenView] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState<any>(null);
+  
   return (
     <div className="space-y-6">
 
@@ -317,22 +320,30 @@ export default function Departments() {
   <div className="flex justify-center gap-3">
 
     {/* VIEW */}
-    <button
-      title="View"
-      className="p-1 rounded hover:bg-blue-50 text-gray-600 hover:text-blue-600"
-    >
-      <Eye size={16} />
-    </button>
+<button
+  title="View"
+  onClick={() => {
+    setSelectedDepartment(d);
+    setOpenView(true);
+  }}
+  className="p-1 rounded hover:bg-blue-50 text-gray-600 hover:text-blue-600"
+>
+  <Eye size={16} />
+</button>
 
-    {/* EDIT */}
-    <button
-      title="Edit"
-      className="p-1 rounded hover:bg-green-50 text-gray-600 hover:text-green-600"
-    >
-      <Pencil size={16} />
-    </button>
+{/* EDIT */}
+<button
+  title="Edit"
+  onClick={() => {
+    setSelectedDepartment(d);
+    setOpenEdit(true);
+  }}
+  className="p-1 rounded hover:bg-green-50 text-gray-600 hover:text-green-600"
+>
+  <Pencil size={16} />
+</button>
 
-    {/* DELETE (✅ THIS IS THE IMPORTANT PART) */}
+    {/* DELETE  */}
     <button
       title="Delete"
       onClick={() => setConfirmDeleteId(d.id)}
@@ -415,6 +426,131 @@ export default function Departments() {
           className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
         >
           Delete
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{openView && selectedDepartment && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Department Details</h3>
+        <button onClick={() => setOpenView(false)}>✕</button>
+      </div>
+
+      <div className="space-y-3 text-sm">
+        {[
+          ["Department ID", selectedDepartment.id],
+          ["Department Name", selectedDepartment.name],
+          ["Status", selectedDepartment.status],
+          ["Created Date", selectedDepartment.date],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            className="flex justify-between bg-gray-50 px-4 py-3 rounded-lg"
+          >
+            <span className="text-gray-500">{label}</span>
+            <span className="font-medium">{value}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenView(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Close
+        </button>
+
+        <button
+          onClick={() => {
+            const csv =
+              "data:text/csv;charset=utf-8," +
+              "ID,Department,Status,Date\n" +
+              `${selectedDepartment.id},${selectedDepartment.name},${selectedDepartment.status},${selectedDepartment.date}`;
+
+            const link = document.createElement("a");
+            link.href = encodeURI(csv);
+            link.download = `department_${selectedDepartment.name}.csv`;
+            link.click();
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Download
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{openEdit && selectedDepartment && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Edit Department</h3>
+        <button onClick={() => setOpenEdit(false)}>✕</button>
+      </div>
+
+      <div className="space-y-4 text-sm">
+
+        <div>
+          <label className="text-gray-500">Department Name</label>
+          <input
+            value={selectedDepartment.name}
+            onChange={(e) =>
+              setSelectedDepartment({
+                ...selectedDepartment,
+                name: e.target.value,
+              })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-500">Status</label>
+          <select
+            value={selectedDepartment.status}
+            onChange={(e) =>
+              setSelectedDepartment({
+                ...selectedDepartment,
+                status: e.target.value,
+              })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          >
+            <option>Active</option>
+            <option>Inactive</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenEdit(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData((prev) =>
+              prev.map((item) =>
+                item.id === selectedDepartment.id
+                  ? selectedDepartment
+                  : item
+              )
+            );
+            setOpenEdit(false);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Update
         </button>
       </div>
     </div>

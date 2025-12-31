@@ -119,7 +119,10 @@ export default function LibraryMembers() {
   const [openCalendar, setOpenCalendar] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [openAdd, setOpenAdd] = useState(false);
-
+  const [openView, setOpenView] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<any>(null);
+  
   const [openFilter, setOpenFilter] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -425,22 +428,30 @@ export default function LibraryMembers() {
   <div className="flex items-center justify-center gap-3">
 
     {/* VIEW */}
-    <button
-      title="View"
-      onClick={() => alert(`View Member ${d.id}`)}
-      className="text-gray-600 hover:text-blue-600"
-    >
-      <Eye size={16} />
-    </button>
+    {/* VIEW */}
+<button
+  title="View"
+  onClick={() => {
+    setSelectedMember(d);
+    setOpenView(true);
+  }}
+  className="p-2 rounded-full hover:bg-blue-50 text-gray-600 hover:text-blue-600"
+>
+  <Eye size={16} />
+</button>
 
-    {/* EDIT */}
-    <button
-      title="Edit"
-      onClick={() => alert(`Edit Member ${d.id}`)}
-      className="text-gray-600 hover:text-green-600"
-    >
-      <Pencil size={16} />
-    </button>
+{/* EDIT */}
+<button
+  title="Edit"
+  onClick={() => {
+    setSelectedMember(d);
+    setOpenEdit(true);
+  }}
+  className="p-2 rounded-full hover:bg-green-50 text-gray-600 hover:text-green-600"
+>
+  <Pencil size={16} />
+</button>
+
 
     {/* DELETE */}
     <button
@@ -534,6 +545,152 @@ export default function LibraryMembers() {
       setData((prev) => [member, ...prev])
     }
   />
+)}
+{openView && selectedMember && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Library Member Details</h3>
+        <button onClick={() => setOpenView(false)}>✕</button>
+      </div>
+
+      {/* DETAILS */}
+      <div className="space-y-3 text-sm">
+        {[
+          ["Member ID", selectedMember.id],
+          ["Name", selectedMember.name],
+          ["Card No", selectedMember.cardNo],
+          ["Email", selectedMember.email],
+          ["Date of Join", selectedMember.date],
+          ["Mobile", selectedMember.mobile],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            className="flex justify-between bg-gray-50 px-4 py-3 rounded-lg"
+          >
+            <span className="text-gray-500">{label}</span>
+            <span className="font-medium">{value}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenView(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Close
+        </button>
+
+        <button
+          onClick={() => {
+            const csv =
+              "data:text/csv;charset=utf-8," +
+              "ID,Name,Card No,Email,Date of Join,Mobile\n" +
+              `${selectedMember.id},${selectedMember.name},${selectedMember.cardNo},${selectedMember.email},${selectedMember.date},${selectedMember.mobile}`;
+
+            const link = document.createElement("a");
+            link.href = encodeURI(csv);
+            link.download = `library_member_${selectedMember.id}.csv`;
+            link.click();
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Download 
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{openEdit && selectedMember && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Edit Library Member</h3>
+        <button onClick={() => setOpenEdit(false)}>✕</button>
+      </div>
+
+      {/* FORM */}
+      <div className="space-y-4 text-sm">
+        <div>
+          <label className="text-gray-500">Name</label>
+          <input
+            value={selectedMember.name}
+            onChange={(e) =>
+              setSelectedMember({ ...selectedMember, name: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-500">Card No</label>
+          <input
+            value={selectedMember.cardNo}
+            onChange={(e) =>
+              setSelectedMember({ ...selectedMember, cardNo: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-500">Email</label>
+          <input
+            value={selectedMember.email}
+            onChange={(e) =>
+              setSelectedMember({ ...selectedMember, email: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-500">Mobile</label>
+          <input
+            value={selectedMember.mobile}
+            onChange={(e) =>
+              setSelectedMember({ ...selectedMember, mobile: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenEdit(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData(prev =>
+              prev.map(item =>
+                item.id === selectedMember.id
+                  ? selectedMember
+                  : item
+              )
+            );
+            setOpenEdit(false);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Update
+        </button>
+      </div>
+
+    </div>
+  </div>
 )}
 
     </div>

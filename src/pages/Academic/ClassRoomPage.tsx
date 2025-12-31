@@ -50,7 +50,10 @@ export default function ClassRoomPage() {
       };
     }, [openDate]);
     
-    
+    const [openViewRoom, setOpenViewRoom] = useState(false);
+    const [openEditRoom, setOpenEditRoom] = useState(false);
+    const [selectedRoom, setSelectedRoom] = useState<any>(null);
+     
   const [search, setSearch] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -111,7 +114,27 @@ export default function ClassRoomPage() {
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   );
-
+  const handleDownloadRoom = (room: any) => {
+    const headers = ["Room ID", "Room No", "Capacity", "Status"];
+    const values = [
+      room.id,
+      room.roomNo,
+      room.capacity,
+      room.status,
+    ];
+  
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      headers.join(",") +
+      "\n" +
+      values.join(",");
+  
+    const link = document.createElement("a");
+    link.href = encodeURI(csvContent);
+    link.download = `${room.roomNo}_class_room_details.csv`;
+    link.click();
+  };
+  
   return (
     <div className="space-y-6">
 
@@ -365,21 +388,28 @@ export default function ClassRoomPage() {
 
     {/* VIEW */}
     <button
-      title="View"
-      onClick={() => alert(`View ${r.id}`)}
-      className="text-gray-600 hover:text-blue-600"
-    >
-      <Eye size={18} />
-    </button>
+  title="View"
+  onClick={() => {
+    setSelectedRoom(r);
+    setOpenViewRoom(true);
+  }}
+  className="text-gray-600 hover:text-blue-600"
+>
+  <Eye size={18} />
+</button>
+
 
     {/* EDIT */}
     <button
-      title="Edit"
-      onClick={() => alert(`Edit ${r.id}`)}
-      className="text-gray-600 hover:text-green-600"
-    >
-      <Pencil size={18} />
-    </button>
+  title="Edit"
+  onClick={() => {
+    setSelectedRoom(r);
+    setOpenEditRoom(true);
+  }}
+  className="text-gray-600 hover:text-green-600"
+>
+  <Pencil size={18} />
+</button>
 
     {/* DELETE */}
     <button
@@ -475,6 +505,150 @@ export default function ClassRoomPage() {
           Delete
         </button>
       </div>
+    </div>
+  </div>
+)}
+{openViewRoom && selectedRoom && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Class Room Details</h3>
+        <button onClick={() => setOpenViewRoom(false)}>✕</button>
+      </div>
+
+      {/* CONTENT */}
+      <div className="space-y-3 text-sm">
+
+        {[
+          ["Room ID", selectedRoom.id],
+          ["Room No", selectedRoom.roomNo],
+          ["Capacity", selectedRoom.capacity],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            className="flex justify-between items-center px-4 py-3 bg-gray-50 rounded-lg"
+          >
+            <span className="text-gray-500">{label}</span>
+            <span className="font-medium">{value}</span>
+          </div>
+        ))}
+
+        <div className="flex justify-between items-center px-4 py-3 bg-gray-50 rounded-lg">
+          <span className="text-gray-500">Status</span>
+          <span
+            className={`px-3 py-1 text-xs rounded-full ${
+              selectedRoom.status === "Active"
+                ? "bg-green-100 text-green-600"
+                : "bg-red-100 text-red-600"
+            }`}
+          >
+            {selectedRoom.status}
+          </span>
+        </div>
+
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+  <button
+    onClick={() => setOpenViewRoom(false)}
+    className="px-4 py-2 border rounded-lg text-sm"
+  >
+    Close
+  </button>
+
+  <button
+    onClick={() => handleDownloadRoom(selectedRoom)}
+    className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+  >
+    Download
+  </button>
+</div>
+
+    </div>
+  </div>
+)}
+{openEditRoom && selectedRoom && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-lg font-semibold">Edit Class Room</h3>
+        <button onClick={() => setOpenEditRoom(false)}>✕</button>
+      </div>
+
+      {/* FORM */}
+      <div className="space-y-4 text-sm">
+
+        <div>
+          <label className="text-gray-500">Room No</label>
+          <input
+            value={selectedRoom.roomNo}
+            onChange={(e) =>
+              setSelectedRoom({ ...selectedRoom, roomNo: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-500">Capacity</label>
+          <input
+            type="number"
+            value={selectedRoom.capacity}
+            onChange={(e) =>
+              setSelectedRoom({
+                ...selectedRoom,
+                capacity: Number(e.target.value),
+              })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-500">Status</label>
+          <select
+            value={selectedRoom.status}
+            onChange={(e) =>
+              setSelectedRoom({ ...selectedRoom, status: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2"
+          >
+            <option>Active</option>
+            <option>Inactive</option>
+          </select>
+        </div>
+
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setOpenEditRoom(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData(prev =>
+              prev.map(item =>
+                item.id === selectedRoom.id ? selectedRoom : item
+              )
+            );
+            setOpenEditRoom(false);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Update
+        </button>
+      </div>
+
     </div>
   </div>
 )}
