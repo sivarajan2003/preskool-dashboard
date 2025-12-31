@@ -328,7 +328,7 @@ export default function Departments() {
   }}
   className="p-1 rounded hover:bg-blue-50 text-gray-600 hover:text-blue-600"
 >
-  <Eye size={16} />
+  <Eye size={18} />
 </button>
 
 {/* EDIT */}
@@ -340,7 +340,7 @@ export default function Departments() {
   }}
   className="p-1 rounded hover:bg-green-50 text-gray-600 hover:text-green-600"
 >
-  <Pencil size={16} />
+  <Pencil size={18} />
 </button>
 
     {/* DELETE  */}
@@ -349,7 +349,7 @@ export default function Departments() {
       onClick={() => setConfirmDeleteId(d.id)}
       className="p-1 rounded hover:bg-red-50 text-red-600 hover:text-red-700"
     >
-      <Trash2 size={16} />
+      <Trash2 size={18} />
     </button>
 
   </div>

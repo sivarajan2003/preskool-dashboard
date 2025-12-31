@@ -368,7 +368,7 @@ const [selectedPayroll, setSelectedPayroll] = useState<any>(null);
         <thead className="bg-gray-50">
   <tr>
     <th className="px-4 py-3 text-center">ID</th>
-    <th className="px-4 py-3 text-center">Name</th>
+    <th className="px-4 py-3 text-left">Name</th>
     <th className="px-4 py-3 text-center">Department</th>
     <th className="px-4 py-3 text-center">Designation</th>
     <th className="px-4 py-3 text-center">Phone</th>
@@ -387,15 +387,16 @@ const [selectedPayroll, setSelectedPayroll] = useState<any>(null);
 </td>
 
 <td className="px-4 py-3">
-  <div className="flex items-center justify-center gap-2">
+  <div className="flex items-center gap-3">
     <img
       src={d.image}
-      className="w-8 h-8 rounded-full"
+      className="w-8 h-8 rounded-full object-cover flex-shrink-0"
       alt={d.name}
     />
-    <span>{d.name}</span>
+    <span className="whitespace-nowrap">{d.name}</span>
   </div>
 </td>
+
 
 
 <td className="px-4 py-3 text-center">{d.department}</td>

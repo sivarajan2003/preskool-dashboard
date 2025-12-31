@@ -325,7 +325,7 @@ const [editingClass, setEditingClass] = useState<any>(null);
       <div className="min-w-[900px]">
 
   <table className="min-w-[900px] w-full text-sm">
-          <thead className="bg-gray-50 text-gray-600">
+  <thead className="bg-gray-50">
             <tr>
               <th className="px-4 py-3 text-left">ID</th>
               <th className="px-4 py-3">Class</th>
@@ -370,7 +370,7 @@ const [editingClass, setEditingClass] = useState<any>(null);
   }}
   className="text-gray-600 hover:text-blue-600"
 >
-  <Eye size={16} />
+  <Eye size={18} />
 </button>
 
     {/* EDIT */}
@@ -382,7 +382,7 @@ const [editingClass, setEditingClass] = useState<any>(null);
   }}
   className="text-gray-600 hover:text-green-600"
 >
-  <Pencil size={16} />
+  <Pencil size={18} />
 </button>
 
 
@@ -392,7 +392,7 @@ const [editingClass, setEditingClass] = useState<any>(null);
       onClick={() => setConfirmDeleteId(c.id)}
       className="text-red-500 hover:text-red-700"
     >
-      <Trash2 size={16} />
+      <Trash2 size={18} />
     </button>
 
   </div>

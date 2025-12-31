@@ -407,7 +407,7 @@ export default function Holidays() {
   }}
   className="p-1 rounded hover:bg-blue-50 text-gray-600 hover:text-blue-600"
 >
-  <Eye size={16} />
+  <Eye size={18} />
 </button>
 
 {/* EDIT */}
@@ -419,11 +419,11 @@ export default function Holidays() {
   }}
   className="p-1 rounded hover:bg-green-50 text-gray-600 hover:text-green-600"
 >
-  <Pencil size={16} />
+  <Pencil size={18} />
 </button>
 
                     <Trash2
-                      size={16}
+                      size={18}
                       className="cursor-pointer text-red-600"
                       onClick={() => setConfirmDeleteId(d.id)}
                     />

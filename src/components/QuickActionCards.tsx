@@ -53,7 +53,7 @@ export default function QuickActionCards() {
             {/* GIF ICON */}
             <div
               className="
-                w-11 h-11 rounded-lg
+                w-12 h-12 rounded-lg
                 flex items-center justify-center
                 bg-white
                 transition-all duration-300

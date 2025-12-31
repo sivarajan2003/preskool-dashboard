@@ -320,7 +320,7 @@ export default function LeaveList() {
   }}
   className="p-2 rounded-full hover:bg-blue-50 text-gray-700 hover:text-blue-600"
 >
-  <Eye size={16} />
+  <Eye size={18} />
 </button>
 
 {/* EDIT */}
@@ -332,7 +332,7 @@ export default function LeaveList() {
   }}
   className="p-2 rounded-full hover:bg-green-50 text-gray-700 hover:text-green-600"
 >
-  <Pencil size={16} />
+  <Pencil size={18} />
 </button>
 
 
@@ -342,7 +342,7 @@ export default function LeaveList() {
       className="p-2 rounded-full hover:bg-red-100 text-red-600"
       onClick={() => setConfirmDeleteId(d.id)}
     >
-      <Trash2 size={16} />
+      <Trash2 size={18} />
     </button>
 
   </div>
@@ -479,7 +479,7 @@ export default function LeaveList() {
           }}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
         >
-          Download CSV
+          Download
         </button>
       </div>
 

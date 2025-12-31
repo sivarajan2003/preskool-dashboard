@@ -362,18 +362,20 @@ export default function StudentAttendance() {
 
       {/* ================= TABLE ================= */}
       <div className="bg-white border rounded-xl overflow-x-auto">
-  <table className="min-w-[900px] w-full text-sm">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-3">Admission No</th>
-              <th className="px-4 py-3">Roll No</th>
-              <th className="px-4 py-3">Name</th>
-              <th className="px-4 py-3">Class</th>
-              <th className="px-4 py-3">Section</th>
-              <th className="px-4 py-3">Attendance</th>
-              <th className="px-4 py-3">Notes</th>
-            </tr>
-          </thead>
+      <table className="min-w-[1200px] w-full text-sm table-fixed">
+      <thead className="bg-gray-50">
+  <tr>
+    <th className="px-4 py-3 w-[140px] text-left">Admission No</th>
+    <th className="px-4 py-3 w-[100px] text-left">Roll No</th>
+    <th className="px-4 py-3 w-[200px] text-left">Name</th>
+    <th className="px-4 py-3 w-[80px] text-left">Class</th>
+<th className="px-4 py-3 w-[80px] text-left">Section</th>
+<th className="px-4 py-3 w-[360px] text-left">Attendance</th>
+
+    <th className="px-4 py-3 w-[180px] text-left">Notes</th>
+  </tr>
+</thead>
+
 
           <tbody>
             {paginated.map((d) => (
@@ -381,35 +383,41 @@ export default function StudentAttendance() {
                 <td className="px-4 py-3 text-blue-600">{d.id}</td>
                 <td className="px-4 py-3">{d.roll}</td>
 
-                <td className="px-4 py-3 flex items-center gap-2">
-                  <img src={d.image} className="w-8 h-8 rounded-full" />
-                  {d.name}
-                </td>
+                <td className="px-4 py-3">
+  <div className="flex items-center gap-2">
+    <img
+      src={d.image}
+      className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+      alt={d.name}
+    />
+    <span className="truncate">{d.name}</span>
+  </div>
+</td>
 
-                <td className="px-4 py-3">{d.class}</td>
-                <td className="px-4 py-3">{d.section}</td>
+
+<td className="px-4 py-3 text-left">{d.class}</td>
+<td className="px-4 py-3 text-left">{d.section}</td>
 
                 <td className="px-4 py-3">
-                  {["Present", "Late", "Absent", "Holiday", "Halfday"].map(
-                    (s) => (
-                      <label key={s} className="mr-3 text-xs">
-                        <input
-                          type="radio"
-                          checked={d.attendance === s}
-                          onChange={() => updateAttendance(d.id, s)}
-                        />{" "}
-                        {s}
-                      </label>
-                    )
-                  )}
-                </td>
-
-                <td className="px-4 py-3">
-                  <input
-                    className="border rounded-lg px-2 py-1 text-xs w-full"
-                    placeholder="Notes"
-                  />
-                </td>
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs">
+    {["Present", "Late", "Absent", "Holiday", "Halfday"].map((s) => (
+      <label key={s} className="flex items-center gap-1 whitespace-nowrap">
+        <input
+          type="radio"
+          checked={d.attendance === s}
+          onChange={() => updateAttendance(d.id, s)}
+        />
+        {s}
+      </label>
+    ))}
+  </div>
+</td>
+<td className="px-4 py-3">
+  <input
+    className="border rounded-lg px-2 py-1 text-xs w-full"
+    placeholder="Notes"
+  />
+</td>
               </tr>
             ))}
           </tbody>

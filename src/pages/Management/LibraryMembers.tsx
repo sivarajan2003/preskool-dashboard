@@ -398,7 +398,7 @@ export default function LibraryMembers() {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-4 py-3">ID</th>
-              <th className="px-4 py-3">Member</th>
+              <th className="px-4 py-3 text-left">Member</th>
               <th className="px-4 py-3">Card No</th>
               <th className="px-4 py-3">Email</th>
               <th className="px-4 py-3">Date of Join</th>
@@ -413,12 +413,16 @@ export default function LibraryMembers() {
            <td className="px-4 py-3 text-center text-blue-600">{d.id}</td>
          
            <td className="px-4 py-3">
-             <div className="flex items-center justify-center gap-3">
-               <img src={d.avatar} className="w-8 h-8 rounded-full" />
-               <span>{d.name}</span>
-             </div>
-           </td>
-         
+  <div className="flex items-center gap-3">
+    <img
+      src={d.avatar}
+      className="w-8 h-8 rounded-full object-cover"
+      alt={d.name}
+    />
+    <span className="whitespace-nowrap">{d.name}</span>
+  </div>
+</td>
+
            <td className="px-4 py-3 text-center">{d.cardNo}</td>
            <td className="px-4 py-3 text-center">{d.email}</td>
            <td className="px-4 py-3 text-center">{d.date}</td>
@@ -437,7 +441,7 @@ export default function LibraryMembers() {
   }}
   className="p-2 rounded-full hover:bg-blue-50 text-gray-600 hover:text-blue-600"
 >
-  <Eye size={16} />
+  <Eye size={18} />
 </button>
 
 {/* EDIT */}
@@ -449,7 +453,7 @@ export default function LibraryMembers() {
   }}
   className="p-2 rounded-full hover:bg-green-50 text-gray-600 hover:text-green-600"
 >
-  <Pencil size={16} />
+  <Pencil size={18} />
 </button>
 
 
@@ -459,7 +463,7 @@ export default function LibraryMembers() {
       onClick={() => setConfirmDeleteId(d.id)}
       className="text-red-500 hover:text-red-700"
     >
-      <Trash2 size={16} />
+      <Trash2 size={18} />
     </button>
 
   </div>

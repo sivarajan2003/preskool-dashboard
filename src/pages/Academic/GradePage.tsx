@@ -518,7 +518,7 @@ useEffect(() => {
     setOpenView(true);
   }}
 >
-  <Eye size={16} />
+  <Eye size={18} />
 </button>
 
 {/* EDIT */}
@@ -530,7 +530,7 @@ useEffect(() => {
     setOpenEdit(true);
   }}
 >
-  <Pencil size={16} />
+  <Pencil size={18} />
 </button>
 
     {/* DELETE */}
@@ -539,7 +539,7 @@ useEffect(() => {
       className="p-2 rounded hover:bg-red-100 text-red-600"
       onClick={() => setDeleteId(d.id)}
     >
-      <Trash2 size={16} />
+      <Trash2 size={18} />
     </button>
 
   </div>

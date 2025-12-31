@@ -333,7 +333,7 @@ const [selectedRoute, setSelectedRoute] = useState<any>(null);
   }}
   className="p-2 rounded-full hover:bg-blue-50 text-gray-600 hover:text-blue-600"
 >
-  <Eye size={16} />
+  <Eye size={18} />
 </button>
 
 {/* EDIT */}
@@ -345,7 +345,7 @@ const [selectedRoute, setSelectedRoute] = useState<any>(null);
   }}
   className="p-2 rounded-full hover:bg-green-50 text-gray-600 hover:text-green-600"
 >
-  <Pencil size={16} />
+  <Pencil size={18} />
 </button>
 
     {/* DELETE */}
@@ -354,7 +354,7 @@ const [selectedRoute, setSelectedRoute] = useState<any>(null);
       onClick={() => setConfirmDeleteId(d.id)}
       className="text-red-500 hover:text-red-700"
     >
-      <Trash2 size={16} />
+      <Trash2 size={18} />
     </button>
 
   </div>

@@ -306,16 +306,17 @@ const [selectedSport, setSelectedSport] = useState<any>(null);
       <div className="bg-white border rounded-xl overflow-x-auto">
       <div className="min-w-[900px]">
 
-  <table className="min-w-[900px] w-full text-sm">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-3 text-center">ID</th>
-              <th className="px-4 py-3 text-center">Name</th>
-              <th className="px-4 py-3 text-center">Coach</th>
-              <th className="px-4 py-3 text-center">Started Year</th>
-              <th className="px-4 py-3 text-center">Action</th>
-            </tr>
-          </thead>
+      <table className="min-w-[900px] w-full text-sm table-fixed">
+      <thead className="bg-gray-50">
+  <tr>
+    <th className="px-4 py-3 w-[120px] text-center">ID</th>
+    <th className="px-4 py-3 w-[180px] text-center">Name</th>
+    <th className="px-4 py-3 w-[220px] text-left">Coach</th>
+    <th className="px-4 py-3 w-[140px] text-center">Started Year</th>
+    <th className="px-4 py-3 w-[120px] text-center">Action</th>
+  </tr>
+</thead>
+
 
           <tbody>
             {paginated.map((d) => (
@@ -324,11 +325,16 @@ const [selectedSport, setSelectedSport] = useState<any>(null);
                 <td className="px-4 py-3 text-center">{d.name}</td>
 
                 <td className="px-4 py-3">
-                  <div className="flex items-center justify-center gap-2">
-                    <img src={d.avatar} className="w-8 h-8 rounded-full" />
-                    <span>{d.coach}</span>
-                  </div>
-                </td>
+  <div className="flex items-center gap-3">
+    <img
+      src={d.avatar}
+      className="w-8 h-8 rounded-full object-cover"
+      alt={d.name}
+    />
+    <span className="whitespace-nowrap">{d.name}</span>
+  </div>
+</td>
+
 
                 <td className="px-4 py-3 text-center">{d.year}</td>
 
@@ -345,7 +351,7 @@ const [selectedSport, setSelectedSport] = useState<any>(null);
   }}
   className="p-2 rounded-full hover:bg-blue-50 text-gray-600 hover:text-blue-600"
 >
-  <Eye size={16} />
+  <Eye size={18} />
 </button>
 
 {/* EDIT */}
@@ -357,7 +363,7 @@ const [selectedSport, setSelectedSport] = useState<any>(null);
   }}
   className="p-2 rounded-full hover:bg-green-50 text-gray-600 hover:text-green-600"
 >
-  <Pencil size={16} />
+  <Pencil size={18} />
 </button>
 
 
@@ -367,7 +373,7 @@ const [selectedSport, setSelectedSport] = useState<any>(null);
       onClick={() => setConfirmDeleteId(d.id)}
       className="text-red-500 hover:text-red-700"
     >
-      <Trash2 size={16} />
+      <Trash2 size={18} />
     </button>
 
   </div>
