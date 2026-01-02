@@ -33,6 +33,8 @@ const USERS = [
     password: "admin123",
     role: "parent",
   },
+  //{ email: "parent@preskool.com", password: "admin123", role: "parent" },
+
 ];
 
 export default function Login() {
@@ -110,44 +112,6 @@ if (user.role === "parent") {
   </div>
 
 </div>
-
-
-
-{/* HALF PAGE WAVE 
-<div className="absolute bottom-0 left-0 w-full h-1/2">
-  <svg
-    viewBox="0 0 1440 320"
-    className="w-full h-full"
-    preserveAspectRatio="none"
-  >
-    <path
-      fill="#4361EE"
-      d="M0,160L48,170.7C96,181,192,203,288,213.3C384,224,480,224,576,213.3C672,203,768,181,864,176C960,171,1056,181,1152,192C1248,203,1344,213,1392,218.7L1440,224L1440,320L0,320Z"
-    />
-    <path
-      d="M0 0H321.603C321.603 0 572.5 162 659.5 369C746.5 576 1043 769 1043 769H0V0Z"
-      fill="#E1E6FF"
-    />
-  </svg>
-</div>
-
-*/}
-
-
-
-
-{/* ONLY ONE BOTTOM WAVE
-<div className="absolute bottom-0 left-0 w-full">
-  <svg viewBox="0 0 1440 320" className="w-full h-[160px]">
-    <path
-      fill="#4361EE"
-      d="M0,224L48,213.3C96,203,192,181,288,170.7C384,160,480,160,576,176C672,192,768,224,864,229.3C960,235,1056,213,1152,197.3C1248,181,1344,171,1392,165.3L1440,160L1440,320L0,320Z"
-    />
-  </svg>
-</div> */}
-
-
-
       {/* RIGHT LOGIN FORM */}
       <div className="flex-1 flex items-center justify-center px-6">
         <div className="w-full max-w-[360px]">

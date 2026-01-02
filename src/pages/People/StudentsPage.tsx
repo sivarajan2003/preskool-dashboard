@@ -168,6 +168,11 @@ export default function StudentsPage() {
 // const [endDate, setEndDate] = useState<string>(() =>
 //   new Date().toISOString().split("T")[0]
 // );
+
+const [viewStudent, setViewStudent] = useState<any>(null);
+const [editStudent, setEditStudent] = useState<any>(null);
+const [deleteStudent, setDeleteStudent] = useState<any>(null);
+
 const [openDate, setOpenDate] = useState(false);
 
 const [startDate, setStartDate] = useState("2020-05-15");
@@ -239,7 +244,37 @@ const [endDate, setEndDate] = useState("2024-05-24");
       return dateMatch && statusMatch && genderMatch;
     });
     
-    
+    const downloadTeacherCSV = (teacher: any) => {
+  const headers = [
+    "ID",
+    "Name",
+    "Class",
+    "Subject",
+    "Email",
+    "Phone",
+    "Status",
+  ];
+
+  const row = [
+    teacher.id,
+    teacher.name,
+    teacher.class,
+    teacher.subject,
+    teacher.email,
+    teacher.phone,
+    teacher.status,
+  ];
+
+  const csvContent =
+    "data:text/csv;charset=utf-8," +
+    [headers.join(","), row.join(",")].join("\n");
+
+  const link = document.createElement("a");
+  link.href = encodeURI(csvContent);
+  link.download = `${teacher.name}.csv`;
+  link.click();
+};
+
   return (
     <div className="space-y-6">
 {/* ================= HEADER ================= */}
@@ -481,34 +516,33 @@ const [endDate, setEndDate] = useState("2024-05-24");
     <div className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-20">
       
       <button
-        onClick={() => {
-          setOpenMenuId(null);
-          console.log("View", s.name);
-        }}
-        className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-50"
-      >
-        <Eye size={14} /> View
-      </button>
+  onClick={() => {
+    setOpenMenuId(null);
+    setViewStudent(s);
+  }}
+  className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-50"
+>
+  <Eye size={14} /> View
+</button>
+<button
+  onClick={() => {
+    setOpenMenuId(null);
+    setEditStudent(s);
+  }}
+  className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-50"
+>
+  <Pencil size={14} /> Edit
+</button>
+<button
+  onClick={() => {
+    setOpenMenuId(null);
+    setDeleteStudent(s);
+  }}
+  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+>
+  <Trash2 size={14} /> Delete
+</button>
 
-      <button
-        onClick={() => {
-          setOpenMenuId(null);
-          console.log("Edit", s.name);
-        }}
-        className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-50"
-      >
-        <Pencil size={14} /> Edit
-      </button>
-
-      <button
-        onClick={() => {
-          setOpenMenuId(null);
-          alert(`Delete ${s.name}`);
-        }}
-        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
-      >
-        <Trash2 size={14} /> Delete
-      </button>
 
     </div>
   )}
@@ -689,6 +723,188 @@ const [endDate, setEndDate] = useState("2024-05-24");
     setStudentList((prev) => [newStudent, ...prev])
   }
 />
+{viewStudent && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white w-[420px] rounded-xl p-6">
+
+      <h3 className="text-lg font-semibold mb-4">
+        Student Profile
+      </h3>
+
+      <div className="flex items-center gap-4 mb-4">
+        <img
+          src={viewStudent.image}
+          className="w-14 h-14 rounded-full"
+        />
+        <div>
+          <p className="font-medium">{viewStudent.name}</p>
+          <p className="text-sm text-gray-500">
+            {viewStudent.class}
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 text-sm">
+        <p><b>Roll No:</b> {viewStudent.rollNo}</p>
+        <p><b>Gender:</b> {viewStudent.gender}</p>
+        <p><b>Joined:</b> {viewStudent.joined}</p>
+        <p><b>Status:</b> {viewStudent.status}</p>
+      </div>
+
+      <div className="flex justify-between mt-6">
+      <button
+  onClick={() => {
+    const headers = [
+      "ID",
+      "Name",
+      "Class",
+      "Roll No",
+      "Gender",
+      "Joined",
+      "Status",
+    ];
+
+    const row = [
+      viewStudent.id,
+      viewStudent.name,
+      viewStudent.class,
+      viewStudent.rollNo,
+      viewStudent.gender,
+      viewStudent.joined,
+      viewStudent.status,
+    ];
+
+    const csv =
+      "data:text/csv;charset=utf-8," +
+      [headers.join(","), row.join(",")].join("\n");
+
+    const link = document.createElement("a");
+    link.href = encodeURI(csv);
+    link.download = `${viewStudent.name}.csv`;
+    link.click();
+  }}
+  className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg"
+>
+  Download 
+</button>
+
+        <button
+          onClick={() => setViewStudent(null)}
+          className="px-4 py-2 text-sm border rounded-lg"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{editStudent && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white w-[420px] rounded-xl p-6">
+
+      <h3 className="text-lg font-semibold mb-4">
+        Edit Student
+      </h3>
+
+      <div className="space-y-3">
+        <input
+          className="w-full border rounded px-3 py-2 text-sm"
+          value={editStudent.name}
+          onChange={(e) =>
+            setEditStudent({ ...editStudent, name: e.target.value })
+          }
+        />
+
+        <input
+          className="w-full border rounded px-3 py-2 text-sm"
+          value={editStudent.class}
+          onChange={(e) =>
+            setEditStudent({ ...editStudent, class: e.target.value })
+          }
+        />
+
+        <select
+          className="w-full border rounded px-3 py-2 text-sm"
+          value={editStudent.gender}
+          onChange={(e) =>
+            setEditStudent({
+              ...editStudent,
+              gender: e.target.value,
+            })
+          }
+        >
+          <option>Male</option>
+          <option>Female</option>
+        </select>
+      </div>
+
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setEditStudent(null)}
+          className="px-4 py-2 text-sm border rounded-lg"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setStudentList((prev) =>
+              prev.map((s) =>
+                s.id === editStudent.id ? editStudent : s
+              )
+            );
+            setEditStudent(null);
+          }}
+          className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{deleteStudent && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white w-[380px] rounded-xl p-6">
+
+      <h3 className="text-lg font-semibold text-gray-900">
+        Confirm Delete
+      </h3>
+
+      <p className="text-sm text-gray-600 mt-2">
+        Are you sure you want to delete
+        <span className="font-semibold"> {deleteStudent.name}</span>?
+        <br />
+        This action cannot be undone.
+      </p>
+
+      <div className="flex justify-end gap-3 mt-6">
+
+        {/* CANCEL */}
+        <button
+          onClick={() => setDeleteStudent(null)}
+          className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50"
+        >
+          Cancel
+        </button>
+
+        {/* CONFIRM DELETE */}
+        <button
+          onClick={() => {
+            setStudentList((prev) =>
+              prev.filter((st) => st.id !== deleteStudent.id)
+            );
+            setDeleteStudent(null);
+          }}
+          className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700"
+        >
+          Delete
+        </button>
+
+      </div>
+    </div>
+  </div>
+)}
 
     </div>
   );

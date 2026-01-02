@@ -9,6 +9,8 @@ import {
   ArrowUpDown,
   MoreVertical,
 } from "lucide-react";
+import { Eye, Pencil, Trash2 } from "lucide-react";
+
 import AddStudentModal from "../../components/AddStudentModal";
 import p1 from "../../assets/par/p1.png";
 import p2 from "../../assets/par/p2.png";
@@ -167,6 +169,7 @@ const [endDate, setEndDate] = useState("2024-05-24");
       [p.id, p.name, p.email, p.phone, p.added].join(",")
       
     );
+    
     //const [selectedParent, setSelectedParent] = useState<any>(null);
     const [selectedParent, setSelectedParent] = useState(null);
 
@@ -214,8 +217,38 @@ type Parent = {
     image: string;
   };
 };
+const [viewParent, setViewParent] = useState<Parent | null>(null);
+const [editParent, setEditParent] = useState<Parent | null>(null);
 
 const [selectedParent, setSelectedParent] = useState<Parent | null>(null);
+const downloadParentCSV = (parent: Parent) => {
+  const headers = [
+    "ID",
+    "Name",
+    "Email",
+    "Phone",
+    "Added On",
+    "Student Name",
+  ];
+
+  const row = [
+    parent.id,
+    parent.name,
+    parent.email,
+    parent.phone,
+    parent.added,
+    parent.student.name,
+  ];
+
+  const csv =
+    "data:text/csv;charset=utf-8," +
+    [headers.join(","), row.join(",")].join("\n");
+
+  const link = document.createElement("a");
+  link.href = encodeURI(csv);
+  link.download = `${parent.name}.csv`;
+  link.click();
+};
 
   return (
     <div className="space-y-6">
@@ -431,34 +464,35 @@ const [selectedParent, setSelectedParent] = useState<Parent | null>(null);
     <div className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-20">
       
       <button
-        onClick={() => {
-          setOpenMenuId(null);
-          console.log("View", p.name);
-        }}
-        className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-50"
-      >
-        View
-      </button>
-
-      <button
-        onClick={() => {
-          setOpenMenuId(null);
-          console.log("Edit", p.name);
-        }}
-        className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-50"
-      >
-        Edit
-      </button>
-
-      <button
-        onClick={() => {
-          setDeleteId(p.id);
-          setOpenMenuId(null);
-        }}
-        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
-      >
-        Delete
-      </button>
+  onClick={() => {
+    setOpenMenuId(null);
+    setViewParent(p);
+  }}
+  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50"
+>
+  <Eye size={14} className="text-gray-600" />
+  View
+</button>
+<button
+  onClick={() => {
+    setOpenMenuId(null);
+    setEditParent(p);
+  }}
+  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50"
+>
+  <Pencil size={14} className="text-grag-600" />
+  Edit
+</button>
+<button
+  onClick={() => {
+    setOpenMenuId(null);
+    setDeleteId(p.id);
+  }}
+  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+>
+  <Trash2 size={14} />
+  Delete
+</button>
     </div>
   )}
 </div>
@@ -660,6 +694,111 @@ const [selectedParent, setSelectedParent] = useState<Parent | null>(null);
         </span>
       </div>
 
+    </div>
+  </div>
+)}
+{viewParent && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white rounded-xl w-[420px] p-6">
+
+      <h3 className="text-lg font-semibold mb-4">
+        Parent Details
+      </h3>
+
+      <div className="flex items-center gap-4 mb-4">
+        <img
+          src={viewParent.image}
+          className="w-14 h-14 rounded-full"
+        />
+        <div>
+          <p className="font-medium">{viewParent.name}</p>
+          <p className="text-sm text-gray-500">
+            Added on {viewParent.added}
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 text-sm">
+        <p><b>Email:</b> {viewParent.email}</p>
+        <p><b>Phone:</b> {viewParent.phone}</p>
+        <p><b>Student:</b> {viewParent.student.name}</p>
+      </div>
+
+      <div className="flex justify-between mt-6">
+      <button
+  onClick={() => downloadParentCSV(viewParent)}
+  className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg"
+>
+  Download
+</button>
+
+
+        <button
+          onClick={() => setViewParent(null)}
+          className="px-4 py-2 text-sm border rounded-lg"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{editParent && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white rounded-xl w-[420px] p-6">
+
+      <h3 className="text-lg font-semibold mb-4">
+        Edit Parent
+      </h3>
+
+      <div className="space-y-3">
+        <input
+          className="w-full border rounded px-3 py-2 text-sm"
+          value={editParent.name}
+          onChange={(e) =>
+            setEditParent({ ...editParent, name: e.target.value })
+          }
+        />
+
+        <input
+          className="w-full border rounded px-3 py-2 text-sm"
+          value={editParent.email}
+          onChange={(e) =>
+            setEditParent({ ...editParent, email: e.target.value })
+          }
+        />
+
+        <input
+          className="w-full border rounded px-3 py-2 text-sm"
+          value={editParent.phone}
+          onChange={(e) =>
+            setEditParent({ ...editParent, phone: e.target.value })
+          }
+        />
+      </div>
+
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setEditParent(null)}
+          className="px-4 py-2 text-sm border rounded-lg"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setParentsData((prev) =>
+              prev.map((p) =>
+                p.id === editParent.id ? editParent : p
+              )
+            );
+            setEditParent(null);
+          }}
+          className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg"
+        >
+          Save
+        </button>
+      </div>
     </div>
   </div>
 )}

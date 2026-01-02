@@ -9,6 +9,8 @@ import {
   ArrowUpDown,
   MoreVertical,
 } from "lucide-react";
+import { Eye, Pencil, Trash2 } from "lucide-react";
+
 import p1 from "../../assets/par/p1.png";
 import p2 from "../../assets/par/p2.png";
 import p3 from "../../assets/par/p3.png";
@@ -186,6 +188,7 @@ export default function GuardianPage() {
   const today = "15 May 2020 - 24 May 2024";
   const [view, setView] = useState<"grid" | "list">("grid");
   //const [view, setView] = useState<"grid" | "list">("grid");
+  const [mode, setMode] = useState<"view" | "edit">("view");
 
   const [openDate, setOpenDate] = useState(false);
   const [startDate, setStartDate] = useState("2020-05-15");
@@ -205,6 +208,34 @@ const filteredGuardians = guardians.filter((g) => {
   }
   return true;
 });
+const downloadGuardianCSV = (guardian: any) => {
+  const headers = [
+    "ID",
+    "Name",
+    "Email",
+    "Phone",
+    "Added On",
+    "Child Name",
+  ];
+
+  const row = [
+    guardian.id,
+    guardian.name,
+    guardian.email,
+    guardian.phone,
+    guardian.added,
+    guardian.child.name,
+  ];
+
+  const csv =
+    "data:text/csv;charset=utf-8," +
+    [headers.join(","), row.join(",")].join("\n");
+
+  const link = document.createElement("a");
+  link.href = encodeURI(csv);
+  link.download = `${guardian.name}.csv`;
+  link.click();
+};
 
   return (
     <div className="space-y-6">
@@ -395,38 +426,47 @@ const filteredGuardians = guardians.filter((g) => {
   </button>
 
   {openMenuId === g.id && (
-    <div className="absolute right-0 mt-2 w-32 bg-white border rounded-lg shadow-lg z-20">
-      <button
-        onClick={() => {
-          setSelectedGuardian(g);
-          setOpenMenuId(null);
-        }}
-        className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50"
-      >
-        View
-      </button>
+  <div className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-20">
 
-      <button
-        onClick={() => {
-          alert("Edit feature later");
-          setOpenMenuId(null);
-        }}
-        className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50"
-      >
-        Edit
-      </button>
+    {/* VIEW */}
+    <button
+      onClick={() => {
+        setSelectedGuardian(g);
+        setMode("view");
+        setOpenMenuId(null);
+      }}
+      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50"
+    >
+      <Eye size={14} />
+      View
+    </button>
 
-      <button
-        onClick={() => {
-          setDeleteId(g.id);
-          setOpenMenuId(null);
-        }}
-        className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50"
-      >
-        Delete
-      </button>
-    </div>
-  )}
+    {/* EDIT */}
+    <button
+      onClick={() => {
+        setSelectedGuardian(g);
+        setMode("edit");
+        setOpenMenuId(null);
+      }}
+      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50"
+    >
+      <Pencil size={14} />
+      Edit
+    </button>
+
+    {/* DELETE */}
+    <button
+      onClick={() => {
+        setDeleteId(g.id);
+        setOpenMenuId(null);
+      }}
+      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+    >
+      <Trash2 size={14} />
+      Delete
+    </button>
+  </div>
+)}
 </div>
             </div>
 
@@ -557,6 +597,127 @@ const filteredGuardians = guardians.filter((g) => {
         <span className="text-xs text-gray-500">Child</span>
       </div>
 
+    </div>
+  </div>
+)}
+{selectedGuardian && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white rounded-xl w-[420px] p-6 relative">
+
+      {/* CLOSE */}
+      <button
+        onClick={() => setSelectedGuardian(null)}
+        className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+      >
+        ✕
+      </button>
+
+      {/* HEADER */}
+      <h3 className="text-lg font-semibold mb-4">
+        {mode === "view" ? "Guardian Details" : "Edit Guardian"}
+      </h3>
+
+      {/* PROFILE */}
+      <div className="flex items-center gap-4 mb-4">
+        <img
+          src={selectedGuardian.image}
+          className="w-14 h-14 rounded-full"
+        />
+        <div>
+          <p className="font-medium">{selectedGuardian.name}</p>
+          <p className="text-sm text-gray-500">
+            Added on {selectedGuardian.added}
+          </p>
+        </div>
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-3 text-sm">
+
+        <div>
+          <p className="text-gray-500">Email</p>
+          {mode === "view" ? (
+            <p className="font-medium">{selectedGuardian.email}</p>
+          ) : (
+            <input
+              className="w-full border rounded px-2 py-1"
+              value={selectedGuardian.email}
+              onChange={(e) =>
+                setSelectedGuardian({
+                  ...selectedGuardian,
+                  email: e.target.value,
+                })
+              }
+            />
+          )}
+        </div>
+
+        <div>
+          <p className="text-gray-500">Phone</p>
+          {mode === "view" ? (
+            <p className="font-medium">{selectedGuardian.phone}</p>
+          ) : (
+            <input
+              className="w-full border rounded px-2 py-1"
+              value={selectedGuardian.phone}
+              onChange={(e) =>
+                setSelectedGuardian({
+                  ...selectedGuardian,
+                  phone: e.target.value,
+                })
+              }
+            />
+          )}
+        </div>
+      </div>
+
+      {/* CHILD */}
+      <div className="flex items-center justify-between bg-gray-50 rounded-lg p-3 mt-4">
+        <div className="flex items-center gap-3">
+          <img
+            src={selectedGuardian.child.image}
+            className="w-8 h-8 rounded-full"
+          />
+          <span className="text-sm font-medium">
+            {selectedGuardian.child.name}
+          </span>
+        </div>
+        <span className="text-xs text-gray-500">Child</span>
+      </div>
+
+      {/* ACTIONS */}
+      <div className="flex justify-end gap-3 mt-6">
+
+      {mode === "view" && (
+  <button
+    onClick={() => downloadGuardianCSV(selectedGuardian)}
+    className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg"
+  >
+    Download
+  </button>
+)}
+
+
+        {mode === "edit" && (
+          <button
+            onClick={() => {
+              alert("Saved successfully");
+              setSelectedGuardian(null);
+            }}
+            className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg"
+          >
+            Save
+          </button>
+        )}
+
+        <button
+          onClick={() => setSelectedGuardian(null)}
+          className="px-4 py-2 text-sm border rounded-lg"
+        >
+          {mode === "view" ? "Close" : "Cancel"}
+        </button>
+
+      </div>
     </div>
   </div>
 )}

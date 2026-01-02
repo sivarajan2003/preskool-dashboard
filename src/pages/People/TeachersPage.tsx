@@ -174,7 +174,10 @@ const [statusFilter, setStatusFilter] = useState<"All" | "Active" | "Inactive">(
 
   const [startDate, setStartDate] = useState("2020-05-15");
   const [endDate, setEndDate] = useState("2024-05-24");
-  
+  const [viewTeacher, setViewTeacher] = useState<any>(null);
+const [editTeacher, setEditTeacher] = useState<any>(null);
+const [deleteTeacher, setDeleteTeacher] = useState<any>(null);
+
   /* SORT */
   const handleSort = () => {
     const sorted = [...data].sort((a, b) =>
@@ -212,6 +215,36 @@ const [statusFilter, setStatusFilter] = useState<"All" | "Active" | "Inactive">(
       setStartDate(past.toISOString().split("T")[0]);
       setEndDate(today.toISOString().split("T")[0]);
     }, []);
+    const downloadTeacherCSV = (teacher: any) => {
+      const headers = [
+        "ID",
+        "Name",
+        "Class",
+        "Subject",
+        "Email",
+        "Phone",
+        "Status",
+      ];
+    
+      const row = [
+        teacher.id,
+        teacher.name,
+        teacher.class,
+        teacher.subject,
+        teacher.email,
+        teacher.phone,
+        teacher.status,
+      ];
+    
+      const csvContent =
+        "data:text/csv;charset=utf-8," +
+        [headers.join(","), row.join(",")].join("\n");
+    
+      const link = document.createElement("a");
+      link.href = encodeURI(csvContent);
+      link.download = `${teacher.name}.csv`;
+      link.click();
+    };
     
   return (
     <div className="space-y-6">
@@ -425,18 +458,43 @@ const [statusFilter, setStatusFilter] = useState<"All" | "Active" | "Inactive">(
                     </button>
 
                     {openMenu === t.id && (
-                      <div className="absolute right-0 mt-2 w-32 bg-white border rounded-lg shadow z-20">
-                        <button className="flex gap-2 px-3 py-2 text-sm hover:bg-gray-50 w-full">
-                          <Eye size={14} /> View
-                        </button>
-                        <button className="flex gap-2 px-3 py-2 text-sm hover:bg-gray-50 w-full">
-                          <Pencil size={14} /> Edit
-                        </button>
-                        <button className="flex gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 w-full">
-                          <Trash2 size={14} /> Delete
-                        </button>
-                      </div>
-                    )}
+  <div className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow z-20">
+
+    {/* VIEW */}
+    <button
+      onClick={() => {
+        setOpenMenu(null);
+        setViewTeacher(t);
+      }}
+      className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-50"
+    >
+      <Eye size={14} /> View
+    </button>
+
+    {/* EDIT */}
+    <button
+      onClick={() => {
+        setOpenMenu(null);
+        setEditTeacher(t);
+      }}
+      className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-50"
+    >
+      <Pencil size={14} /> Edit
+    </button>
+
+    {/* DELETE */}
+    <button
+      onClick={() => {
+        setOpenMenu(null);
+        setDeleteTeacher(t);
+      }}
+      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+    >
+      <Trash2 size={14} /> Delete
+    </button>
+
+  </div>
+)}
                   </div>
                 </div>
 
@@ -536,6 +594,147 @@ const [statusFilter, setStatusFilter] = useState<"All" | "Active" | "Inactive">(
     setData((prev) => [newTeacher, ...prev])
   }
 />
+{viewTeacher && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white w-[420px] rounded-xl p-6">
+
+      <h3 className="text-lg font-semibold mb-4">
+        Teacher Details
+      </h3>
+
+      <div className="flex items-center gap-4 mb-4">
+        <img src={viewTeacher.image} className="w-14 h-14 rounded-full" />
+        <div>
+          <p className="font-medium">{viewTeacher.name}</p>
+          <p className="text-sm text-gray-500">
+            {viewTeacher.class} • {viewTeacher.subject}
+          </p>
+        </div>
+      </div>
+
+      <div className="text-sm space-y-2 text-gray-600">
+        <p><b>Email:</b> {viewTeacher.email}</p>
+        <p><b>Phone:</b> {viewTeacher.phone}</p>
+        <p><b>Status:</b> {viewTeacher.status}</p>
+      </div>
+
+      <div className="flex justify-between mt-6">
+      <button
+  onClick={() => downloadTeacherCSV(viewTeacher)}
+  className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg"
+>
+  Download
+</button>
+
+
+        <button
+          onClick={() => setViewTeacher(null)}
+          className="px-4 py-2 text-sm border rounded-lg"
+        >
+          Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{editTeacher && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white w-[420px] rounded-xl p-6">
+
+      <h3 className="text-lg font-semibold mb-4">
+        Edit Teacher
+      </h3>
+
+      <div className="space-y-3">
+        <input
+          className="w-full border rounded px-3 py-2 text-sm"
+          value={editTeacher.name}
+          onChange={(e) =>
+            setEditTeacher({ ...editTeacher, name: e.target.value })
+          }
+        />
+
+        <input
+          className="w-full border rounded px-3 py-2 text-sm"
+          value={editTeacher.subject}
+          onChange={(e) =>
+            setEditTeacher({ ...editTeacher, subject: e.target.value })
+          }
+        />
+
+        <input
+          className="w-full border rounded px-3 py-2 text-sm"
+          value={editTeacher.email}
+          onChange={(e) =>
+            setEditTeacher({ ...editTeacher, email: e.target.value })
+          }
+        />
+      </div>
+
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setEditTeacher(null)}
+          className="px-4 py-2 text-sm border rounded-lg"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData((prev) =>
+              prev.map((t) =>
+                t.id === editTeacher.id ? editTeacher : t
+              )
+            );
+            setEditTeacher(null);
+          }}
+          className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg"
+        >
+          Save
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{deleteTeacher && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white w-[380px] rounded-xl p-6">
+
+      <h3 className="text-lg font-semibold">
+        Delete Teacher?
+      </h3>
+
+      <p className="text-sm text-gray-600 mt-2">
+        Are you sure you want to delete
+        <b> {deleteTeacher.name}</b>?
+      </p>
+
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          onClick={() => setDeleteTeacher(null)}
+          className="px-4 py-2 text-sm border rounded-lg"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData((prev) =>
+              prev.filter((t) => t.id !== deleteTeacher.id)
+            );
+            setDeleteTeacher(null);
+          }}
+          className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg"
+        >
+          Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
 
     </div>
   );

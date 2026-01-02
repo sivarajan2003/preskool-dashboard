@@ -98,7 +98,7 @@ export default function App() {
       <Route
   path="/admin/dashboard"
   element={
-    <ProtectedRoute>
+    <ProtectedRoute role="admin">
       <DashboardLayout />
     </ProtectedRoute>
   }
@@ -174,39 +174,57 @@ export default function App() {
       <Route
   path="/student"
   element={
-    <ProtectedRoute>
+    <ProtectedRoute role="student">
       <StudentDashboard />
     </ProtectedRoute>
   }
 >
   <Route path="dashboard" element={<StudentDashboard />} />
-  <Route path="exam-results" element={<ExamResults />} />
-  <Route path="fees" element={<FeesDetails />} />
-  
-<Route path="/student/fees" element={<StudentFees />} />
 
+  {/* PEOPLE */}
+  <Route path="people/students" element={<StudentsPage />} />
+
+  {/* ACADEMIC */}
+  <Route path="academic/classes" element={<ClassesPage />} />
+
+  {/* REPORTS */}
+  <Route path="reports/attendance" element={<AttendanceReport />} />
 </Route>
 
 
       {/* TEACHER */}
       <Route
-        path="/teacher/dashboard"
-        element={
-          <ProtectedRoute>
-            <TeacherDashboard />
-          </ProtectedRoute>
-        }
-      />
+  path="/teacher"
+  element={
+    <ProtectedRoute role="teacher">
+      <TeacherDashboard />
+    </ProtectedRoute>
+  }
+>
+  <Route path="dashboard" element={<TeacherDashboard />} />
+
+  {/* PEOPLE */}
+  <Route path="people/students" element={<StudentsPage />} />
+  <Route path="people/teachers" element={<TeachersPage />} />
+
+  {/* ACADEMIC */}
+  <Route path="academic/classes" element={<ClassesPage />} />
+
+  {/* REPORTS */}
+  <Route path="reports/attendance" element={<AttendanceReport />} />
+</Route>
+
+
 
       {/* PARENT */}
       <Route
-        path="/parent/dashboard"
-        element={
-          <ProtectedRoute>
-            <ParentDashboard />
-          </ProtectedRoute>
-        }
-      />
+  path="/parent/dashboard"
+  element={
+    <ProtectedRoute role="parent">
+      <ParentDashboard />
+    </ProtectedRoute>
+  }
+/>
 
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>

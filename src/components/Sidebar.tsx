@@ -24,7 +24,8 @@ export default function Sidebar() {
 
   const navigate = useNavigate();
   const location = useLocation();
-  
+  //const role = localStorage.getItem("role");
+
   const isActive = (path: string) =>
     location.pathname === path;
     
@@ -36,6 +37,15 @@ export default function Sidebar() {
     
   
   const role = localStorage.getItem("role");
+  const basePath =
+  role === "admin"
+    ? "/admin/dashboard"
+    : role === "teacher"
+    ? "/teacher/dashboard"
+    : role === "student"
+    ? "/student/dashboard"
+    : "/parent/dashboard";
+
   const logout = () => {
     localStorage.clear();
     navigate("/login");
@@ -212,7 +222,7 @@ const isManagementItemActive = (path: string) =>
 
     {/* ================= STUDENTS ================= */}
     <button
-  onClick={() => navigate("/admin/dashboard/people/students")}
+  onClick={() => navigate(`${basePath}/people/students`)}
   className={`w-full flex items-center justify-between px-3 py-2 rounded-lg
     ${
       isActive("/admin/dashboard/people/students")
@@ -255,7 +265,7 @@ const isManagementItemActive = (path: string) =>
     {/* ================= PARENTS ================= */}
     <button
       onClick={() => {
-        navigate("/admin/dashboard/people/parents");
+        navigate(`${basePath}/people/parents`);
         setActiveItem("parents");
       }}
       
