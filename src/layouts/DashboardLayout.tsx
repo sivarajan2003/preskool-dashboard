@@ -2,10 +2,17 @@ import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { Outlet } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function DashboardLayout() {
   const [openSidebar, setOpenSidebar] = useState(false);
+  const location = useLocation();
 
+  useEffect(() => {
+    setOpenSidebar(false);
+  }, [location.pathname]);
+  
   return (
     <div className="flex h-screen bg-gray-50">
 
@@ -16,17 +23,16 @@ export default function DashboardLayout() {
 
 
       {/* ===== Mobile Sidebar Drawer ===== */}
-{openSidebar && (
+      {openSidebar && (
   <div className="fixed inset-0 z-50 lg:hidden">
-    
     {/* Overlay */}
     <div
       className="absolute inset-0 bg-black/40"
       onClick={() => setOpenSidebar(false)}
     />
 
-    {/* Sidebar */}
-    <div className="absolute left-0 top-0 h-screen w-64 bg-white shadow-xl overflow-y-auto">
+    {/* 🔥 Mobile Sidebar (HIDDEN on desktop) */}
+    <div className="absolute left-0 top-0 h-screen w-64 bg-white shadow-xl overflow-y-auto lg:hidden">
       <Sidebar />
     </div>
   </div>

@@ -121,8 +121,8 @@ export default function ParentDashboard() {
   };
   
   return (
-    <DashboardLayout>
-
+    //<DashboardLayout>
+<>
       {/* ================= PAGE TITLE ================= */}
       <div className="flex items-center justify-between mb-5">
         <div>
@@ -798,7 +798,7 @@ export default function ParentDashboard() {
 
 </div>
 
-
-    </DashboardLayout>
+</>
+    //</DashboardLayout>
   );
 }

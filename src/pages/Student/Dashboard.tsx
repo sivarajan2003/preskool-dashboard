@@ -169,7 +169,7 @@ const nextClasses = [
 ];
 
   return (
-    <DashboardLayout>
+    //<DashboardLayout>
     <>
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
         <div>
@@ -1310,7 +1310,7 @@ const nextClasses = [
 
 </div>
 
-  </> 
+
   {showAddExam && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-4 sm:p-5 w-[300px]">
@@ -1423,7 +1423,7 @@ const nextClasses = [
     </div>
   </div>
 )}
-
-  </DashboardLayout>
+  </> 
+ // </DashboardLayout>
   );
 }

@@ -148,8 +148,8 @@ const nextMonth = () =>
   };
   
   return (
-    <DashboardLayout>
-
+    //<DashboardLayout>
+<>
       {/* ================= PAGE TITLE ================= */}
       <h2 className="text-2xl font-semibold">Teacher Dashboard</h2>
       <p className="text-sm text-gray-500 mb-6">
@@ -1181,7 +1181,7 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
     </div>
   </div>
 )}
-
-    </DashboardLayout>
+</>
+   // </DashboardLayout>
   );
 }

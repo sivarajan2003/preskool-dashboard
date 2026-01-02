@@ -172,36 +172,33 @@ export default function App() {
 
       {/* STUDENT */}
       <Route
-  path="/student"
+  path="/student/dashboard"
   element={
     <ProtectedRoute role="student">
-      <StudentDashboard />
+      <DashboardLayout />
     </ProtectedRoute>
   }
 >
-  <Route path="dashboard" element={<StudentDashboard />} />
+<Route index element={<StudentDashboard />} />
 
   {/* PEOPLE */}
   <Route path="people/students" element={<StudentsPage />} />
 
   {/* ACADEMIC */}
   <Route path="academic/classes" element={<ClassesPage />} />
-
-  {/* REPORTS */}
-  <Route path="reports/attendance" element={<AttendanceReport />} />
 </Route>
 
-
-      {/* TEACHER */}
-      <Route
-  path="/teacher"
+<Route
+  path="/teacher/dashboard"
   element={
     <ProtectedRoute role="teacher">
-      <TeacherDashboard />
+      <DashboardLayout />
     </ProtectedRoute>
   }
 >
-  <Route path="dashboard" element={<TeacherDashboard />} />
+  <Route index element={<TeacherDashboard />} />
+
+  
 
   {/* PEOPLE */}
   <Route path="people/students" element={<StudentsPage />} />
@@ -221,10 +218,13 @@ export default function App() {
   path="/parent/dashboard"
   element={
     <ProtectedRoute role="parent">
-      <ParentDashboard />
+      <DashboardLayout />
     </ProtectedRoute>
   }
-/>
+>
+<Route index element={<ParentDashboard />} />
+</Route>
+
 
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
@@ -233,3 +233,4 @@ export default function App() {
     </>
   );
 }
+
