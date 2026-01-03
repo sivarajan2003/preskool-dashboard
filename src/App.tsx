@@ -71,6 +71,8 @@ import TeacherReport from "./pages/Reports/AttendanceTabs/TeacherReport";
 import StaffDayWise from "./pages/Reports/AttendanceTabs/StaffDayWise";
 import StaffReport from "./pages/Reports/AttendanceTabs/StaffReport";
 
+//upevent
+
 // Auth
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -103,6 +105,7 @@ export default function App() {
     </ProtectedRoute>
   }
 >
+  
   {/* DASHBOARD */}
   <Route index element={<Dashboard />} />
   <Route path="fees" element={<FeesPage />} />
@@ -136,6 +139,8 @@ export default function App() {
 <Route path="hrm/attendance/student" element={<StudentAttendance />} />
 <Route path="hrm/attendance/teacher" element={<TeacherAttendance />} />
 <Route path="hrm/attendance/staff" element={<StaffAttendance />} />
+
+
 
 <Route path="hrm/leaves/list" element={<LeaveList />} />
 <Route path="hrm/leaves/approve" element={<ApproveLeave />} />

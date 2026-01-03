@@ -27,6 +27,13 @@ const [tab, setTab] = useState("Present");
 const [openSyllabus, setOpenSyllabus] = useState(false);
 const [openReschedule, setOpenReschedule] = useState(false);
 const [selectedTopic, setSelectedTopic] = useState(null);
+const [showLeaveYearPopup, setShowLeaveYearPopup] = useState(false);
+const leaveData = [
+  { type: "Emergency Leave", status: "Pending", year: 2024 },
+  { type: "Medical Leave", status: "Approved", year: 2024 },
+  { type: "Medical Leave", status: "Declined", year: 2024 },
+  { type: "Fever", status: "Approved", year: 2024 },
+];
 
   const [openBestPerformers, setOpenBestPerformers] = useState(false);
   const studentImages: Record<string, string> = {
@@ -94,6 +101,14 @@ const monthNames = [
 // first day of month (Mon based)
 const firstDay = new Date(year, month, 1).getDay();
 const startOffset = firstDay === 0 ? 6 : firstDay - 1;
+const currentYear = new Date().getFullYear();
+
+const yearLeaves = leaveData.filter(l => l.year === currentYear);
+
+const totalLeaves = yearLeaves.length;
+const approved = yearLeaves.filter(l => l.status === "Approved").length;
+const pending = yearLeaves.filter(l => l.status === "Pending").length;
+const declined = yearLeaves.filter(l => l.status === "Declined").length;
 
 // total days
 const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -103,6 +118,18 @@ const days = [
   ...Array(startOffset).fill(null),
   ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
 ];
+const [showMonthAttendance, setShowMonthAttendance] = useState(false);
+
+const monthAttendance = [
+  { date: "01 May 2024", status: "Present" },
+  { date: "02 May 2024", status: "Present" },
+  { date: "03 May 2024", status: "Absent" },
+  { date: "04 May 2024", status: "Present" },
+  { date: "05 May 2024", status: "Absent" },
+];
+
+const presentList = monthAttendance.filter(d => d.status === "Present");
+const absentList = monthAttendance.filter(d => d.status === "Absent");
 
 // today
 const today = new Date();
@@ -502,13 +529,12 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
     <h4 className="text-18px font-medium">Attendance</h4>
 
     <div className="flex items-center gap-1 text-xs text-gray-500">
-      <button
-  onClick={() => setOpen(true)}
-  className="flex items-center gap-1 text-xs text-gray-500"
+    <button
+  onClick={() => setShowMonthAttendance(true)}
+  className="flex items-center gap-1 text-xs text-gray-500 hover:text-blue-600"
 >
   This Month ▼
 </button>
-
     </div>
   </div>
 
@@ -815,28 +841,35 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
         },
       ].map((item, i) => (
         <div
-        key={i}
-        className={`border rounded-xl p-4 bg-white flex flex-col justify-between ${cardAnim(8 + i)}`}
-      >      
-          {/* Top */}
-          <div>
-            {/* Class pill */}
-            <span
-  className={`text-[11px] h-6 px-4 rounded-md min-w-[100px] flex items-center justify-center ${item.pillBg}`}
+  key={i}
+  className={`border rounded-xl bg-white p-5 flex flex-col justify-between ${cardAnim(8 + i)}`}
 >
+  {/* CONTENT */}
+  <div className="space-y-4">
+           {/* Class pill */}
+    <span
+      className={`inline-flex items-center justify-center
+        h-6 px-4 rounded-md
+        text-[11px] font-medium
+        ${item.pillBg}`}
+    >
+      {item.cls}
+    </span>            {/* Title */}
+    <p className="text-sm font-medium leading-snug min-h-[40px]">
+      {item.title}
+    </p>
 
-              {item.cls}
-            </span>
-
-            {/* Title */}
-            <p className="text-sm font-medium leading-snug mb-4">
-              {item.title}
-            </p>
 
             {/* Progress line */}
-            <div className="w-full h-1 rounded-full bg-gray-200 mb-4">
-              <div className={`h-1 rounded-full ${item.bar}`} style={{ width: "60%" }} />
+            <div className="pt-1">
+
+      <div className="w-full h-1.5 rounded-full bg-gray-200">
+      <div
+          className={`h-1.5 rounded-full ${item.bar}`}
+          style={{ width: "60%" }}
+        />
             </div>
+          </div>
           </div>
 
           {/* Actions */}
@@ -972,9 +1005,6 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
         <span className="w-6 h-6 flex items-center justify-center bg-blue-600 text-white rounded">
           1
         </span>
-        <span className="cursor-pointer">2</span>
-        <span>…</span>
-        <span className="cursor-pointer">20</span>
         <span className="text-blue-600 cursor-pointer">Next</span>
       </div>
     </div>
@@ -986,11 +1016,15 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
     {/* Header */}
     <div className="flex items-center justify-between mb-4">
       <h4 className="text-18px font-medium">Leave Status</h4>
-      <span className="flex items-center gap-1 text-xs text-gray-500 cursor-pointer">
+      <span
+  onClick={() => setShowLeaveYearPopup(true)}
+  className="flex items-center gap-1 text-xs text-gray-500 cursor-pointer hover:text-blue-600"
+>
   <CalendarDays className="w-4 h-4" />
   This Year
   <ChevronDown className="w-3 h-3" />
-</span>    </div>
+</span>
+   </div>
 
     {[
       {
@@ -1181,6 +1215,138 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
     </div>
   </div>
 )}
+{showLeaveYearPopup && (
+  <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+    <div className="bg-white w-[360px] rounded-xl p-5">
+
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="text-sm font-semibold">
+          Leave Summary – {currentYear}
+        </h4>
+        <button
+          onClick={() => setShowLeaveYearPopup(false)}
+          className="text-gray-400 hover:text-red-500"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Summary */}
+      <div className="grid grid-cols-2 gap-3 text-xs mb-4">
+        <div className="border rounded-lg p-3 text-center">
+          <p className="text-lg font-bold">{totalLeaves}</p>
+          <p className="text-gray-500">Total Leaves</p>
+        </div>
+
+        <div className="border rounded-lg p-3 text-center text-green-600">
+          <p className="text-lg font-bold">{approved}</p>
+          Approved
+        </div>
+
+        <div className="border rounded-lg p-3 text-center text-blue-600">
+          <p className="text-lg font-bold">{pending}</p>
+          Pending
+        </div>
+
+        <div className="border rounded-lg p-3 text-center text-red-600">
+          <p className="text-lg font-bold">{declined}</p>
+          Declined
+        </div>
+      </div>
+
+      {/* Leave Types */}
+      <div className="space-y-2 text-xs">
+        {yearLeaves.map((l, i) => (
+          <div
+            key={i}
+            className="flex justify-between border rounded-lg px-3 py-2"
+          >
+            <span>{l.type}</span>
+            <span className="font-medium">{l.status}</span>
+          </div>
+        ))}
+      </div>
+
+      <button
+        onClick={() => setShowLeaveYearPopup(false)}
+        className="mt-4 w-full border rounded-lg py-2 text-xs hover:bg-gray-50"
+      >
+        Close
+      </button>
+
+    </div>
+  </div>
+)}
+{showMonthAttendance && (
+  <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+    
+    <div className="bg-white rounded-xl w-[420px] p-5">
+
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="text-sm font-semibold">
+          This Month Attendance
+        </h4>
+        <button
+          onClick={() => setShowMonthAttendance(false)}
+          className="text-gray-400 hover:text-red-500"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Summary */}
+      <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
+        <div className="border rounded-lg p-3 text-center">
+          <p className="text-lg font-bold text-green-600">
+            {presentList.length}
+          </p>
+          <p className="text-gray-500">Present</p>
+        </div>
+        <div className="border rounded-lg p-3 text-center">
+          <p className="text-lg font-bold text-red-600">
+            {absentList.length}
+          </p>
+          <p className="text-gray-500">Absent</p>
+        </div>
+      </div>
+
+      {/* Attendance List */}
+      <div className="space-y-2 max-h-[260px] overflow-y-auto">
+
+        {monthAttendance.map((d, i) => (
+          <div
+            key={i}
+            className="flex items-center justify-between border rounded-lg px-3 py-2 text-xs"
+          >
+            <span>{d.date}</span>
+
+            <span
+              className={`px-2 py-0.5 rounded-full text-white
+                ${d.status === "Present"
+                  ? "bg-green-500"
+                  : "bg-red-500"}`}
+            >
+              {d.status}
+            </span>
+          </div>
+        ))}
+
+      </div>
+
+      {/* Footer */}
+      <button
+        onClick={() => setShowMonthAttendance(false)}
+        className="mt-4 w-full border rounded-lg py-2 text-xs hover:bg-gray-50"
+      >
+        Close
+      </button>
+
+    </div>
+  </div>
+)}
+
 </>
    // </DashboardLayout>
   );

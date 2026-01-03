@@ -84,6 +84,8 @@ const attendancePercent = Math.round(
 );
 const leaveDays = absentDays;
 const attendancePercentage = attendancePercent;
+const [showAllNotices, setShowAllNotices] = useState(false);
+const [showAllHomeWorks, setShowAllHomeWorks] = useState(false);
 
 /* ================== CALENDAR HELPERS ================== */
 const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -126,6 +128,15 @@ const handleAddExam = (dateValue: string) => {
   ]);
   setShowAddExam(false);
 };
+const facultyRef = useRef<HTMLDivElement | null>(null);
+
+const scrollLeft = () => {
+  facultyRef.current?.scrollBy({ left: -300, behavior: "smooth" });
+};
+
+const scrollRight = () => {
+  facultyRef.current?.scrollBy({ left: 300, behavior: "smooth" });
+};
 
 const todayClasses = [
   {
@@ -165,6 +176,106 @@ const nextClasses = [
     img: Tc2,
     status: "Upcoming",
     c: "blue",
+  },
+];
+const notices = [
+  {
+    title: "New Syllabus Instructions",
+    date: "11 Mar 2025",
+    icon: "📘",
+    color: "text-blue-600",
+  },
+  {
+    title: "World Environment Day",
+    date: "21 Apr 2025",
+    icon: "🌱",
+    color: "text-green-600",
+  },
+  {
+    title: "Exam Preparation Notification!",
+    date: "13 Mar 2025",
+    icon: "🔔",
+    color: "text-red-600",
+  },
+  {
+    title: "Online Classes Preparation",
+    date: "24 May 2025",
+    icon: "💻",
+    color: "text-cyan-600",
+  },
+  {
+    title: "Exam Time Table Release",
+    date: "24 May 2025",
+    icon: "📅",
+    color: "text-yellow-600",
+  },
+  {
+    title: "PTA Meeting Announcement",
+    date: "02 Jun 2025",
+    icon: "👨‍👩‍👧",
+    color: "text-purple-600",
+  },
+  {
+    title: "Holiday Declaration",
+    date: "10 Jun 2025",
+    icon: "🏖️",
+    color: "text-orange-600",
+  },
+];
+const allHomeWorks = [
+  {
+    sub: "Physics",
+    color: "blue",
+    title: "Write about Theory of Pendulum",
+    teacher: "Aaron",
+    due: "16 Jun 2025",
+    percent: 90,
+    img: H1,
+  },
+  {
+    sub: "Chemistry",
+    color: "green",
+    title: "Chemistry - Change of Elements",
+    teacher: "Hellana",
+    due: "18 Jun 2025",
+    percent: 65,
+    img: H2,
+  },
+  {
+    sub: "Maths",
+    color: "yellow",
+    title: "Maths - Problems to Solve Page 21",
+    teacher: "Morgan",
+    due: "21 Jun 2025",
+    percent: 30,
+    img: H3,
+  },
+  {
+    sub: "English",
+    color: "red",
+    title: "English - Vocabulary Introduction",
+    teacher: "Daniel Josua",
+    due: "21 Jun 2025",
+    percent: 10,
+    img: H4,
+  },
+  {
+    sub: "Biology",
+    color: "green",
+    title: "Biology – Cell Structure Notes",
+    teacher: "Sophia",
+    due: "23 Jun 2025",
+    percent: 50,
+    img: H2,
+  },
+  {
+    sub: "History",
+    color: "blue",
+    title: "History – World War II Essay",
+    teacher: "Robert",
+    due: "25 Jun 2025",
+    percent: 20,
+    img: H1,
   },
 ];
 
@@ -725,7 +836,12 @@ const nextClasses = [
   {/* Header */}
   <div className="flex items-center justify-between mb-4">
   <h4 className="text-18px font-medium">Home Works</h4>
-  <span className="text-xs text-gray-500">📚 All Subject</span>
+  <span
+  onClick={() => setShowAllHomeWorks(true)}
+  className="text-xs text-blue-600 cursor-pointer hover:underline"
+>
+  📚 All Subject
+</span>
 </div>
 
 {[
@@ -1083,20 +1199,33 @@ const nextClasses = [
   {/* Header */}
   <div className="flex items-center justify-between mb-4">
     <h4 className="text-18px font-medium">Class Faculties</h4>
-
     <div className="hidden sm:flex gap-2">
-      <button className="w-7 h-7 rounded-full border text-gray-400 flex items-center justify-center">
-        ‹
-      </button>
-      <button className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center">
-        ›
-      </button>
-    </div>
+  <button
+    onClick={scrollLeft}
+    className="w-8 h-8 rounded-full border flex items-center justify-center
+               text-gray-500 hover:bg-gray-100 transition"
+  >
+    ‹
+  </button>
+
+  <button
+    onClick={scrollRight}
+    className="w-8 h-8 rounded-full border flex items-center justify-center
+               text-gray-500 hover:bg-gray-100 transition"
+  >
+    ›
+  </button>
+</div>
+
   </div>
-
   {/* Faculty Cards */}
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-
+  <div
+  ref={facultyRef}
+  className="
+    flex gap-4 overflow-x-auto scroll-smooth
+    scrollbar-hide
+  "
+>
     {[
   {
     name: "Aaron",
@@ -1112,6 +1241,7 @@ const nextClasses = [
     email: "hellana@gmail.com",
     phone: "919812345678",
   },
+  
   {
     name: "Morgan",
     subject: "Physics",
@@ -1126,13 +1256,27 @@ const nextClasses = [
     email: "daniel@gmail.com",
     phone: "919845612378",
   },
+  {
+    name: "Ram",
+    subject: "Maths",
+    img: C4,
+    email: "ram123@gmail.com",
+    phone: "919845612378",
+  },
+  {
+    name: "Kumar",
+    subject: "Social",
+    img: C1,
+    email: "kkummar@gmail.com",
+    phone: "919845612378",
+  },
 ]
 .map((f, i) => (
-      <div
-        key={i}
-        className="border rounded-lg p-4"
-      >
-        {/* Avatar + Info */}
+  <div
+  key={i}
+  className="min-w-[240px] border rounded-lg p-4 flex-shrink-0"
+>
+          {/* Avatar + Info */}
         <div className="flex items-center gap-3 mb-3">
           <img
             src={f.img}
@@ -1185,72 +1329,62 @@ const nextClasses = [
                 animate-card card-hover">
   <div className="flex items-center justify-between mb-4">
     <h4 className="text-18px font-medium">Notice Board</h4>
-    <span className="text-xs text-blue-600 cursor-pointer">View All</span>
+    <span
+  onClick={() => setShowAllNotices(true)}
+  className="text-xs text-blue-600 cursor-pointer hover:underline"
+>
+  View All
+</span>
+
   </div>
 
-  {[
-    {
-      title: "New Syllabus Instructions",
-      date: "11 Mar 2025",
-      icon: "📘",
-      bg: "text-blue-600",
-    },
-    {
-      title: "World Environment Day",
-      date: "21 Apr 2025",
-      icon: "🌱",
-      bg: "text-green-600",
-    },
-    {
-      title: "Exam Preparation Notification!",
-      date: "13 Mar 2025",
-      icon: "🔔",
-      bg: " text-red-600",
-    },
-    {
-      title: "Online Classes Preparation",
-      date: "24 May 2025",
-      icon: "💻",
-      bg: " text-cyan-600",
-    },
-    {
-      title: "Exam Time Table Release",
-      date: "24 May 2025",
-      icon: "📅",
-      bg: "text-yellow-600",
-    },
-  ].map((n, i) => (
+  {notices.slice(0, 5).map((n, i) => (
+  <div
+    key={i}
+    className="flex items-start gap-3 py-3 border-b last:border-none"
+  >
     <div
-      key={i}
-      className="flex items-start gap-3 py-3 border-b last:border-none"
+      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${n.color}`}
     >
-      <div
-        className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${n.bg}`}
-      >
-        {n.icon}
-      </div>
-
-      <div className="flex-1">
-        <p className="text-sm font-medium">{n.title}</p>
-        <p className="text-xs text-gray-500">
-          Added on : {n.date}
-        </p>
-      </div>
-
-      <span className="text-gray-400">›</span>
+      {n.icon}
     </div>
-  ))}
-</div>
-{/* ================= SYLLABUS ================= */}
-<div className="bg-white rounded-xl border p-4 sm:p-5
-                animate-card card-hover">
-  <h4 className="text-18px font-medium">Syllabus</h4>
 
-  {/* Info box */}
-  <div className="border border-blue-400 bg-blue-50 text-blue-600 text-xs rounded-lg px-4 py-2 mb-4 flex gap-2">
-    ℹ️ These Result are obtained from the syllabus completion on the respective Class
+    <div className="flex-1">
+      <p className="text-sm font-medium">{n.title}</p>
+      <p className="text-xs text-gray-500">
+        Added on : {n.date}
+      </p>
+    </div>
+
+    <span className="text-gray-400">›</span>
+  </div>
+))}
+
+</div>
+
+{/* ================= SYLLABUS ================= */}
+<div className="bg-white rounded-xl border p-5 animate-card card-hover">
+
+  {/* Header */}
+  <h4 className="text-lg font-semibold mb-3">
+    Syllabus
+  </h4>
+
+  {/* Info box (BLUE like Image 1) */}
+  <div className="
+    flex items-start gap-2
+    bg-blue-50 border border-blue-200
+    text-blue-600 text-sm
+    rounded-lg px-4 py-3
+    mb-5
+  ">
+    <span className="text-lg">ℹ️</span>
+    <p>
+      These Result are obtained from the syllabus completion on the respective Class
+    </p>
   </div>
 
+  {/* Progress list */}
   {[
     { sub: "Maths", w: "20%", c: "bg-indigo-500" },
     { sub: "Physics", w: "35%", c: "bg-sky-400" },
@@ -1261,10 +1395,10 @@ const nextClasses = [
   ].map((s, i) => (
     <div
       key={i}
-      className="flex items-center gap-4 px-3 py-2 rounded-lg hover:bg-gray-50"
+      className="flex items-center gap-4 mb-3 last:mb-0"
     >
-      {/* Subject name */}
-      <span className="w-24 text-xs font-medium text-gray-700">
+      {/* Subject */}
+      <span className="w-24 text-sm font-medium text-gray-700">
         {s.sub}
       </span>
 
@@ -1278,8 +1412,6 @@ const nextClasses = [
     </div>
   ))}
 </div>
-
-
   {/* ================= TODO ================= */}
   <div className="bg-white rounded-xl border p-4 sm:p-5
                 animate-card card-hover">
@@ -1287,7 +1419,6 @@ const nextClasses = [
       <h4 className="text-18px font-medium">Todo</h4>
       <span className="text-xs text-gray-500">Today</span>
     </div>
-
     {[
       { t: "Send Reminder to Students", time: "01:00 PM", status: "Completed", color: "bg-green-100 text-green-600", checked: true },
       { t: "Create Routine to new staff", time: "04:50 PM", status: "Inprogress", color: "bg-blue-100 text-blue-600" },
@@ -1309,8 +1440,6 @@ const nextClasses = [
   </div>
 
 </div>
-
-
   {showAddExam && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-4 sm:p-5 w-[300px]">
@@ -1423,6 +1552,94 @@ const nextClasses = [
     </div>
   </div>
 )}
+{showAllNotices && (
+  <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
+    <div className="bg-white rounded-xl w-[420px] max-h-[500px] overflow-hidden shadow-xl">
+
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 py-4 border-b">
+        <h4 className="text-lg font-semibold">All Notices</h4>
+        <button
+          onClick={() => setShowAllNotices(false)}
+          className="text-gray-500 hover:text-red-500 text-lg"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* List */}
+      <div className="p-4 space-y-3 overflow-y-auto max-h-[420px]">
+        {notices.map((n, i) => (
+          <div
+            key={i}
+            className="flex items-start gap-3 p-3 rounded-lg border hover:bg-gray-50"
+          >
+            <div
+              className={`w-9 h-9 rounded-full flex items-center justify-center text-sm ${n.color}`}
+            >
+              {n.icon}
+            </div>
+
+            <div className="flex-1">
+              <p className="text-sm font-medium">{n.title}</p>
+              <p className="text-xs text-gray-500">
+                Added on : {n.date}
+              </p>
+            </div>
+
+            <span className="text-gray-400">›</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
+{showAllHomeWorks && (
+  <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
+    <div className="bg-white rounded-xl w-[450px] max-h-[520px] overflow-hidden shadow-xl">
+
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 py-4 border-b">
+        <h4 className="text-lg font-semibold">All Home Works</h4>
+        <button
+          onClick={() => setShowAllHomeWorks(false)}
+          className="text-gray-500 hover:text-red-500 text-lg"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* List */}
+      <div className="p-4 space-y-3 overflow-y-auto max-h-[450px]">
+        {allHomeWorks.map((h, i) => (
+          <div
+            key={i}
+            className="flex items-center gap-3 p-3 rounded-lg border hover:bg-gray-50"
+          >
+            <img
+              src={h.img}
+              alt={h.sub}
+              className="w-12 h-12 rounded-lg object-cover"
+            />
+
+            <div className="flex-1">
+              <p className="text-xs font-medium text-blue-600">{h.sub}</p>
+              <p className="text-sm font-medium">{h.title}</p>
+              <p className="text-xs text-gray-500">
+                👤 {h.teacher} • Due : {h.due}
+              </p>
+            </div>
+
+            <span className="text-xs font-semibold">
+              {h.percent}%
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
+
   </> 
  // </DashboardLayout>
   );

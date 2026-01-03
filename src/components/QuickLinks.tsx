@@ -9,12 +9,12 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const links = [
-  { label: "Calendar", icon: Calendar, path: "/calendar", bg: "bg-green-100", color: "text-green-600" },
-  { label: "Events", icon: Layers, path: "/events", bg: "bg-blue-100", color: "text-blue-600" },
-  { label: "Attendance", icon: ClipboardCheck, path: "/attendance", bg: "bg-yellow-100", color: "text-yellow-600" },
-  { label: "Exams", icon: BookOpen, path: "/exams", bg: "bg-cyan-100", color: "text-cyan-600" },
-  { label: "Reports", icon: BarChart3, path: "/reports", bg: "bg-purple-100", color: "text-purple-600" },
-  { label: "Files", icon: FileText, path: "/files", bg: "bg-red-100", color: "text-red-600" },
+  { label: "Calendar", icon: Calendar, path: "/admin/dashboard/hrm/holidays", bg: "bg-green-100", color: "text-green-600" },
+  { label: "Events", icon: Layers,  path: "/admin/dashboard/management/sports", bg: "bg-blue-100", color: "text-blue-600" },
+  { label: "Attendance", icon: ClipboardCheck,   path: "/admin/dashboard/reports/attendance", bg: "bg-yellow-100", color: "text-yellow-600" },
+  { label: "Exams", icon: BookOpen, path: "/admin/dashboard/academic/examinations/exam", bg: "bg-cyan-100", color: "text-cyan-600" },
+  { label: "Reports", icon: BarChart3,   path: "/admin/dashboard/reports/attendance", bg: "bg-purple-100", color: "text-purple-600" },
+  { label: "Files", icon: FileText, path: "/admin/dashboard/reports/attendance", bg: "bg-red-100", color: "text-red-600" },
 ];
 
 export default function QuickLinks() {
@@ -37,7 +37,7 @@ export default function QuickLinks() {
               active:scale-95
             "
           >
-            {/* ICON */}
+            {/* ICON admin/dashboard/hrm/holidays*/}
             <div
               className={`
                 w-10 h-10 rounded-full flex items-center justify-center
