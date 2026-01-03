@@ -19,6 +19,15 @@ import { useState } from "react";
 
 
 export default function ParentDashboard() {
+  const [showEditParent, setShowEditParent] = useState(false);
+
+const [parentProfile, setParentProfile] = useState({
+  id: "#P124556",
+  name: "Thomas Brown",
+  child: "Janet",
+  addedOn: "25 Mar 2024",
+});
+
   const [statsRange, setStatsRange] = useState<"month" | "year">("month");
   const [showAllFeesPopup, setShowAllFeesPopup] = useState(false);
   const [showSelectChildPopup, setShowSelectChildPopup] = useState(false);
@@ -152,7 +161,30 @@ const [showAllEventsPopup, setShowAllEventsPopup] = useState(false);
 const [showAllSubjectsPopup, setShowAllSubjectsPopup] = useState(false);
 
   const [showAllEvents, setShowAllEvents] = useState(false);
+  const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
   
+    const index = Math.round((x / rect.width) * (months.length - 1));
+    setHoverIndex(Math.max(0, Math.min(index, months.length - 1)));
+  };
+  
+  const handleMouseLeave = () => {
+    setHoverIndex(null);
+  };
+  
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+const examValues = statsRange === "month"
+  ? [70,72,75,78,82,79,76,80,78,79,81,83]
+  : [68,70,72,74,76,78,80,82,84,85,86,88];
+
+const attendanceValues = statsRange === "month"
+  ? [85,87,88,86,84,89,90,88,89,90,92,93]
+  : [82,83,84,85,86,87,88,89,90,91,92,93];
+
+const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+
   const statisticsData = {
     month: {
       examAvg: "72%",
@@ -210,16 +242,27 @@ const [showAllSubjectsPopup, setShowAllSubjectsPopup] = useState(false);
 />
 
               <div>
-                <span className="inline-block text-[10px] px-2 py-[2px] rounded bg-blue-600 mb-1">
-                  #P124556
-                </span>
-                <p className="font-semibold text-base">Thomas Brown</p>
-                <p className="text-xs text-gray-300">
-                  Added On : 25 Mar 2024 | Child : Janet
-                </p>
+              <span className="inline-block text-[10px] px-2 py-[2px] rounded bg-blue-600 mb-1">
+  {parentProfile.id}
+</span>
+<p className="font-semibold text-base">
+  {parentProfile.name}
+</p>     
+<button
+  onClick={() => setShowEditParent(true)}
+  className="absolute top-3 right-3 text-xs bg-blue-600 px-3 py-1 rounded"
+>
+  Edit
+</button>
+
+<p className="text-xs text-gray-300">
+  Added On : {parentProfile.addedOn} | Child : {parentProfile.child}
+</p>
               </div>
             </div>
+            
           </div>
+          
         </div>
 
         {/* ================= ACTIONS ================= */}
@@ -481,10 +524,13 @@ const [showAllSubjectsPopup, setShowAllSubjectsPopup] = useState(false);
 
     {/* Lines */}
     <svg
-      viewBox="0 0 600 250"
-      className="absolute inset-0 w-full h-full"
-      preserveAspectRatio="none"
-    >
+  viewBox="0 0 600 250"
+  className="absolute inset-0 w-full h-full"
+  preserveAspectRatio="none"
+  onMouseMove={handleMouseMove}
+  onMouseLeave={handleMouseLeave}
+>
+
       {/* Exam Score */}
       <polyline
         fill="none"
@@ -500,6 +546,16 @@ const [showAllSubjectsPopup, setShowAllSubjectsPopup] = useState(false);
         strokeWidth="3"
         points={statisticsData[statsRange].attendancePoints}
         />
+{hoverIndex !== null && (
+  <line
+    x1={(hoverIndex / 11) * 600}
+    y1="0"
+    x2={(hoverIndex / 11) * 600}
+    y2="250"
+    stroke="#CBD5E1"
+    strokeDasharray="4"
+  />
+)}
 
       {/* Highlight (Aug) */}
       <rect
@@ -513,11 +569,25 @@ const [showAllSubjectsPopup, setShowAllSubjectsPopup] = useState(false);
     </svg>
 
     {/* Tooltip */}
-    <div className="absolute top-10 left-[45%] bg-white shadow-md border rounded-lg px-3 py-2 text-xs">
-      <p className="font-medium mb-1">Aug 2024</p>
-      <p className="text-blue-600">Exam Score : 80%</p>
-      <p className="text-cyan-600">Attendance : 40%</p>
-    </div>
+    {hoverIndex !== null && (
+  <div
+    className="absolute bg-white shadow-md border rounded-lg px-3 py-2 text-xs pointer-events-none"
+    style={{
+      left: `${(hoverIndex / 11) * 100}%`,
+      top: "30px",
+      transform: "translateX(-50%)",
+    }}
+  >
+    <p className="font-medium mb-1">{months[hoverIndex]} 2024</p>
+    <p className="text-blue-600">
+      Exam Score : {examValues[hoverIndex]}%
+    </p>
+    <p className="text-cyan-600">
+      Attendance : {attendanceValues[hoverIndex]}%
+    </p>
+  </div>
+)}
+
   </div>
 
   {/* Months */}
@@ -1377,6 +1447,62 @@ const [showAllSubjectsPopup, setShowAllSubjectsPopup] = useState(false);
       >
         Close
       </button>
+    </div>
+  </div>
+)}
+{showEditParent && (
+  <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+    <div className="bg-white rounded-xl w-[380px] p-5 animate-card">
+
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="text-lg font-semibold">Edit Parent Profile</h4>
+        <button
+          onClick={() => setShowEditParent(false)}
+          className="text-gray-400 hover:text-red-500"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Form */}
+      <div className="space-y-3 text-sm">
+        <input
+          value={parentProfile.name}
+          onChange={(e) =>
+            setParentProfile({ ...parentProfile, name: e.target.value })
+          }
+          className="w-full border rounded-lg px-3 py-2"
+          placeholder="Parent Name"
+        />
+
+        <input
+          value={parentProfile.child}
+          onChange={(e) =>
+            setParentProfile({ ...parentProfile, child: e.target.value })
+          }
+          className="w-full border rounded-lg px-3 py-2"
+          placeholder="Child Name"
+        />
+      </div>
+
+      {/* Footer */}
+      <div className="flex gap-3 mt-5">
+        <button
+          onClick={() => setShowEditParent(false)}
+          className="flex-1 border rounded-lg py-2 text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => setShowEditParent(false)}
+          className="flex-1 bg-blue-600 text-white rounded-lg py-2 text-sm"
+        >
+          Save
+        </button>
+      </div>
+
     </div>
   </div>
 )}

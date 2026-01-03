@@ -1,19 +1,24 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import best2 from "../assets/best.png";
+import best3 from "../assets/best.png";
 import bestImg from "../assets/best.png";
 import topImg from "../assets/top.png";
+import top2 from "../assets/top.png";
+import top3 from "../assets/top.png";
 const bestPerformers = [
   { name: "Adrian Rubell", role: "Physics Teacher", img: bestImg },
-  { name: "Maria John", role: "Math Teacher", img: bestImg },
-  { name: "Kevin Lee", role: "Chemistry Teacher", img: bestImg },
-  { name: "Sophia Ray", role: "Biology Teacher", img: bestImg },
+  { name: "Maria John", role: "Math Teacher", img: best2 },
+  { name: "Kevin Lee", role: "Chemistry Teacher", img: best3 },
+  { name: "Sophia Ray", role: "Biology Teacher", img: best3 },
 ];
 
 const starStudents = [
   { name: "Tenesa", role: "XII, A", img: topImg },
-  { name: "Arjun", role: "XI, B", img: topImg },
-  { name: "Priya", role: "X, C", img: topImg },
-  { name: "Rahul", role: "XII, D", img: topImg },
+  { name: "Arjun", role: "XI, B", img: top2 },
+  { name: "Priya", role: "X, C", img: top3 },
+  { name: "Rahul", role: "XII, D", img: top3 },
+
 ];
 
 export default function TopPerformers() {
@@ -72,6 +77,7 @@ export default function TopPerformers() {
   className="w-full h-full object-cover"
   alt="Best Performer"
 />
+
 
         </div>
       </div>

@@ -90,24 +90,24 @@ if (user.role === "parent") {
 
   {/* SVG WAVE BACKGROUND */}
   <svg
-    viewBox="0 0 1043 769"
-    className="absolute inset-0 w-full h-full"
-    preserveAspectRatio="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M0 0H321.603C321.603 0 572.5 162 659.5 369C746.5 576 1043 769 1043 769H0V0Z"
-      fill="#E1E6FF"
-    />
+  viewBox="0 0 1043 769"
+  className="absolute inset-0 w-full h-full scale-125 origin-left"
+  preserveAspectRatio="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M0 0H321.603C321.603 0 572.5 162 659.5 369C746.5 576 1043 769 1043 769H0V0Z"
+    fill="#E1E6FF"
+  />
+</svg>
 
-  </svg>
 
   {/* ILLUSTRATION CONTENT */}
   <div className="relative z-10 flex items-center justify-center w-full">
     <img
       src={LeftIllustration}
       alt="Education Illustration"
-      className="w-[820px] object-contain -translate-x-6"
+      className="w-[1120px] object-contain -translate-x-6"
     />
   </div>
 

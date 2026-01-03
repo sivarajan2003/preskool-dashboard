@@ -17,6 +17,16 @@ import { CalendarDays, FolderOpen, ChevronDown } from "lucide-react";
 
 
 export default function TeacherDashboard() {
+  const [showEditProfile, setShowEditProfile] = useState(false);
+
+const [teacherProfile, setTeacherProfile] = useState({
+  id: "#T594651",
+  name: "Henriques Morgan",
+  subject: "Physics",
+  classes: "IV-A, V-B",
+  avatar: T1Img,
+});
+
   const [openSection, setOpenSection] = useState(false);
 const [selectedClass, setSelectedClass] = useState("All");
 
@@ -236,14 +246,21 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
                 <span className="inline-block text-[11px] bg-[#2D5BFF] px-2 py-0.5 rounded-md mb-1">
         #T594651
       </span>
-                  <p className="font-semibold">Henriques Morgan</p>
-                  <p className="text-xs text-gray-300">Classes : IV-A, V-B</p>
-                  <p className="text-xs text-gray-300">Physics</p>
+      <p className="font-semibold">{teacherProfile.name}</p>
+      <p className="text-xs text-gray-300">
+  Classes : {teacherProfile.classes}
+</p>
+<p className="text-xs text-gray-300">
+  {teacherProfile.subject}
+</p>
                 </div>
               </div>
-              <button className="bg-blue-600 text-xs px-3 py-1 rounded">
-                Edit Profile
-              </button>
+              <button
+  onClick={() => setShowEditProfile(true)}
+  className="bg-blue-600 text-xs px-3 py-1 rounded"
+>
+  Edit Profile
+</button>
             </div>
           </div>
         </div>
@@ -1342,6 +1359,71 @@ bg-gradient-to-r from-[#0F1025] to-[#1A1C3A] ${cardAnim(0)}`}>
       >
         Close
       </button>
+
+    </div>
+  </div>
+)}
+{showEditProfile && (
+  <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
+    <div className="bg-white rounded-xl w-[380px] p-5">
+
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="text-lg font-semibold">Edit Teacher Profile</h4>
+        <button
+          onClick={() => setShowEditProfile(false)}
+          className="text-gray-400 hover:text-red-500"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Form */}
+      <div className="space-y-3">
+        <input
+          value={teacherProfile.name}
+          onChange={e =>
+            setTeacherProfile({ ...teacherProfile, name: e.target.value })
+          }
+          className="border rounded w-full px-3 py-2 text-sm"
+          placeholder="Teacher Name"
+        />
+
+        <input
+          value={teacherProfile.subject}
+          onChange={e =>
+            setTeacherProfile({ ...teacherProfile, subject: e.target.value })
+          }
+          className="border rounded w-full px-3 py-2 text-sm"
+          placeholder="Subject"
+        />
+
+        <input
+          value={teacherProfile.classes}
+          onChange={e =>
+            setTeacherProfile({ ...teacherProfile, classes: e.target.value })
+          }
+          className="border rounded w-full px-3 py-2 text-sm"
+          placeholder="Classes (eg: IV-A, V-B)"
+        />
+      </div>
+
+      {/* Actions */}
+      <div className="flex gap-3 mt-5">
+        <button
+          onClick={() => setShowEditProfile(false)}
+          className="flex-1 border rounded-lg py-2 text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => setShowEditProfile(false)}
+          className="flex-1 bg-blue-600 text-white rounded-lg py-2 text-sm"
+        >
+          Save
+        </button>
+      </div>
 
     </div>
   </div>

@@ -23,6 +23,15 @@ import s4 from "../../assets/gif/s4.gif";
 
 
 export default function StudentDashboard() {
+  const [showEditProfile, setShowEditProfile] = useState(false);
+
+const [editProfile, setEditProfile] = useState({
+  name: "Angelo Riana",
+  className: "III",
+  section: "C",
+  rollNo: "36545",
+});
+
   const navigate = useNavigate();
   const [showMonthDetails, setShowMonthDetails] = useState<boolean>(false);
 /* ================== CALENDAR STATE ================== */
@@ -30,6 +39,12 @@ const [currentMonth, setCurrentMonth] = useState(6); // July (0-based)
 const [currentYear, setCurrentYear] = useState(2025);
 const [showAddExam, setShowAddExam] = useState(false);
 const [showNextClass, setShowNextClass] = useState(false);
+const [showExamPopup, setShowExamPopup] = useState(false);
+const [showFeesPopup, setShowFeesPopup] = useState(false);
+
+const [rollNo, setRollNo] = useState("");
+const [studentName, setStudentName] = useState("");
+const [showResult, setShowResult] = useState(false);
 
 /* ================== EXAMS STATE ================== */
 const [exams, setExams] = useState([
@@ -136,6 +151,30 @@ const scrollLeft = () => {
 
 const scrollRight = () => {
   facultyRef.current?.scrollBy({ left: 300, behavior: "smooth" });
+};
+const performanceLabels = [
+  "Quarter 1",
+  "Quarter 2",
+  "Half yearly",
+  "Model",
+  "Final Exam",
+];
+
+const examScores = [78, 74, 60, 68, 75];
+const attendanceScores = [72, 68, 55, 62, 70];
+
+const [activePerfIndex, setActivePerfIndex] = useState<number | null>(2);
+const handlePerfMove = (e: React.MouseEvent<SVGSVGElement>) => {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const index = Math.round((x / rect.width) * (performanceLabels.length - 1));
+  setActivePerfIndex(
+    Math.max(0, Math.min(index, performanceLabels.length - 1))
+  );
+};
+
+const handlePerfLeave = () => {
+  setActivePerfIndex(null);
 };
 
 const todayClasses = [
@@ -291,19 +330,20 @@ const allHomeWorks = [
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-          <button
-            onClick={() => navigate("/student/exam-results")}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg"
-          >
-            Exam Result
-          </button>
+        <button
+  onClick={() => setShowExamPopup(true)}
+  className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+>
+  Exam Result
+</button>
 
-          <button
-            onClick={() => navigate("/student/fees")}
-            className="px-4 py-2 bg-gray-100 rounded-lg"
-          >
-            Fees Details
-          </button>
+<button
+  onClick={() => setShowFeesPopup(true)}
+  className="px-4 py-2 bg-gray-100 rounded-lg"
+>
+  Fees Details
+</button>
+
         </div>
       </div>
 
@@ -331,17 +371,13 @@ const allHomeWorks = [
       <span className="inline-block text-[11px] bg-[#2D5BFF] px-2 py-0.5 rounded-md mb-1">
         #ST123456
       </span>
-
       {/* NAME */}
       <p className="font-semibold text-base leading-tight">
-        Angelo Riana
-      </p>
-
-      {/* CLASS & ROLL */}
-      <p className="text-xs text-gray-300 mt-0.5">
-        Class : III, C | Roll No : #36545
-      </p>
-    </div>
+  {editProfile.name}
+</p>
+<p className="text-xs text-gray-300 mt-0.5">
+  Class : {editProfile.className}, {editProfile.section} | Roll No : #{editProfile.rollNo}
+</p>    </div>
   </div>
 
   {/* CENTER DASHED LINE */}
@@ -358,11 +394,13 @@ const allHomeWorks = [
         Pass
       </span>
     </div>
+    <button
+  onClick={() => setShowEditProfile(true)}
+  className="bg-[#2D5BFF] hover:bg-blue-700 transition text-xs px-4 py-1.5 rounded-lg"
+>
+  Edit Profile
+</button>
 
-    {/* RIGHT */}
-    <button className="bg-[#2D5BFF] hover:bg-blue-700 transition text-xs px-4 py-1.5 rounded-lg">
-      Edit Profile
-    </button>
   </div>
 </div>
 
@@ -759,7 +797,13 @@ const allHomeWorks = [
       ))}
     </div>
     <div className="overflow-x-auto">
-    <svg viewBox="0 0 500 220" className="ml-6 w-full h-40 sm:h-49">
+    <svg
+  viewBox="0 0 500 220"
+  className="ml-6 w-full h-40 sm:h-49"
+  onMouseMove={handlePerfMove}
+  onMouseLeave={handlePerfLeave}
+>
+
 
       {/* GRID */}
       {[40, 80, 120, 160, 200].map(y => (
@@ -767,15 +811,26 @@ const allHomeWorks = [
       ))}
 
       {/* FOCUS AREA */}
-      <rect x="225" y="0" width="50" height="220" fill="#EEF2FF" />
-      <line
-        x1="250"
-        y1="0"
-        x2="250"
-        y2="220"
-        stroke="#94A3B8"
-        strokeDasharray="3"
-      />
+      {activePerfIndex !== null && (
+  <>
+    <rect
+      x={(activePerfIndex / 4) * 500 - 25}
+      y="0"
+      width="50"
+      height="220"
+      fill="#EEF2FF"
+    />
+    <line
+      x1={(activePerfIndex / 4) * 500}
+      y1="0"
+      x2={(activePerfIndex / 4) * 500}
+      y2="220"
+      stroke="#94A3B8"
+      strokeDasharray="3"
+    />
+  </>
+)}
+
 
       {/* AREA FILL */}
       <path
@@ -801,11 +856,27 @@ const allHomeWorks = [
     </svg>
     </div>
     {/* TOOLTIP */} 
-    <div className="absolute top-8 left-1/2 -translate-x-1/2 bg-white border rounded-lg px-4 py-2 shadow text-xs">
-      <p className="font-medium mb-1">Oct 2025</p>
-      <p className="text-gray-400">Exam Score <b>80%</b></p>
-      <p className="text-sky-500">Attendance <b>40%</b></p>
-    </div>
+    {activePerfIndex !== null && (
+  <div
+    className="absolute bg-white border rounded-lg px-4 py-2 shadow text-xs"
+    style={{
+      left: `${(activePerfIndex / 4) * 100}%`,
+      top: "30px",
+      transform: "translateX(-50%)",
+    }}
+  >
+    <p className="font-medium mb-1">
+      {performanceLabels[activePerfIndex]}
+    </p>
+    <p className="text-gray-400">
+      Exam Score <b>{examScores[activePerfIndex]}%</b>
+    </p>
+    <p className="text-sky-500">
+      Attendance <b>{attendanceScores[activePerfIndex]}%</b>
+    </p>
+  </div>
+)}
+
 
     {/* X AXIS */}
     <div className="grid grid-cols-5 text-xs text-gray-400 mt-2 ml-8">
@@ -1635,6 +1706,191 @@ const allHomeWorks = [
             </span>
           </div>
         ))}
+      </div>
+    </div>
+  </div>
+)}
+{showExamPopup && (
+  <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
+    <div className="bg-white rounded-xl w-[420px] p-5">
+
+      {/* Header */}
+      <div className="flex justify-between items-center mb-4">
+        <h4 className="text-lg font-semibold">Exam Result</h4>
+        <button onClick={() => {
+          setShowExamPopup(false);
+          setShowResult(false);
+        }}>✕</button>
+      </div>
+
+      {/* Input Form */}
+      {!showResult && (
+        <>
+          <input
+            placeholder="Roll Number"
+            value={rollNo}
+            onChange={e => setRollNo(e.target.value)}
+            className="border rounded w-full px-3 py-2 mb-3 text-sm"
+          />
+
+          <input
+            placeholder="Student Name"
+            value={studentName}
+            onChange={e => setStudentName(e.target.value)}
+            className="border rounded w-full px-3 py-2 mb-4 text-sm"
+          />
+
+          <button
+            onClick={() => setShowResult(true)}
+            className="w-full bg-blue-600 text-white py-2 rounded"
+          >
+            View Result
+          </button>
+        </>
+      )}
+
+      {/* Result Display */}
+      {showResult && (
+        <div className="border rounded-lg p-4">
+          <p className="text-sm font-semibold mb-2">
+            {studentName} ({rollNo})
+          </p>
+
+          <div className="flex gap-2 flex-wrap">
+            <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded text-xs">
+              Maths : 92
+            </span>
+            <span className="bg-green-100 text-green-600 px-3 py-1 rounded text-xs">
+              Physics : 88
+            </span>
+            <span className="bg-yellow-100 text-yellow-600 px-3 py-1 rounded text-xs">
+              Chemistry : 85
+            </span>
+            <span className="bg-red-100 text-red-600 px-3 py-1 rounded text-xs">
+              English : 78
+            </span>
+          </div>
+
+          <button
+            onClick={() => setShowExamPopup(false)}
+            className="mt-4 w-full border py-2 rounded"
+          >
+            Close
+          </button>
+        </div>
+      )}
+
+    </div>
+  </div>
+)}
+{showFeesPopup && (
+  <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
+    <div className="bg-white rounded-xl w-[420px] p-5">
+
+      <div className="flex justify-between items-center mb-4">
+        <h4 className="text-lg font-semibold">Fees Details</h4>
+        <button onClick={() => setShowFeesPopup(false)}>✕</button>
+      </div>
+
+      <div className="space-y-3">
+        <div className="flex justify-between border p-3 rounded">
+          <span>Tuition Fees</span>
+          <span className="font-semibold">₹25,000</span>
+        </div>
+        <div className="flex justify-between border p-3 rounded">
+          <span>Exam Fees</span>
+          <span className="font-semibold">₹2,500</span>
+        </div>
+        <div className="flex justify-between border p-3 rounded">
+          <span>Transport Fees</span>
+          <span className="font-semibold">₹5,000</span>
+        </div>
+      </div>
+
+      <button
+        onClick={() => setShowFeesPopup(false)}
+        className="mt-4 w-full border py-2 rounded"
+      >
+        Close
+      </button>
+
+    </div>
+  </div>
+)}
+{showEditProfile && (
+  <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
+    <div className="bg-white rounded-xl w-[380px] p-5">
+
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="text-lg font-semibold">Edit Profile</h4>
+        <button
+          onClick={() => setShowEditProfile(false)}
+          className="text-gray-500 hover:text-red-500"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Form */}
+      <div className="space-y-3">
+        <input
+          value={editProfile.name}
+          onChange={e =>
+            setEditProfile({ ...editProfile, name: e.target.value })
+          }
+          className="border rounded w-full px-3 py-2 text-sm"
+          placeholder="Student Name"
+        />
+
+        <div className="grid grid-cols-2 gap-2">
+          <input
+            value={editProfile.className}
+            onChange={e =>
+              setEditProfile({ ...editProfile, className: e.target.value })
+            }
+            className="border rounded px-3 py-2 text-sm"
+            placeholder="Class"
+          />
+
+          <input
+            value={editProfile.section}
+            onChange={e =>
+              setEditProfile({ ...editProfile, section: e.target.value })
+            }
+            className="border rounded px-3 py-2 text-sm"
+            placeholder="Section"
+          />
+        </div>
+
+        <input
+          value={editProfile.rollNo}
+          onChange={e =>
+            setEditProfile({ ...editProfile, rollNo: e.target.value })
+          }
+          className="border rounded w-full px-3 py-2 text-sm"
+          placeholder="Roll No"
+        />
+      </div>
+
+      {/* Actions */}
+      <div className="flex gap-3 mt-5">
+        <button
+          onClick={() => setShowEditProfile(false)}
+          className="flex-1 border rounded-lg py-2 text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            // later you can call API here
+            setShowEditProfile(false);
+          }}
+          className="flex-1 bg-blue-600 text-white rounded-lg py-2 text-sm"
+        >
+          Save
+        </button>
       </div>
     </div>
   </div>
