@@ -17,6 +17,7 @@ import {
   Users,
 } from "lucide-react";
 import {  useLocation } from "react-router-dom";
+import PreLogo from "../assets/pre.png"; 
 
 
 export default function Sidebar() {
@@ -98,16 +99,18 @@ const isManagementItemActive = (path: string) =>
 
       {/* ================= HEADER ================= */}
       <div className="p-6 border-b">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-            <GraduationCap className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h1 className="text-lg font-bold">PreSkool</h1>
-            <p className="text-xs text-gray-500">Admin Dashboard</p>
-          </div>
-        </div>
-      </div>
+  <div className="flex items-center gap-3">
+    <img
+      src={PreLogo}
+      alt="PreSkool Logo"
+      className="w-10 h-10 object-contain"
+    />
+    <div>
+      <h1 className="text-lg font-bold">PreSkool</h1>
+      <p className="text-xs text-gray-500">Admin Dashboard</p>
+    </div>
+  </div>
+</div>
 
       <nav className="p-4 space-y-2">
 
@@ -886,7 +889,13 @@ const isManagementItemActive = (path: string) =>
           <MenuItem icon={FileText} label="Attendance" />
           <MenuItem icon={DollarSign} label="Fees Collection" />
           <MenuItem icon={MessageSquare} label="Notice Board" />
-          <MenuItem icon={Settings} label="Settings" />
+          <MenuItem
+  icon={Settings}
+  label="Settings"
+  onClick={() => navigate("/admin/dashboard/settings")}
+  active={location.pathname === "/admin/dashboard/settings"}
+/>
+
         </div>
         {/* ================= LOGOUT ================= */}
 <div className="pt-4 mt-4 border-t">
@@ -987,12 +996,25 @@ function AcademicItem({
 function MenuItem({
   icon: Icon,
   label,
+  onClick,
+  active,
 }: {
   icon: any;
   label: string;
+  onClick?: () => void;
+  active?: boolean;
 }) {
   return (
-    <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50">
+    <button
+  onClick={onClick}
+  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition
+    ${
+      active
+        ? "bg-blue-600 text-white"
+        : "text-gray-700 hover:bg-gray-50"
+    }`}
+>
+
       <Icon className="w-5 h-5" />
       <span className="text-sm font-medium">{label}</span>
     </button>

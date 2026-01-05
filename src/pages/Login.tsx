@@ -89,17 +89,20 @@ if (user.role === "parent") {
 <div className="hidden lg:flex w-1/2 relative overflow-hidden bg-white">
 
   {/* SVG WAVE BACKGROUND */}
-  <svg
+ {/* SVG WAVE BACKGROUND */}
+ <svg
   viewBox="0 0 1043 769"
-  className="absolute inset-0 w-full h-full scale-125 origin-left"
-  preserveAspectRatio="none"
+  className="absolute inset-0 w-[160%] h-full -right-[30%]"
+    preserveAspectRatio="xMinYMin slice"
   xmlns="http://www.w3.org/2000/svg"
 >
   <path
-    d="M0 0H321.603C321.603 0 572.5 162 659.5 369C746.5 576 1043 769 1043 769H0V0Z"
+    d="M0 0H260C360 80 480 260 520 420C560 600 760 769 1043 769H0V0Z"
     fill="#E1E6FF"
   />
 </svg>
+
+
 
 
   {/* ILLUSTRATION CONTENT */}
@@ -107,7 +110,7 @@ if (user.role === "parent") {
     <img
       src={LeftIllustration}
       alt="Education Illustration"
-      className="w-[1120px] object-contain -translate-x-6"
+      className="w-[920px] object-contain -translate-x-6"
     />
   </div>
 

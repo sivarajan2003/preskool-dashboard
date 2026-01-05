@@ -82,6 +82,8 @@ import ResetSuccess from "./pages/ResetSuccess";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Unauthorized from "./pages/Unauthorized";
+import Settings from "./pages/Admin/Settings";
 
 export default function App() {
   return (
@@ -109,6 +111,8 @@ export default function App() {
   {/* DASHBOARD */}
   <Route index element={<Dashboard />} />
   <Route path="fees" element={<FeesPage />} />
+  <Route path="settings" element={<Settings />} />
+
 
   {/* PEOPLE */}
   <Route path="people/students/add" element={<AddStudentPage />} />
@@ -230,6 +234,7 @@ export default function App() {
 <Route index element={<ParentDashboard />} />
 </Route>
 
+<Route path="/unauthorized" element={<Unauthorized />} />
 
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>

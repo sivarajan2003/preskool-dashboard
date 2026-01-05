@@ -45,6 +45,8 @@ const [showFeesPopup, setShowFeesPopup] = useState(false);
 const [rollNo, setRollNo] = useState("");
 const [studentName, setStudentName] = useState("");
 const [showResult, setShowResult] = useState(false);
+const [activeQuarter, setActiveQuarter] = useState<keyof typeof examResults>("1st Quarter");
+const [showQuarterMenu, setShowQuarterMenu] = useState(false);
 
 /* ================== EXAMS STATE ================== */
 const [exams, setExams] = useState([
@@ -317,6 +319,67 @@ const allHomeWorks = [
     img: H1,
   },
 ];
+const [showLeaveYearDetails, setShowLeaveYearDetails] = useState(false);
+const leaveData = [
+  {
+    title: "Emergency Leave",
+    date: "2025-06-15",
+    reason: "Family emergency",
+    status: "Pending",
+  },
+  {
+    title: "Medical Leave",
+    date: "2025-06-15",
+    reason: "Hospital checkup",
+    status: "Approved",
+  },
+  {
+    title: "Medical Leave",
+    date: "2025-06-15",
+    reason: "Fever",
+    status: "Declined",
+  },
+  {
+    title: "Fever",
+    date: "2025-06-15",
+    reason: "Viral fever",
+    status: "Approved",
+  },
+];
+//const currentYear = 2025;
+
+const yearLeaves = leaveData.filter(l => {
+  return new Date(l.date).getFullYear() === currentYear;
+});
+
+const totalLeaves = yearLeaves.length;
+const approvedLeaves = yearLeaves.filter(l => l.status === "Approved").length;
+const pendingLeaves = yearLeaves.filter(l => l.status === "Pending").length;
+const declinedLeaves = yearLeaves.filter(l => l.status === "Declined").length;
+
+const examResults = {
+  "1st Quarter": [
+    { label: "Mat", value: 100 },
+    { label: "Phy", value: 92 },
+    { label: "Che", value: 90 },
+    { label: "Eng", value: 80 },
+    { label: "Sci", value: 70 },
+  ],
+  "2nd Quarter": [
+    { label: "Mat", value: 85 },
+    { label: "Phy", value: 88 },
+    { label: "Che", value: 78 },
+    { label: "Eng", value: 82 },
+    { label: "Sci", value: 75 },
+  ],
+  "Final Exam": [
+    { label: "Mat", value: 90 },
+    { label: "Phy", value: 94 },
+    { label: "Che", value: 89 },
+    { label: "Eng", value: 85 },
+    { label: "Sci", value: 88 },
+  ],
+};
 
   return (
     //<DashboardLayout>
@@ -387,9 +450,7 @@ const allHomeWorks = [
   <div className="flex items-center justify-between">
     {/* LEFT */}
     <div className="flex items-center gap-2">
-      <span className="text-xs text-gray-300">
-        1st Quarterly
-      </span>
+    
       <span className="bg-green-500 text-[10px] px-2 py-0.5 rounded-full font-medium">
         Pass
       </span>
@@ -1044,10 +1105,14 @@ const allHomeWorks = [
   {/* Header */}
   <div className="flex justify-between items-center px-5 py-4 border-b">
     <h4 className="text-18px font-medium">Leave Status</h4>
-    <span className="text-xs text-gray-500 flex items-center gap-1">
+    <span
+  onClick={() => setShowLeaveYearDetails(true)}
+  className="text-xs text-gray-500 flex items-center gap-1 cursor-pointer hover:underline"
+>
   <CalendarDays className="w-4 h-4 text-gray-400" />
   This Year
 </span>
+
 
   </div>
 
@@ -1094,29 +1159,49 @@ const allHomeWorks = [
   {/* Header */}
   <div className="flex items-center justify-between px-5 py-4 border-b">
     <h4 className="text-18px font-medium">Exam Result</h4>
-    <span className="text-xs text-gray-500 flex items-center gap-1">
-  <CalendarDays className="w-4 h-4 text-gray-400" />
-  1st Quarter
-</span>
+    <div className="relative">
+  <span
+    onClick={() => setShowQuarterMenu(!showQuarterMenu)}
+    className="text-xs text-gray-500 flex items-center gap-1 cursor-pointer hover:underline"
+  >
+    <CalendarDays className="w-4 h-4 text-gray-400" />
+    {activeQuarter}
+  </span>
+
+  {showQuarterMenu && (
+    <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow text-xs z-20">
+      {Object.keys(examResults).map(q => (
+        <div
+          key={q}
+          onClick={() => {
+            setActiveQuarter(q as keyof typeof examResults);
+            setShowQuarterMenu(false);
+          }}
+          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+        >
+          {q}
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
   </div>
 
   <div className="px-5 py-4">
 
     {/* Subject Pills */}
-    <div className="flex gap-2 mb-4">
-      <span className="text-xs px-3 py-1 rounded bg-blue-100 text-blue-600">
-        Mat : 100
-      </span>
-      <span className="text-xs px-3 py-1 rounded bg-green-100 text-green-600">
-        Phy : 92
-      </span>
-      <span className="text-xs px-3 py-1 rounded bg-yellow-100 text-yellow-600">
-        Che : 90
-      </span>
-      <span className="text-xs px-3 py-1 rounded bg-red-100 text-red-600">
-        Eng : 80
-      </span>
-    </div>
+    <div className="flex gap-2 mb-4 flex-wrap">
+  {examResults[activeQuarter].map(s => (
+    <span
+      key={s.label}
+      className="text-xs px-3 py-1 rounded bg-blue-100 text-blue-600"
+    >
+      {s.label} : {s.value}
+    </span>
+  ))}
+</div>
+
 
     {/* Chart */}
     <div className="flex items-end justify-between h-52 px-4">
@@ -1134,29 +1219,24 @@ const allHomeWorks = [
       {/* Bars */}
       <div className="flex flex-1 items-end justify-between">
 
-        {[
-          { label: "Mat", value: 100, active: false },
-          { label: "Phy", value: 92, active: true },
-          { label: "Che", value: 90, active: false },
-          { label: "Eng", value: 80, active: false },
-          { label: "Sci", value: 70, active: false },
-        ].map((b, i) => (
-          <div key={i} className="flex flex-col items-center gap-2">
+      <div className="flex flex-1 items-end justify-between">
+  {examResults[activeQuarter].map((b, i) => (
+    <div key={i} className="flex flex-col items-center gap-2">
 
-            {/* Bar */}
-            <div
-              className={`w-10 rounded-lg ${
-                b.active ? "bg-blue-600" : "bg-gray-200"
-              }`}
-              style={{ height: `${b.value * 1.5}px` }}
-            />
+      <div
+        className={`w-10 rounded-lg ${
+          b.value === Math.max(...examResults[activeQuarter].map(x => x.value))
+            ? "bg-blue-600"
+            : "bg-gray-200"
+        }`}
+        style={{ height: `${b.value * 1.5}px` }}
+      />
 
-            {/* Label */}
-            <span className="text-xs text-gray-500">
-              {b.label}
-            </span>
-          </div>
-        ))}
+      <span className="text-xs text-gray-500">{b.label}</span>
+    </div>
+  ))}
+</div>
+
 
       </div>
     </div>
@@ -1872,7 +1952,6 @@ const allHomeWorks = [
           placeholder="Roll No"
         />
       </div>
-
       {/* Actions */}
       <div className="flex gap-3 mt-5">
         <button
@@ -1892,6 +1971,83 @@ const allHomeWorks = [
           Save
         </button>
       </div>
+    </div>
+  </div>
+)}
+{showLeaveYearDetails && (
+  <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
+    <div className="bg-white rounded-xl w-[420px] p-5">
+
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="text-lg font-semibold">
+          Leave Summary - {currentYear}
+        </h4>
+        <button
+          onClick={() => setShowLeaveYearDetails(false)}
+          className="text-gray-500 hover:text-red-500"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Summary */}
+      <div className="grid grid-cols-2 gap-3 text-xs mb-4">
+        <div className="border rounded-lg p-3 text-center">
+          <p className="text-lg font-bold">{totalLeaves}</p>
+          <p className="text-gray-500">Total Leaves</p>
+        </div>
+        <div className="border rounded-lg p-3 text-center">
+          <p className="text-lg font-bold text-green-600">{approvedLeaves}</p>
+          <p className="text-gray-500">Approved</p>
+        </div>
+        <div className="border rounded-lg p-3 text-center">
+          <p className="text-lg font-bold text-blue-600">{pendingLeaves}</p>
+          <p className="text-gray-500">Pending</p>
+        </div>
+        <div className="border rounded-lg p-3 text-center">
+          <p className="text-lg font-bold text-red-600">{declinedLeaves}</p>
+          <p className="text-gray-500">Declined</p>
+        </div>
+      </div>
+
+      {/* Leave List */}
+      <div className="space-y-3 max-h-[260px] overflow-y-auto">
+        {yearLeaves.map((l, i) => (
+          <div
+            key={i}
+            className="border rounded-lg p-3 text-xs"
+          >
+            <p className="font-medium text-sm">{l.title}</p>
+            <p className="text-gray-500">
+              📅 {new Date(l.date).toDateString()}
+            </p>
+            <p className="text-gray-500">
+              📝 {l.reason}
+            </p>
+
+            <span
+              className={`inline-block mt-2 px-3 py-1 rounded-full text-white text-[10px]
+                ${
+                  l.status === "Approved"
+                    ? "bg-green-500"
+                    : l.status === "Pending"
+                    ? "bg-blue-500"
+                    : "bg-red-500"
+                }`}
+            >
+              {l.status}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <button
+        onClick={() => setShowLeaveYearDetails(false)}
+        className="mt-4 w-full border rounded-lg py-2 text-xs hover:bg-gray-50"
+      >
+        Close
+      </button>
     </div>
   </div>
 )}
