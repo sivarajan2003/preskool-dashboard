@@ -17,12 +17,14 @@ import { useNavigate } from "react-router-dom";
 import { User, LogOut } from "lucide-react";
 import { useEffect } from "react";
 import { CalendarDays } from "lucide-react";
+import StatisticsChart from "../components/StatisticsChart";
 
 export default function Header({
   onMenuClick,
 }: {
   onMenuClick?: () => void;
 }) {
+  const [showStats, setShowStats] = useState(false);
 
   const [dark, setDark] = useState(false);
   const [yearOpen, setYearOpen] = useState(false);
@@ -38,6 +40,7 @@ export default function Header({
   }, []);
     
   const [selectedYear, setSelectedYear] = useState("2024 / 2025");
+  const [notificationOpen, setNotificationOpen] = useState(false);
 
 const academicYears = Array.from({ length: 6 }, (_, i) => {
   const start = 2020 + i;
@@ -155,9 +158,10 @@ const academicYears = Array.from({ length: 6 }, (_, i) => {
           </IconBtn>
 
           {/* Stats */}
-          <IconBtn onClick={() => alert("Open statistics")}>
-            <BarChart2 className="w-4 h-4" />
-          </IconBtn>
+          <IconBtn onClick={() => setShowStats(true)}>
+  <BarChart2 className="w-4 h-4" />
+</IconBtn>
+
 
           {/* Fullscreen */}
           <IconBtn onClick={toggleFullscreen}>
@@ -222,6 +226,26 @@ const academicYears = Array.from({ length: 6 }, (_, i) => {
 
         </div>
       </div>
+      {showStats && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+          <div className="bg-white w-[600px] rounded-xl p-6 relative">
+      
+            {/* CLOSE */}
+            <button
+              onClick={() => setShowStats(false)}
+              className="absolute top-3 right-3 text-gray-500"
+            >
+              ✕
+            </button>
+      
+            <h2 className="text-lg font-semibold mb-4">Statistics Overview</h2>
+      
+            {/* GRAPH */}
+            <StatisticsChart />
+          </div>
+        </div>
+      )}
+      
     </header>
   );
 }
