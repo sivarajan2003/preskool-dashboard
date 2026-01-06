@@ -8,9 +8,9 @@ import {
   Plus,
   Eye,
   Pencil,
-  Trash2,
+  Trash2,ArrowLeft,
 } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 import AddSportModal from "../../components/tables/AddSportModal";
 
 /* ================= DATA ================= */
@@ -29,6 +29,7 @@ const INITIAL_DATA = [
 
 /* ================= PAGE ================= */
 export default function Sports() {
+  const navigate = useNavigate();
   const [data, setData] = useState(INITIAL_DATA);
   const [search, setSearch] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -113,12 +114,25 @@ const [selectedSport, setSelectedSport] = useState<any>(null);
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-5">
         <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold">Sports</h2>
-            <p className="text-sm text-gray-500 mt-1">
-              Dashboard / Management / Sports
-            </p>
-          </div>
+        <div className="flex items-center gap-3">
+  {/* BACK ARROW */}
+  <button
+        onClick={() => navigate("/admin/dashboard")}
+    className="p-2 -mt-1 rounded-lg hover:bg-gray-100"
+    title="Go Back"
+  >
+    <ArrowLeft size={20} />
+  </button>
+
+  {/* TITLE */}
+  <div>
+    <h2 className="text-2xl font-semibold">Sports</h2>
+    <p className="text-sm text-gray-500 mt-1">
+      Dashboard / Management / Sports
+    </p>
+  </div>
+</div>
+
 
           <div className="flex items-center gap-3">
             <button onClick={handleRefresh} className="p-2.5 border rounded-lg hover:bg-gray-50">

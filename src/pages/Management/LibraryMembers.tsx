@@ -10,6 +10,8 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import AddLibraryMemberModal from "../../components/tables/AddLibraryMemberModal";
 
@@ -110,6 +112,8 @@ const INITIAL_DATA = [
 /* ================= PAGE ================= */
 
 export default function LibraryMembers() {
+  const navigate = useNavigate();
+
   const [data, setData] = useState(INITIAL_DATA);
   const [search, setSearch] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -201,12 +205,25 @@ export default function LibraryMembers() {
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-5">
         <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold">Library Members</h2>
-            <p className="text-sm text-gray-500 mt-1">
-              Dashboard / Management / Library Members
-            </p>
-          </div>
+        <div className="flex items-start gap-3">
+  {/* BACK ARROW */}
+  <button
+            onClick={() => navigate("/admin/dashboard")}
+    className="mt-1 p-2 rounded-lg hover:bg-gray-100"
+    title="Go Back"
+  >
+    <ArrowLeft size={20} />
+  </button>
+
+  {/* TITLE */}
+  <div>
+    <h2 className="text-2xl font-semibold">Library Members</h2>
+    <p className="text-sm text-gray-500 mt-1">
+      Dashboard / Management / Library Members
+    </p>
+  </div>
+</div>
+
 
           <div className="flex items-center gap-3">
             <button

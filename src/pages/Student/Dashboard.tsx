@@ -41,6 +41,7 @@ const [showAddExam, setShowAddExam] = useState(false);
 const [showNextClass, setShowNextClass] = useState(false);
 const [showExamPopup, setShowExamPopup] = useState(false);
 const [showFeesPopup, setShowFeesPopup] = useState(false);
+const [showViewExams, setShowViewExams] = useState(false);
 
 const [rollNo, setRollNo] = useState("");
 const [studentName, setStudentName] = useState("");
@@ -55,14 +56,28 @@ const [exams, setExams] = useState([
     subject: "Mathematics",
     date: new Date(2025, 6, 6),
     time: "01:30 - 02:15 PM",
-    room: "15",
+    room: "105",
+  },
+  {
+    title: "2nd Quarterly",
+    subject: "English",
+    date: new Date(2025, 6, 12),
+    time: "01:30 - 02:15 PM",
+    room: "106",
   },
   {
     title: "2nd Quarterly",
     subject: "Physics",
     date: new Date(2025, 6, 12),
     time: "01:30 - 02:15 PM",
-    room: "15",
+    room: "107",
+  },
+  {
+    title: "2nd Quarterly",
+    subject: "Chemistry",
+    date: new Date(2025, 7, 12),
+    time: "01:30 - 02:15 PM",
+    room: "108",
   },
 ]);
 /* ================= ATTENDANCE DATA ================= */
@@ -115,7 +130,16 @@ const examDays = exams
       e.date.getFullYear() === currentYear
   )
   .map(e => e.date.getDate());
-
+  const uniqueExams = exams.filter(
+    (exam, index, self) =>
+      index ===
+      self.findIndex(
+        e =>
+          e.subject === exam.subject &&
+          e.date.getTime() === exam.date.getTime()
+      )
+  );
+  
 /* ================== MONTH NAVIGATION ================== */
 const changeMonth = (dir: "prev" | "next") => {
   if (dir === "prev") {
@@ -677,12 +701,12 @@ const examResults = {
 {/* Header */}
 <div className="flex items-center justify-between mb-4">
   <h4 className="text-18px font-medium">Schedules</h4>
-  <button
-    onClick={() => setShowAddExam(true)}
-    className="text-xs text-blue-600 flex items-center gap-1"
-  >
-    ➕ Add New
-  </button>
+  <span
+  onClick={() => setShowViewExams(true)}
+  className="text-xs text-blue-600 cursor-pointer hover:underline"
+>
+  View Exams
+</span>
 </div>
 
 {/* Month Navigation */}
@@ -723,19 +747,25 @@ const examResults = {
     <div key={"e" + i} />
   ))}
 
-  {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => (
-    <div
-      key={day}
-      className={`w-8 h-8 flex items-center justify-center rounded-lg
-        ${
-          examDays.includes(day)
-            ? "bg-blue-600 text-white font-medium"
-            : "text-gray-600 hover:bg-gray-100"
-        }`}
-    >
-      {day}
-    </div>
-  ))}
+{Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => (
+  <div
+    key={day}
+    className={`relative w-8 h-8 flex items-center justify-center rounded-lg
+      ${
+        examDays.includes(day)
+          ? "bg-blue-600 text-white font-medium"
+          : "text-gray-600 hover:bg-gray-100"
+      }`}
+  >
+    {day}
+
+    {/* 🔵 exam indicator dot */}
+    {examDays.includes(day) && (
+      <span className="absolute bottom-1 w-1.5 h-1.5 bg-white rounded-full" />
+    )}
+  </div>
+))}
+
 </div>
 
 {/* Exams */}
@@ -755,21 +785,22 @@ const examResults = {
 
       return (
         <div key={i} className="border rounded-lg p-3">
-          <div className="flex items-center justify-between mb-1">
-            <p className="text-sm font-medium">{e.title}</p>
-            <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
-              {daysLeft} Days More
-            </span>
-          </div>
+  <div className="flex items-center justify-between mb-1">
+    <p className="text-sm font-semibold">{e.subject}</p>
 
-          <p className="text-xs font-medium">{e.subject}</p>
-          <p className="text-xs text-gray-500">
-            🕒 {e.time}
-          </p>
-          <p className="text-xs text-blue-600">
-            📍 Room No : {e.room}
-          </p>
-        </div>
+    <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
+      {daysLeft} Days More
+    </span>
+  </div>
+
+  <p className="text-xs text-gray-500">
+    🕒 {e.time}
+  </p>
+
+  <p className="text-xs text-blue-600">
+    📍 Room No : {e.room}
+  </p>
+</div>
       );
     })}
 </div>
@@ -2048,6 +2079,53 @@ const examResults = {
       >
         Close
       </button>
+    </div>
+  </div>
+)}
+{showViewExams && (
+  <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
+    <div className="bg-white rounded-xl w-[420px] p-5">
+
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="text-lg font-semibold">Exam Schedule</h4>
+        <button
+          onClick={() => setShowViewExams(false)}
+          className="text-gray-500 hover:text-red-500"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* EXAM LIST */}
+      <div className="space-y-3 max-h-[320px] overflow-y-auto">
+        {exams.map((e, i) => (
+          <div key={i} className="border rounded-lg p-3">
+            <p className="text-sm font-semibold">{e.subject}</p>
+
+            <p className="text-xs text-gray-500">
+              📅 {e.date.toDateString()}
+            </p>
+
+            <p className="text-xs text-gray-500">
+              🕒 {e.time}
+            </p>
+
+            <p className="text-xs text-blue-600">
+              📍 Room No : {e.room}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* FOOTER */}
+      <button
+        onClick={() => setShowViewExams(false)}
+        className="mt-4 w-full border rounded-lg py-2 text-sm hover:bg-gray-50"
+      >
+        Close
+      </button>
+
     </div>
   </div>
 )}

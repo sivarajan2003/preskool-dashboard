@@ -10,6 +10,8 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import AddClassModal from "../../components/AddClassModal";
 import { useEffect } from "react";
@@ -32,6 +34,7 @@ const initialClasses = [
 
 export default function ClassesPage() {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const [data, setData] = useState(initialClasses);
   //const [openMenu, setOpenMenu] = useState<string | null>(null);
@@ -155,12 +158,14 @@ const [editingClass, setEditingClass] = useState<any>(null);
       {/* ================= HEADER ================= */}
       <div className="bg-white border border-gray-200 rounded-2xl px-6 py-6">
   <div className="flex items-center justify-between">
+    
 
     {/* LEFT */}
     <div>
       <h2 className="text-2xl font-semibold text-gray-900">
         Classes
       </h2>
+      
       <p className="text-sm text-gray-500 mt-1">
         Dashboard / Academic / Classes
       </p>

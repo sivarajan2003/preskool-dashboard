@@ -10,6 +10,9 @@ import {
   Filter,
   Plus,
 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 import AddHolidayModal from "../../components/tables/AddHolidayModal";
 
 /* ================= HOLIDAY DATA ================= */
@@ -88,6 +91,8 @@ const INITIAL_DATA = [
 
 /* ================= PAGE ================= */
 export default function Holidays() {
+  const navigate = useNavigate();
+
   const [data, setData] = useState(INITIAL_DATA);
   const [search, setSearch] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -175,12 +180,24 @@ export default function Holidays() {
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold">Holidays</h2>
-            <p className="text-sm text-gray-500 mt-1">
-              Dashboard / HRM / Holidays
-            </p>
-          </div>
+      <div className="flex items-start gap-3">
+  {/* BACK ARROW */}
+  <button
+    onClick={() => navigate("/admin/dashboard")}
+    className="mt-1 p-2 rounded-lg hover:bg-gray-100"
+    title="Go Back"
+  >
+    <ArrowLeft size={20} />
+  </button>
+
+  {/* TITLE */}
+  <div>
+    <h2 className="text-2xl font-semibold">Holidays</h2>
+    <p className="text-sm text-gray-500 mt-1">
+      Dashboard / HRM / Holidays
+    </p>
+  </div>
+</div>
 
           <div className="flex items-center gap-3">
             <button onClick={handleRefresh} className="p-2.5 border rounded-lg">

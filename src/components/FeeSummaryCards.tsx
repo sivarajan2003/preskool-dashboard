@@ -2,10 +2,10 @@ import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 
 export default function FeeSummaryCards() {
   const cards = [
-    { title: "Total Fees Collected", value: "$25,000.02", up: true, percent: "1.2%" },
-    { title: "Fine Collected till date", value: "$4,56.64", down: true, percent: "1.5%" },
+    { title: "Total Fees Collected", value: "₹25,000.02", up: true, percent: "1.2%" },
+    { title: "Fine Collected till date", value: "₹456.64", down: true, percent: "1.5%" },
     { title: "Student Not Paid", value: "545", up: true, percent: "1.5%" },
-    { title: "Total Outstanding", value: "$4,56.64", down: true, percent: "1.5%" },
+    { title: "Total Outstanding", value: "₹456.64", down: true, percent: "1.5%" },
   ];
 
   return (

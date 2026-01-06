@@ -21,55 +21,54 @@ import PreLogo from "../assets/pre.png";
 
 
 export default function Sidebar() {
-  
-
   const navigate = useNavigate();
   const location = useLocation();
-  //const role = localStorage.getItem("role");
+
+  const role = localStorage.getItem("role");
+  const isParent = role === "parent";
+
+  const basePath =
+    role === "admin"
+      ? "/admin/dashboard"
+      : role === "teacher"
+      ? "/teacher/dashboard"
+      : role === "student"
+      ? "/student/dashboard"
+      : "/parent/dashboard";
 
   const isActive = (path: string) =>
     location.pathname === path;
-    
-    
-    const isPeopleActive = location.pathname.startsWith(
-      "/admin/dashboard/people"
-      
-    );
-    
-  
-  const role = localStorage.getItem("role");
-  const basePath =
-  role === "admin"
-    ? "/admin/dashboard"
-    : role === "teacher"
-    ? "/teacher/dashboard"
-    : role === "student"
-    ? "/student/dashboard"
-    : "/parent/dashboard";
 
+  const isPeopleActive = location.pathname.startsWith(
+    `${basePath}/people`
+  );
+
+  const canAccess = (allowedRoles: string[]) =>
+    role ? allowedRoles.includes(role) : false;
   const logout = () => {
     localStorage.clear();
     navigate("/login");
   };
+  //const role = localStorage.getItem("role");
   const [openDashboard, setOpenDashboard] = useState(true);
   const [openApplications, setOpenApplications] = useState(false);
  
   const [openPeople, setOpenPeople] = useState(
-    location.pathname.startsWith("/admin/dashboard/people")
+    location.pathname.startsWith(`${basePath}/people`)
   );
+  
   
 const [openStudents, setOpenStudents] = useState(false);
 const [openTeachers, setOpenTeachers] = useState(false);
 const [activeItem, setActiveItem] = useState<string | null>(null);
 const [openAcademic, setOpenAcademic] = useState(
-  location.pathname.startsWith("/admin/dashboard/academic")
+  location.pathname.startsWith(`${basePath}/academic`)
 );
 
 const [openClasses, setOpenClasses] = useState(false);
 const [openExams, setOpenExams] = useState(
-  location.pathname.startsWith("/admin/dashboard/academic/examinations")
+  location.pathname.startsWith(`${basePath}/academic/examinations`)
 );
-
 const [openManagement, setOpenManagement] = useState(true);
 const [openFees, setOpenFees] = useState(false);
 const [openLibrary, setOpenLibrary] = useState(false);
@@ -79,20 +78,14 @@ const [openHRM, setOpenHRM] = useState(true);
 const [openAttendance, setOpenAttendance] = useState(false);
 const [openLeaves, setOpenLeaves] = useState(false);
 const [openReports, setOpenReports] = useState(
-  location.pathname.startsWith("/admin/dashboard/reports")
+  location.pathname.startsWith(`${basePath}/reports`)
 );
-
-
 /* MANAGEMENT ACTIVE CHECK */
 const isManagementActive = location.pathname.startsWith(
   "/admin/dashboard/management"
 );
-
-
-
 const isManagementItemActive = (path: string) =>
-  location.pathname === path;
-
+  location.pathname.startsWith(path);
 
   return (
 <div className="w-64 bg-white border-r h-screen overflow-y-auto">
@@ -113,7 +106,8 @@ const isManagementItemActive = (path: string) =>
 </div>
 
       <nav className="p-4 space-y-2">
-
+      {canAccess(["admin", "teacher", "student", "parent"]) && (
+  <>
         {/* ================= DASHBOARD ================= */}
         <button
           onClick={() => setOpenDashboard(!openDashboard)}
@@ -159,7 +153,12 @@ const isManagementItemActive = (path: string) =>
 
   </div>
 )}
+ </>
+)}
 
+
+{canAccess(["admin"]) && (
+  <>
         {/* ================= APPLICATIONS ================= */}
         <button
   onClick={() => setOpenApplications(!openApplications)}
@@ -207,6 +206,11 @@ const isManagementItemActive = (path: string) =>
             <LayoutItem icon={<BoxIcon />} label="Box" />
           </div>
         )} */}
+
+        </>
+)}
+{canAccess(["admin", "teacher", "parent"]) && (
+  <>
 {/* ================= PEOPLE ================= */}
 <button
   onClick={() => setOpenPeople(!openPeople)}
@@ -224,11 +228,13 @@ const isManagementItemActive = (path: string) =>
   <div className="ml-6 mt-2 space-y-1">
 
     {/* ================= STUDENTS ================= */}
+    {!isParent && (
+  <>
     <button
   onClick={() => navigate(`${basePath}/people/students`)}
   className={`w-full flex items-center justify-between px-3 py-2 rounded-lg
     ${
-      isActive("/admin/dashboard/people/students")
+      isActive(`${basePath}/people/students`)
         ? "bg-blue-600 text-white"
         : "hover:bg-gray-50 text-gray-700"
     }`}
@@ -237,7 +243,7 @@ const isManagementItemActive = (path: string) =>
     <span
       className={`w-8 h-8 rounded-lg flex items-center justify-center
         ${
-          isActive("/admin/dashboard/people/students")
+          isActive(`${basePath}/people/students`)
             ? "bg-white/20"
             : "bg-gray-100"
         }`}
@@ -274,7 +280,7 @@ const isManagementItemActive = (path: string) =>
       
       className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
   ${
-    isActive("/admin/dashboard/people/parents")
+    isActive(`${basePath}/people/parents`)
       ? "bg-blue-600 text-white"
       : "hover:bg-gray-50 text-gray-700"
   }`}
@@ -286,16 +292,17 @@ const isManagementItemActive = (path: string) =>
 
       <span className="text-sm font-medium">Parents</span>
     </button>
-
+    </>
+)}
     {/* ================= GUARDIANS ================= */}
     <button
   onClick={() => {
-    navigate("/admin/dashboard/people/guardians");
+    navigate(`${basePath}/people/guardians`);
     setActiveItem("guardians");
   }}
   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
     ${
-      isActive("/admin/dashboard/people/guardians")
+      isActive(`${basePath}/people/guardians`)
         ? "bg-blue-600 text-white"
         : "hover:bg-gray-50 text-gray-700"
     }`}
@@ -307,16 +314,16 @@ const isManagementItemActive = (path: string) =>
 
       <span className="text-sm font-medium">Guardians</span>
     </button>
-
+   
     {/* ================= TEACHERS ================= */}
     <button
   onClick={() => {
-    navigate("/admin/dashboard/people/teachers");
+    navigate(`${basePath}/people/teachers`);
     setActiveItem("teachers");
   }}
   className={`w-full flex items-center justify-between px-3 py-2 rounded-lg
     ${
-      isActive("/admin/dashboard/people/teachers")
+      isActive(`${basePath}/people/teachers`)
         ? "bg-blue-600 text-white"
         : "hover:bg-gray-50 text-gray-700"
     }`}
@@ -355,7 +362,12 @@ const isManagementItemActive = (path: string) =>
     )}  */}
   </div>
 )}
+</>
+)}
+{canAccess(["admin", "teacher", "student", "parent"]) && (
+  <>
 {/* ================= ACADEMIC ================= */}
+
 <button
   onClick={() => setOpenAcademic(!openAcademic)}
   className="w-full flex items-center px-4 py-3 rounded-lg hover:bg-gray-100"
@@ -369,11 +381,13 @@ const isManagementItemActive = (path: string) =>
   <div className="ml-4 mt-2 space-y-1">
 
     {/* ================= CLASSES (HAS CHILD) ================= */}
+    {!isParent && (
     <button
-  onClick={() => navigate("/admin/dashboard/academic/classes")}
+  onClick={() => navigate(`${basePath}/academic/classes`)}
   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
     ${
-      location.pathname === "/admin/dashboard/academic/classes"
+      location.pathname === `${basePath}/academic/classes`
+
         ? "bg-blue-600 text-white"
         : "hover:bg-gray-50 text-gray-700"
     }`}
@@ -381,7 +395,7 @@ const isManagementItemActive = (path: string) =>
   <span
     className={`w-8 h-8 rounded-lg flex items-center justify-center
       ${
-        location.pathname === "/admin/dashboard/academic/classes"
+        location.pathname === `${basePath}/academic/classes`
           ? "bg-white/20"
           : "bg-gray-100"
       }`}
@@ -390,7 +404,7 @@ const isManagementItemActive = (path: string) =>
   </span>
   <span className="text-sm font-medium">Classes</span>
 </button>
-
+    )}
 
       {/*{openClasses && (
       <div className="ml-11 space-y-1">
@@ -403,12 +417,12 @@ const isManagementItemActive = (path: string) =>
     <AcademicItem
   label="Class Room"
   icon={DoorOpen}
-  path="/admin/dashboard/academic/class-room"
+  path={`${basePath}/academic/class-room`}
 />
 <AcademicItem
   label="Class Routine"
   icon={CalendarDays}
-  path="/admin/dashboard/academic/class-routine"
+  path={`${basePath}/academic/class-routine`}
 />
 
  {/*<AcademicItem
@@ -420,17 +434,17 @@ const isManagementItemActive = (path: string) =>
 <AcademicItem
   label="Subject"
   icon={BookOpen}
-  path="/admin/dashboard/academic/subject"
+  path={`${basePath}/academic/subject`}
 />
 <AcademicItem
   label="Syllabus"
   icon={FileText}
-  path="/admin/dashboard/academic/syllabus"
+  path={`${basePath}/academic/syllabus`}
 />
 <AcademicItem
   label="Time Table"
   icon={Table}
-  path="/admin/dashboard/academic/time-table"
+  path={`${basePath}/academic/time-table`}
 />
  {/* <AcademicItem
   label="Home Work"
@@ -440,6 +454,8 @@ const isManagementItemActive = (path: string) =>
 */}
 
     {/* ================= EXAMINATIONS (HAS CHILD) ================= */}
+    {!isParent && (
+  <>
     <button
       onClick={() => setOpenExams(!openExams)}
       className="w-full flex items-center gap-3 px-3 py-2 rounded-lg"
@@ -463,9 +479,10 @@ const isManagementItemActive = (path: string) =>
 
     <ChildItem
       label="Exam"
-      active={location.pathname === "/admin/dashboard/academic/examinations/exam"}
+      active={location.pathname === `${basePath}/academic/examinations/exam`
+}
       onClick={() =>
-        navigate("/admin/dashboard/academic/examinations/exam")
+        navigate(`${basePath}/academic/examinations/exam`)
       }
     />
 
@@ -473,7 +490,7 @@ const isManagementItemActive = (path: string) =>
       label="Exam Schedule"
       active={location.pathname === "/admin/dashboard/academic/examinations/schedule"}
       onClick={() =>
-        navigate("/admin/dashboard/academic/examinations/schedule")
+        navigate(`${basePath}/academic/examinations/schedule`)
       }
     />
 
@@ -481,19 +498,33 @@ const isManagementItemActive = (path: string) =>
       label="Grade"
       active={location.pathname === "/admin/dashboard/academic/examinations/grade"}
       onClick={() =>
-        navigate("/admin/dashboard/academic/examinations/grade")
+        navigate(`${basePath}/academic/examinations/grade`)
       }
     />
 
   </div>
 )}
+{isParent && (
+  <MenuItem
+    icon={CalendarCheck}
+    label="Attendance"
+    onClick={() => navigate(`${basePath}/attendance`)}
+    active={location.pathname.startsWith(`${basePath}/attendance`)}
+  />
+)}
 
 
     {/* ================= SINGLE MENU ================= */}
     <MainItem label="Reasons" icon={HelpCircle} />
-
+    </>
+)}
   </div>
 )}
+ </>
+)}
+
+{canAccess(["admin", "student"]) && (
+  <>
 {/* ================= MANAGEMENT ================= */}
 <button
   onClick={() => setOpenManagement(!openManagement)}
@@ -509,9 +540,10 @@ const isManagementItemActive = (path: string) =>
   <div className="ml-4 mt-2 space-y-1">
 
     {/* ================= FEES COLLECTION ================= */}
+    {role === "admin" && (
     <button
   onClick={() =>
-    navigate("/admin/dashboard/management/fees-collection")
+    navigate("/admin/dashboard/management/fees-collection") 
   }
   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
     ${
@@ -536,7 +568,7 @@ const isManagementItemActive = (path: string) =>
 
   <span className="text-sm">Fees Collection</span>
 </button>
-
+)}
 
    {/* {openFees && (
       <div className="ml-11 space-y-1">
@@ -550,30 +582,24 @@ const isManagementItemActive = (path: string) =>
 
     {/* ================= LIBRARY ================= */}
     <button
-  onClick={() =>
-    navigate("/admin/dashboard/management/library")
-  }
+  onClick={() => navigate(`${basePath}/management/library`)}
   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
     ${
-      isManagementItemActive(
-        "/admin/dashboard/management/library"
-      )
+      isManagementItemActive(`${basePath}/management/library`)
         ? "bg-blue-600 text-white"
         : "hover:bg-gray-50 text-gray-700"
     }`}
 >
-  <span className={`w-9 h-9 rounded-xl flex items-center justify-center
-    ${
-      isManagementItemActive(
-        "/admin/dashboard/management/library"
-      )
-        ? "bg-white/20"
-        : "bg-gray-100"
-    }`}
+  <span
+    className={`w-9 h-9 rounded-xl flex items-center justify-center
+      ${
+        isManagementItemActive(`${basePath}/management/library`)
+          ? "bg-blue-500 text-white"
+          : "bg-gray-100 text-gray-600"
+      }`}
   >
     <Book className="w-4 h-4" />
   </span>
-
   <span className="text-sm">Library Members</span>
 </button>
 
@@ -588,26 +614,21 @@ const isManagementItemActive = (path: string) =>
 
     {/* ================= SPORTS (NO CHILD) ================= */}
     <button
-  onClick={() =>
-    navigate("/admin/dashboard/management/sports")
-  }
+  onClick={() => navigate(`${basePath}/management/sports`)}
   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
     ${
-      isManagementItemActive(
-        "/admin/dashboard/management/sports"
-      )
+      isManagementItemActive(`${basePath}/management/sports`)
         ? "bg-blue-600 text-white"
         : "hover:bg-gray-50 text-gray-700"
     }`}
 >
-  <span className={`w-9 h-9 rounded-xl flex items-center justify-center
-    ${
-      isManagementItemActive(
-        "/admin/dashboard/management/sports"
-      )
-        ? "bg-white/20"
-        : "bg-gray-100"
-    }`}
+  <span
+    className={`w-9 h-9 rounded-xl flex items-center justify-center
+      ${
+        isManagementItemActive(`${basePath}/management/sports`)
+          ? "bg-blue-500 text-white"
+          : "bg-gray-100 text-gray-600"
+      }`}
   >
     <Activity className="w-4 h-4" />
   </span>
@@ -615,37 +636,29 @@ const isManagementItemActive = (path: string) =>
   <span className="text-sm">Sports</span>
 </button>
 
-
     {/* ================= HOSTEL ================= */}
     <button
-  onClick={() =>
-    navigate("/admin/dashboard/management/hostel")
-  }
+  onClick={() => navigate(`${basePath}/management/hostel`)}
   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
     ${
-      isManagementItemActive(
-        "/admin/dashboard/management/hostel"
-      )
+      isManagementItemActive(`${basePath}/management/hostel`)
         ? "bg-blue-600 text-white"
         : "hover:bg-gray-50 text-gray-700"
     }`}
 >
-  <span className={`w-9 h-9 rounded-xl flex items-center justify-center
-    ${
-      isManagementItemActive(
-        "/admin/dashboard/management/hostel"
-      )
-        ? "bg-white/20"
-        : "bg-gray-100"
-    }`}
+  <span
+    className={`w-9 h-9 rounded-xl flex items-center justify-center
+      ${
+        isManagementItemActive(`${basePath}/management/hostel`)
+          ? "bg-white/20"
+          : "bg-gray-100"
+      }`}
   >
     <Building className="w-4 h-4" />
   </span>
 
   <span className="text-sm">Hostel</span>
 </button>
-
-
      {/*{openHostel && (
       <div className="ml-11 space-y-1">
         <ChildItem label="Hostel List" />
@@ -656,26 +669,21 @@ const isManagementItemActive = (path: string) =>
 
     {/* ================= TRANSPORT ================= */}
     <button
-  onClick={() =>
-    navigate("/admin/dashboard/management/transport")
-  }
+  onClick={() => navigate(`${basePath}/management/transport`)}
   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
     ${
-      isManagementItemActive(
-        "/admin/dashboard/management/transport"
-      )
+      isManagementItemActive(`${basePath}/management/transport`)
         ? "bg-blue-600 text-white"
         : "hover:bg-gray-50 text-gray-700"
     }`}
 >
-  <span className={`w-9 h-9 rounded-xl flex items-center justify-center
-    ${
-      isManagementItemActive(
-        "/admin/dashboard/management/transport"
-      )
-        ? "bg-white/20"
-        : "bg-gray-100"
-    }`}
+  <span
+    className={`w-9 h-9 rounded-xl flex items-center justify-center
+      ${
+        isManagementItemActive(`${basePath}/management/transport`)
+          ? "bg-white/20"
+          : "bg-gray-100"
+      }`}
   >
     <Bus className="w-4 h-4" />
   </span>
@@ -695,7 +703,10 @@ const isManagementItemActive = (path: string) =>
 
   </div>
 )}
-
+</>
+)}
+{canAccess(["admin", "student"]) && (
+  <>
 {/* ================= HRM ================= */}
 <button
   onClick={() => setOpenHRM(!openHRM)}
@@ -713,20 +724,25 @@ const isManagementItemActive = (path: string) =>
   path="/admin/dashboard/hrm/staffs"
 />*/}
 
-<HRMItem
-  icon={Layers}
-  label="Departments"
-  path="/admin/dashboard/hrm/departments"
-/>
-
-<HRMItem
-  icon={UserCog}
-  label="Designation"
-  path="/admin/dashboard/hrm/designation"
-/>
+{role === "admin" && (
+  <HRMItem
+    icon={Layers}
+    label="Departments"
+    path="/admin/dashboard/hrm/departments"
+  />
+)}
+{role === "admin" && (
+  <HRMItem
+    icon={UserCog}
+    label="Designation"
+    path="/admin/dashboard/hrm/designation"
+  />
+)}
 
 
     {/* ===== Attendance (HAS CHILD) ===== */}
+    {role === "admin" && (
+  <>
     <button
       onClick={() => setOpenAttendance(!openAttendance)}
       className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
@@ -770,8 +786,11 @@ const isManagementItemActive = (path: string) =>
 
       </div>
     )}
-
+</>
+)}
     {/* ===== Leaves (HAS CHILD) ===== */}
+    {role === "admin" && (
+  <>
     <button
       onClick={() => setOpenLeaves(!openLeaves)}
       className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50"
@@ -807,23 +826,27 @@ const isManagementItemActive = (path: string) =>
 
       </div>
     )}
-
+</>
+)}
     {/* ===== Holidays ===== */}
     <HRMItem
   icon={Briefcase}
   label="Holidays"
-  path="/admin/dashboard/hrm/holidays"
+  path={`${basePath}/hrm/holidays`}
 />
-
-<HRMItem
-  icon={Wallet}
-  label="Payroll"
-  path="/admin/dashboard/hrm/payroll"
-/>
-
-
+{role === "admin" && (
+  <HRMItem
+    icon={Wallet}
+    label="Payroll"
+    path="/admin/dashboard/hrm/payroll"
+  />
+)}
   </div>
 )}
+ </>
+)}
+{canAccess(["admin", "teacher", "parent"]) && (
+  <>
 {/* ================= REPORTS ================= */}
 <button
   onClick={() => setOpenReports(!openReports)}
@@ -845,7 +868,7 @@ const isManagementItemActive = (path: string) =>
     <ReportItem
       icon={ClipboardCheck}
       label="Attendance Report"
-      path="/admin/dashboard/reports/attendance"
+      path={`${basePath}/reports/attendance`}
     />
 
    {/* <ReportItem
@@ -880,8 +903,10 @@ const isManagementItemActive = (path: string) =>
 
   </div>
 )}
-
+  </>
+)}
         {/* ================= OTHER MENUS ================= */}
+        {!isParent && (
         <div className="pt-3 space-y-1">
           <MenuItem icon={Building2} label="Classes" />
           <MenuItem icon={BookOpen} label="Subjects" />
@@ -897,6 +922,7 @@ const isManagementItemActive = (path: string) =>
 />
 
         </div>
+        )}
         {/* ================= LOGOUT ================= */}
 <div className="pt-4 mt-4 border-t">
   <button
@@ -960,7 +986,8 @@ function AcademicItem({
 }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const active = location.pathname === path;
+  //const active = location.pathname === path;
+  const active = location.pathname.startsWith(path);
 
   return (
     <button
@@ -1070,10 +1097,22 @@ function ChildItem({
     </button>
   );
 }
-function IconBox({ Icon }: { Icon: any }) {
+function IconBox({
+  Icon,
+  active,
+}: {
+  Icon: any;
+  active?: boolean;
+}) {
   return (
-    <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
-      <Icon className="w-4 h-4 text-gray-500" />
+    <span
+      className={`w-8 h-8 rounded-lg flex items-center justify-center
+        ${active ? "bg-blue-500" : "bg-gray-100"}`}
+    >
+      <Icon
+        className={`w-4 h-4
+          ${active ? "text-white" : "text-gray-500"}`}
+      />
     </span>
   );
 }
@@ -1101,7 +1140,7 @@ function HRMItem({
             : "hover:bg-gray-50 text-gray-700"
         }`}
     >
-      <IconBox Icon={Icon} />
+<IconBox Icon={Icon} active={active} />
       <span className="text-sm">{label}</span>
     </button>
   );

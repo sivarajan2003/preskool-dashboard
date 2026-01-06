@@ -6,7 +6,7 @@ import {
   Eye,
 Pencil,
 Trash2,
-
+ArrowLeft,
   Plus,
   CalendarDays,
   Filter,
@@ -225,12 +225,24 @@ const [filterDate, setFilterDate] = useState<
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-5 space-y-5">
         <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold">Exam</h2>
-            <p className="text-sm text-gray-500 mt-1">
-              Dashboard / Academic / Exam
-            </p>
-          </div>
+        <div className="flex items-start gap-3">
+  {/* BACK ARROW */}
+  <button
+       onClick={() => navigate("/admin/dashboard")}
+    className="mt-1 p-2 rounded-lg hover:bg-gray-100"
+    title="Go Back"
+  >
+    <ArrowLeft size={20} />
+  </button>
+
+  {/* TITLE */}
+  <div>
+    <h2 className="text-2xl font-semibold">Exam</h2>
+    <p className="text-sm text-gray-500 mt-1">
+      Dashboard / Academic / Exam
+    </p>
+  </div>
+</div>
 
           <div className="flex items-center gap-3">
             <button

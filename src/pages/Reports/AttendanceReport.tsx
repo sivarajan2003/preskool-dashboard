@@ -5,6 +5,8 @@ import {
   ArrowUpDown,
   Download,
 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+
 import { useState, useMemo } from "react";
 /* ================= TABS ================= */
 const TABS = [
@@ -36,13 +38,24 @@ export default function AttendanceReport() {
     <div className="p-6">
       {/* ================= HEADER ================= */}
       <div className="flex items-center justify-between mb-4">
-        <div>
-          <h2 className="text-2xl font-semibold">Attendance Report</h2>
-          <p className="text-sm text-gray-500">
-            Dashboard / Report / Attendance Report
-          </p>
-        </div>
+      <div className="flex items-start gap-3">
+  {/* BACK ARROW */}
+  <button
+    onClick={() => navigate("/admin/dashboard")}
+    className="mt-1 p-2 rounded-lg hover:bg-gray-100"
+    title="Go Back"
+  >
+    <ArrowLeft size={20} />
+  </button>
 
+  {/* TITLE */}
+  <div>
+    <h2 className="text-2xl font-semibold">Attendance Report</h2>
+    <p className="text-sm text-gray-500">
+      Dashboard / Report / Attendance Report
+    </p>
+  </div>
+</div>
         {/* ACTION BUTTONS */}
         <div className="flex items-center gap-2">
         <div className="relative">

@@ -163,10 +163,6 @@ export default function App() {
   
 </Route>
 
-
-
-
-
   {/* MANAGEMENT ✅ THIS IS WHERE IT GOES */}
   <Route
     path="management/fees-collection"
@@ -183,7 +179,7 @@ export default function App() {
       <Route
   path="/student/dashboard"
   element={
-    <ProtectedRoute role="student">
+<ProtectedRoute role={["student", "teacher", "admin"]}>
       <DashboardLayout />
     </ProtectedRoute>
   }
@@ -195,12 +191,33 @@ export default function App() {
 
   {/* ACADEMIC */}
   <Route path="academic/classes" element={<ClassesPage />} />
+  <Route path="academic/class-room" element={<ClassRoomPage />} />
+  <Route path="academic/class-routine" element={<ClassRoutinePage />} />
+  <Route path="academic/subject" element={<SubjectPage />} />
+  <Route path="academic/syllabus" element={<SyllabusPage />} />
+  <Route path="academic/time-table" element={<TimeTablePage />} />
+
+  {/* EXAMINATIONS */}
+  <Route path="academic/examinations/exam" element={<ExamPage />} />
+  <Route path="academic/examinations/schedule" element={<ExamSchedulePage />} />
+  <Route path="academic/examinations/grade" element={<GradePage />} />
+ 
+{/* MANAGEMENT (STUDENT ACCESS) */}
+<Route path="management/library" element={<LibraryMembers />} />
+<Route path="management/sports" element={<Sports />} />
+<Route path="management/hostel" element={<Hostel />} />
+<Route path="management/transport" element={<Transport />} />
+
+{/* HRM (STUDENT ONLY) */}
+<Route path="hrm/holidays" element={<Holidays />} />
+
+
 </Route>
 
 <Route
   path="/teacher/dashboard"
   element={
-    <ProtectedRoute role="teacher">
+    <ProtectedRoute role={["teacher", "admin"]}>
       <DashboardLayout />
     </ProtectedRoute>
   }
@@ -212,12 +229,33 @@ export default function App() {
   {/* PEOPLE */}
   <Route path="people/students" element={<StudentsPage />} />
   <Route path="people/teachers" element={<TeachersPage />} />
+  <Route path="people/parents" element={<ParentsPage />} />
+  <Route path="people/guardians" element={<GuardiansPage />} />
 
   {/* ACADEMIC */}
   <Route path="academic/classes" element={<ClassesPage />} />
+  <Route path="academic/class-room" element={<ClassRoomPage />} />
+  <Route path="academic/class-routine" element={<ClassRoutinePage />} />
+  <Route path="academic/subject" element={<SubjectPage />} />
+  <Route path="academic/syllabus" element={<SyllabusPage />} />
+  <Route path="academic/time-table" element={<TimeTablePage />} />
+
+  {/* EXAMINATIONS */}
+  <Route path="academic/examinations/exam" element={<ExamPage />} />
+  <Route path="academic/examinations/schedule" element={<ExamSchedulePage />} />
+  <Route path="academic/examinations/grade" element={<GradePage />} />
 
   {/* REPORTS */}
-  <Route path="reports/attendance" element={<AttendanceReport />} />
+  <Route path="reports/attendance" element={<AttendanceReport />}>
+    <Route index element={<AttendanceMain />} />
+    <Route path="student-type" element={<StudentAttendanceType />} />
+    <Route path="daily" element={<DailyAttendance />} />
+    <Route path="student-day-wise" element={<StudentDayWise />} />
+    <Route path="teacher-day-wise" element={<TeacherDayWise />} />
+    <Route path="teacher-report" element={<TeacherReport />} />
+    <Route path="staff-day-wise" element={<StaffDayWise />} />
+    <Route path="staff-report" element={<StaffReport />} />
+  </Route>
 </Route>
 
 
@@ -226,12 +264,31 @@ export default function App() {
       <Route
   path="/parent/dashboard"
   element={
-    <ProtectedRoute role="parent">
+<ProtectedRoute role={["parent", "teacher", "admin"]}>
       <DashboardLayout />
     </ProtectedRoute>
   }
 >
 <Route index element={<ParentDashboard />} />
+{/* PEOPLE */}
+<Route path="people/teachers" element={<TeachersPage />} />
+<Route path="people/guardians" element={<GuardiansPage />} />
+{/* ACADEMIC  */}
+<Route path="academic/class-room" element={<ClassRoomPage />} />
+  <Route path="academic/class-routine" element={<ClassRoutinePage />} />
+  <Route path="academic/subject" element={<SubjectPage />} />
+  <Route path="academic/syllabus" element={<SyllabusPage />} />
+  <Route path="academic/time-table" element={<TimeTablePage />} />
+
+{/* ATTENDANCE */}
+<Route path="attendance" element={<StudentAttendance />} />
+
+{/* REPORTS */}
+<Route path="reports/attendance" element={<AttendanceReport />}>
+    <Route index element={<AttendanceMain />} />
+    <Route path="student-type" element={<StudentAttendanceType />} />
+    <Route path="daily" element={<DailyAttendance />} />
+  </Route>
 </Route>
 
 <Route path="/unauthorized" element={<Unauthorized />} />

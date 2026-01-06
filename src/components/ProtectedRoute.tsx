@@ -1,33 +1,27 @@
-import { Navigate, Outlet } from "react-router-dom";
-
-const ROLE_MATRIX: Record<string, string[]> = {
-  admin: ["admin", "teacher", "parent", "student"],
-  teacher: ["teacher", "parent", "student"],
-  parent: ["parent", "student"],
-  student: ["student"],
-};
+import { Navigate } from "react-router-dom";
 
 export default function ProtectedRoute({
   children,
   role,
 }: {
-  children?: JSX.Element;
-  role?: "admin" | "teacher" | "parent" | "student";
+  children: JSX.Element;
+  role: string | string[];
 }) {
-  const isAuth = localStorage.getItem("isAuth");
   const userRole = localStorage.getItem("role");
 
   // ❌ Not logged in
-  if (!isAuth || !userRole) {
+  if (!userRole) {
     return <Navigate to="/login" replace />;
   }
 
-  // ❌ Role not allowed → FORCE re-login
-  if (role && !ROLE_MATRIX[userRole]?.includes(role)) {
-    localStorage.clear(); // 🔥 IMPORTANT
-    return <Navigate to="/login" replace />;
+  // Normalize roles
+  const allowedRoles = Array.isArray(role) ? role : [role];
+
+  // ❌ Logged in but NOT authorized
+  if (!allowedRoles.includes(userRole)) {
+    return <Navigate to="/unauthorized" replace />;
   }
 
-  // ✅ Allow nested routes
-  return children ?? <Outlet />;
+  // ✅ Authorized
+  return children;
 }
