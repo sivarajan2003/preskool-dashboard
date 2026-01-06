@@ -41,7 +41,7 @@ export default function AttendanceReport() {
       <div className="flex items-start gap-3">
   {/* BACK ARROW */}
   <button
-    onClick={() => navigate("/admin/dashboard")}
+onClick={() => window.history.back()}
     className="mt-1 p-2 rounded-lg hover:bg-gray-100"
     title="Go Back"
   >

@@ -244,7 +244,13 @@ export default function App() {
   <Route path="academic/examinations/exam" element={<ExamPage />} />
   <Route path="academic/examinations/schedule" element={<ExamSchedulePage />} />
   <Route path="academic/examinations/grade" element={<GradePage />} />
+  <Route path="management/library" element={<LibraryMembers />} />
+<Route path="management/sports" element={<Sports />} />
+<Route path="management/hostel" element={<Hostel />} />
+<Route path="management/transport" element={<Transport />} />
 
+{/* HRM (STUDENT ONLY) */}
+<Route path="hrm/holidays" element={<Holidays />} />
   {/* REPORTS */}
   <Route path="reports/attendance" element={<AttendanceReport />}>
     <Route index element={<AttendanceMain />} />

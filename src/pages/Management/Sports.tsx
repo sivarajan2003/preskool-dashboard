@@ -117,7 +117,7 @@ const [selectedSport, setSelectedSport] = useState<any>(null);
         <div className="flex items-center gap-3">
   {/* BACK ARROW */}
   <button
-        onClick={() => navigate("/admin/dashboard")}
+    onClick={() => window.history.back()}
     className="p-2 -mt-1 rounded-lg hover:bg-gray-100"
     title="Go Back"
   >

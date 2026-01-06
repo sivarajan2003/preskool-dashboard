@@ -523,7 +523,7 @@ const isManagementItemActive = (path: string) =>
  </>
 )}
 
-{canAccess(["admin", "student"]) && (
+{canAccess(["admin", "student", "teacher"]) && (
   <>
 {/* ================= MANAGEMENT ================= */}
 <button
@@ -602,7 +602,7 @@ const isManagementItemActive = (path: string) =>
   </span>
   <span className="text-sm">Library Members</span>
 </button>
-
+  
     {/*{openLibrary && (
       <div className="ml-11 space-y-1">
         <ChildItem label="Library Members" />
@@ -613,6 +613,7 @@ const isManagementItemActive = (path: string) =>
     )}*/}
 
     {/* ================= SPORTS (NO CHILD) ================= */}
+   
     <button
   onClick={() => navigate(`${basePath}/management/sports`)}
   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
@@ -635,8 +636,9 @@ const isManagementItemActive = (path: string) =>
 
   <span className="text-sm">Sports</span>
 </button>
-
+   
     {/* ================= HOSTEL ================= */}
+   
     <button
   onClick={() => navigate(`${basePath}/management/hostel`)}
   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
@@ -659,6 +661,7 @@ const isManagementItemActive = (path: string) =>
 
   <span className="text-sm">Hostel</span>
 </button>
+   
      {/*{openHostel && (
       <div className="ml-11 space-y-1">
         <ChildItem label="Hostel List" />
@@ -705,7 +708,7 @@ const isManagementItemActive = (path: string) =>
 )}
 </>
 )}
-{canAccess(["admin", "student"]) && (
+{canAccess(["admin", "student", "teacher"]) && (
   <>
 {/* ================= HRM ================= */}
 <button
@@ -829,11 +832,14 @@ const isManagementItemActive = (path: string) =>
 </>
 )}
     {/* ===== Holidays ===== */}
-    <HRMItem
-  icon={Briefcase}
-  label="Holidays"
-  path={`${basePath}/hrm/holidays`}
-/>
+    {(role === "admin" || role === "teacher") && (
+  <HRMItem
+    icon={Briefcase}
+    label="Holidays"
+    path={`${basePath}/hrm/holidays`}
+  />
+)}
+
 {role === "admin" && (
   <HRMItem
     icon={Wallet}
