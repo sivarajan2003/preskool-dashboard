@@ -100,7 +100,7 @@ const isManagementItemActive = (path: string) =>
     />
     <div>
       <h1 className="text-lg font-bold">PreSkool</h1>
-      <p className="text-xs text-gray-500">Admin Dashboard</p>
+      <p className="text-xs text-gray-500">Dashboard</p>
     </div>
   </div>
 </div>
@@ -127,29 +127,56 @@ const isManagementItemActive = (path: string) =>
         {openDashboard && (
   <div className="ml-11 mt-2 space-y-2">
 
-    <SubItem
-      label="Admin Dashboard"
-      onClick={() => navigate("/admin/dashboard")}
-      active={location.pathname.startsWith("/admin")}
-    />
+    {/* ADMIN CAN SEE ALL */}
+    {role === "admin" && (
+      <>
+        <SubItem
+          label="Admin Dashboard"
+          onClick={() => navigate("/admin/dashboard")}
+          active={location.pathname.startsWith("/admin/dashboard")}
+        />
+        <SubItem
+          label="Student Dashboard"
+          onClick={() => navigate("/student/dashboard")}
+          active={location.pathname.startsWith("/student/dashboard")}
+        />
+        <SubItem
+          label="Teacher Dashboard"
+          onClick={() => navigate("/teacher/dashboard")}
+          active={location.pathname.startsWith("/teacher/dashboard")}
+        />
+        <SubItem
+          label="Parent Dashboard"
+          onClick={() => navigate("/parent/dashboard")}
+          active={location.pathname.startsWith("/parent/dashboard")}
+        />
+      </>
+    )}
 
-    <SubItem
-      label="Student Dashboard"
-      onClick={() => navigate("/student/dashboard")}
-      active={location.pathname.startsWith("/student")}
-    />
+    {/* NON-ADMIN USERS */}
+    {role === "student" && (
+      <SubItem
+        label="Student Dashboard"
+        onClick={() => navigate("/student/dashboard")}
+        active={location.pathname.startsWith("/student/dashboard")}
+      />
+    )}
 
-    <SubItem
-      label="Teacher Dashboard"
-      onClick={() => navigate("/teacher/dashboard")}
-      active={location.pathname.startsWith("/teacher")}
-    />
+    {role === "teacher" && (
+      <SubItem
+        label="Teacher Dashboard"
+        onClick={() => navigate("/teacher/dashboard")}
+        active={location.pathname.startsWith("/teacher/dashboard")}
+      />
+    )}
 
-    <SubItem
-      label="Parent Dashboard"
-      onClick={() => navigate("/parent/dashboard")}
-      active={location.pathname.startsWith("/parent")}
-    />
+    {role === "parent" && (
+      <SubItem
+        label="Parent Dashboard"
+        onClick={() => navigate("/parent/dashboard")}
+        active={location.pathname.startsWith("/parent/dashboard")}
+      />
+    )}
 
   </div>
 )}
@@ -708,7 +735,7 @@ const isManagementItemActive = (path: string) =>
 )}
 </>
 )}
-{canAccess(["admin", "student", "teacher"]) && (
+{canAccess(["admin", "student", "teacher", "parent"]) && (
   <>
 {/* ================= HRM ================= */}
 <button
@@ -744,7 +771,8 @@ const isManagementItemActive = (path: string) =>
 
 
     {/* ===== Attendance (HAS CHILD) ===== */}
-    {role === "admin" && (
+
+{(role === "admin" || role === "teacher") && (
   <>
     <button
       onClick={() => setOpenAttendance(!openAttendance)}
@@ -755,7 +783,7 @@ const isManagementItemActive = (path: string) =>
         <span className="text-sm text-gray-700">Attendance</span>
       </div>
       <ChevronDown
-        className={`w-4 h-4 text-gray-400 transition-transform ${
+        className={`w-4 h-4 transition-transform ${
           openAttendance ? "rotate-180" : ""
         }`}
       />
@@ -763,34 +791,45 @@ const isManagementItemActive = (path: string) =>
 
     {openAttendance && (
       <div className="ml-11 space-y-1">
-       <ChildItem
-  label="Student Attendance"
-  active={location.pathname === "/admin/dashboard/hrm/attendance/student"}
-  onClick={() =>
-    navigate("/admin/dashboard/hrm/attendance/student")
-  }
-/>
 
-<ChildItem
-  label="Teacher Attendance"
-  active={location.pathname === "/admin/dashboard/hrm/attendance/teacher"}
-  onClick={() =>
-    navigate("/admin/dashboard/hrm/attendance/teacher")
-  }
-/>
+        {/* Student Attendance */}
+        <ChildItem
+          label="Student Attendance"
+          onClick={() =>
+            navigate(
+              role === "admin"
+                ? "/admin/dashboard/hrm/attendance/student"
+                : "/teacher/dashboard/hrm/attendance/student"
+            )
+          }
+        />
 
-<ChildItem
-  label="Staff Attendance"
-  active={location.pathname === "/admin/dashboard/hrm/attendance/staff"}
-  onClick={() =>
-    navigate("/admin/dashboard/hrm/attendance/staff")
-  }
-/>
+        {/* Teacher Attendance */}
+        <ChildItem
+          label="Teacher Attendance"
+          onClick={() =>
+            navigate(
+              role === "admin"
+                ? "/admin/dashboard/hrm/attendance/teacher"
+                : "/teacher/dashboard/hrm/attendance/teacher"
+            )
+          }
+        />
 
+        {/* Staff Attendance (ADMIN ONLY) */}
+        {role === "admin" && (
+          <ChildItem
+            label="Staff Attendance"
+            onClick={() =>
+              navigate("/admin/dashboard/hrm/attendance/staff")
+            }
+          />
+        )}
       </div>
     )}
-</>
+  </>
 )}
+
     {/* ===== Leaves (HAS CHILD) ===== */}
     {role === "admin" && (
   <>
@@ -832,13 +871,14 @@ const isManagementItemActive = (path: string) =>
 </>
 )}
     {/* ===== Holidays ===== */}
-    {(role === "admin" || role === "teacher") && (
+    {(role === "admin" || role === "teacher" || role === "student" || role === "parent") && (
   <HRMItem
     icon={Briefcase}
     label="Holidays"
     path={`${basePath}/hrm/holidays`}
   />
 )}
+
 
 {role === "admin" && (
   <HRMItem
@@ -851,7 +891,7 @@ const isManagementItemActive = (path: string) =>
 )}
  </>
 )}
-{canAccess(["admin", "teacher", "parent"]) && (
+{canAccess(["admin", "teacher", "parent", "student"]) && (
   <>
 {/* ================= REPORTS ================= */}
 <button
@@ -912,24 +952,23 @@ const isManagementItemActive = (path: string) =>
   </>
 )}
         {/* ================= OTHER MENUS ================= */}
-        {!isParent && (
-        <div className="pt-3 space-y-1">
-          <MenuItem icon={Building2} label="Classes" />
-          <MenuItem icon={BookOpen} label="Subjects" />
-          <MenuItem icon={Calendar} label="Class Routine" />
-          <MenuItem icon={FileText} label="Attendance" />
-          <MenuItem icon={DollarSign} label="Fees Collection" />
-          <MenuItem icon={MessageSquare} label="Notice Board" />
-          <MenuItem
-  icon={Settings}
-  label="Settings"
-  onClick={() => navigate("/admin/dashboard/settings")}
-  active={location.pathname === "/admin/dashboard/settings"}
-/>
-
-        </div>
-        )}
-        {/* ================= LOGOUT ================= */}
+        {role === "admin" && (
+  <div className="pt-3 space-y-1">
+    <MenuItem icon={Building2} label="Classes" />
+    <MenuItem icon={BookOpen} label="Subjects" />
+    <MenuItem icon={Calendar} label="Class Routine" />
+    <MenuItem icon={FileText} label="Attendance" />
+    <MenuItem icon={DollarSign} label="Fees Collection" />
+    <MenuItem icon={MessageSquare} label="Notice Board" />
+    <MenuItem
+      icon={Settings}
+      label="Settings"
+      onClick={() => navigate("/admin/dashboard/settings")}
+      active={location.pathname === "/admin/dashboard/settings"}
+    />
+  </div>
+)}
+      {/* ================= LOGOUT ================= */}
 <div className="pt-4 mt-4 border-t">
   <button
     onClick={logout}

@@ -28,11 +28,21 @@ import SubjectGif from "../assets/gif/sub.gif";
 import StudentTable from "../components/tables/StudentTable";
 import FeesTable from "../components/tables/FeesTable";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 
 export default function Dashboard() {
   const [showAlert, setShowAlert] = useState(true);
 const [confirmOpen, setConfirmOpen] = useState(false);
+const [currentTime, setCurrentTime] = useState(new Date());
+
+useEffect(() => {
+  const timer = setInterval(() => {
+    setCurrentTime(new Date());
+  }, 1000);
+
+  return () => clearInterval(timer);
+}, []);
 
   const navigate = useNavigate();
     return (
@@ -125,7 +135,11 @@ const [confirmOpen, setConfirmOpen] = useState(false);
                 Have a Good day at work
               </p>
             </div>
-            <p className="text-xs text-gray-300">⏱ Updated Recently</p>
+            <p className="text-xs text-gray-300">
+  ⏱ {currentTime.toLocaleString()}
+</p>
+
+
           </div>
         </div>
 {/* STAT CARDS */}

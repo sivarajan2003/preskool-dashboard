@@ -86,17 +86,17 @@ if (user.role === "parent") {
   return (
     <div className="min-h-screen flex bg-white">
 {/* LEFT ILLUSTRATION SECTION — SVG WAVE */}
-<div className="hidden lg:flex w-1/2 relative overflow-hidden bg-white">
+<div className="hidden lg:flex w-[55%] relative overflow-visible bg-white">
 
   {/* SVG WAVE BACKGROUND */}
  {/* SVG WAVE BACKGROUND */}
  <svg
   viewBox="0 0 1043 769"
-  className="absolute inset-0 w-[160%] h-full -right-[30%]"
-    preserveAspectRatio="xMinYMin slice"
+  className="absolute top-0 left-0 h-full w-[130%]"
+  preserveAspectRatio="xMinYMin slice"
   xmlns="http://www.w3.org/2000/svg"
 >
-  <path
+ <path
     d="M0 0H260C360 80 480 260 520 420C560 600 760 769 1043 769H0V0Z"
     fill="#E1E6FF"
   />
@@ -106,17 +106,17 @@ if (user.role === "parent") {
 
 
   {/* ILLUSTRATION CONTENT */}
-  <div className="relative z-10 flex items-center justify-center w-full">
-    <img
-      src={LeftIllustration}
-      alt="Education Illustration"
-      className="w-[920px] object-contain -translate-x-6"
-    />
-  </div>
+  <div className="relative z-10 flex items-center justify-end w-full pr-12">
+  <img
+    src={LeftIllustration}
+    alt="Education Illustration"
+    className="w-[860px] object-contain"
+  />
+</div>
 
 </div>
       {/* RIGHT LOGIN FORM */}
-      <div className="flex-1 flex items-center justify-center px-6">
+      <div className="flex-1 flex items-center justify-center px-6 -ml-32 relative z-20 bg-white">
         <div className="w-full max-w-[360px]">
   
           {/* LOGO */}

@@ -1,4 +1,6 @@
+//import DashboardLayout from "../../components/DashboardLayout";
 import DashboardLayout from "../../components/DashboardLayout";
+
 import StudentAvatar from "../../assets/s1.png";
 import Tc1 from "../../assets/tc1.png";
 import Tc2 from "../../assets/tc2.png";
@@ -31,6 +33,7 @@ const [editProfile, setEditProfile] = useState({
   section: "C",
   rollNo: "36545",
 });
+
 
   const navigate = useNavigate();
   const [showMonthDetails, setShowMonthDetails] = useState<boolean>(false);
@@ -178,16 +181,6 @@ const scrollLeft = () => {
 const scrollRight = () => {
   facultyRef.current?.scrollBy({ left: 300, behavior: "smooth" });
 };
-const performanceLabels = [
-  "Quarter 1",
-  "Quarter 2",
-  "Half yearly",
-  "Model",
-  "Final Exam",
-];
-
-const examScores = [78, 74, 60, 68, 75];
-const attendanceScores = [72, 68, 55, 62, 70];
 
 const [activePerfIndex, setActivePerfIndex] = useState<number | null>(2);
 const handlePerfMove = (e: React.MouseEvent<SVGSVGElement>) => {
@@ -404,6 +397,41 @@ const examResults = {
     { label: "Sci", value: 88 },
   ],
 };
+const perfConfig: Record<
+  PerfView,
+  {
+    label: string;
+    xLabels: string[];
+    exam: number[];
+    attendance: number[];
+  }
+> = {
+  week: {
+    label: "This Week",
+    xLabels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    exam: [70, 72, 68, 75, 74, 78, 80],
+    attendance: [90, 92, 88, 95, 93, 96, 98],
+  },
+  month: {
+    label: "This Month",
+    xLabels: ["W1", "W2", "W3", "W4"],
+    exam: [68, 72, 75, 78],
+    attendance: [92, 94, 95, 96],
+  },
+  year: {
+    label: "2024 - 2025",
+    xLabels: ["Q1", "Q2", "Half", "Model", "Final"],
+    exam: [78, 74, 60, 68, 75],
+    attendance: [72, 68, 55, 62, 70],
+  },
+};
+type PerfView = "week" | "month" | "year";
+
+const [perfView, setPerfView] = useState<PerfView>("year");
+const [showPerfMenu, setShowPerfMenu] = useState(false);
+const examScores = perfConfig[perfView].exam;
+const attendanceScores = perfConfig[perfView].attendance;
+const performanceLabels = perfConfig[perfView].xLabels;
 
   return (
     //<DashboardLayout>
@@ -811,31 +839,39 @@ const examResults = {
         <div className="xl:col-span-2 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
 
 {[
-    { title: "Pay Fees", gif: s1, color: "blue" },
+    { title: "Pay Receipts", gif: s1, color: "blue" },
     { title: "Exam Result", gif: s2, color: "green" },
     { title: "Calendar", gif: s3, color: "yellow" },
     { title: "Attendance", gif: s4, color: "slate" },
   ].map((a, i) => (
     <div
-      key={i}
-      className={`
-        group
-        bg-white rounded-xl
-        border border-gray-200
-        border-b-4
-        ${a.color === "blue" && "border-b-blue-600"}
-        ${a.color === "green" && "border-b-green-600"}
-        ${a.color === "yellow" && "border-b-yellow-500"}
-        ${a.color === "slate" && "border-b-slate-800"}
-        p-4 flex items-center gap-4
+    key={i}
+    onClick={() => {
+      switch (a.title) {
+        case "Calendar":
+          navigate("/student/dashboard/hrm/holidays");
+          break;
+        case "Attendance":
+          navigate("/student/dashboard/reports/attendance");
+          break;
+        case "Exam Result":
+          setShowExamPopup(true);
+          break;
+        case "Pay Receipts":
+          navigate("/student/dashboard/reports/attendance"); // optional
+          break;
+      }
+    }}
+    className={`group bg-white rounded-xl border border-gray-200 border-b-4
+      ${a.color === "blue" && "border-b-blue-600"}
+      ${a.color === "green" && "border-b-green-600"}
+      ${a.color === "yellow" && "border-b-yellow-500"}
+      ${a.color === "slate" && "border-b-slate-800"}
+      p-4 flex items-center gap-4 cursor-pointer
+      transition-all duration-300 hover:-translate-y-1 hover:shadow-md`}
+  >
+  
 
-        /* 🔥 ANIMATION */
-        animate-card card-interactive
-        cursor-pointer
-        transition-all duration-300
-        hover:-translate-y-1 hover:shadow-md
-      `}
-    >
       {/* GIF ICON */}
       <div
         className={`
@@ -873,10 +909,34 @@ const examResults = {
   {/* Header */}
   <div className="flex items-center justify-between mb-2">
     <h4 className="text-18px font-medium">Performance</h4>
-    <span className="text-xs text-gray-500 flex items-center gap-1">
-      <CalendarDays className="w-4 h-4 text-gray-500" />
-      2024 - 2025
-    </span>
+    <div className="relative">
+  <span
+    onClick={() => setShowPerfMenu(!showPerfMenu)}
+    className="text-xs text-gray-500 flex items-center gap-1 cursor-pointer hover:underline"
+  >
+    <CalendarDays className="w-4 h-4 text-gray-500" />
+    {perfConfig[perfView].label}
+  </span>
+
+  {showPerfMenu && (
+    <div className="absolute right-0 mt-2 bg-white border rounded-lg shadow text-xs z-20">
+      {(["week", "month", "year"] as PerfView[]).map(v => (
+        <div
+          key={v}
+          onClick={() => {
+            setPerfView(v);
+            setShowPerfMenu(false);
+            setActivePerfIndex(null);
+          }}
+          className="px-4 py-2 hover:bg-gray-100 cursor-pointer capitalize"
+        >
+          {v}
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
   </div>
 
   {/* GRAPH CONTAINER */}
@@ -971,13 +1031,17 @@ const examResults = {
 
 
     {/* X AXIS */}
-    <div className="grid grid-cols-5 text-xs text-gray-400 mt-2 ml-8">
-      <span>Quarter 1</span>
-      <span>Quarter 2</span>
-      <span>Half yearly</span>
-      <span>Model</span>
-      <span>Final Exam</span>
-    </div>
+    <div
+  className="grid text-xs text-gray-400 mt-2 ml-8"
+  style={{
+    gridTemplateColumns: `repeat(${performanceLabels.length}, 1fr)`,
+  }}
+>
+  {performanceLabels.map(l => (
+    <span key={l} className="text-center">{l}</span>
+  ))}
+</div>
+
   </div>
 
   {/* LEGEND */}

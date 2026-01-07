@@ -84,7 +84,7 @@ const academicYears = Array.from({ length: 6 }, (_, i) => {
       </div>
     </div>
 
-    {/* RIGHT ICONS (your existing code stays same) */}
+    {/* RIGHT ICONS  */}
 
         {/* ACADEMIC YEAR */}
         <div className="relative">
@@ -122,41 +122,12 @@ const academicYears = Array.from({ length: 6 }, (_, i) => {
         {/* ICONS */}
         <div className="flex items-center gap-3">
 
-        <button
-  onClick={() => setCountry(country === "IN" ? "US" : "IN")}
-  className="w-9 h-9 border border-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-100"
-  title={country === "IN" ? "India" : "USA"}
->
-  <img
-    src={country === "IN" ? IN_FLAG : US_FLAG}
-    alt={country === "IN" ? "India" : "USA"}
-    className="w-5 h-5 object-contain"
-  />
-</button>
-
-
-
-          {/* Add */}
-          <IconBtn onClick={() => alert("Add clicked")}>
-            <Plus className="w-4 h-4" />
-          </IconBtn>
-
-          {/* Theme */}
-          <IconBtn onClick={() => setDark(!dark)}>
-            {dark ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-          </IconBtn>
-
+       
           {/* Notification */}
           <IconBtn onClick={() => alert("Notifications")}>
             <Bell className="w-4 h-4" />
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
           </IconBtn>
-
-          {/* Quick Search */}
-          <IconBtn onClick={() => alert("Quick search")}>
-            <Search className="w-4 h-4" />
-          </IconBtn>
-
           {/* Stats */}
           <IconBtn onClick={() => setShowStats(true)}>
   <BarChart2 className="w-4 h-4" />
@@ -199,7 +170,7 @@ const academicYears = Array.from({ length: 6 }, (_, i) => {
       <button
         onClick={() => {
           setProfileOpen(false);
-          navigate("/admin/profile"); // change if needed
+          navigate("/admin/profile");
         }}
         className="flex items-center gap-2 w-full px-4 py-2 text-sm hover:bg-gray-50"
       >
@@ -212,8 +183,8 @@ const academicYears = Array.from({ length: 6 }, (_, i) => {
       {/* LOGOUT */}
       <button
         onClick={() => {
-          localStorage.clear();     // ✅ clear login
-          navigate("/login");       // ✅ redirect
+          localStorage.clear();     
+          navigate("/login");       
         }}
         className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
       >

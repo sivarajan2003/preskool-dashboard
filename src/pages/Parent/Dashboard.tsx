@@ -15,10 +15,9 @@ import J1 from "../../assets/j1.png";
 import J2 from "../../assets/j2.png";
 import J3 from "../../assets/j3.png";
 import { useState } from "react";
-
-
-
+import { useNavigate } from "react-router-dom";
 export default function ParentDashboard() {
+  const navigate = useNavigate();
   const [showEditParent, setShowEditParent] = useState(false);
 
 const [parentProfile, setParentProfile] = useState({
@@ -731,10 +730,22 @@ const [hoverIndex, setHoverIndex] = useState<number | null>(null);
       </div>
 
       {f.due ? (
-        <button className="bg-blue-600 text-white text-xs px-4 py-1.5 rounded">
-          Pay now
-        </button>
-      ) : (
+  <button
+    onClick={() =>
+      navigate("/parent/dashboard/fees/pay", {
+        state: {
+          title: f.t,
+          amount: f.a,
+          due: f.due,
+        },
+      })
+    }
+    className="bg-blue-600 text-white text-xs px-4 py-1.5 rounded"
+  >
+    Pay now
+  </button>
+) : (
+
         <div className="text-xs text-gray-500 text-right">
           <p>Last Date</p>
           <p>{f.d}</p>

@@ -12,6 +12,7 @@ import StudentsPage from "./pages/People/StudentsPage";
 import ParentsPage from "./pages/People/ParentsPage";
 import GuardiansPage from "./pages/People/GuardiansPage";
 import TeachersPage from "./pages/People/TeachersPage";
+import PayFees from "./pages/Student/PayFees";
 
 // Academic
 import ClassesPage from "./pages/Academic/ClassesPage";
@@ -32,7 +33,6 @@ import AddStudentPage from "./pages/People/AddStudentPage";
 import ExamResults from "./pages/Student/StudentsExamResults";
 import FeesDetails from "./pages/Student/StudentFees";
 import FeesPage from "./pages/Admin/FeesPage";
-//import StudentExamResult from "./pages/Student/StudentExamResult";
 import StudentFees from "./pages/Student/StudentFees";
 
 // Management
@@ -59,9 +59,6 @@ import StudentReport from "./pages/Reports/StudentReport";
 import GradeReport from "./pages/Reports/GradeReport";
 import LeaveReport from "./pages/Reports/LeaveReport";
 import FeesReport from "./pages/Reports/FeesReport";
-//import AttendanceReport from "./pages/Reports/AttendanceReport";
-//import StudentAttendanceType from "./pages/Reports/StudentAttendanceType";
-//import DailyAttendance from "./pages/Reports/DailyAttendance";
 import AttendanceMain from "./pages/Reports/AttendanceTabs/AttendanceMain";
 import StudentAttendanceType from "./pages/Reports/AttendanceTabs/StudentAttendanceType";
 import DailyAttendance from "./pages/Reports/AttendanceTabs/DailyAttendance";
@@ -185,6 +182,7 @@ export default function App() {
   }
 >
 <Route index element={<StudentDashboard />} />
+<Route path="fees/pay" element={<PayFees />} />
 
   {/* PEOPLE */}
   <Route path="people/students" element={<StudentsPage />} />
@@ -210,6 +208,13 @@ export default function App() {
 
 {/* HRM (STUDENT ONLY) */}
 <Route path="hrm/holidays" element={<Holidays />} />
+{/* ✅ REPORTS (STUDENT ACCESS) */}
+<Route path="reports/attendance" element={<AttendanceReport />}>
+  <Route index element={<AttendanceMain />} />
+  <Route path="student-type" element={<StudentAttendanceType />} />
+  <Route path="daily" element={<DailyAttendance />} />
+  <Route path="student-day-wise" element={<StudentDayWise />} />
+</Route>
 
 
 </Route>
@@ -249,7 +254,16 @@ export default function App() {
 <Route path="management/hostel" element={<Hostel />} />
 <Route path="management/transport" element={<Transport />} />
 
-{/* HRM (STUDENT ONLY) */}
+{/* HRM  */}
+<Route
+  path="hrm/attendance/student"
+  element={<StudentAttendance />}
+/>
+
+<Route
+  path="hrm/attendance/teacher"
+  element={<TeacherAttendance />}
+/>
 <Route path="hrm/holidays" element={<Holidays />} />
   {/* REPORTS */}
   <Route path="reports/attendance" element={<AttendanceReport />}>
@@ -285,6 +299,9 @@ export default function App() {
   <Route path="academic/subject" element={<SubjectPage />} />
   <Route path="academic/syllabus" element={<SyllabusPage />} />
   <Route path="academic/time-table" element={<TimeTablePage />} />
+  <Route path="fees/pay" element={<PayFees />} />
+{/* HRM  */}
+<Route path="hrm/holidays" element={<Holidays />} />
 
 {/* ATTENDANCE */}
 <Route path="attendance" element={<StudentAttendance />} />
