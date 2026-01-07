@@ -1,90 +1,56 @@
 import { useState } from "react";
-import {
-  User,
-  Bell,
-  Shield,
-  Palette,
-} from "lucide-react";
+import { Calendar, Bell, FileText } from "lucide-react";
+
+/* ================= MAIN ================= */
 
 export default function Settings() {
-  const [activeTab, setActiveTab] = useState("profile");
-  const defaultProfile = {
-    name: "Admin Name",
-    email: "admin@preskool.com",
-    department: "Administration",
-  };
-  
-  const [profile, setProfile] = useState(() => {
-    const saved = localStorage.getItem("adminProfile");
-    return saved ? JSON.parse(saved) : defaultProfile;
-  });
-  
-  const [tempProfile, setTempProfile] = useState(profile);
-  
+  const [activeTab, setActiveTab] = useState("academic");
+
   return (
-    <div className="p-6">
+    <div className="p-6 space-y-6">
       {/* HEADER */}
-      <div className="mb-6">
+      <div>
         <h1 className="text-2xl font-semibold">Settings</h1>
         <p className="text-sm text-gray-500">
-          Manage your account and preferences
+          Manage system configuration and preferences
         </p>
       </div>
 
       {/* TABS */}
-      <div className="flex gap-3 mb-6">
+      <div className="flex gap-3">
         <TabButton
-          label="Profile"
-          icon={User}
-          active={activeTab === "profile"}
-          onClick={() => setActiveTab("profile")}
+          label="Academic Year"
+          icon={Calendar}
+          active={activeTab === "academic"}
+          onClick={() => setActiveTab("academic")}
         />
         <TabButton
-          label="Notifications"
+          label="Notification Settings"
           icon={Bell}
           active={activeTab === "notifications"}
           onClick={() => setActiveTab("notifications")}
         />
         <TabButton
-          label="Security"
-          icon={Shield}
-          active={activeTab === "security"}
-          onClick={() => setActiveTab("security")}
-        />
-        <TabButton
-          label="Preferences"
-          icon={Palette}
-          active={activeTab === "preferences"}
-          onClick={() => setActiveTab("preferences")}
+          label="Audit Logs"
+          icon={FileText}
+          active={activeTab === "audit"}
+          onClick={() => setActiveTab("audit")}
         />
       </div>
 
       {/* CONTENT */}
-      <div className="bg-white rounded-xl border p-6">
-      {activeTab === "profile" && (
-  <ProfileSettings
-    profile={profile}
-    tempProfile={tempProfile}
-    setTempProfile={setTempProfile}
-    setProfile={setProfile}
-  />
-)}
+      <div className="bg-white border rounded-xl p-6">
+        {activeTab === "academic" && <AcademicYearSettings />}
         {activeTab === "notifications" && <NotificationSettings />}
-        {activeTab === "security" && <SecuritySettings />}
-        {activeTab === "preferences" && <PreferenceSettings />}
+        {activeTab === "audit" && <AuditLogs />}
       </div>
     </div>
   );
 }
 
-/* ---------------- TAB BUTTON ---------------- */
+/* ================= TAB BUTTON ================= */
 
-function TabButton({
-  label,
-  icon: Icon,
-  active,
-  onClick,
-}: any) {
+function TabButton({ label, icon: Icon, active, onClick }: any) {
   return (
     <button
       onClick={onClick}
@@ -101,118 +67,91 @@ function TabButton({
   );
 }
 
-/* ---------------- PROFILE ---------------- */
+/* ================= ACADEMIC YEAR ================= */
 
-function ProfileSettings({
-    profile,
-    tempProfile,
-    setTempProfile,
-    setProfile,
-  }: any) {
-    return (
+function AcademicYearSettings() {
+  const [year, setYear] = useState("2024 - 2025");
+
+  return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold">Profile Information</h2>
+      <h2 className="text-lg font-semibold">Academic Year</h2>
 
       <div className="grid grid-cols-2 gap-4">
-      <Input
-  label="Full Name"
-  value={tempProfile.name}
-  onChange={(e: any) =>
-    setTempProfile({ ...tempProfile, name: e.target.value })
-  }
-/>
+        <Input
+          label="Academic Year"
+          value={year}
+          onChange={(e: any) => setYear(e.target.value)}
+        />
 
-<Input
-  label="Email"
-  value={tempProfile.email}
-  disabled
-/>
-
-<Input
-  label="Department"
-  value={tempProfile.department}
-  onChange={(e: any) =>
-    setTempProfile({ ...tempProfile, department: e.target.value })
-  }
-/>
-
-        <Input label="Role" placeholder="Admin" disabled />
+        <Input label="Status" value="Active" disabled />
       </div>
 
-      <div className="flex justify-end gap-3 mt-6">
-      <button
-  onClick={() => setTempProfile(profile)}
-  className="px-4 py-2 border rounded-lg text-sm"
->
-  Cancel
-</button>
-
-<button
-  onClick={() => {
-    localStorage.setItem(
-      "adminProfile",
-      JSON.stringify(tempProfile)
-    );
-    setProfile(tempProfile);
-    alert("Settings saved successfully ✅");
-  }}
-  className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
->
-  Save Changes
-</button>
+      <div className="flex justify-end">
+        <button
+          onClick={() => alert("Academic Year Updated ✅")}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Save
+        </button>
       </div>
     </div>
   );
 }
 
-/* ---------------- NOTIFICATIONS ---------------- */
+/* ================= NOTIFICATION SETTINGS ================= */
 
 function NotificationSettings() {
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold">Email Notifications</h2>
+      <h2 className="text-lg font-semibold">Notification Settings</h2>
 
-      <Toggle label="Promotional emails" />
-      <Toggle label="Exam notifications" />
-      <Toggle label="Attendance alerts" />
-      <Toggle label="System updates" />
+      <Toggle label="Exam Notifications" />
+      <Toggle label="Fee Payment Alerts" />
+      <Toggle label="Attendance Alerts" />
+      <Toggle label="System Updates" />
     </div>
   );
 }
 
-/* ---------------- SECURITY ---------------- */
+/* ================= AUDIT LOGS ================= */
 
-function SecuritySettings() {
+function AuditLogs() {
+  const logs = [
+    { id: 1, action: "Login", user: "Admin", date: "15 May 2025" },
+    { id: 2, action: "Updated Academic Year", user: "Admin", date: "14 May 2025" },
+    { id: 3, action: "Deleted Fee Record", user: "Admin", date: "13 May 2025" },
+    { id: 4, action: "Changed Notification Settings", user: "Admin", date: "12 May 2025" },
+  ];
+
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold">Security</h2>
+      <h2 className="text-lg font-semibold">Audit Logs</h2>
 
-      <Input label="Current Password" type="password" />
-      <Input label="New Password" type="password" />
-      <Input label="Confirm Password" type="password" />
-
-      <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm">
-        Update Password
-      </button>
+      <div className="border rounded-lg overflow-hidden">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-4 py-3 text-left">Action</th>
+              <th className="px-4 py-3 text-left">User</th>
+              <th className="px-4 py-3 text-left">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {logs.map((log) => (
+              <tr key={log.id} className="border-t">
+                <td className="px-4 py-3">{log.action}</td>
+                <td className="px-4 py-3">{log.user}</td>
+                <td className="px-4 py-3">{log.date}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
 
-/* ---------------- PREFERENCES ---------------- */
-
-function PreferenceSettings() {
-  return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-semibold">Preferences</h2>
-
-      <Toggle label="Dark Mode" />
-      <Toggle label="Compact Sidebar" />
-      <Toggle label="Enable animations" />
-    </div>
-  );
-}
-
-/* ---------------- REUSABLE ---------------- */
+/* ================= REUSABLE ================= */
 
 function Input({ label, ...props }: any) {
   return (

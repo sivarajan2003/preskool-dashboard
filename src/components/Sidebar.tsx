@@ -542,7 +542,13 @@ const isManagementItemActive = (path: string) =>
 
 
     {/* ================= SINGLE MENU ================= */}
-    <MainItem label="Reasons" icon={HelpCircle} />
+    <MainItem
+  label="Reasons"
+  icon={HelpCircle}
+  active={location.pathname.startsWith(`${basePath}/academic/reasons`)}
+  onClick={() => navigate(`${basePath}/academic/reasons`)}
+/>
+
     </>
 )}
   </div>
@@ -879,14 +885,18 @@ const isManagementItemActive = (path: string) =>
   />
 )}
 
-
-{role === "admin" && (
+{(role === "admin" || role === "parent") && (
   <HRMItem
     icon={Wallet}
     label="Payroll"
-    path="/admin/dashboard/hrm/payroll"
+    path={
+      role === "admin"
+        ? "/admin/dashboard/hrm/payroll"
+        : "/parent/dashboard/hrm/payroll"
+    }
   />
 )}
+
   </div>
 )}
  </>
@@ -916,6 +926,26 @@ const isManagementItemActive = (path: string) =>
       label="Attendance Report"
       path={`${basePath}/reports/attendance`}
     />
+{role === "admin" && (
+  <ReportItem
+    icon={Wallet}
+    label="Fee Collection"
+    path={`${basePath}/reports/fees`}
+  />
+)}
+
+<ReportItem
+  icon={FileText}
+  label="Exam Results"
+  path={`${basePath}/reports/exam-results`}
+/>
+{role === "admin" && (
+  <ReportItem
+    icon={FileBarChart2}
+    label="Custom Reports"
+    path={`${basePath}/reports/custom`}
+  />
+)}
 
    {/* <ReportItem
       icon={GraduationCap}

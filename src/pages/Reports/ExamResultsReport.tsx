@@ -13,113 +13,118 @@ import {
 /* ================= DATA ================= */
 const INITIAL_DATA = [
   {
-    id: "FR10201",
+    id: "ER2001",
     student: "Arjun",
     class: "X - A",
-    amount: 15000,
-    status: "Paid",
+    subject: "Maths",
+    marks: 92,
+    result: "Pass",
     date: "15 May 2024",
   },
   {
-    id: "FR10202",
+    id: "ER2002",
     student: "Priya",
     class: "IX - B",
-    amount: 12000,
-    status: "Pending",
+    subject: "Science",
+    marks: 78,
+    result: "Pass",
     date: "14 May 2024",
   },
   {
-    id: "FR10203",
+    id: "ER2003",
     student: "Karthik",
     class: "VIII - C",
-    amount: 10000,
-    status: "Paid",
+    subject: "English",
+    marks: 65,
+    result: "Pass",
     date: "13 May 2024",
   },
 
-  /* ✅ NEW 10 RECORDS */
+
   {
-    id: "FR10204",
+    id: "ER2004",
     student: "Sneha",
     class: "VII - A",
-    amount: 9500,
-    status: "Paid",
+    subject: "Maths",
+    marks: 88,
+    result: "Pass",
     date: "12 May 2024",
   },
   {
-    id: "FR10205",
+    id: "ER2005",
     student: "Rahul",
     class: "X - B",
-    amount: 15500,
-    status: "Pending",
+    subject: "Science",
+    marks: 42,
+    result: "Fail",
     date: "11 May 2024",
   },
   {
-    id: "FR10206",
+    id: "ER2006",
     student: "Anitha",
     class: "IX - A",
-    amount: 13000,
-    status: "Paid",
+    subject: "English",
+    marks: 81,
+    result: "Pass",
     date: "10 May 2024",
   },
   {
-    id: "FR10207",
+    id: "ER2007",
     student: "Vignesh",
     class: "VIII - B",
-    amount: 11000,
-    status: "Paid",
+    subject: "Maths",
+    marks: 74,
+    result: "Pass",
     date: "09 May 2024",
   },
   {
-    id: "FR10208",
+    id: "ER2008",
     student: "Divya",
     class: "VI - A",
-    amount: 9000,
-    status: "Pending",
+    subject: "Science",
+    marks: 39,
+    result: "Fail",
     date: "08 May 2024",
   },
   {
-    id: "FR10209",
+    id: "ER2009",
     student: "Suresh",
     class: "X - C",
-    amount: 16000,
-    status: "Paid",
+    subject: "English",
+    marks: 85,
+    result: "Pass",
     date: "07 May 2024",
   },
   {
-    id: "FR10210",
+    id: "ER2010",
     student: "Meena",
     class: "VII - B",
-    amount: 9800,
-    status: "Paid",
+    subject: "Maths",
+    marks: 90,
+    result: "Pass",
     date: "06 May 2024",
   },
-  {
-    id: "FR10211",
-    student: "Naveen",
-    class: "IX - C",
-    amount: 12500,
-    status: "Pending",
-    date: "05 May 2024",
+   {
+    id: "ER2002",
+    student: "Priya",
+    class: "IX - B",
+    subject: "Science",
+    marks: 78,
+    result: "Pass",
+    date: "14 May 2024",
   },
   {
-    id: "FR10212",
-    student: "Pooja",
-    class: "VIII - A",
-    amount: 10500,
-    status: "Paid",
-    date: "04 May 2024",
-  },
-  {
-    id: "FR10213",
-    student: "Manoj",
-    class: "X - A",
-    amount: 15000,
-    status: "Pending",
-    date: "03 May 2024",
+    id: "ER2002",
+    student: "Priya",
+    class: "IX - B",
+    subject: "Science",
+    marks: 78,
+    result: "Pass",
+    date: "14 May 2024",
   },
 ];
-export default function FeesReport() {
+
+export default function ExamResultsReport() {
   const [data, setData] = useState(INITIAL_DATA);
   const [search, setSearch] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -129,10 +134,6 @@ export default function FeesReport() {
   const [openCalendar, setOpenCalendar] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
-
-  const [openView, setOpenView] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<any>(null);
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -156,22 +157,22 @@ export default function FeesReport() {
     setCurrentPage(1);
   };
 
-  /* 📤 EXPORT CSV */
+  /* 📤 EXPORT */
   const handleExport = () => {
     const csv =
       "data:text/csv;charset=utf-8," +
-      ["ID,Student,Class,Amount,Status,Date"]
+      ["ID,Student,Class,Subject,Marks,Result,Date"]
         .concat(
           data.map(
             (d) =>
-              `${d.id},${d.student},${d.class},${d.amount},${d.status},${d.date}`
+              `${d.id},${d.student},${d.class},${d.subject},${d.marks},${d.result},${d.date}`
           )
         )
         .join("\n");
 
     const link = document.createElement("a");
     link.href = encodeURI(csv);
-    link.download = "fees_collection_report.csv";
+    link.download = "exam_results_report.csv";
     link.click();
   };
 
@@ -207,11 +208,9 @@ export default function FeesReport() {
       <div className="bg-white border rounded-2xl px-6 py-5">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-semibold">
-              Fees Collection Report
-            </h2>
+            <h2 className="text-2xl font-semibold">Exam Results Report</h2>
             <p className="text-sm text-gray-500 mt-1">
-              Dashboard / Reports / Fees Collection
+              Dashboard / Reports / Exam Results
             </p>
           </div>
 
@@ -223,12 +222,11 @@ export default function FeesReport() {
               <Printer size={16} />
             </button>
             <button
-  onClick={handleExport}
-  className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm flex items-center gap-2"
->
-  Export
-</button>
-
+              onClick={handleExport}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+            >
+              Export
+            </button>
           </div>
         </div>
       </div>
@@ -236,114 +234,79 @@ export default function FeesReport() {
       {/* ================= SUB HEADER ================= */}
       <div className="bg-white border rounded-xl px-6 py-4 space-y-4">
         <div className="flex justify-between items-center">
-          <h3 className="font-semibold">Fees Records</h3>
+          <h3 className="font-semibold">Exam Records</h3>
 
           <div className="flex gap-3">
             {/* DATE RANGE */}
-            {/* DATE RANGE */}
-<div className="relative">
-  <button
-    onClick={(e) => {
-      e.stopPropagation();
-      setOpenCalendar(!openCalendar);
-      setOpenFilter(false);
-    }}
-    className="flex items-center gap-2 px-4 py-2 border rounded-lg text-sm"
-  >
-    <CalendarDays size={14} /> Select Date Range
-  </button>
+            <div className="relative">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenCalendar(!openCalendar);
+                  setOpenFilter(false);
+                }}
+                className="flex items-center gap-2 px-4 py-2 border rounded-lg text-sm"
+              >
+                <CalendarDays size={14} /> Select Date Range
+              </button>
 
-  {openCalendar && (
-    <div
-      onClick={(e) => e.stopPropagation()}
-      className="absolute right-0 mt-2 w-80 bg-white border rounded-xl shadow-lg p-5 z-30"
-    >
-      <div className="mb-4">
-        <label className="text-sm text-gray-600">Start Date</label>
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          className="w-full mt-1 border rounded-lg px-3 py-2 text-sm"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="text-sm text-gray-600">End Date</label>
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          className="w-full mt-1 border rounded-lg px-3 py-2 text-sm"
-        />
-      </div>
-
-      <button
-        onClick={() => {
-          if (!startDate || !endDate) return;
-
-          const filteredByDate = INITIAL_DATA.filter((d) => {
-            const rowDate = new Date(d.date);
-            return (
-              rowDate >= new Date(startDate) &&
-              rowDate <= new Date(endDate)
-            );
-          });
-
-          setData(filteredByDate);
-          setCurrentPage(1);
-          setOpenCalendar(false);
-        }}
-        className="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium"
-      >
-        Apply
-      </button>
-    </div>
-  )}
-</div>
-
+              {openCalendar && (
+                <div className="absolute right-0 mt-2 w-80 bg-white border rounded-xl shadow-lg p-5 z-30">
+                  <input
+                    type="date"
+                    className="w-full border rounded-lg px-3 py-2 text-sm mb-3"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                  <input
+                    type="date"
+                    className="w-full border rounded-lg px-3 py-2 text-sm mb-3"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                  <button className="w-full bg-blue-600 text-white py-2 rounded-lg text-sm">
+                    Apply
+                  </button>
+                </div>
+              )}
+            </div>
 
             {/* FILTER */}
-            {/* FILTER */}
-<div className="relative">
-  <button
-    onClick={(e) => {
-      e.stopPropagation();
-      setOpenFilter(!openFilter);
-      setOpenCalendar(false);
-    }}
-    className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm"
-  >
-    <Filter size={14} /> Filter
-  </button>
+            <div className="relative">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenFilter(!openFilter);
+                  setOpenCalendar(false);
+                }}
+                className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm"
+              >
+                <Filter size={14} /> Filter
+              </button>
 
-  {openFilter && (
-    <div
-      onClick={(e) => e.stopPropagation()}
-      className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-30"
-    >
-      <button
-        onClick={() => {
-          setData(INITIAL_DATA.filter((d) => d.status === "Paid"));
-          setOpenFilter(false);
-        }}
-        className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left"
-      >
-        Paid
-      </button>
-
-      <button
-        onClick={() => {
-          setData(INITIAL_DATA.filter((d) => d.status === "Pending"));
-          setOpenFilter(false);
-        }}
-        className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left"
-      >
-        Pending
-      </button>
-    </div>
-  )}
-</div>
+              {openFilter && (
+                <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-30">
+                  <button
+                    onClick={() => {
+                      setData(INITIAL_DATA.filter((d) => d.result === "Pass"));
+                      setOpenFilter(false);
+                    }}
+                    className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left"
+                  >
+                    Pass
+                  </button>
+                  <button
+                    onClick={() => {
+                      setData(INITIAL_DATA.filter((d) => d.result === "Fail"));
+                      setOpenFilter(false);
+                    }}
+                    className="block w-full px-4 py-2 text-sm hover:bg-gray-50 text-left"
+                  >
+                    Fail
+                  </button>
+                </div>
+              )}
+            </div>
 
             <button
               onClick={handleSort}
@@ -385,57 +348,30 @@ export default function FeesReport() {
               <th className="px-4 py-3 text-center">ID</th>
               <th className="px-4 py-3 text-center">Student</th>
               <th className="px-4 py-3 text-center">Class</th>
-              <th className="px-4 py-3 text-center">Amount</th>
-              <th className="px-4 py-3 text-center">Status</th>
-              <th className="px-4 py-3 text-center">Action</th>
+              <th className="px-4 py-3 text-center">Subject</th>
+              <th className="px-4 py-3 text-center">Marks</th>
+              <th className="px-4 py-3 text-center">Result</th>
             </tr>
           </thead>
 
           <tbody>
             {paginated.map((d) => (
               <tr key={d.id} className="border-t hover:bg-gray-50">
-                <td className="px-4 py-3 text-center text-blue-600">
-                  {d.id}
-                </td>
+                <td className="px-4 py-3 text-center text-blue-600">{d.id}</td>
                 <td className="px-4 py-3 text-center">{d.student}</td>
                 <td className="px-4 py-3 text-center">{d.class}</td>
-                <td className="px-4 py-3 text-center">₹ {d.amount}</td>
+                <td className="px-4 py-3 text-center">{d.subject}</td>
+                <td className="px-4 py-3 text-center">{d.marks}</td>
                 <td className="px-4 py-3 text-center">
                   <span
                     className={`px-2 py-1 rounded-full text-xs ${
-                      d.status === "Paid"
+                      d.result === "Pass"
                         ? "bg-green-100 text-green-600"
-                        : "bg-yellow-100 text-yellow-600"
+                        : "bg-red-100 text-red-600"
                     }`}
                   >
-                    ● {d.status}
+                    ● {d.result}
                   </span>
-                </td>
-                <td className="px-4 py-3 text-center">
-                  <div className="flex justify-center gap-3">
-                    <button
-                      onClick={() => {
-                        setSelectedRow(d);
-                        setOpenView(true);
-                      }}
-                    >
-                      <Eye size={18} />
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedRow(d);
-                        setOpenEdit(true);
-                      }}
-                    >
-                      <Pencil size={18} />
-                    </button>
-                    <button
-                      onClick={() => setConfirmDeleteId(d.id)}
-                      className="text-red-600"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
                 </td>
               </tr>
             ))}
@@ -486,37 +422,6 @@ export default function FeesReport() {
 </div>
 
       </div>
-
-      {/* DELETE CONFIRMATION */}
-      {confirmDeleteId && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-xl">
-            <h3 className="font-semibold mb-2">Confirm Delete</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Are you sure you want to delete this record?
-            </p>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setConfirmDeleteId(null)}
-                className="px-4 py-2 border rounded"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  setData((prev) =>
-                    prev.filter((i) => i.id !== confirmDeleteId)
-                  );
-                  setConfirmDeleteId(null);
-                }}
-                className="px-4 py-2 bg-red-600 text-white rounded"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -701,10 +701,10 @@ const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   </div>
 
   {[
-    { t: "Transport Fees", a: "$2500", d: "25 May 2024", ic: "🚌", ib: "bg-blue-100" },
-    { t: "Book Fees", a: "$2500", d: "25 May 2024", ic: "📘", ib: "bg-green-100" },
-    { t: "Exam Fees", a: "$2500 + $150", due: true, ic: "📝", ib: "bg-cyan-100" },
-    { t: "Hostel", a: "$2500", d: "25 May 2024", ic: "🏨", ib: "bg-red-100" },
+    { t: "Transport Fees", a: "₹2500", d: "25 May 2024", ic: "🚌", ib: "bg-blue-100" },
+    { t: "Book Fees", a: "₹2500", d: "25 May 2024", ic: "📘", ib: "bg-green-100" },
+    { t: "Exam Fees", a: "₹2500 + ₹150", due: true, ic: "📝", ib: "bg-cyan-100" },
+    { t: "Hostel", a: "₹2500", d: "25 May 2024", ic: "🏨", ib: "bg-red-100" },
   ].map((f, i) => (
     <div
   key={i}

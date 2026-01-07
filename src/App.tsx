@@ -27,6 +27,10 @@ import HomeWorkPage from "./pages/Academic/HomeWorkPage";
 import ExamPage from "./pages/Academic/ExamPage";
 import ExamSchedulePage from "./pages/Academic/ExamSchedulePage";
 import GradePage from "./pages/Academic/GradePage";
+import ReasonsPage from "./pages/Academic/ReasonsPage";
+import ExamReasons from "./pages/Academic/Reasons/ExamReasons";
+import LeaveReasons from "./pages/Academic/Reasons/LeaveReasons";
+import DisciplinaryReasons from "./pages/Academic/Reasons/DisciplinaryReasons";
 
 import AddStudentPage from "./pages/People/AddStudentPage";
 //import StudentDashboard from "./pages/Student/Dashboard";
@@ -58,7 +62,7 @@ import ClassReport from "./pages/Reports/ClassReport";
 import StudentReport from "./pages/Reports/StudentReport";
 import GradeReport from "./pages/Reports/GradeReport";
 import LeaveReport from "./pages/Reports/LeaveReport";
-import FeesReport from "./pages/Reports/FeesReport";
+//import FeesReport from "./pages/Reports/FeesReport";
 import AttendanceMain from "./pages/Reports/AttendanceTabs/AttendanceMain";
 import StudentAttendanceType from "./pages/Reports/AttendanceTabs/StudentAttendanceType";
 import DailyAttendance from "./pages/Reports/AttendanceTabs/DailyAttendance";
@@ -67,6 +71,10 @@ import TeacherDayWise from "./pages/Reports/AttendanceTabs/TeacherDayWise";
 import TeacherReport from "./pages/Reports/AttendanceTabs/TeacherReport";
 import StaffDayWise from "./pages/Reports/AttendanceTabs/StaffDayWise";
 import StaffReport from "./pages/Reports/AttendanceTabs/StaffReport";
+import FeesReport from "./pages/Reports/FeesReport";
+import ExamResultsReport from "./pages/Reports/ExamResultsReport";
+import PayrollReport from "./pages/Reports/PayrollReport";
+import CustomReport from "./pages/Reports/CustomReport";
 
 //upevent
 
@@ -104,7 +112,11 @@ export default function App() {
     </ProtectedRoute>
   }
 >
-  
+<Route path="academic/reasons" element={<ReasonsPage />}>
+    <Route path="exam" element={<ExamReasons />} />
+    <Route path="leave" element={<LeaveReasons />} />
+    <Route path="disciplinary" element={<DisciplinaryReasons />} />
+  </Route>
   {/* DASHBOARD */}
   <Route index element={<Dashboard />} />
   <Route path="fees" element={<FeesPage />} />
@@ -157,9 +169,12 @@ export default function App() {
   <Route path="teacher-report" element={<TeacherReport />} />
   <Route path="staff-day-wise" element={<StaffDayWise />} />
   <Route path="staff-report" element={<StaffReport />} />
-  
+ 
 </Route>
-
+<Route path="reports/fees" element={<FeesReport />} />
+<Route path="reports/exam-results" element={<ExamResultsReport />} />
+<Route path="reports/payroll" element={<PayrollReport />} />
+<Route path="reports/custom" element={<CustomReport />} />
   {/* MANAGEMENT ✅ THIS IS WHERE IT GOES */}
   <Route
     path="management/fees-collection"
@@ -217,6 +232,7 @@ export default function App() {
 </Route>
 
 
+
 </Route>
 
 <Route
@@ -228,9 +244,10 @@ export default function App() {
   }
 >
   <Route index element={<TeacherDashboard />} />
-
-  
-
+  <Route
+    path="reports/exam-results"
+    element={<ExamResultsReport />}
+  />
   {/* PEOPLE */}
   <Route path="people/students" element={<StudentsPage />} />
   <Route path="people/teachers" element={<TeachersPage />} />
@@ -290,6 +307,12 @@ export default function App() {
   }
 >
 <Route index element={<ParentDashboard />} />
+<Route path="hrm/payroll" element={<Payroll />} />
+
+<Route
+    path="reports/exam-results"
+    element={<ExamResultsReport />}
+  />
 {/* PEOPLE */}
 <Route path="people/teachers" element={<TeachersPage />} />
 <Route path="people/guardians" element={<GuardiansPage />} />
