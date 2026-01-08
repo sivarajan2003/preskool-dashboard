@@ -5,7 +5,7 @@ import {
   DoorOpen,CalendarDays,
   Layers,Table,ClipboardList,
   FileCheck,HelpCircle, Wallet,Book, Activity,
-  Building,Bus,UserCog,CalendarCheck,Briefcase, FileBarChart2,
+  Building,Bus,UserCog,CalendarCheck,Briefcase, FileBarChart2,Mail,
   ClipboardCheck,
   CalendarOff,
 } from "lucide-react";
@@ -52,7 +52,12 @@ export default function Sidebar() {
   //const role = localStorage.getItem("role");
   const [openDashboard, setOpenDashboard] = useState(true);
   const [openApplications, setOpenApplications] = useState(false);
- 
+  const isAdminDashboard =
+  location.pathname === "/admin/dashboard";
+
+  const isReceptionistDashboard =
+  location.pathname.startsWith("/admin/dashboard/receptionist");
+
   const [openPeople, setOpenPeople] = useState(
     location.pathname.startsWith(`${basePath}/people`)
   );
@@ -136,6 +141,14 @@ const isManagementItemActive = (path: string) =>
           active={location.pathname.startsWith("/admin/dashboard")}
         />
         <SubItem
+  label="Receptionist Dashboard"
+  onClick={() => navigate("/admin/dashboard/receptionist")}
+  active={location.pathname.startsWith(
+    "/admin/dashboard/receptionist"
+  )}
+/>
+
+        <SubItem
           label="Student Dashboard"
           onClick={() => navigate("/student/dashboard")}
           active={location.pathname.startsWith("/student/dashboard")}
@@ -183,59 +196,69 @@ const isManagementItemActive = (path: string) =>
  </>
 )}
 
-
-{canAccess(["admin"]) && (
+{/* ================= APPLICATIONS ================= */}
+{/* ================= APPLICATIONS ================= */}
+{role === "admin" && isReceptionistDashboard && (
   <>
-        {/* ================= APPLICATIONS ================= */}
-        <button
-  onClick={() => setOpenApplications(!openApplications)}
-  className="w-full flex items-center px-4 py-3 rounded-lg hover:bg-gray-100"
->
-  <div className="flex items-center gap-3">
-    <LayoutGrid className="w-5 h-5 text-gray-700" />
-    <span className="text-sm font-medium">Applications</span>
-  </div>
-</button>
+    <button
+      onClick={() => setOpenApplications(!openApplications)}
+      className="w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-100"
+    >
+      <div className="flex items-center gap-3">
+        <LayoutGrid className="w-5 h-5" />
+        <span className="text-sm font-medium">Applications</span>
+      </div>
 
+      <ChevronDown
+        className={`w-4 h-4 transition-transform ${
+          openApplications ? "rotate-180" : ""
+        }`}
+      />
+    </button>
 
-         {/*  {openApplications && (
-          <div className="ml-11 mt-2 space-y-1">
-            {[
-              "Chat",
-              "Call",
-              "Calendar",
-              "Email",
-              "To Do",
-              "Notes",
-              "File Manager",
-            ].map((item) => (
-              <SubItem key={item} label={item} />
-            ))}
-          </div>
-        )}
+    {openApplications && (
+      <div className="ml-6 mt-2 space-y-1">
+        
+<ApplicationItem
+  label="All Applications"
+  icon={FileText}
+  path="/admin/dashboard/receptionist/admissions/all"
+/>
 
-      ================= LAYOUT (SEPARATE SECTION) ================= 
-         const [openLayout, setOpenLayout] = useState(false);
-        <button
-  onClick={() => setOpenLayout(!openLayout)}
-  className="w-full flex items-center px-4 py-3 rounded-lg hover:bg-gray-100"
->
-  <span className="text-sm font-medium text-gray-700">
-    Layout
-  </span>
-</button>
+        <ApplicationItem
+          label="New Application"
+          icon={Mail}
+          path="/admin/dashboard/receptionist/admissions/new"
+        />
 
-        {openLayout && (
-          <div className="ml-11 mt-2 space-y-2">
-            <LayoutItem icon={<Columns />} label="Default" />
-            <LayoutItem icon={<AlignLeft />} label="Mini" />
-            <LayoutItem icon={<AlignLeft />} label="RTL" />
-            <LayoutItem icon={<BoxIcon />} label="Box" />
-          </div>
-        )} */}
+        <ApplicationItem
+          label="Documents"
+          icon={ClipboardCheck}
+          path="/admin/dashboard/receptionist/admissions/documents"
+        />
 
-        </>
+        <ApplicationItem
+          label="Interviews"
+          icon={CalendarCheck}
+          path="/admin/dashboard/receptionist/admissions/interviews"
+        />
+
+        <ApplicationItem
+          label="Offer Letters"
+          icon={FileCheck}
+          path="/admin/dashboard/receptionist/admissions/offers"
+        />
+
+        <ApplicationItem
+          label="Enrolled Student"
+          icon={UserCheck}
+          path="/admin/dashboard/receptionist/admissions/enrolled"
+        />
+      </div>
+    )}
+  </>
 )}
+
 {canAccess(["admin", "teacher", "parent"]) && (
   <>
 {/* ================= PEOPLE ================= */}
@@ -984,12 +1007,12 @@ const isManagementItemActive = (path: string) =>
         {/* ================= OTHER MENUS ================= */}
         {role === "admin" && (
   <div className="pt-3 space-y-1">
-    <MenuItem icon={Building2} label="Classes" />
+     {/*<MenuItem icon={Building2} label="Classes" />
     <MenuItem icon={BookOpen} label="Subjects" />
     <MenuItem icon={Calendar} label="Class Routine" />
     <MenuItem icon={FileText} label="Attendance" />
     <MenuItem icon={DollarSign} label="Fees Collection" />
-    <MenuItem icon={MessageSquare} label="Notice Board" />
+    <MenuItem icon={MessageSquare} label="Notice Board" />*/}
     <MenuItem
       icon={Settings}
       label="Settings"
@@ -1253,4 +1276,47 @@ function ReportItem({
       {label}
     </button>
   );
+}function ApplicationItem({
+  label,
+  icon: Icon,
+  path,
+}: {
+  label: string;
+  icon: any;
+  path: string;
+}) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const active = location.pathname === path;
+
+  return (
+    <button
+      onClick={() => navigate(path)}
+      className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl transition
+        ${
+          active
+            ? "bg-blue-600 text-white"
+            : "text-gray-700 hover:bg-gray-50"
+        }`}
+    >
+      {/* ICON BOX */}
+      <span
+        className={`w-9 h-9 rounded-lg flex items-center justify-center
+          ${
+            active
+              ? "bg-blue-500"
+              : "bg-gray-100"
+          }`}
+      >
+        <Icon
+          className={`w-4 h-4 ${
+            active ? "text-white" : "text-gray-600"
+          }`}
+        />
+      </span>
+
+      <span className="text-sm font-medium">{label}</span>
+    </button>
+  );
 }
+

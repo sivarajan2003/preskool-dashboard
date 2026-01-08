@@ -6,6 +6,14 @@ import Dashboard from "./pages/Dashboard";
 import StudentDashboard from "./pages/Student/Dashboard";
 import TeacherDashboard from "./pages/Teacher/Dashboard";
 import ParentDashboard from "./pages/Parent/Dashboard";
+import ReceptionistDashboard from "./pages/Receptionist/Dashboard";
+import ReceptionistAdmissions from "./pages/Receptionist/Admissions";
+import NewApplication from "./pages/Receptionist/Admissions/NewApplication";
+import DocumentVerification from "./pages/Receptionist/Admissions/DocumentVerification";
+import Interviews from "./pages/Receptionist/Admissions/Interviews";
+import OfferLetters from "./pages/Receptionist/Admissions/OfferLetters";
+import EnrolledStudents from "./pages/Receptionist/Admissions/EnrolledStudents";
+import AllApplications from "./pages/Receptionist/Admissions/AllApplications";
 
 // People
 import StudentsPage from "./pages/People/StudentsPage";
@@ -119,6 +127,49 @@ export default function App() {
   </Route>
   {/* DASHBOARD */}
   <Route index element={<Dashboard />} />
+   {/* ✅ Receptionist Dashboard */}
+<Route
+  path="receptionist"
+  element={<ReceptionistDashboard />}
+/>
+
+{/* ✅ Admissions (Parent Route = All Applications) */}
+<Route
+  path="receptionist/admissions"
+  element={<ReceptionistAdmissions />}
+/>
+
+{/* ✅ Admissions Children */}
+<Route
+  path="receptionist/admissions/all"
+  element={<AllApplications />}
+/>
+
+<Route
+  path="receptionist/admissions/new"
+  element={<NewApplication />}
+/>
+
+<Route
+  path="receptionist/admissions/documents"
+  element={<DocumentVerification />}
+/>
+
+<Route
+  path="receptionist/admissions/interviews"
+  element={<Interviews />}
+/>
+
+<Route
+  path="receptionist/admissions/offers"
+  element={<OfferLetters />}
+/>
+
+<Route
+  path="receptionist/admissions/enrolled"
+  element={<EnrolledStudents />}
+/>
+
   <Route path="fees" element={<FeesPage />} />
   <Route path="settings" element={<Settings />} />
 

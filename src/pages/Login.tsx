@@ -33,6 +33,11 @@ const USERS = [
     password: "admin123",
     role: "parent",
   },
+  {
+    email: "receptionist@preskool.com",
+    password: "admin123",
+    role: "receptionist",
+  },
   //{ email: "parent@preskool.com", password: "admin123", role: "parent" },
 
 ];
@@ -80,6 +85,9 @@ if (user.role === "teacher") {
 }
 if (user.role === "parent") {
   navigate("/parent/dashboard");
+}
+if (user.role === "receptionist") {
+  navigate("/admin/dashboard/receptionist");
 }
 
   };
