@@ -40,6 +40,12 @@
     "framer-motion": "^12.23.26",
 
 
+    "html2canvas": "^1.4.1",
+
+
+    "html2pdf.js": "^0.13.0",
+
+
     "jspdf": "^3.0.4",
 
 

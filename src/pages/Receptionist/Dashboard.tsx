@@ -1,9 +1,8 @@
-import {
-    Users,
-    FileText,
-    CalendarCheck,
-    UserCheck,
-  } from "lucide-react";
+import r1 from "../../assets/gif/r1.gif";
+import r2 from "../../assets/gif/r2.gif";
+import r3 from "../../assets/gif/r3.gif";
+import r4 from "../../assets/gif/r4.gif";
+
   import AdmissionFunnel from "./Admissions/AdmissionFunnel";
 import ClassCapacity from "./Admissions/ClassCapacity";
 import RecentApplications from "./Admissions/RecentApplications";
@@ -59,36 +58,32 @@ import RecentApplications from "./Admissions/RecentApplications";
     title="Total Applications"
     value="50"
     change="+12%"
-    icon={Users}
-    iconBg="bg-blue-500"
-    iconWrapper="bg-blue-50"
+    gif={r1}
+    
   />
 
   <ReceptionistCard
     title="Pending Documents"
     value="11"
     change="-5%"
-    icon={FileText}
-    iconBg="bg-orange-500"
-    iconWrapper="bg-orange-50"
+    gif={r2}
+    
   />
 
   <ReceptionistCard
     title="Interviews Scheduled"
     value="5"
     change="+3%"
-    icon={CalendarCheck}
-    iconBg="bg-purple-500"
-    iconWrapper="bg-purple-50"
+    gif={r3}
+    
   />
 
   <ReceptionistCard
     title="Enrolled Students"
     value="6"
     change="+8%"
-    icon={UserCheck}
-    iconBg="bg-green-500"
-    iconWrapper="bg-green-50"
+    gif={r4}
+    
   />
 </div>
 {/* 🔥 ADMISSION FUNNEL SECTION */}
@@ -109,9 +104,7 @@ import RecentApplications from "./Admissions/RecentApplications";
     title,
     value,
     change,
-    icon: Icon,
-    iconBg,
-    iconWrapper,
+    gif,
   }: any) {
     const isPositive = change.startsWith("+");
   
@@ -129,27 +122,20 @@ import RecentApplications from "./Admissions/RecentApplications";
       >
         {/* TOP ROW */}
         <div className="flex items-start gap-4">
-          {/* ICON LEFT */}
-          <div
-            className={`w-12 h-12 rounded-xl ${iconWrapper}
-            flex items-center justify-center`}
-          >
-            <div
-              className={`w-9 h-9 rounded-lg ${iconBg}
-              flex items-center justify-center`}
-            >
-              <Icon className="w-5 h-5 text-white" />
-            </div>
+          {/* GIF ICON */}
+          <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center">
+            <img
+              src={gif}
+              alt={title}
+              className="w-8 h-8 object-contain"
+            />
           </div>
   
           {/* TEXT */}
           <div>
-            {/* NUMBER FIRST */}
             <h3 className="text-2xl font-semibold text-gray-900">
               {value}
             </h3>
-  
-            {/* TITLE BELOW */}
             <p className="text-sm text-gray-500 mt-0.5">
               {title}
             </p>

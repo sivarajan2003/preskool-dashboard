@@ -232,6 +232,14 @@ const applications = [
       },
 
 ];
+const documents = [
+  {
+    name: "Birth Certificate.pdf",
+    size: "239 KB",
+    type: "pdf",
+    url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+  },
+];
 
 const statusStyle = (status: string) => {
   switch (status) {
@@ -264,6 +272,22 @@ const [deleteApp, setDeleteApp] = useState<any>(null);
 const [activeTab, setActiveTab] = useState<
   "overview" | "documents" | "interview" | "offer"
 >("overview");
+const [openNew, setOpenNew] = useState(false);
+
+const emptyApplication = {
+  id: "",
+  name: "",
+  dob: "",
+  phone: "",
+  email: "",
+  class: "Grade 1",
+  status: "Applied",
+  documents: "0/2",
+  avatar: "https://i.pravatar.cc/40",
+};
+const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+
+const [newApp, setNewApp] = useState(emptyApplication);
 
 const handleRefresh = () => {
     setData(initialApplications);
@@ -373,9 +397,13 @@ const paginatedData = filteredData.slice(
   Export
 </button>
 
-      <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium flex items-center gap-1">
-        <Plus size={14} /> New Application
-      </button>
+<button
+  onClick={() => setOpenNew(true)}
+  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium flex items-center gap-1"
+>
+  <Plus size={14} /> New Application
+</button>
+
     </div>
   </div>
 </div>
@@ -708,26 +736,51 @@ const paginatedData = filteredData.slice(
         )}
 
         {/* ================= DOCUMENTS ================= */}
-        {activeTab === "documents" && (
-  <div className="space-y-4 p-4">
-            {[
-              { name: "Birth Certificate.pdf", size: "239 KB" },
-              { name: "Student Photo.jpg", size: "122 KB" },
-            ].map(doc => (
-              <div key={doc.name} className="flex justify-between items-center border p-4 rounded-lg">
-                <div>
-                  <p className="font-medium">{doc.name}</p>
-                  <p className="text-xs text-gray-500">{doc.size}</p>
-                </div>
-                <button className="px-4 py-2 border rounded-lg text-sm">
-                  View / Download
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
 
-        {/* ================= INTERVIEW ================= */}
+{activeTab === "documents" && (
+  <div className="space-y-4 p-4">
+
+    {/* BIRTH CERTIFICATE (DOWNLOAD) */}
+    {documents.map((doc) => (
+      <div
+        key={doc.name}
+        className="flex justify-between items-center border p-4 rounded-lg"
+      >
+        <div>
+          <p className="font-medium">{doc.name}</p>
+          <p className="text-xs text-gray-500">{doc.size}</p>
+        </div>
+
+        <a
+          href={doc.url}
+          download
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+        >
+          View / Download
+        </a>
+      </div>
+    ))}
+
+    {/* STUDENT PHOTO (VIEW ONLY) */}
+    <div className="flex justify-between items-center border p-4 rounded-lg">
+      <div>
+        <p className="font-medium">Student Photo.jpg</p>
+        <p className="text-xs text-gray-500">122 KB</p>
+      </div>
+
+      <button
+        onClick={() => setPhotoPreview(viewApp.avatar)}
+        className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+      >
+        View Photo
+      </button>
+    </div>
+
+  </div>
+)}
+
        {/* ================= INTERVIEW ================= */}
 {activeTab === "interview" && (
   <div className="space-y-4 p-4">
@@ -925,6 +978,150 @@ const paginatedData = filteredData.slice(
           className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
         >
           Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{openNew && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white w-full max-w-3xl rounded-xl overflow-hidden">
+
+      {/* HEADER */}
+      <div className="px-6 py-4 border-b flex justify-between items-center">
+        <h2 className="text-xl font-semibold">New Application</h2>
+        <button onClick={() => setOpenNew(false)} className="text-xl">✕</button>
+      </div>
+
+      {/* FORM */}
+      <div className="p-6 grid grid-cols-2 gap-4 text-sm">
+
+        <div>
+          <label className="text-gray-600">Student Name</label>
+          <input
+            value={newApp.name}
+            onChange={(e) => setNewApp({ ...newApp, name: e.target.value })}
+            className="w-full border rounded-lg px-3 py-2 mt-1"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-600">Date of Birth</label>
+          <input
+            type="date"
+            value={newApp.dob}
+            onChange={(e) => setNewApp({ ...newApp, dob: e.target.value })}
+            className="w-full border rounded-lg px-3 py-2 mt-1"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-600">Phone</label>
+          <input
+            value={newApp.phone}
+            onChange={(e) => setNewApp({ ...newApp, phone: e.target.value })}
+            className="w-full border rounded-lg px-3 py-2 mt-1"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-600">Email</label>
+          <input
+            value={newApp.email}
+            onChange={(e) => setNewApp({ ...newApp, email: e.target.value })}
+            className="w-full border rounded-lg px-3 py-2 mt-1"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-600">Class</label>
+          <select
+            value={newApp.class}
+            onChange={(e) => setNewApp({ ...newApp, class: e.target.value })}
+            className="w-full border rounded-lg px-3 py-2 mt-1"
+          >
+            <option>Grade 1</option>
+            <option>Grade 2</option>
+            <option>Grade 3</option>
+            <option>Grade 4</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="text-gray-600">Status</label>
+          <select
+            value={newApp.status}
+            onChange={(e) => setNewApp({ ...newApp, status: e.target.value })}
+            className="w-full border rounded-lg px-3 py-2 mt-1"
+          >
+            <option>Applied</option>
+            <option>Interview Scheduled</option>
+            <option>Interview Done</option>
+            <option>Offer Accepted</option>
+          </select>
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <div className="px-6 py-4 border-t flex justify-end gap-3">
+        <button
+          onClick={() => setOpenNew(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData((prev) => [
+              {
+                ...newApp,
+                id: `ADM-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+              },
+              ...prev,
+            ]);
+            setNewApp(emptyApplication);
+            setOpenNew(false);
+          }}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
+        >
+          Save Application
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{photoPreview && (
+  <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
+    
+    <div className="bg-white rounded-xl p-6 relative max-w-md w-full">
+
+      {/* CLOSE */}
+      <button
+        onClick={() => setPhotoPreview(null)}
+        className="absolute top-3 right-3 text-xl"
+      >
+        ✕
+      </button>
+
+      <h3 className="text-lg font-semibold mb-4 text-center">
+        Student Photo
+      </h3>
+
+      <img
+        src={photoPreview}
+        alt="Student"
+        className="w-full rounded-lg object-contain"
+      />
+
+      <div className="flex justify-center mt-4">
+        <button
+          onClick={() => setPhotoPreview(null)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Close
         </button>
       </div>
 

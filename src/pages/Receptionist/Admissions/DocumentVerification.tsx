@@ -281,6 +281,14 @@ const [deleteApp, setDeleteApp] = useState<any>(null);
 const [activeTab, setActiveTab] = useState<
   "overview" | "documents" | "interview" | "offer"
 >("overview");
+const [openNewDoc, setOpenNewDoc] = useState(false);
+
+const [newDoc, setNewDoc] = useState({
+  applicationId: "",
+  name: "",
+  type: "pdf",
+  file: null as File | null,
+});
 
 const handleRefresh = () => {
     setData(initialApplications);
@@ -390,9 +398,12 @@ const paginatedData = filteredData.slice(
   Export
 </button>
 
-      <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium flex items-center gap-1">
-        <Plus size={14} /> New Document 
-      </button>
+<button
+  onClick={() => setOpenNewDoc(true)}
+  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium flex items-center gap-1"
+>
+  <Plus size={14} /> New Document
+</button>
     </div>
   </div>
 </div>
@@ -591,13 +602,24 @@ const paginatedData = filteredData.slice(
         {doc.size} • Uploaded
       </p>
     </div>
+    {doc.type === "pdf" ? (
+  <a
+    href={doc.url}
+    target="_blank"
+    download
+    className="px-5 py-2 border rounded-lg bg-white text-sm hover:bg-gray-50"
+  >
+    View / Download
+  </a>
+) : (
+  <button
+    onClick={() => setPreviewDoc(doc)}
+    className="px-5 py-2 border rounded-lg bg-white text-sm hover:bg-gray-50"
+  >
+    View Photo
+  </button>
+)}
 
-    <button
-      onClick={() => setPreviewDoc(doc)}
-      className="px-5 py-2 border rounded-lg bg-white text-sm"
-    >
-      Preview
-    </button>
   </div>
 ))}
 
@@ -633,6 +655,113 @@ const paginatedData = filteredData.slice(
           className="w-full h-[70vh] rounded-lg"
         />
       )}
+    </div>
+  </div>
+)}
+{openNewDoc && (
+  <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
+    <div className="bg-white rounded-xl w-full max-w-lg p-6">
+
+      <h3 className="text-lg font-semibold mb-4">
+        Add New Document
+      </h3>
+
+      {/* APPLICATION */}
+      <div className="mb-4">
+        <label className="text-sm text-gray-600">Application</label>
+        <select
+          value={newDoc.applicationId}
+          onChange={(e) =>
+            setNewDoc({ ...newDoc, applicationId: e.target.value })
+          }
+          className="w-full border rounded-lg px-3 py-2 mt-1 text-sm"
+        >
+          <option value="">Select Application</option>
+          {applications.map(app => (
+            <option key={app.id} value={app.id}>
+              {app.name} ({app.id})
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* DOCUMENT NAME */}
+      <div className="mb-4">
+        <label className="text-sm text-gray-600">Document Name</label>
+        <input
+          type="text"
+          placeholder="Birth Certificate / Student Photo"
+          value={newDoc.name}
+          onChange={(e) =>
+            setNewDoc({ ...newDoc, name: e.target.value })
+          }
+          className="w-full border rounded-lg px-3 py-2 mt-1 text-sm"
+        />
+      </div>
+
+      {/* DOCUMENT TYPE */}
+      <div className="mb-4">
+        <label className="text-sm text-gray-600">Document Type</label>
+        <select
+          value={newDoc.type}
+          onChange={(e) =>
+            setNewDoc({ ...newDoc, type: e.target.value })
+          }
+          className="w-full border rounded-lg px-3 py-2 mt-1 text-sm"
+        >
+          <option value="pdf">PDF</option>
+          <option value="image">Image</option>
+        </select>
+      </div>
+
+      {/* FILE UPLOAD */}
+      <div className="mb-6">
+        <label className="text-sm text-gray-600">Upload File</label>
+        <input
+          type="file"
+          onChange={(e) =>
+            setNewDoc({ ...newDoc, file: e.target.files?.[0] || null })
+          }
+          className="w-full border rounded-lg px-3 py-2 mt-1 text-sm"
+        />
+      </div>
+
+      {/* ACTIONS */}
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setOpenNewDoc(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            if (!newDoc.file) return;
+
+            const url = URL.createObjectURL(newDoc.file);
+
+            documents.push({
+              name: newDoc.name,
+              size: `${Math.round(newDoc.file.size / 1024)} KB`,
+              type: newDoc.type,
+              url,
+            });
+
+            setOpenNewDoc(false);
+            setNewDoc({
+              applicationId: "",
+              name: "",
+              type: "pdf",
+              file: null,
+            });
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+        >
+          Save
+        </button>
+      </div>
+
     </div>
   </div>
 )}

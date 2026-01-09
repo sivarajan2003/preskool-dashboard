@@ -133,42 +133,21 @@ export default function App() {
   element={<ReceptionistDashboard />}
 />
 
-{/* ✅ Admissions (Parent Route = All Applications) */}
 <Route
   path="receptionist/admissions"
   element={<ReceptionistAdmissions />}
-/>
+>
+  {/* DEFAULT PAGE */}
+  <Route index element={<AllApplications />} />
 
-{/* ✅ Admissions Children */}
-<Route
-  path="receptionist/admissions/all"
-  element={<AllApplications />}
-/>
+  <Route path="all" element={<AllApplications />} />
+  <Route path="new" element={<NewApplication />} />
+  <Route path="documents" element={<DocumentVerification />} />
+  <Route path="interviews" element={<Interviews />} />
+  <Route path="offers" element={<OfferLetters />} />
+  <Route path="enrolled" element={<EnrolledStudents />} />
+</Route>
 
-<Route
-  path="receptionist/admissions/new"
-  element={<NewApplication />}
-/>
-
-<Route
-  path="receptionist/admissions/documents"
-  element={<DocumentVerification />}
-/>
-
-<Route
-  path="receptionist/admissions/interviews"
-  element={<Interviews />}
-/>
-
-<Route
-  path="receptionist/admissions/offers"
-  element={<OfferLetters />}
-/>
-
-<Route
-  path="receptionist/admissions/enrolled"
-  element={<EnrolledStudents />}
-/>
 
   <Route path="fees" element={<FeesPage />} />
   <Route path="settings" element={<Settings />} />

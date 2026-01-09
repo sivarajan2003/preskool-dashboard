@@ -8,7 +8,11 @@ import {
     CalendarDays,
   } from "lucide-react";
   import { useState } from "react";
-  
+  import i1 from "../../../assets/gif/i1.gif";
+import i2 from "../../../assets/gif/i2.gif";
+import i3 from "../../../assets/gif/i3.gif";
+
+
 const applications = [
     {
         id: "ADM-2026-0004",
@@ -270,6 +274,16 @@ const [scheduleTime, setScheduleTime] = useState("");
 const [scheduleLocation, setScheduleLocation] = useState(
   "Admin Office - Room 101"
 );
+const [openNewApp, setOpenNewApp] = useState(false);
+
+const [newApp, setNewApp] = useState({
+  id: "",
+  name: "",
+  dob: "",
+  phone: "",
+  email: "",
+  class: "Grade 1",
+});
 
 const handleRefresh = () => {
     setData(initialApplications);
@@ -351,10 +365,10 @@ const paginatedData = filteredData.slice(
     {/* LEFT */}
     <div>
       <h2 className="text-2xl font-semibold text-gray-900">
-        All Applications
+       Interviews
       </h2>
       <p className="text-sm text-gray-500 mt-1">
-        Dashboard / Receptionist / Applications
+        Dashboard / Receptionist / Interviews
       </p>
     </div>
 
@@ -378,10 +392,12 @@ const paginatedData = filteredData.slice(
 >
   Export
 </button>
-
-      <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium flex items-center gap-1">
-        <Plus size={14} /> New Application
-      </button>
+<button
+  onClick={() => setOpenNewApp(true)}
+  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium flex items-center gap-1"
+>
+  <Plus size={14} /> New Application
+</button>
     </div>
   </div>
 </div>
@@ -391,7 +407,7 @@ const paginatedData = filteredData.slice(
   {/* TOP ROW */}
   <div className="flex items-center justify-between">
     <h3 className="text-lg font-semibold text-gray-900">
-      Application List
+    Interviews List
     </h3>
 
     <div className="flex items-center gap-3">
@@ -515,40 +531,37 @@ const paginatedData = filteredData.slice(
 
   {/* Scheduled */}
   <div className="bg-white rounded-xl border p-6 flex items-center justify-between hover:shadow-md transition">
-    <div>
-      <p className="text-sm text-gray-500">Scheduled</p>
-      <p className="text-3xl font-bold mt-1">39</p>
-    </div>
-    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-      <CalendarDays className="text-blue-600" />
-    </div>
+  <div>
+    <p className="text-sm text-gray-500">Scheduled</p>
+    <p className="text-3xl font-bold mt-1">39</p>
   </div>
 
-  {/* Completed */}
-  <div className="bg-white rounded-xl border p-6 flex items-center justify-between hover:shadow-md transition">
-    <div>
-      <p className="text-sm text-gray-500">Completed</p>
-      <p className="text-3xl font-bold mt-1">34</p>
-    </div>
-    <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-      ✓
-    </div>
+  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
+    <img src={i1} alt="Scheduled" className="w-10 h-10 object-contain" />
+  </div>
+</div>
+<div className="bg-white rounded-xl border p-6 flex items-center justify-between hover:shadow-md transition">
+  <div>
+    <p className="text-sm text-gray-500">Completed</p>
+    <p className="text-3xl font-bold mt-1">34</p>
   </div>
 
-  {/* Pass Rate */}
-  <div className="bg-white rounded-xl border p-6 flex items-center justify-between hover:shadow-md transition">
-    <div>
-      <p className="text-sm text-gray-500">Pass Rate</p>
-      <p className="text-3xl font-bold mt-1">100%</p>
-    </div>
-    <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-      ✓
-    </div>
+  <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center">
+    <img src={i2} alt="Completed" className="w-10 h-10 object-contain" />
+  </div>
+</div>
+<div className="bg-white rounded-xl border p-6 flex items-center justify-between hover:shadow-md transition">
+  <div>
+    <p className="text-sm text-gray-500">Pass Rate</p>
+    <p className="text-3xl font-bold mt-1">100%</p>
   </div>
 
+  <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center">
+    <img src={i3} alt="Pass Rate" className="w-10 h-10 object-contain" />
+  </div>
 </div>
 
-
+</div>
       {/* TABLE */}
       <div className="bg-white rounded-xl border overflow-hidden">
         <table className="w-full text-sm">
@@ -1002,6 +1015,118 @@ const paginatedData = filteredData.slice(
           className="px-4 py-2 bg-blue-600 text-white rounded-lg"
         >
           Schedule Interview
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+{openNewApp && (
+  <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
+    <div className="bg-white w-full max-w-xl rounded-2xl overflow-hidden">
+
+      {/* HEADER */}
+      <div className="px-6 py-4 border-b flex justify-between items-center">
+        <h2 className="text-xl font-semibold">New Application</h2>
+        <button
+          onClick={() => setOpenNewApp(false)}
+          className="text-xl text-gray-500 hover:text-gray-700"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* FORM */}
+      <div className="p-6 grid grid-cols-2 gap-4 text-sm">
+
+        <div>
+          <label className="text-gray-600">Student Name</label>
+          <input
+            value={newApp.name}
+            onChange={(e) =>
+              setNewApp({ ...newApp, name: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2 mt-1"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-600">Date of Birth</label>
+          <input
+            type="date"
+            value={newApp.dob}
+            onChange={(e) =>
+              setNewApp({ ...newApp, dob: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2 mt-1"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-600">Phone</label>
+          <input
+            value={newApp.phone}
+            onChange={(e) =>
+              setNewApp({ ...newApp, phone: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2 mt-1"
+          />
+        </div>
+
+        <div>
+          <label className="text-gray-600">Email</label>
+          <input
+            value={newApp.email}
+            onChange={(e) =>
+              setNewApp({ ...newApp, email: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2 mt-1"
+          />
+        </div>
+
+        <div className="col-span-2">
+          <label className="text-gray-600">Class</label>
+          <select
+            value={newApp.class}
+            onChange={(e) =>
+              setNewApp({ ...newApp, class: e.target.value })
+            }
+            className="w-full border rounded-lg px-3 py-2 mt-1"
+          >
+            <option>Grade 1</option>
+            <option>Grade 2</option>
+            <option>Grade 3</option>
+            <option>Grade 4</option>
+          </select>
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <div className="px-6 py-4 border-t flex justify-end gap-3">
+        <button
+          onClick={() => setOpenNewApp(false)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setData((prev) => [
+              {
+                ...newApp,
+                id: `ADM-2026-${Math.floor(Math.random() * 9000)}`,
+                status: "Applied",
+                documents: "0/2",
+                avatar: "https://i.pravatar.cc/40",
+              },
+              ...prev,
+            ]);
+            setOpenNewApp(false);
+          }}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
+        >
+          Save Application
         </button>
       </div>
 

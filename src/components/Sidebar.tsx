@@ -23,9 +23,15 @@ import PreLogo from "../assets/pre.png";
 export default function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-
   const role = localStorage.getItem("role");
   const isParent = role === "parent";
+
+  const isApplicationsContext =
+  role === "admin" &&
+  (
+    location.pathname === "/admin/dashboard" ||
+    location.pathname.startsWith("/admin/dashboard/receptionist")
+  );
 
   const basePath =
     role === "admin"
@@ -51,8 +57,13 @@ export default function Sidebar() {
   };
   //const role = localStorage.getItem("role");
   const [openDashboard, setOpenDashboard] = useState(true);
-  const [openApplications, setOpenApplications] = useState(false);
-  const isAdminDashboard =
+  const [openApplications, setOpenApplications] = useState(
+    location.pathname.startsWith(
+      "/admin/dashboard/receptionist/admissions"
+    )
+  );
+  
+    const isAdminDashboard =
   location.pathname === "/admin/dashboard";
 
   const isReceptionistDashboard =
@@ -138,8 +149,8 @@ const isManagementItemActive = (path: string) =>
         <SubItem
           label="Admin Dashboard"
           onClick={() => navigate("/admin/dashboard")}
-          active={location.pathname.startsWith("/admin/dashboard")}
-        />
+          active={location.pathname === "/admin/dashboard"}
+          />
         <SubItem
   label="Receptionist Dashboard"
   onClick={() => navigate("/admin/dashboard/receptionist")}
@@ -195,10 +206,8 @@ const isManagementItemActive = (path: string) =>
 )}
  </>
 )}
-
-{/* ================= APPLICATIONS ================= */}
-{/* ================= APPLICATIONS ================= */}
-{role === "admin" && isReceptionistDashboard && (
+{/* ================= APPLICATIONS (Receptionist Only) ================= */}
+{isApplicationsContext && (
   <>
     <button
       onClick={() => setOpenApplications(!openApplications)}
@@ -218,37 +227,31 @@ const isManagementItemActive = (path: string) =>
 
     {openApplications && (
       <div className="ml-6 mt-2 space-y-1">
-        
-<ApplicationItem
-  label="All Applications"
-  icon={FileText}
-  path="/admin/dashboard/receptionist/admissions/all"
-/>
-
+        <ApplicationItem
+          label="All Applications"
+          icon={FileText}
+          path="/admin/dashboard/receptionist/admissions/all"
+        />
         <ApplicationItem
           label="New Application"
           icon={Mail}
           path="/admin/dashboard/receptionist/admissions/new"
         />
-
         <ApplicationItem
           label="Documents"
           icon={ClipboardCheck}
           path="/admin/dashboard/receptionist/admissions/documents"
         />
-
         <ApplicationItem
           label="Interviews"
           icon={CalendarCheck}
           path="/admin/dashboard/receptionist/admissions/interviews"
         />
-
         <ApplicationItem
           label="Offer Letters"
           icon={FileCheck}
           path="/admin/dashboard/receptionist/admissions/offers"
         />
-
         <ApplicationItem
           label="Enrolled Student"
           icon={UserCheck}
@@ -1287,7 +1290,7 @@ function ReportItem({
 }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const active = location.pathname === path;
+  const active = location.pathname.startsWith(path);
 
   return (
     <button
