@@ -8,6 +8,10 @@ import {
     CalendarDays,
   } from "lucide-react";
   import { useState } from "react";
+  import { useLocation } from "react-router-dom";
+  import { useEffect} from "react";
+
+
   import i1 from "../../../assets/gif/i1.gif";
 import i2 from "../../../assets/gif/i2.gif";
 import i3 from "../../../assets/gif/i3.gif";
@@ -252,12 +256,23 @@ const statusStyle = (status: string) => {
 const initialApplications = [...applications];
 
 export default function AllApplications() {
+  const STORAGE_KEY = "admission_applications";
+  const [data, setData] = useState<any[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : [];
+  });
+  
+  const location = useLocation();
+const student = location.state;
     const [openDate, setOpenDate] = useState(false);
 const [openFilter, setOpenFilter] = useState(false);
 const [search, setSearch] = useState("");
 const [startDate, setStartDate] = useState("2020-05-15");
 const [endDate, setEndDate] = useState("2024-05-24");
-const [data, setData] = useState(applications);
+useEffect(() => {
+  const saved = localStorage.getItem("applications");
+  setData(saved ? JSON.parse(saved) : applications);
+}, []);
 const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 const [statusFilter, setStatusFilter] = useState<string>("All");
 const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -265,6 +280,21 @@ const [currentPage, setCurrentPage] = useState(1);
 const [viewApp, setViewApp] = useState<any>(null);
 const [editApp, setEditApp] = useState<any>(null);
 const [deleteApp, setDeleteApp] = useState<any>(null);
+const markInterviewDone = (id: string) => {
+  const updated = data.map((app) =>
+    app.id === id
+      ? {
+          ...app,
+          status: "Interview Done",
+          interviewResult: "PASS",
+          interviewCompletedAt: new Date().toISOString(),
+        }
+      : app
+  );
+
+  setData(updated);
+  localStorage.setItem("applications", JSON.stringify(updated));
+};
 const [activeTab, setActiveTab] = useState<
   "overview" | "documents" | "interview" | "offer"
 >("overview");
@@ -274,6 +304,12 @@ const [scheduleTime, setScheduleTime] = useState("");
 const [scheduleLocation, setScheduleLocation] = useState(
   "Admin Office - Room 101"
 );
+const interviews = data.filter(
+  a =>
+    a.status === "Interview Scheduled" ||
+    a.status === "Interview Done"
+);
+
 const [openNewApp, setOpenNewApp] = useState(false);
 
 const [newApp, setNewApp] = useState({
@@ -457,8 +493,6 @@ const paginatedData = filteredData.slice(
     </button>
   </div>
 )}
-
-
       </div>
 
       {/* FILTER */}
@@ -587,12 +621,18 @@ const paginatedData = filteredData.slice(
     </div>
   </div>
 </td>
-
-
 <td className="px-6 py-4">
-  {app.status === "Interview Scheduled"
-    ? "25 Jan 2026"
-    : "Not scheduled"}
+  {app.interviewDate ? (
+    <span className="font-medium">
+      {new Date(app.interviewDate).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })}
+    </span>
+  ) : (
+    <span className="text-gray-400">Not scheduled</span>
+  )}
 </td>
 <td className="px-6 py-4 text-gray-600">
   Admin Office – Room 101
@@ -609,17 +649,25 @@ const paginatedData = filteredData.slice(
   )}
 </td>
 <td className="px-6 py-4 text-center">
-  {app.status !== "Interview Done" && (
+  {app.status === "Interview Scheduled" && (
     <button
-      onClick={() => setScheduleApp(app)}
-      className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+      onClick={() => markInterviewDone(app.id)}
+      className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-green-700"
     >
-      + Schedule
+      Mark Done
     </button>
   )}
+
+  {app.status !== "Interview Scheduled" &&
+    app.status !== "Interview Done" && (
+      <button
+        onClick={() => setScheduleApp(app)}
+        className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+      >
+        + Schedule
+      </button>
+    )}
 </td>
-
-
     </tr>
   ))}
 </tbody>
@@ -741,14 +789,23 @@ const paginatedData = filteredData.slice(
             ))}
           </div>
         )}
-
-        {/* ================= INTERVIEW ================= */}
        {/* ================= INTERVIEW ================= */}
 {activeTab === "interview" && (
   <div className="space-y-4 p-4">
 
     <div className="space-y-6 bg-white p-5 rounded-xl border">
-      <p><b>Scheduled Date:</b> 25 Jan 2026</p>
+    <p>
+  <b>Scheduled Date:</b>{" "}
+  {viewApp.interviewDate
+    ? new Date(viewApp.interviewDate).toLocaleDateString("en-GB")
+    : "Not scheduled"}
+</p>
+
+<p>
+  <b>Location:</b>{" "}
+  {viewApp.interviewLocation || "Admin Office - Room 101"}
+</p>
+
       <p><b>Location:</b> Admin Office - Room 101</p>
     </div>
 
@@ -761,8 +818,6 @@ const paginatedData = filteredData.slice(
 
   </div>
 )}
-
-
         {/* ================= OFFER LETTER ================= */}
         {activeTab === "offer" && (
   <div className="space-y-4 p-4">
@@ -1006,10 +1061,34 @@ const paginatedData = filteredData.slice(
             setData(prev =>
               prev.map(item =>
                 item.id === scheduleApp.id
-                  ? { ...item, status: "Interview Scheduled" }
+                  ? {
+                      ...item,
+                      status: "Interview Scheduled",
+                      interviewDate: scheduleDate,
+                      interviewTime: scheduleTime,
+                      interviewLocation: scheduleLocation,
+                    }
                   : item
               )
             );
+            
+            localStorage.setItem(
+              "applications",
+              JSON.stringify(
+                data.map(item =>
+                  item.id === scheduleApp.id
+                    ? {
+                        ...item,
+                        status: "Interview Scheduled",
+                        interviewDate: scheduleDate,
+                        interviewTime: scheduleTime,
+                        interviewLocation: scheduleLocation,
+                      }
+                    : item
+                )
+              )
+            );
+            
             setScheduleApp(null);
           }}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg"

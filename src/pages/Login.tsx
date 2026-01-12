@@ -5,6 +5,7 @@ import LoginIllustration from "../assets/login-illustration.png";
 import { Eye, EyeOff, Mail } from "lucide-react";
 import LeftIllustration from "../assets/login-left.png";
 import SampleLogin from "../assets/samplelogin.png";
+import LoginWave from "../assets/png.png";
 
 //import LoginImg from '../assets/login.png';
 import Logo from '../assets/logo.png';
@@ -94,25 +95,12 @@ if (user.role === "receptionist") {
   return (
     <div className="min-h-screen flex bg-white">
 {/* LEFT ILLUSTRATION SECTION — SVG WAVE */}
-<div className="hidden lg:flex w-[55%] relative overflow-visible bg-white">
-
-  {/* SVG WAVE BACKGROUND */}
- {/* SVG WAVE BACKGROUND */}
- <svg
-  viewBox="0 0 1043 769"
-  className="absolute top-0 left-0 h-full w-[130%]"
-  preserveAspectRatio="xMinYMin slice"
-  xmlns="http://www.w3.org/2000/svg"
->
- <path
-    d="M0 0H260C360 80 480 260 520 420C560 600 760 769 1043 769H0V0Z"
-    fill="#E1E6FF"
-  />
-</svg>
-
-
-
-
+<div className="hidden lg:flex w-[60%] relative overflow-hidden bg-white">
+<img
+  src={LoginWave}
+  alt="Login Background"
+  className="absolute top-0 right-[-0%] h-full w-[160%] object-cover"
+ />
   {/* ILLUSTRATION CONTENT */}
   <div className="relative z-10 flex items-center justify-end w-full pr-12">
   <img
@@ -124,7 +112,7 @@ if (user.role === "receptionist") {
 
 </div>
       {/* RIGHT LOGIN FORM */}
-      <div className="flex-1 flex items-center justify-center px-6 -ml-32 relative z-20 bg-white">
+      <div className="flex-1 flex items-center justify-center px-6 relative z-20 bg-white">
         <div className="w-full max-w-[360px]">
   
           {/* LOGO */}

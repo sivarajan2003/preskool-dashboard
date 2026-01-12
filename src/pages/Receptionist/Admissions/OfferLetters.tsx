@@ -1,4 +1,4 @@
-import { Eye, Pencil, Trash2, FileText } from "lucide-react";
+import { Eye, Pencil,Send, GraduationCap, Trash2, FileText } from "lucide-react";
 import {
     RefreshCcw,
     Printer,
@@ -7,7 +7,9 @@ import {
     Plus,
     CalendarDays,
   } from "lucide-react";
-  import { useState } from "react";
+  import { useState,useEffect } from "react";
+  import { useNavigate } from "react-router-dom";
+  
   
 const applications = [
     {
@@ -245,15 +247,47 @@ const statusStyle = (status: string) => {
       return "bg-gray-100 text-gray-600";
   }
 };
-const initialApplications = [...applications];
+//const initialApplications = [...applications];
 
 export default function AllApplications() {
+  const [newApplication, setNewApplication] = useState({
+    name: "",
+    dob: "",
+    phone: "",
+    email: "",
+    class: "Grade 1",
+    bloodGroup: "O+",
+  });
+  const [newAppOpen, setNewAppOpen] = useState(false);
+
+  //const STORAGE_KEY = "offer_letters_applications";
+  const navigate = useNavigate();
+
+  const STORAGE_KEY = "admission_applications";
+  const [data, setData] = useState<any[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : [];
+  });
+  
+
+  const loadApplications = () => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved && JSON.parse(saved).length
+      ? JSON.parse(saved)
+      : applications;
+  };  
+const saveApplications = (data: any[]) => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+};
+const offers = data.filter(
+  a => a.status === "Offer Accepted"
+);
+
     const [openDate, setOpenDate] = useState(false);
 const [openFilter, setOpenFilter] = useState(false);
 const [search, setSearch] = useState("");
 const [startDate, setStartDate] = useState("2020-05-15");
 const [endDate, setEndDate] = useState("2024-05-24");
-const [data, setData] = useState(applications);
 const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 const [statusFilter, setStatusFilter] = useState<string>("All");
 const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -278,10 +312,13 @@ const [generateApp, setGenerateApp] = useState<any>(null);
 const [previewApp, setPreviewApp] = useState<any>(null);
 
 const handleRefresh = () => {
-    setData(initialApplications);
-    setSearch("");
-    setStatusFilter("All");
-  };
+  const saved = localStorage.getItem(STORAGE_KEY);
+  setData(saved ? JSON.parse(saved) : applications);
+
+  setSearch("");
+  setStatusFilter("All");
+  setCurrentPage(1);
+};
   const handlePrint = () => {
     window.print();
   };
@@ -329,8 +366,7 @@ const handleRefresh = () => {
     setData(sorted);
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
-  const [newAppOpen, setNewAppOpen] = useState(false);
-
+  //const [newAppOpen, setNewAppOpen] = useState(false);
 const [newApp, setNewApp] = useState({
   name: "",
   dob: "",
@@ -338,7 +374,9 @@ const [newApp, setNewApp] = useState({
   phone: "",
   class: "Grade 1",
 });
-
+useEffect(() => {
+  saveApplications(data);
+}, [data]);
   /* FILTER + SEARCH ================= */
 
 const filteredData = data
@@ -650,43 +688,64 @@ const totalGenerated = acceptedCount + pendingCount;
    </td>
  
    {/* ACTIONS */}
-   <td className="px-6 py-4 text-center space-x-2">
-  {app.status === "Offer Accepted" ? (
-    <>
-      {/* PREVIEW */}
+   <td className="px-6 py-4">
+  <div className="flex items-center justify-center gap-2 flex-nowrap">
+    {app.status === "Offer Accepted" ? (
+      <>
+        {/* PREVIEW */}
+        <button
+          onClick={() => setPreviewApp(app)}
+          className="p-2.5 border rounded-lg hover:bg-gray-50"
+          title="Preview"
+        >
+          <Eye size={16} />
+        </button>
+
+        {/* SEND */}
+        <button
+          onClick={() => {
+            setSendApp(app);
+            setEmail(app.email);
+            setMessage(
+              `Dear Parent,\n\nPlease find attached the offer letter for ${app.name}.\n\nRegards,\nSchool Admin`
+            );
+          }}
+          className="p-2.5 border rounded-lg hover:bg-gray-50"
+          title="Send Offer"
+        >
+          <Send size={16} />
+        </button>
+
+        {/* ENROLL */}
+        <button
+          onClick={() => {
+            const updated = data.map(item =>
+              item.id === app.id
+                ? { ...item, status: "Enrolled" }
+                : item
+            );
+
+            setData(updated);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+            navigate("/admin/dashboard/receptionist/admissions/enrolled");
+          }}
+          className="p-2.5 border rounded-lg hover:bg-gray-50"
+          title="Enroll Student"
+        >
+          <GraduationCap size={16} />
+        </button>
+      </>
+    ) : (
       <button
-        onClick={() => setPreviewApp(app)}
-        className="px-4 py-2 border rounded-lg text-sm"
+        onClick={() => setGenerateApp(app)}
+        className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
       >
-        <Eye size={14} className="inline mr-1" />
-        Preview
+        Generate
       </button>
-
-      {/* SEND */}
-      <button
-  onClick={() => {
-    setSendApp(app);
-    setEmail(app.email);
-    setMessage(
-      `Dear Parent,\n\nPlease find attached the offer letter for ${app.name}.\n\nRegards,\nSchool Admin`
-    );
-  }}
-  className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
->
-  Send
-</button>
-
-    </>
-  ) : (
-    /* GENERATE */
-    <button
-      onClick={() => setGenerateApp(app)}
-      className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
-    >
-      Generate
-    </button>
-  )}
+    )}
+  </div>
 </td>
+
 
  </tr>
  
@@ -874,25 +933,7 @@ const totalGenerated = acceptedCount + pendingCount;
             className="w-full border rounded-lg px-3 py-2 mt-1"
           />
         </div>
-
-        {/* STATUS */}
-        <div className="col-span-2">
-          <label className="text-gray-600">Status</label>
-          <select
-            value={editApp.status}
-            onChange={(e) =>
-              setEditApp({ ...editApp, status: e.target.value })
-            }
-            className="w-full border rounded-lg px-3 py-2 mt-1"
-          >
-            <option>Enrolled</option>
-            <option>Interview Done</option>
-            <option>Interview Scheduled</option>
-            <option>Applied</option>
-            <option>Offer Accepted</option>
-            <option>Verifying Documents</option>
-          </select>
-        </div>
+        
 
       </div>
 
@@ -924,82 +965,6 @@ const totalGenerated = acceptedCount + pendingCount;
   </div>
 )}
 
-
-{scheduleApp && (
-  <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-    <div className="bg-white w-full max-w-md rounded-2xl p-6">
-
-      {/* HEADER */}
-      <h2 className="text-xl font-semibold">Schedule Interview</h2>
-      <p className="text-sm text-gray-500 mt-1">
-        {scheduleApp.name}
-      </p>
-
-      {/* FORM */}
-      <div className="space-y-4 mt-6">
-
-        {/* DATE */}
-        <div>
-          <label className="text-sm text-gray-600">Interview Date</label>
-          <input
-            type="date"
-            value={scheduleDate}
-            onChange={(e) => setScheduleDate(e.target.value)}
-            className="w-full mt-1 border rounded-lg px-4 py-2"
-          />
-        </div>
-
-        {/* TIME */}
-        <div>
-          <label className="text-sm text-gray-600">Interview Time</label>
-          <input
-            type="time"
-            value={scheduleTime}
-            onChange={(e) => setScheduleTime(e.target.value)}
-            className="w-full mt-1 border rounded-lg px-4 py-2"
-          />
-        </div>
-
-        {/* LOCATION */}
-        <div>
-          <label className="text-sm text-gray-600">Location</label>
-          <input
-            value={scheduleLocation}
-            onChange={(e) => setScheduleLocation(e.target.value)}
-            className="w-full mt-1 border rounded-lg px-4 py-2"
-          />
-        </div>
-      </div>
-
-      {/* ACTIONS */}
-      <div className="flex justify-end gap-3 mt-6">
-        <button
-          onClick={() => setScheduleApp(null)}
-          className="px-4 py-2 border rounded-lg"
-        >
-          Cancel
-        </button>
-
-        <button
-          onClick={() => {
-            setData(prev =>
-              prev.map(item =>
-                item.id === scheduleApp.id
-                  ? { ...item, status: "Interview Scheduled" }
-                  : item
-              )
-            );
-            setScheduleApp(null);
-          }}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg"
-        >
-          Schedule Interview
-        </button>
-      </div>
-
-    </div>
-  </div>
-)}
 {generateApp && (
   <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
     <div className="bg-white w-full max-w-md rounded-2xl p-6">
@@ -1047,22 +1012,28 @@ const totalGenerated = acceptedCount + pendingCount;
         >
           Cancel
         </button>
-
         <button
-          onClick={() => {
-            setData(prev =>
-              prev.map(item =>
-                item.id === generateApp.id
-                  ? { ...item, status: "Offer Accepted" }
-                  : item
-              )
-            );
-            setGenerateApp(null);
-          }}
-          className="px-6 py-2 bg-blue-600 text-white rounded-lg"
-        >
-          Generate Offer
-        </button>
+  onClick={() => {
+    const updated = data.map(item =>
+      item.id === generateApp.id
+        ? {
+            ...item,
+            status: "Offer Accepted", 
+            
+          }
+        : item
+    );
+
+    setData(updated);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
+    setGenerateApp(null); // close modal
+  }}
+  className="px-6 py-2 bg-blue-600 text-white rounded-lg"
+>
+  Generate Offer
+</button>
+
       </div>
     </div>
   </div>
@@ -1256,6 +1227,28 @@ const totalGenerated = acceptedCount + pendingCount;
             <option>Grade 4</option>
           </select>
         </div>
+        <div>
+  <label className="text-gray-600">
+    Blood Group <span className="text-red-500">*</span>
+  </label>
+  <select
+    value={newApplication.bloodGroup}
+    onChange={(e) =>
+      setNewApplication({
+        ...newApplication,
+        bloodGroup: e.target.value,
+      })
+    }
+    required
+    className="w-full mt-1 border rounded-lg px-4 py-2"
+  >
+    <option value="">Select Blood Group</option>
+    <option>O+</option>
+    <option>A+</option>
+    <option>B+</option>
+    <option>AB+</option>
+  </select>
+</div>
 
         <div>
           <label className="text-gray-600">Parent Email</label>
@@ -1269,7 +1262,6 @@ const totalGenerated = acceptedCount + pendingCount;
             placeholder="example@email.com"
           />
         </div>
-
         <div>
           <label className="text-gray-600">Phone</label>
           <input
@@ -1283,7 +1275,6 @@ const totalGenerated = acceptedCount + pendingCount;
         </div>
 
       </div>
-
       {/* ACTION BUTTONS */}
       <div className="flex justify-end gap-3 mt-8">
         <button
@@ -1316,7 +1307,6 @@ const totalGenerated = acceptedCount + pendingCount;
     </div>
   </div>
 )}
-
     </div>
   );
 }

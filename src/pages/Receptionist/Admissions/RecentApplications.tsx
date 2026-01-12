@@ -145,6 +145,7 @@ const applications = [
 const visibleApplications = showAll
   ? applications
   : applications.slice(0, 10);
+  const [viewApp, setViewApp] = useState<any>(null);
 
     return (
       <div className="bg-white rounded-2xl border shadow-sm overflow-hidden">
@@ -214,15 +215,91 @@ const visibleApplications = showAll
                   </td>
   
                   <td className="px-6 py-4">
-                    <button className="text-blue-600 font-medium hover:underline">
-                      View Details
-                    </button>
+                  <button
+  onClick={() => setViewApp(app)}
+  className="text-blue-600 font-medium hover:underline"
+>
+  View Details
+</button>
+
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+        {viewApp && (
+  <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
+    <div className="bg-white w-full max-w-4xl rounded-2xl overflow-hidden">
+
+      {/* HEADER */}
+      <div className="bg-blue-50 px-6 py-4 flex justify-between items-start">
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-900">
+            {viewApp.name}
+          </h2>
+          <div className="flex items-center gap-3 mt-1">
+            <span className="text-blue-600 font-medium">
+              {viewApp.id}
+            </span>
+            <span className="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700">
+              {viewApp.status}
+            </span>
+          </div>
+        </div>
+
+        <button
+          onClick={() => setViewApp(null)}
+          className="text-xl text-gray-500 hover:text-gray-700"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* TABS (ONLY OVERVIEW) */}
+      <div className="border-b px-6">
+        <button className="py-3 border-b-2 border-blue-600 text-blue-600 font-medium text-sm">
+          Overview
+        </button>
+      </div>
+
+      {/* CONTENT */}
+      <div className="p-6 space-y-6">
+
+        {/* STUDENT INFO */}
+        <div className="bg-white p-5 rounded-xl border">
+          <h3 className="font-semibold mb-4">Student Information</h3>
+
+          <div className="grid grid-cols-2 gap-y-3 text-sm">
+            <p><b>Full Name:</b> {viewApp.name}</p>
+            <p><b>Applied On:</b> {viewApp.date}</p>
+            <p><b>Class:</b> {viewApp.class}</p>
+            <p><b>Status:</b> {viewApp.status}</p>
+          </div>
+        </div>
+
+        {/* ADDRESS */}
+        <div className="bg-white p-5 rounded-xl border">
+          <h3 className="font-semibold mb-2">Address</h3>
+          <p className="text-sm text-gray-600">—</p>
+        </div>
+
+      </div>
+
+      {/* FOOTER */}
+      <div className="px-6 py-4 border-t flex justify-end">
+        <button
+          onClick={() => setViewApp(null)}
+          className="px-4 py-2 border rounded-lg text-sm"
+        >
+          Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+
       </div>
     );
   }

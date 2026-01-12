@@ -28,10 +28,7 @@ export default function Sidebar() {
 
   const isApplicationsContext =
   role === "admin" &&
-  (
-    location.pathname === "/admin/dashboard" ||
-    location.pathname.startsWith("/admin/dashboard/receptionist")
-  );
+  location.pathname.startsWith("/admin/dashboard/receptionist");
 
   const basePath =
     role === "admin"
@@ -215,7 +212,7 @@ const isManagementItemActive = (path: string) =>
     >
       <div className="flex items-center gap-3">
         <LayoutGrid className="w-5 h-5" />
-        <span className="text-sm font-medium">Applications</span>
+        <span className="text-sm font-medium">Admission </span>
       </div>
 
       <ChevronDown

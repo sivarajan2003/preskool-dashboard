@@ -42,18 +42,18 @@ import RecentApplications from "./Admissions/RecentApplications";
             <h2 className="text-lg font-semibold">
               Welcome Back, Receptionist
             </h2>
-            <p className="text-sm opacity-80">
+            <p className="text-sm text-gray-300 mt-1">
               Have a productive day at work
             </p>
           </div>
   
-          <p className="text-xs opacity-80">
+          <p className="text-xs text-gray-300">
             {new Date().toLocaleString()}
           </p>
         </div>
   
         {/* ================= STAT CARDS ================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
   <ReceptionistCard
     title="Total Applications"
     value="50"

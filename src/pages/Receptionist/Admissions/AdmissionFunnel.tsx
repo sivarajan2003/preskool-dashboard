@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 const THIS_MONTH = [
   { id: 1, label: "Applied", value: 50, percent: 100, color: "bg-blue-500" },
   { id: 2, label: "Documents Verified", value: 45, percent: 90, color: "bg-cyan-500" },
@@ -19,7 +21,16 @@ export default function AdmissionFunnel() {
   const [period, setPeriod] = useState<"this" | "last">("this");
 
 const steps = period === "this" ? THIS_MONTH : LAST_MONTH;
+const navigate = useNavigate();
 
+  // ✅ PUT IT HERE 👇
+  const routeMap: Record<string, string> = {
+    Applied: "/admin/dashboard/receptionist/admissions",
+    "Documents Verified": "/admin/dashboard/receptionist/admissions/documents",
+    Interviewed: "/admin/dashboard/receptionist/admissions/interviews",
+    Offered: "/admin/dashboard/receptionist/admissions/offers",
+    Enrolled: "/admin/dashboard/receptionist/admissions/enrolled",
+  };
 
   return (
     <div className="bg-white rounded-2xl border shadow-sm p-6 h-full transition hover:shadow-md">
@@ -47,16 +58,22 @@ const steps = period === "this" ? THIS_MONTH : LAST_MONTH;
 
       {/* STEPS */}
       <div className="space-y-6">
-        {steps.map((step) => (
-          <div key={step.id}>
+      {steps.map((step) => (
+  <div
+    key={step.id}
+    onClick={() => navigate(routeMap[step.label])}
+    className="cursor-pointer group"
+  >
+
             <div className="flex justify-between items-center mb-2">
               <div className="flex items-center gap-3">
                 <span className="w-8 h-8 rounded-full bg-gray-100 text-sm font-semibold flex items-center justify-center">
                   {step.id}
                 </span>
-                <span className="text-sm font-medium text-gray-800">
-                  {step.label}
-                </span>
+                <span className="text-sm font-medium text-gray-800 group-hover:text-blue-600">
+  {step.label}
+</span>
+
               </div>
 
               <div className="text-sm text-gray-700 font-medium">
@@ -67,12 +84,16 @@ const steps = period === "this" ? THIS_MONTH : LAST_MONTH;
               </div>
             </div>
 
-            <div className="h-2.5 w-full bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className={`h-full rounded-full ${step.color} transition-all duration-700`}
-                style={{ width: `${step.percent}%` }}
-              />
-            </div>
+            <div className="relative h-3.5 w-full bg-gray-100 overflow-hidden rounded-md">
+  <div
+    className={`absolute left-0 top-0 h-full ${step.color} transition-all duration-700`}
+    style={{
+      width: `${step.percent}%`,
+      clipPath: "polygon(0 0, 100% 0, 96% 100%, 0% 100%)",
+    }}
+  />
+</div>
+
           </div>
         ))}
       </div>

@@ -273,6 +273,11 @@ const applications = [
 ];
 
 export default function OfferLetters() {
+  const STORAGE_KEY = "admission_applications";
+  const [data, setData] = useState<any[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : [];
+  });
   
 const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -317,6 +322,9 @@ const handleExport = () => {
   link.download = "offer_letters.csv";
   link.click();
 };
+const enrolled = data.filter(
+  a => a.status === "Enrolled"
+);
 
 const handleSort = () => {
   setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
@@ -635,41 +643,77 @@ const handleSort = () => {
 
 {/* ================= VIEW PROFILE MODAL ================= */}
 {viewProfile && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/70 backdrop-blur-sm">
-    
-    <div className="relative bg-white w-full max-w-md rounded-2xl shadow-xl p-6">
-
-      {/* CLOSE ICON */}
-      <button
-        onClick={() => setViewProfile(null)}
-        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-      >
-        ✕
-      </button>
+  <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
+    <div className="bg-white w-full max-w-5xl rounded-xl overflow-hidden">
 
       {/* HEADER */}
-      <div className="text-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-900">
-          {viewProfile.name}
-        </h2>
-        <p className="text-sm text-gray-500">
-          {viewProfile.id}
-        </p>
+      <div className="bg-blue-50 px-6 py-4 flex justify-between items-start">
+        <div>
+          <h2 className="text-2xl font-semibold">{viewProfile.name}</h2>
+          <div className="flex items-center gap-3 mt-1">
+            <span className="text-blue-600 font-medium">
+              {viewProfile.id}
+            </span>
+            <span className="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700">
+              Enrolled
+            </span>
+          </div>
+        </div>
+        <button
+          onClick={() => setViewProfile(null)}
+          className="text-xl"
+        >
+          ✕
+        </button>
       </div>
 
-      {/* DETAILS */}
-      <div className="space-y-2 text-sm text-gray-700">
-        <p><b>DOB:</b> {viewProfile.dob}</p>
-        <p><b>Class:</b> {viewProfile.class}</p>
-        <p><b>Phone:</b> {viewProfile.phone}</p>
-        <p><b>Enrolled On:</b> {viewProfile.enrolledOn}</p>
+      {/* TABS */}
+      <div className="flex gap-6 border-b px-6 text-sm">
+        {["Overview"].map(
+          (tab) => (
+            <button
+              key={tab}
+              className="py-3 border-b-2 border-blue-600 text-blue-600 font-medium"
+            >
+              {tab}
+            </button>
+          )
+        )}
+      </div>
+
+      {/* CONTENT */}
+      <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
+
+        {/* STUDENT INFO */}
+        <div className="border rounded-xl p-5">
+          <h3 className="font-semibold mb-4">Student Information</h3>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <p><b>Full Name:</b> {viewProfile.name}</p>
+            <p><b>DOB:</b> {viewProfile.dob}</p>
+            <p><b>Class:</b> {viewProfile.class}</p>
+            <p><b>Status:</b> Enrolled</p>
+          </div>
+        </div>
+
+        {/* GUARDIAN INFO */}
+        <div className="border rounded-xl p-5">
+          <h3 className="font-semibold mb-4">Guardian Information</h3>
+          <p><b>Email:</b> {viewProfile.email}</p>
+          <p><b>Phone:</b> {viewProfile.phone}</p>
+        </div>
+
+        {/* ADDRESS */}
+        <div className="border rounded-xl p-5">
+          <h3 className="font-semibold mb-2">Address</h3>
+          <p>Chennai</p>
+        </div>
       </div>
 
       {/* FOOTER */}
-      <div className="flex justify-end mt-6">
+      <div className="px-6 py-4 border-t">
         <button
           onClick={() => setViewProfile(null)}
-          className="px-5 py-2 border rounded-lg text-sm hover:bg-gray-50"
+          className="px-5 py-2 border rounded-lg"
         >
           Close
         </button>
@@ -790,18 +834,24 @@ const handleSort = () => {
 
         <button
           onClick={() => {
+            if (!newApplication.bloodGroup) {
+              alert("Blood Group is required");
+              return;
+            }
+          
             const newEntry = {
-              id: `ADM-2026-${Math.floor(Math.random() * 9000 + 1000)}`,
+              id: `ADM-2026-${Math.floor(1000 + Math.random() * 9000)}`,
               avatar: "https://i.pravatar.cc/40",
               status: "Applied",
               documents: "0/2",
               enrolledOn: "—",
-              ...newApplication,
+              ...newApplication, // ✅ includes bloodGroup
             };
-
-            applications.unshift(newEntry as any);
+          
+            setData(prev => [newEntry, ...prev]);
             setNewAppOpen(false);
           }}
+          
           className="px-5 py-2 bg-blue-600 text-white rounded-lg text-sm"
         >
           Save Application

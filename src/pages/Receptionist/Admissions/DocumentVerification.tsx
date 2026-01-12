@@ -262,6 +262,12 @@ const statusStyle = (status: string) => {
 const initialApplications = [...applications];
 
 export default function AllApplications() {
+  const STORAGE_KEY = "admission_applications";
+  const [data, setData] = useState<any[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : [];
+  });
+  
     const [openDate, setOpenDate] = useState(false);
 const [openFilter, setOpenFilter] = useState(false);
 const [selectedApp, setSelectedApp] = useState<any>(null);
@@ -270,7 +276,6 @@ const [previewDoc, setPreviewDoc] = useState<any>(null);
 const [search, setSearch] = useState("");
 const [startDate, setStartDate] = useState("2020-05-15");
 const [endDate, setEndDate] = useState("2024-05-24");
-const [data, setData] = useState(applications);
 const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 const [statusFilter, setStatusFilter] = useState<string>("All");
 const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -289,6 +294,9 @@ const [newDoc, setNewDoc] = useState({
   type: "pdf",
   file: null as File | null,
 });
+const documents = data.filter(
+  a => a.status === "Verifying Documents"
+);
 
 const handleRefresh = () => {
     setData(initialApplications);

@@ -8,7 +8,7 @@ import {
     CalendarDays,
   } from "lucide-react";
   import { useState } from "react";
-  
+  import { useEffect } from "react";
 const applications = [
     {
         id: "ADM-2026-0004",
@@ -256,12 +256,30 @@ const statusStyle = (status: string) => {
 const initialApplications = [...applications];
 
 export default function AllApplications() {
+  const STORAGE_KEY = "admission_applications";
+  const [data, setData] = useState<any[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : applications;
+  });
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }, [data]);
+  
+  useEffect(() => {
+    const saved = localStorage.getItem("applications");
+    if (!saved || JSON.parse(saved).length < applications.length) {
+      localStorage.setItem("applications", JSON.stringify(applications));
+      setData(applications);
+    }
+  }, []);
+  useEffect(() => {
+    localStorage.setItem("applications", JSON.stringify(data));
+  }, [data]);
     const [openDate, setOpenDate] = useState(false);
 const [openFilter, setOpenFilter] = useState(false);
 const [search, setSearch] = useState("");
 const [startDate, setStartDate] = useState("2020-05-15");
 const [endDate, setEndDate] = useState("2024-05-24");
-const [data, setData] = useState(applications);
 const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 const [statusFilter, setStatusFilter] = useState<string>("All");
 const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -284,16 +302,18 @@ const emptyApplication = {
   status: "Applied",
   documents: "0/2",
   avatar: "https://i.pravatar.cc/40",
+  address: "", 
 };
 const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
 const [newApp, setNewApp] = useState(emptyApplication);
 
 const handleRefresh = () => {
-    setData(initialApplications);
-    setSearch("");
-    setStatusFilter("All");
-  };
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    setData(JSON.parse(saved));
+  }
+};
   const handlePrint = () => {
     window.print();
   };
@@ -308,7 +328,9 @@ const handleRefresh = () => {
       "Status",
       "Documents",
     ];
-  
+    useEffect(() => {
+      localStorage.setItem("applications", JSON.stringify(data));
+    }, [data]);
     const rows = data.map((a) =>
       [
         a.id,
@@ -607,7 +629,7 @@ const paginatedData = filteredData.slice(
     {/* VIEW */}
     <button
       onClick={() => setViewApp(app)}
-      className="text-blue-600 hover:text-blue-800"
+      className="text-gray-600 hover:text-blue-800"
     >
       <Eye className="w-4 h-4" />
     </button>
@@ -725,12 +747,14 @@ const paginatedData = filteredData.slice(
               <p><b>Email:</b> {viewApp.email}</p>
               <p><b>Phone:</b> {viewApp.phone}</p>
             </div>
-
             {/* ADDRESS */}
-            <div className="space-y-6 bg-white p-5 rounded-xl border">
-                              <h3 className="font-semibold mb-3">Address</h3>
-              <p>96 Main Street, Mumbai, Maharashtra - 400001</p>
-            </div>
+<div className="space-y-6 bg-white p-5 rounded-xl border">
+  <h3 className="font-semibold mb-3">Address</h3>
+  <p className="text-sm text-gray-700">
+    {viewApp.address || "—"}
+  </p>
+</div>
+
 
           </div>
         )}
@@ -1061,6 +1085,19 @@ const paginatedData = filteredData.slice(
             <option>Offer Accepted</option>
           </select>
         </div>
+        <div className="col-span-2">
+  <label className="text-gray-600">Address</label>
+  <textarea
+    value={newApp.address}
+    onChange={(e) =>
+      setNewApp({ ...newApp, address: e.target.value })
+    }
+    placeholder="House no, Street, City, State, Pincode"
+    rows={3}
+    className="w-full border rounded-lg px-3 py-2 mt-1 resize-none"
+  />
+</div>
+
       </div>
 
       {/* FOOTER */}
@@ -1071,23 +1108,29 @@ const paginatedData = filteredData.slice(
         >
           Cancel
         </button>
-
         <button
-          onClick={() => {
-            setData((prev) => [
-              {
-                ...newApp,
-                id: `ADM-2026-${Math.floor(1000 + Math.random() * 9000)}`,
-              },
-              ...prev,
-            ]);
-            setNewApp(emptyApplication);
-            setOpenNew(false);
-          }}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
-        >
-          Save Application
-        </button>
+  onClick={() => {
+    const createdApp = {
+      ...newApp,
+      id: `ADM-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+      status: "Applied",        // 🔥 always start as Applied
+      documents: "0/2",
+      avatar: "https://i.pravatar.cc/40",
+    };
+
+    // ✅ ADD TO MAIN DATA (this auto-saves to localStorage)
+    setData(prev => [createdApp, ...prev]);
+
+    // ✅ CLOSE MODAL
+    setOpenNew(false);
+
+    // ✅ RESET FORM
+    setNewApp(emptyApplication);
+  }}
+  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+>
+  Save Application
+</button>
       </div>
 
     </div>
