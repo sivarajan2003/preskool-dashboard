@@ -11,14 +11,17 @@ import LoginWave from "../assets/png.png";
 import Logo from '../assets/logo.png';
 import GoogleIcon from '../assets/google.png';
 import { toast } from "react-toastify";
+import api from "../lib/api";
 
 // 🔹 TEMP USERS (Frontend only)
+{/* ILLUSTRATION CONTENT
 const USERS = [
   {
     email: "admin@preskool.com",
     password: "admin123",
     role: "admin",
   },
+  
   {
     email: "teacher@preskool.com",
     password: "admin123",
@@ -41,7 +44,7 @@ const USERS = [
   },
   //{ email: "parent@preskool.com", password: "admin123", role: "parent" },
 
-];
+]; */}
 
 export default function Login() {
   const navigate = useNavigate();
@@ -52,46 +55,46 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
   
-    const user = USERS.find(
-      (u) => u.email === email && u.password === password
-    );
+    try {
+      const res = await api.post("/api/auth/login", {
+        email,
+        password,
+      });
   
-    if (!user) {
-      toast.error("Invalid email or password ❌");
+      const { token, user } = res.data;
+  
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", user.role);
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("isAuth", "true");
+      
+  
+      toast.success("Login successful ✅");
+  
+      if (user.role === "admin") navigate("/admin/dashboard");
+      if (user.role === "student") navigate("/student/dashboard");
+      if (user.role === "teacher") navigate("/teacher/dashboard");
+      if (user.role === "parent") navigate("/parent/dashboard");
+      if (user.role === "receptionist")
+        navigate("/admin/dashboard/receptionist");
+  
+    } catch (err: any) {
+      console.error("LOGIN ERROR:", err.response?.data || err.message);
+  
+      toast.error(
+        err.response?.data?.message ||
+        "Login failed"
+      );
+    } finally {
       setLoading(false);
-      return;
     }
-    
-  
-    // Save auth info
-    localStorage.setItem("isAuth", "true");
-localStorage.setItem("role", user.role);
-toast.success("Login successful ✅");
-
-
-if (user.role === "admin") {
-  navigate("/admin/dashboard");
-}
-if (user.role === "student") {
-  navigate("/student/dashboard");
-}
-if (user.role === "teacher") {
-  navigate("/teacher/dashboard");
-}
-if (user.role === "parent") {
-  navigate("/parent/dashboard");
-}
-if (user.role === "receptionist") {
-  navigate("/admin/dashboard/receptionist");
-}
-
   };
+  
   return (
     <div className="min-h-screen flex bg-white">
 {/* LEFT ILLUSTRATION SECTION — SVG WAVE */}

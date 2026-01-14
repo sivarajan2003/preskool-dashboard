@@ -39,6 +39,8 @@ import ReasonsPage from "./pages/Academic/ReasonsPage";
 import ExamReasons from "./pages/Academic/Reasons/ExamReasons";
 import LeaveReasons from "./pages/Academic/Reasons/LeaveReasons";
 import DisciplinaryReasons from "./pages/Academic/Reasons/DisciplinaryReasons";
+import AcademicYear from "./pages/Academic/AcademicYear";
+import AcademicYearDetails from "./pages/Academic/AcademicYearDetails";
 
 import AddStudentPage from "./pages/People/AddStudentPage";
 //import StudentDashboard from "./pages/Student/Dashboard";
@@ -164,6 +166,22 @@ export default function App() {
   <Route path="academic/classes" element={<ClassesPage />} />
   <Route path="academic/class-room" element={<ClassRoomPage />} />
   <Route path="academic/class-routine" element={<ClassRoutinePage />} />
+  <Route
+  path="academic/academic-year"
+  element={
+    <ProtectedRoute role="admin">
+      <AcademicYear />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="academic/academic-year/:year"
+  element={
+    <ProtectedRoute role="admin">
+      <AcademicYearDetails />
+    </ProtectedRoute>
+  }
+/>
   <Route path="academic/section" element={<SectionPage />} />
   <Route path="academic/subject" element={<SubjectPage />} />
   <Route path="academic/syllabus" element={<SyllabusPage />} />

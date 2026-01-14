@@ -106,7 +106,10 @@ const academicYears = Array.from({ length: 6 }, (_, i) => {
         onClick={() => {
           setSelectedYear(year);
           setYearOpen(false);
+        
+          navigate("/admin/dashboard/academic/academic-year");
         }}
+        
         className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
           selectedYear === year ? "bg-blue-50 font-medium" : ""
         }`}
