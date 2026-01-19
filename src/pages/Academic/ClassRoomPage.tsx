@@ -28,7 +28,13 @@ const initialRooms = [
 /* ================= PAGE ================= */
 
 export default function ClassRoomPage() {
-  const [data, setData] = useState(initialRooms);
+  const STORAGE_KEY = "academic_class_rooms";
+
+  const [data, setData] = useState<any[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : initialRooms;
+  });
+  
   //const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
@@ -49,6 +55,9 @@ export default function ClassRoomPage() {
         document.removeEventListener("click", handleClickOutside);
       };
     }, [openDate]);
+    useEffect(() => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }, [data]);
     
     const [openViewRoom, setOpenViewRoom] = useState(false);
     const [openEditRoom, setOpenEditRoom] = useState(false);
@@ -61,13 +70,16 @@ export default function ClassRoomPage() {
   const [openAddRoom, setOpenAddRoom] = useState(false);
 
   const today = "15 May 2020 - 24 May 2024";
-
-  /* REFRESH */
   const handleRefresh = () => {
-    setData(initialRooms);
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      setData(JSON.parse(saved));
+    }
     setStatusFilter("All");
     setSearch("");
+    setCurrentPage(1);
   };
+  
 
   /* EXPORT */
   const handleExport = () => {

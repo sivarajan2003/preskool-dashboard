@@ -266,9 +266,9 @@ export default function AllApplications() {
   const STORAGE_KEY = "admission_applications";
   const [data, setData] = useState<any[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [];
+    return saved ? JSON.parse(saved) : applications;
   });
-  
+  const [subject, setSubject] = useState("");
 
   const loadApplications = () => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -313,7 +313,10 @@ const [previewApp, setPreviewApp] = useState<any>(null);
 
 const handleRefresh = () => {
   const saved = localStorage.getItem(STORAGE_KEY);
-  setData(saved ? JSON.parse(saved) : applications);
+
+  if (saved && JSON.parse(saved).length > 0) {
+    setData(JSON.parse(saved));
+  }
 
   setSearch("");
   setStatusFilter("All");
@@ -690,59 +693,73 @@ const totalGenerated = acceptedCount + pendingCount;
    {/* ACTIONS */}
    <td className="px-6 py-4">
   <div className="flex items-center justify-center gap-2 flex-nowrap">
-    {app.status === "Offer Accepted" ? (
-      <>
-        {/* PREVIEW */}
-        <button
-          onClick={() => setPreviewApp(app)}
-          className="p-2.5 border rounded-lg hover:bg-gray-50"
-          title="Preview"
-        >
-          <Eye size={16} />
-        </button>
+  {app.status === "Offer Accepted" && (
+  <>
+    {/* PREVIEW */}
+    <button
+      onClick={() => setPreviewApp(app)}
+      className="p-2.5 border rounded-lg hover:bg-gray-50"
+      title="Preview"
+    >
+      <Eye size={16} />
+    </button>
 
-        {/* SEND */}
-        <button
-          onClick={() => {
-            setSendApp(app);
-            setEmail(app.email);
-            setMessage(
-              `Dear Parent,\n\nPlease find attached the offer letter for ${app.name}.\n\nRegards,\nSchool Admin`
-            );
-          }}
-          className="p-2.5 border rounded-lg hover:bg-gray-50"
-          title="Send Offer"
-        >
-          <Send size={16} />
-        </button>
+    {/* SEND */}
+    <button
+  onClick={() => {
+    setSendApp(app);
+    setEmail(app.email);
 
-        {/* ENROLL */}
-        <button
-          onClick={() => {
-            const updated = data.map(item =>
-              item.id === app.id
-                ? { ...item, status: "Enrolled" }
-                : item
-            );
+    // ✅ ADD THIS
+    setSubject(`Admission Offer Letter – ${app.name}`);
 
-            setData(updated);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-            navigate("/admin/dashboard/receptionist/admissions/enrolled");
-          }}
-          className="p-2.5 border rounded-lg hover:bg-gray-50"
-          title="Enroll Student"
-        >
-          <GraduationCap size={16} />
-        </button>
-      </>
-    ) : (
-      <button
-        onClick={() => setGenerateApp(app)}
-        className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
-      >
-        Generate
-      </button>
-    )}
+    // ✅ UPDATE MESSAGE TEMPLATE
+    setMessage(
+`Dear Parent,
+
+We are pleased to inform you that your child ${app.name} has been offered admission to ${app.class}.
+
+Please find the attached offer letter for further details.
+
+Warm regards,
+School Admin`
+    );
+  }}
+  className="p-2.5 border rounded-lg hover:bg-gray-50"
+>
+
+      <Send size={16} />
+    </button>
+
+    {/* ENROLL */}
+    <button
+      onClick={() => {
+        const updated = data.map(item =>
+          item.id === app.id
+            ? { ...item, status: "Enrolled" }
+            : item
+        );
+
+        setData(updated);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+        navigate("/admin/dashboard/receptionist/admissions/enrolled");
+      }}
+      className="p-2.5 border rounded-lg hover:bg-gray-50"
+      title="Enroll Student"
+    >
+      <GraduationCap size={16} />
+    </button>
+  </>
+)}
+{app.status === "Interview Done" && (
+  <button
+    onClick={() => setGenerateApp(app)}
+    className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+  >
+    Generate
+  </button>
+)}
+
   </div>
 </td>
 
@@ -1125,30 +1142,44 @@ const totalGenerated = acceptedCount + pendingCount;
       </p>
 
       {/* FORM */}
-      <div className="space-y-4 mt-5">
+      {/* FORM */}
+<div className="space-y-4 mt-5">
 
-        {/* EMAIL */}
-        <div>
-          <label className="text-sm text-gray-600">Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full mt-1 border rounded-lg px-4 py-2"
-          />
-        </div>
+{/* TO (EMAIL) */}
+<div>
+  <label className="text-sm text-gray-600">To</label>
+  <input
+    type="email"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    className="w-full mt-1 border rounded-lg px-4 py-2"
+  />
+</div>
 
-        {/* MESSAGE */}
-        <div>
-          <label className="text-sm text-gray-600">Message</label>
-          <textarea
-            rows={5}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            className="w-full mt-1 border rounded-lg px-4 py-2"
-          />
-        </div>
-      </div>
+{/* ✅ SUBJECT (STEP-3) */}
+<div>
+  <label className="text-sm text-gray-600">Subject</label>
+  <input
+    type="text"
+    value={subject}
+    onChange={(e) => setSubject(e.target.value)}
+    className="w-full mt-1 border rounded-lg px-4 py-2"
+    placeholder="Enter email subject"
+  />
+</div>
+
+{/* MESSAGE */}
+<div>
+  <label className="text-sm text-gray-600">Message</label>
+  <textarea
+    rows={6}
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+    className="w-full mt-1 border rounded-lg px-4 py-2"
+  />
+</div>
+
+</div>
 
       {/* ACTIONS */}
       <div className="flex justify-end gap-3 mt-6">
@@ -1161,11 +1192,10 @@ const totalGenerated = acceptedCount + pendingCount;
 
         <button
           onClick={() => {
-            console.log("Sending email to:", email);
-            console.log("Message:", message);
-            alert("Offer letter sent successfully!");
+            alert(`Email prepared for ${sendApp.name}`);
             setSendApp(null);
           }}
+          
           className="px-6 py-2 bg-blue-600 text-white rounded-lg"
         >
           Send
@@ -1288,7 +1318,7 @@ const totalGenerated = acceptedCount + pendingCount;
           onClick={() => {
             setData((prev) => [
               {
-                id: `ADM-2026-${String(prev.length + 1).padStart(4, "0")}`,
+                id: `ADM-2026-${Math.floor(1000 + Math.random() * 9000)}`,
                 status: "Applied",
                 documents: "0/2",
                 avatar: "https://i.pravatar.cc/40",

@@ -142,8 +142,13 @@ const ROUTINES = [
 /* ================= PAGE ================= */
 
 export default function ClassRoutinePage() {
-  const [data, setData] = useState(ROUTINES);
-  //const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const STORAGE_KEY = "academic_class_routines";
+
+  const [data, setData] = useState<any[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : ROUTINES;
+  });
+    //const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [sortAsc, setSortAsc] = useState(true);
   const [dayFilter, setDayFilter] = useState<string | null>(null);
@@ -170,13 +175,21 @@ useEffect(() => {
   window.addEventListener("click", close);
   return () => window.removeEventListener("click", close);
 }, []);
+useEffect(() => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}, [data]);
 
   /* 🔄 REFRESH */
   const handleRefresh = () => {
-    setData(ROUTINES);
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      setData(JSON.parse(saved));
+    }
     setSearch("");
     setDayFilter(null);
+    setCurrentPage(1);
   };
+  
 
   /* 🖨 PRINT */
   const handlePrint = () => window.print();

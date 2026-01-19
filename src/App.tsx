@@ -14,6 +14,7 @@ import Interviews from "./pages/Receptionist/Admissions/Interviews";
 import OfferLetters from "./pages/Receptionist/Admissions/OfferLetters";
 import EnrolledStudents from "./pages/Receptionist/Admissions/EnrolledStudents";
 import AllApplications from "./pages/Receptionist/Admissions/AllApplications";
+//import Interviews from "./pages/Receptionist/Admissions/Interviews";
 
 // People
 import StudentsPage from "./pages/People/StudentsPage";
@@ -117,7 +118,7 @@ export default function App() {
       <Route
   path="/admin/dashboard"
   element={
-    <ProtectedRoute role="admin">
+    <ProtectedRoute role={["admin", "receptionist"]}>
       <DashboardLayout />
     </ProtectedRoute>
   }

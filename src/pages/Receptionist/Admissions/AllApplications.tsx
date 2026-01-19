@@ -264,17 +264,7 @@ export default function AllApplications() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }, [data]);
-  
-  useEffect(() => {
-    const saved = localStorage.getItem("applications");
-    if (!saved || JSON.parse(saved).length < applications.length) {
-      localStorage.setItem("applications", JSON.stringify(applications));
-      setData(applications);
-    }
-  }, []);
-  useEffect(() => {
-    localStorage.setItem("applications", JSON.stringify(data));
-  }, [data]);
+
     const [openDate, setOpenDate] = useState(false);
 const [openFilter, setOpenFilter] = useState(false);
 const [search, setSearch] = useState("");
@@ -328,9 +318,7 @@ const handleRefresh = () => {
       "Status",
       "Documents",
     ];
-    useEffect(() => {
-      localStorage.setItem("applications", JSON.stringify(data));
-    }, [data]);
+    
     const rows = data.map((a) =>
       [
         a.id,

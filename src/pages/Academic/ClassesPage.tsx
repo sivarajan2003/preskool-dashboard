@@ -33,11 +33,16 @@ const initialClasses = [
 /* ================= PAGE ================= */
 
 export default function ClassesPage() {
+  const STORAGE_KEY = "academic_classes";
+
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const [data, setData] = useState(initialClasses);
-  //const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [data, setData] = useState<any[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : initialClasses;
+  });
+    //const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [openViewModal, setOpenViewModal] = useState(false);
 const [selectedClass, setSelectedClass] = useState<any>(null);
 const [openEditClass, setOpenEditClass] = useState(false);
@@ -67,13 +72,19 @@ const [editingClass, setEditingClass] = useState<any>(null);
   }, [openDate]);
   
   const today = "15 May 2020 - 24 May 2024";
-  
-  
-  /* 🔁 REFRESH */
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }, [data]);
   const handleRefresh = () => {
-    setData(initialClasses);
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      setData(JSON.parse(saved));
+    }
     setStatusFilter("All");
+    setSearch("");
+    setCurrentPage(1);
   };
+  
 
   /* 🖨 PRINT */
   const handlePrint = () => window.print();

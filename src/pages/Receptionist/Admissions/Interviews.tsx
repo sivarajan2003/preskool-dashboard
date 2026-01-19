@@ -8,7 +8,7 @@ import {
     CalendarDays,
   } from "lucide-react";
   import { useState } from "react";
-  import { useLocation } from "react-router-dom";
+  import { useLocation, useNavigate } from "react-router-dom";
   import { useEffect} from "react";
 
 
@@ -259,20 +259,21 @@ export default function AllApplications() {
   const STORAGE_KEY = "admission_applications";
   const [data, setData] = useState<any[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+    return saved ? JSON.parse(saved) : applications;
+  });  
   
   const location = useLocation();
-const student = location.state;
+  const navigate = useNavigate();
+  const student = location.state;
     const [openDate, setOpenDate] = useState(false);
 const [openFilter, setOpenFilter] = useState(false);
 const [search, setSearch] = useState("");
 const [startDate, setStartDate] = useState("2020-05-15");
 const [endDate, setEndDate] = useState("2024-05-24");
 useEffect(() => {
-  const saved = localStorage.getItem("applications");
-  setData(saved ? JSON.parse(saved) : applications);
-}, []);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}, [data]);
+
 const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 const [statusFilter, setStatusFilter] = useState<string>("All");
 const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -281,20 +282,20 @@ const [viewApp, setViewApp] = useState<any>(null);
 const [editApp, setEditApp] = useState<any>(null);
 const [deleteApp, setDeleteApp] = useState<any>(null);
 const markInterviewDone = (id: string) => {
-  const updated = data.map((app) =>
-    app.id === id
-      ? {
-          ...app,
-          status: "Interview Done",
-          interviewResult: "PASS",
-          interviewCompletedAt: new Date().toISOString(),
-        }
-      : app
+  setData(prev =>
+    prev.map(app =>
+      app.id === id
+        ? {
+            ...app,
+            status: "Interview Done", // ✅ STEP 4
+            interviewResult: "PASS",
+            interviewCompletedAt: new Date().toISOString(),
+          }
+        : app
+    )
   );
-
-  setData(updated);
-  localStorage.setItem("applications", JSON.stringify(updated));
 };
+
 const [activeTab, setActiveTab] = useState<
   "overview" | "documents" | "interview" | "offer"
 >("overview");
@@ -649,24 +650,38 @@ const paginatedData = filteredData.slice(
   )}
 </td>
 <td className="px-6 py-4 text-center">
+
+  {/* MARK DONE */}
   {app.status === "Interview Scheduled" && (
     <button
       onClick={() => markInterviewDone(app.id)}
-      className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-green-700"
+      className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
     >
       Mark Done
     </button>
   )}
 
-  {app.status !== "Interview Scheduled" &&
-    app.status !== "Interview Done" && (
-      <button
-        onClick={() => setScheduleApp(app)}
-        className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
-      >
-        + Schedule
-      </button>
-    )}
+  {/* OFFER LETTER ICON */}
+  {app.status === "Interview Done" && (
+    <button
+      onClick={() =>
+        navigate("/admin/dashboard/receptionist/admissions/offers")
+      }
+      className="px-4 py-2 border rounded-lg text-sm"
+    >
+      📄 Offer Letter
+    </button>
+  )}
+
+  {/* SCHEDULE */}
+  {app.status === "Applied" && (
+    <button
+      onClick={() => setScheduleApp(app)}
+      className="px-4 py-2 border rounded-lg text-sm"
+    >
+      + Schedule
+    </button>
+  )}
 </td>
     </tr>
   ))}
@@ -1072,22 +1087,6 @@ const paginatedData = filteredData.slice(
               )
             );
             
-            localStorage.setItem(
-              "applications",
-              JSON.stringify(
-                data.map(item =>
-                  item.id === scheduleApp.id
-                    ? {
-                        ...item,
-                        status: "Interview Scheduled",
-                        interviewDate: scheduleDate,
-                        interviewTime: scheduleTime,
-                        interviewLocation: scheduleLocation,
-                      }
-                    : item
-                )
-              )
-            );
             
             setScheduleApp(null);
           }}
@@ -1191,16 +1190,20 @@ const paginatedData = filteredData.slice(
 
         <button
           onClick={() => {
-            setData((prev) => [
-              {
-                ...newApp,
-                id: `ADM-2026-${Math.floor(Math.random() * 9000)}`,
-                status: "Applied",
-                documents: "0/2",
-                avatar: "https://i.pravatar.cc/40",
-              },
-              ...prev,
-            ]);
+            setData(prev => {
+              const updated = [
+                {
+                  ...newApp,
+                  id: `ADM-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+                  status: "Applied",
+                  documents: "0/2",
+                  avatar: "https://i.pravatar.cc/40",
+                },
+                ...prev,
+              ];
+              return updated;
+            });
+            
             setOpenNewApp(false);
           }}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
