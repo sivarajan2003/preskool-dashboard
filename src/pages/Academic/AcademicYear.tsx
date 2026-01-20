@@ -8,6 +8,8 @@ import {
   Trash2,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import api from "../../lib/api";
+
 
 /* ================= DATA ================= */
 interface AcademicYearType {
@@ -19,25 +21,18 @@ interface AcademicYearType {
   status: "Active" | "Inactive";
 }
 
-const academicYears: AcademicYearType[] = [
-  {
-    id: 1782341,
-    year: "2023 - 2024",
-    start: "01/06/2023",
-    end: "31/05/2024",
-    current: "Yes",
-    status: "Active",
-  },
-];
 
 /* ================= PAGE ================= */
 export default function AcademicYear() {
-  
+  const token = localStorage.getItem("token");
+if (!token) {
+  alert("Login expired. Please login again.");
+  return;
+}
+
   const navigate = useNavigate();
-  const [data, setData] = useState<AcademicYearType[]>(() => {
-    const saved = localStorage.getItem("academicYears");
-    return saved ? JSON.parse(saved) : academicYears;
-  });
+  const [data, setData] = useState<AcademicYearType[]>([]);
+
   const [deleteId, setDeleteId] = useState<number | null>(null);
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
@@ -62,13 +57,13 @@ export default function AcademicYear() {
 
   /* ACTIONS */
   const handleRefresh = () => {
-    const saved = localStorage.getItem("academicYears");
-    if (saved) setData(JSON.parse(saved));
+    fetchAcademicYears();
   };
-    const handlePrint = () => window.print();
   useEffect(() => {
-    localStorage.setItem("academicYears", JSON.stringify(data));
-  }, [data]);
+    fetchAcademicYears();
+  }, []);
+  
+    const handlePrint = () => window.print();
   
   const sortByAcademicYear = () => {
     setData(prev =>
@@ -84,7 +79,104 @@ export default function AcademicYear() {
   selectedYear === "ALL"
     ? data
     : data.filter((item) => item.year === selectedYear);
+    const fetchAcademicYears = async () => {
+      try {
+        const res = await api.get("/school/academicyear");
+    
+        setData(
+          res.data.data.map((y: any) => ({
+            id: y.id,
+            year: y.yearsbyname,
+            start: y.startdate,
+            end: y.enddate,
+            current: y.is_current ? "Yes" : "No",
+            status: y.is_active ? "Active" : "Inactive",
+          }))
+        );
+      } catch (error) {
+        console.error("Failed to load academic years", error);
+      }
+    };
+    const handleUpdateAcademicYear = async () => {
+      if (!editingYear) return;
+    
+      try {
+        await api.put(`/school/academicyear/${editingYear.id}`, {
+          yearsbyname: form.year,
+          startdate: form.start,
+          enddate: form.end,
+          is_active: form.status === "Active",
+        });
+    
+        setOpenEditModal(false);
+        fetchAcademicYears(); // reload from backend
+      } catch (error) {
+        console.error("Update failed", error);
+      }
+    };
+    const handleDeleteAcademicYear = async () => {
+      if (!deleteId) return;
+    
+      try {
+        await api.delete(`/school/academicyear/${deleteId}`);
+        setDeleteId(null);
+        fetchAcademicYears(); // reload
+      } catch (error) {
+        console.error("Delete failed", error);
+      }
+    };
+    const handleAddAcademicYear = async () => {
+      try {
+        const payload = {
+          yearsbyname: form.year,
+          startdate: new Date(form.start).toISOString().split("T")[0],
+          enddate: new Date(form.end).toISOString().split("T")[0],
+          is_current: form.current === "Yes",
+          is_active: form.status === "Active",
+        };
+    
+        console.log("Submitting payload:", payload); // 👈 IMPORTANT
+    
+        const res = await api.post("/school/academicyear", payload);
 
+        if (!res.data?.success) {
+          throw new Error(res.data?.message || "Backend rejected request");
+        }
+        if (!form.year || !form.start || !form.end) {
+          alert("All fields are required");
+          return;
+        }
+        
+        if (new Date(form.start) > new Date(form.end)) {
+          alert("Start date cannot be after End date");
+          return;
+        }
+                
+        setOpenAddModal(false);
+        fetchAcademicYears();
+    
+        setForm({
+          year: "",
+          start: "",
+          end: "",
+          current: "No",
+          status: "Active",
+        });
+      }catch (error: any) {
+        console.error("Save failed FULL ERROR", {
+          status: error?.response?.status,
+          data: error?.response?.data,
+        });
+      
+        alert(
+          error?.response?.data?.message ||
+          error?.response?.data?.error ||
+          `Save failed (HTTP ${error?.response?.status})`
+        );
+      }
+      
+    };
+    
   return (
     <div className="space-y-6">
 
@@ -206,8 +298,9 @@ export default function AcademicYear() {
   key={y.id}
   className="border-t hover:bg-blue-50 cursor-pointer"
   onClick={() =>
-    navigate(`/admin/dashboard/academic/academic-year/${y.year}`)
+    navigate(`/admin/dashboard/academic/academic-year/${y.id}`)
   }
+  
 >                <td className="px-4 py-3">{y.id}</td>
                 <td className="px-4 py-3">{y.year}</td>
                 <td className="px-4 py-3">{y.start}</td>
@@ -348,41 +441,12 @@ export default function AcademicYear() {
       {/* FOOTER */}
       <div className="flex justify-end gap-3 mt-6">
       <button
-  onClick={() => {
-    setData((prev) => {
-      const updated = prev.map((y) =>
-        form.current === "Yes"
-          ? { ...y, current: "No" }
-          : y
-      );
-
-      // ✅ MUST return the new array
-      return [
-        {
-          id: Date.now(),
-          year: form.year,
-          start: form.start,
-          end: form.end,
-          current: form.current,
-          status: form.status,
-        },
-        ...updated,
-      ];
-    });
-
-    setOpenAddModal(false);
-    setForm({
-      year: "",
-      start: "",
-      end: "",
-      current: "No",
-      status: "Active",
-    });
-  }}
+  onClick={handleAddAcademicYear}
   className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
 >
   Save
 </button>
+
 
         <button
           onClick={() => setOpenAddModal(false)}
@@ -417,14 +481,12 @@ export default function AcademicYear() {
         </button>
 
         <button
-          onClick={() => {
-            setData(prev => prev.filter(y => y.id !== deleteId));
-            setDeleteId(null);
-          }}
-          className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
-        >
-          Delete
-        </button>
+  onClick={handleDeleteAcademicYear}
+  className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm"
+>
+  Delete
+</button>
+
       </div>
     </div>
   </div>
@@ -507,22 +569,12 @@ export default function AcademicYear() {
         >
           Cancel
         </button>
-
         <button
-          onClick={() => {
-            setData(prev =>
-              prev.map(y =>
-                y.id === editingYear.id
-                  ? { ...y, ...form }
-                  : y
-              )
-            );
-            setOpenEditModal(false);
-          }}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
-        >
-          Update
-        </button>
+  onClick={handleUpdateAcademicYear}
+  className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+>
+  Update
+</button>
       </div>
 
     </div>

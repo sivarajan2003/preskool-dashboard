@@ -1156,7 +1156,6 @@ School Admin`
   />
 </div>
 
-{/* ✅ SUBJECT (STEP-3) */}
 <div>
   <label className="text-sm text-gray-600">Subject</label>
   <input

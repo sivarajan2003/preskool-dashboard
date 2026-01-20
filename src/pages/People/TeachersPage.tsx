@@ -738,4 +738,4 @@ const [deleteTeacher, setDeleteTeacher] = useState<any>(null);
 
     </div>
   );
-}
+} 

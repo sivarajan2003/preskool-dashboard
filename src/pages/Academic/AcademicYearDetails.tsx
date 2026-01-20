@@ -1,48 +1,49 @@
+//import { useParams, useNavigate } from "react-router-dom";
+
 import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../../lib/api";
 
 interface ClassData {
-    year: string;
-    className: string;
-    students: number;
-    sections: number;
-  }
-  
-  const academicYears = ["2025-2026", "2024-2025", "2023-2024", "2021-2022"];
-  
-  const classData: ClassData[] = academicYears.flatMap((year) =>
-    Array.from({ length: 12 }, (_, i) => ({
-      year,
-      className: `Class ${i + 1}`,
-      students:
-        year === "2025-2026"
-          ? i < 4 ? 90 : i < 8 ? 85 : 80
-          : year === "2024-2025"
-          ? i < 6 ? 75 : 70
-          : year === "2023-2024"
-          ? 60
-          : 50,
-      sections:
-        year === "2025-2026"
-          ? i < 6 ? 4 : 3
-          : year === "2024-2025"
-          ? 3
-          : 2,
-    }))
-  );
-  
+  id: number;
+  className: string;
+  students: number;
+  sections: number;
+}
+ 
 export default function AcademicYearDetails() {
   const { year } = useParams();
   const navigate = useNavigate();
+  const [classes, setClasses] = useState<ClassData[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (!year) return;
+  
+    const fetchClasses = async () => {
+      try {
+        const res = await api.get(
+          `/school/class?academicyear_id=${year}`
+        );
+        setClasses(res.data.data);
+      } catch (error) {
+        console.error("Failed to load classes", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchClasses();
+  }, [year]);
+  const totalClasses = classes.length;
+const totalStudents = classes.reduce(
+  (sum, c) => sum + (c.students || 0),
+  0
+);
+const totalSections = classes.reduce(
+  (sum, c) => sum + (c.sections || 0),
+  0
+);
 
-  const filtered =
-    year === "ALL"
-      ? classData
-      : classData.filter((c) => c.year === year);
-
-      const totalClasses = filtered.length;
-      const totalStudents = filtered.reduce((sum, c) => sum + c.students, 0);
-      const totalSections = filtered.reduce((sum, c) => sum + c.sections, 0);
-      
   return (
     <div className="p-6 space-y-6">
       <button
@@ -53,7 +54,7 @@ export default function AcademicYearDetails() {
 </button>
 
       <h2 className="text-2xl font-semibold">
-        Academic Year Details : {year}
+      Academic Year Details
       </h2>
 
       {/* STATS */}
@@ -85,7 +86,8 @@ export default function AcademicYearDetails() {
             </tr>
           </thead>
           <tbody>
-            {filtered.map((c, i) => (
+          {classes.map((c, i) => (
+
               <tr key={i} className="border-t">
                 <td className="p-3">{c.className}</td>
                 <td className="p-3">{c.students}</td>
