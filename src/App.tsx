@@ -15,6 +15,11 @@ import OfferLetters from "./pages/Receptionist/Admissions/OfferLetters";
 import EnrolledStudents from "./pages/Receptionist/Admissions/EnrolledStudents";
 import AllApplications from "./pages/Receptionist/Admissions/AllApplications";
 //import Interviews from "./pages/Receptionist/Admissions/Interviews";
+import ApplicationForm from "./pages/Receptionist/Admissions/ApplicationForm";
+import FeePayment from "./pages/Receptionist/Admissions/FeePayment";
+import SeatAllocation from "./pages/Receptionist/Admissions/SeatAllocation";
+import Verification from "./pages/Receptionist/Admissions/Verification";
+import Reports from "./pages/Receptionist/Admissions/Reports";
 
 // People
 import StudentsPage from "./pages/People/StudentsPage";
@@ -142,13 +147,16 @@ export default function App() {
 >
   {/* DEFAULT PAGE */}
   <Route index element={<AllApplications />} />
-
+  <Route path="application-form" element={<ApplicationForm />} />
+  <Route path="fee-payment" element={<FeePayment />} />
   <Route path="all" element={<AllApplications />} />
   <Route path="new" element={<NewApplication />} />
   <Route path="documents" element={<DocumentVerification />} />
   <Route path="interviews" element={<Interviews />} />
   <Route path="offers" element={<OfferLetters />} />
   <Route path="enrolled" element={<EnrolledStudents />} />
+  <Route path="seat-allocation" element={<SeatAllocation />} />
+  <Route path="reports" element={<Reports />} />
 </Route>
 
 

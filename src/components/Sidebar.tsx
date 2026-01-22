@@ -224,6 +224,24 @@ const isManagementItemActive = (path: string) =>
 
     {openApplications && (
       <div className="ml-6 mt-2 space-y-1">
+        {/* Application Form */}
+    <ApplicationItem
+      label="Application Form"
+      icon={FileText}
+      path="/admin/dashboard/receptionist/admissions/application-form"
+    />
+
+    {/* Fee Payment */}
+    <ApplicationItem
+      label="Fee Payment"
+      icon={Wallet}
+      path="/admin/dashboard/receptionist/admissions/fee-payment"
+    />
+    <ApplicationItem
+      label="Verification"
+      icon={ClipboardCheck}
+      path="/admin/dashboard/receptionist/admissions/verification"
+    />
         <ApplicationItem
           label="All Applications"
           icon={FileText}
@@ -254,6 +272,17 @@ const isManagementItemActive = (path: string) =>
           icon={UserCheck}
           path="/admin/dashboard/receptionist/admissions/enrolled"
         />
+        
+        <ApplicationItem
+      label="Seat Allocation"
+      icon={LayoutGrid}
+      path="/admin/dashboard/receptionist/admissions/seat-allocation"
+    />
+    <ApplicationItem
+      label="Reports"
+      icon={LayoutGrid}
+      path="/admin/dashboard/receptionist/admissions/reports"
+    />
       </div>
     )}
   </>
