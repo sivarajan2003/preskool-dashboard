@@ -157,6 +157,8 @@ export default function App() {
   <Route path="enrolled" element={<EnrolledStudents />} />
   <Route path="seat-allocation" element={<SeatAllocation />} />
   <Route path="reports" element={<Reports />} />
+  <Route path="verification" element={<Verification />} />
+
 </Route>
 
 
