@@ -17,14 +17,14 @@ import {
   Users,
 } from "lucide-react";
 import {  useLocation } from "react-router-dom";
-import PreLogo from "../assets/pre.png"; 
-
+import PreLogo from "../assets/pre1.png"; 
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const role = localStorage.getItem("role");
   const isParent = role === "parent";
+  const isParentPortal = localStorage.getItem("portal") === "true";
 
   const isApplicationsContext =
   role === "admin" &&
@@ -69,7 +69,13 @@ export default function Sidebar() {
   const [openPeople, setOpenPeople] = useState(
     location.pathname.startsWith(`${basePath}/people`)
   );
-  
+  const canSeeAdmission =
+  role === "admin" ||
+  role === "receptionist" ||
+  (role === "parent" && isParentPortal);
+  const isPureParentPortal =
+  role === "parent" && isParentPortal;
+
   
 const [openStudents, setOpenStudents] = useState(false);
 const [openTeachers, setOpenTeachers] = useState(false);
@@ -93,6 +99,10 @@ const [openLeaves, setOpenLeaves] = useState(false);
 const [openReports, setOpenReports] = useState(
   location.pathname.startsWith(`${basePath}/reports`)
 );
+const admissionBasePath = isPureParentPortal
+  ? "/parent/dashboard/admissions"
+  : "/admin/dashboard/receptionist/admissions";
+
 /* MANAGEMENT ACTIVE CHECK */
 const isManagementActive = location.pathname.startsWith(
   "/admin/dashboard/management"
@@ -105,17 +115,16 @@ const isManagementItemActive = (path: string) =>
 
       {/* ================= HEADER ================= */}
       <div className="p-6 border-b">
-  <div className="flex items-center gap-3">
-    <img
-      src={PreLogo}
-      alt="PreSkool Logo"
-      className="w-10 h-10 object-contain"
-    />
-    <div>
-      <h1 className="text-lg font-bold">PreSkool</h1>
-      <p className="text-xs text-gray-500">Dashboard</p>
-    </div>
-  </div>
+      <div className="flex items-center gap-3 px-4 py-3">
+  <img
+    src={PreLogo}
+    alt="PreSkool Logo"
+    
+    className="h-20 w-64 object-contain"
+  />
+</div>
+
+
 </div>
 
       <nav className="p-4 space-y-2">
@@ -171,6 +180,10 @@ const isManagementItemActive = (path: string) =>
           onClick={() => navigate("/parent/dashboard")}
           active={location.pathname.startsWith("/parent/dashboard")}
         />
+        {/* Admissions */}
+
+ 
+
       </>
     )}
 
@@ -191,20 +204,30 @@ const isManagementItemActive = (path: string) =>
       />
     )}
 
-    {role === "parent" && (
-      <SubItem
-        label="Parent Dashboard"
-        onClick={() => navigate("/parent/dashboard")}
-        active={location.pathname.startsWith("/parent/dashboard")}
-      />
-    )}
+{role === "parent" && !isParentPortal && (
+  <SubItem
+    label="Parent Dashboard"
+    onClick={() => navigate("/parent/dashboard")}
+    active={location.pathname === "/parent/dashboard"}
+  />
+)}
+
+{isPureParentPortal && (
+  <SubItem
+    label="Parent Portal"
+    onClick={() => navigate("/parent/dashboard/admissions")}
+    active={location.pathname.startsWith("/parent/dashboard/admissions")}
+  />
+)}
+
 
   </div>
 )}
  </>
+ 
 )}
 {/* ================= APPLICATIONS (Receptionist Only) ================= */}
-{isApplicationsContext && (
+{canSeeAdmission && (
   <>
     <button
       onClick={() => setOpenApplications(!openApplications)}
@@ -224,71 +247,78 @@ const isManagementItemActive = (path: string) =>
 
     {openApplications && (
       <div className="ml-6 mt-2 space-y-1">
-        {/* Application Form */}
-    <ApplicationItem
-      label="Application Form"
-      icon={FileText}
-      path="/admin/dashboard/receptionist/admissions/application-form"
-    />
+        <ApplicationItem
+  label="All Applications"
+  icon={FileText}
+  path={`${admissionBasePath}/all`}
+/>
 
-    {/* Fee Payment */}
-    <ApplicationItem
-      label="Fee Payment"
-      icon={Wallet}
-      path="/admin/dashboard/receptionist/admissions/fee-payment"
-    />
-    <ApplicationItem
-      label="Verification"
-      icon={ClipboardCheck}
-      path="/admin/dashboard/receptionist/admissions/verification"
-    />
-        <ApplicationItem
-          label="All Applications"
-          icon={FileText}
-          path="/admin/dashboard/receptionist/admissions/all"
-        />
-        <ApplicationItem
-          label="New Application"
-          icon={Mail}
-          path="/admin/dashboard/receptionist/admissions/new"
-        />
-        <ApplicationItem
-          label="Documents"
-          icon={ClipboardCheck}
-          path="/admin/dashboard/receptionist/admissions/documents"
-        />
-        <ApplicationItem
-          label="Interviews"
-          icon={CalendarCheck}
-          path="/admin/dashboard/receptionist/admissions/interviews"
-        />
-        <ApplicationItem
-          label="Offer Letters"
-          icon={FileCheck}
-          path="/admin/dashboard/receptionist/admissions/offers"
-        />
-        <ApplicationItem
-          label="Enrolled Student"
-          icon={UserCheck}
-          path="/admin/dashboard/receptionist/admissions/enrolled"
-        />
-        
-        <ApplicationItem
-      label="Seat Allocation"
-      icon={LayoutGrid}
-      path="/admin/dashboard/receptionist/admissions/seat-allocation"
-    />
-    <ApplicationItem
-      label="Reports"
-      icon={LayoutGrid}
-      path="/admin/dashboard/receptionist/admissions/reports"
-    />
+<ApplicationItem
+  label="Application Form"
+  icon={FileText}
+  path={`${admissionBasePath}/application-form`}
+/>
+
+<ApplicationItem
+  label="Fee Payment"
+  icon={Wallet}
+  path={`${admissionBasePath}/fee-payment`}
+/>
+
+<ApplicationItem
+  label="Verification"
+  icon={ClipboardCheck}
+  path={`${admissionBasePath}/verification`}
+/>
+
+<ApplicationItem
+  label="New Application"
+  icon={Mail}
+  path={`${admissionBasePath}/new`}
+/>
+
+<ApplicationItem
+  label="Documents"
+  icon={ClipboardCheck}
+  path={`${admissionBasePath}/documents`}
+/>
+
+<ApplicationItem
+  label="Interviews"
+  icon={CalendarCheck}
+  path={`${admissionBasePath}/interviews`}
+/>
+
+<ApplicationItem
+  label="Offer Letters"
+  icon={FileCheck}
+  path={`${admissionBasePath}/offers`}
+/>
+
+<ApplicationItem
+  label="Enrolled Student"
+  icon={UserCheck}
+  path={`${admissionBasePath}/enrolled`}
+/>
+
+<ApplicationItem
+  label="Seat Allocation"
+  icon={LayoutGrid}
+  path={`${admissionBasePath}/seat-allocation`}
+/>
+
+<ApplicationItem
+  label="Reports"
+  icon={LayoutGrid}
+  path={`${admissionBasePath}/reports`}
+/>
+
       </div>
     )}
   </>
 )}
 
-{canAccess(["admin", "teacher", "parent"]) && (
+{canAccess(["admin", "teacher", "parent"]) && !isPureParentPortal && (
   <>
 {/* ================= PEOPLE ================= */}
 <button
@@ -443,7 +473,7 @@ const isManagementItemActive = (path: string) =>
 )}
 </>
 )}
-{canAccess(["admin", "teacher", "student", "parent"]) && (
+{canAccess(["admin", "teacher", "student", "parent"]) && !isPureParentPortal && (
   <>
 {/* ================= ACADEMIC ================= */}
 
@@ -608,7 +638,7 @@ const isManagementItemActive = (path: string) =>
  </>
 )}
 
-{canAccess(["admin", "student", "teacher"]) && (
+{canAccess(["admin", "student", "teacher"]) && !isPureParentPortal && (
   <>
 {/* ================= MANAGEMENT ================= */}
 <button
@@ -793,7 +823,7 @@ const isManagementItemActive = (path: string) =>
 )}
 </>
 )}
-{canAccess(["admin", "student", "teacher", "parent"]) && (
+{canAccess(["admin", "student", "teacher", "parent"]) && !isPureParentPortal && (
   <>
 {/* ================= HRM ================= */}
 <button
@@ -953,7 +983,7 @@ const isManagementItemActive = (path: string) =>
 )}
  </>
 )}
-{canAccess(["admin", "teacher", "parent", "student"]) && (
+{canAccess(["admin", "teacher", "parent", "student"]) && !isPureParentPortal && (
   <>
 {/* ================= REPORTS ================= */}
 <button

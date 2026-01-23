@@ -6,6 +6,7 @@ import { Eye, EyeOff, Mail } from "lucide-react";
 import LeftIllustration from "../assets/login-left.png";
 import SampleLogin from "../assets/samplelogin.png";
 import LoginWave from "../assets/png.png";
+import PreLogo from "../assets/pre1.png"; 
 
 //import LoginImg from '../assets/login.png';
 import Logo from '../assets/logo.png';
@@ -60,28 +61,77 @@ export default function Login() {
     setError("");
     setLoading(true);
   
+    // ✅ STEP 1: FRONTEND-ONLY PARENT PORTAL LOGIN (PUT HERE)
+    if (
+      email.trim() === "parentportal@preskool.com" &&
+      password.trim() === "admin123"
+    ) {
+      localStorage.setItem("token", "parent-portal-demo-token");
+      localStorage.setItem("role", "parent");
+      localStorage.setItem("portal", "true");
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          email,
+          role: "parent",
+          portal: true,
+        })
+      );
+      localStorage.setItem("isAuth", "true");
+  
+      toast.success("Parent Portal Login Successful ✅");
+  
+      navigate("/parent/dashboard/admissions");
+      setLoading(false);
+      return; // ⛔ VERY IMPORTANT → stops API call
+    }
+  
+  
     try {
       const res = await api.post("/api/auth/login", {
-        email,
-        password,
+        email: email.trim(),
+        password: password.trim(),
       });
+      
   
       const { token, user } = res.data;
   
       localStorage.setItem("token", token);
       localStorage.setItem("role", user.role);
+      localStorage.setItem("portal", String(user.portal || false));
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("isAuth", "true");
+      
       
   
       toast.success("Login successful ✅");
   
-      if (user.role === "admin") navigate("/admin/dashboard");
-      if (user.role === "student") navigate("/student/dashboard");
-      if (user.role === "teacher") navigate("/teacher/dashboard");
-      if (user.role === "parent") navigate("/parent/dashboard");
-      if (user.role === "receptionist")
+      if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      }
+      
+      if (user.role === "student") {
+        navigate("/student/dashboard");
+      }
+      
+      if (user.role === "teacher") {
+        navigate("/teacher/dashboard");
+      }
+      
+      if (user.role === "receptionist") {
         navigate("/admin/dashboard/receptionist");
+      }
+      
+      if (user.role === "parent") {
+        if (user.portal === true) {
+          // ✅ Parent Portal Login
+          navigate("/parent/dashboard/admissions");
+        } else {
+          // ✅ Normal Parent Login
+          navigate("/parent/dashboard");
+        }
+      }
+      
   
     } catch (err: any) {
       console.error("LOGIN ERROR:", err.response?.data || err.message);
@@ -120,8 +170,12 @@ export default function Login() {
   
           {/* LOGO */}
           <div className="flex items-center justify-center gap-2 mb-5">
-            <img src={Logo} className="h-9 w-9" />
-            <span className="text-lg font-semibold">PreSkool</span>
+          <img
+    src={PreLogo}
+    alt="PreSkool Logo"
+    
+    className="h-20 w-64 object-contain"
+  />
           </div>
   
           {/* TITLE */}

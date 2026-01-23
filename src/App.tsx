@@ -6,6 +6,8 @@ import Dashboard from "./pages/Dashboard";
 import StudentDashboard from "./pages/Student/Dashboard";
 import TeacherDashboard from "./pages/Teacher/Dashboard";
 import ParentDashboard from "./pages/Parent/Dashboard";
+import AdmissionPortal from "./pages/Parent/AdmissionPortal";
+import ParentPortalLogin from "./pages/ParentPortalLogin";
 import ReceptionistDashboard from "./pages/Receptionist/Dashboard";
 import ReceptionistAdmissions from "./pages/Receptionist/Admissions";
 import NewApplication from "./pages/Receptionist/Admissions/NewApplication";
@@ -116,6 +118,7 @@ export default function App() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/reset-success" element={<ResetSuccess />} />
+      <Route path="/parent-portal/login" element={<ParentPortalLogin />} />
 
 
 
@@ -357,16 +360,38 @@ export default function App() {
 
 
       {/* PARENT */}
-      <Route
+      {/* ================= PARENT ================= */}
+<Route
   path="/parent/dashboard"
   element={
-<ProtectedRoute role={["parent", "teacher", "admin"]}>
+    <ProtectedRoute role={["parent"]}>
       <DashboardLayout />
     </ProtectedRoute>
   }
 >
-<Route index element={<ParentDashboard />} />
-<Route path="hrm/payroll" element={<Payroll />} />
+  {/* Parent main dashboard */}
+  <Route index element={<ParentDashboard />} />
+
+  {/* ✅ Parent Portal – Admissions (NESTED PROPERLY) */}
+  <Route path="admissions" element={<AdmissionPortal />}>
+    <Route index element={<AllApplications />} />
+    <Route path="all" element={<AllApplications />} />
+    <Route path="application-form" element={<ApplicationForm />} />
+    <Route path="fee-payment" element={<FeePayment />} />
+    <Route path="verification" element={<Verification />} />
+    <Route path="new" element={<NewApplication />} />
+    <Route path="documents" element={<DocumentVerification />} />
+    <Route path="interviews" element={<Interviews />} />
+    <Route path="offers" element={<OfferLetters />} />
+    <Route path="enrolled" element={<EnrolledStudents />} />
+    <Route path="seat-allocation" element={<SeatAllocation />} />
+    <Route path="reports" element={<Reports />} />
+  </Route>
+
+  {/* Other parent routes */}
+  <Route path="hrm/payroll" element={<Payroll />} />
+  <Route path="attendance" element={<StudentAttendance />} />
+
 
 <Route
     path="reports/exam-results"

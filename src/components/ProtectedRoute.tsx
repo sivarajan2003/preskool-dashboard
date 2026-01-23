@@ -8,20 +8,17 @@ export default function ProtectedRoute({
   role: string | string[];
 }) {
   const userRole = localStorage.getItem("role");
+  const isAuth = localStorage.getItem("isAuth");
 
-  // ❌ Not logged in
-  if (!userRole) {
+  if (!isAuth || !userRole) {
     return <Navigate to="/login" replace />;
   }
 
-  // Normalize roles
   const allowedRoles = Array.isArray(role) ? role : [role];
 
-  // ❌ Logged in but NOT authorized
   if (!allowedRoles.includes(userRole)) {
     return <Navigate to="/unauthorized" replace />;
   }
 
-  // ✅ Authorized
   return children;
 }
