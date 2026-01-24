@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useMemo } from "react";
 import { useState } from "react";
+import { ArrowLeft } from "lucide-react";
 
 const STORAGE_KEY = "admission_applications";
 
@@ -69,7 +70,20 @@ export default function VerificationDetails() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
       {/* LEFT CARD */}
       <div className="bg-white border rounded-2xl p-6">
-  <div className="flex flex-col items-center">
+
+{/* BACK ARROW */}
+<button
+  onClick={() =>
+    navigate("/admin/dashboard/receptionist/admissions/verification")
+  }
+  className="mb-4 flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600"
+>
+  <ArrowLeft className="w-4 h-4" />
+  Back
+</button>
+
+<div className="flex flex-col items-center">
+
     <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center text-4xl font-semibold">
       {application.name
         .split(" ")

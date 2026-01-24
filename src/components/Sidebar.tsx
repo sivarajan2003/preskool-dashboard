@@ -124,14 +124,14 @@ const isManagementItemActive = (path: string) =>
       <div className="border-b px-4 py-4">
   <div
     className={`flex items-center ${
-      collapsed ? "justify-center" : "gap-2"
+      collapsed ? "justify-center" : "gap-5"
     }`}
   >
     {/* LOGO ICON */}
     <img
       src={PreLogo}
       alt="Logo"
-      className="h-10 w-10 object-contain"
+      className="h-16 w-16 object-contain"
     />
 
     {/* LOGO TEXT */}
@@ -212,7 +212,13 @@ const isManagementItemActive = (path: string) =>
           active={location.pathname.startsWith("/parent/dashboard")}
         />
         {/* Admissions */}
-
+        <SubItem
+      label="Parent Portal"
+      onClick={() => navigate("/parent/dashboard/admissions")}
+      active={location.pathname.startsWith(
+        "/parent/dashboard/admissions"
+      )}
+    />
  
 
       </>
@@ -252,11 +258,14 @@ const isManagementItemActive = (path: string) =>
         "/admin/dashboard/receptionist"
       )}
     />
-    <SubItem
-      label="Parent Dashboard"
-      onClick={() => navigate("/parent/dashboard")}
-      active={location.pathname === "/parent/dashboard"}
-    />
+    
+<SubItem
+  label="Parent Portal"
+  onClick={() => navigate("/parent/dashboard/admissions")}
+  active={location.pathname.startsWith(
+    "/parent/dashboard/admissions"
+  )}
+/>
 
     
   </>

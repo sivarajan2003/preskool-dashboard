@@ -8,6 +8,9 @@ import {
     CalendarDays,
   } from "lucide-react";
   import { useState } from "react";
+  import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
   const documents = [
     {
       name: "Birth Certificate.pdf",
@@ -267,7 +270,8 @@ export default function AllApplications() {
     const saved = localStorage.getItem(STORAGE_KEY);
     return saved ? JSON.parse(saved) : [];
   });
-  
+  const navigate = useNavigate();
+
     const [openDate, setOpenDate] = useState(false);
 const [openFilter, setOpenFilter] = useState(false);
 const [selectedApp, setSelectedApp] = useState<any>(null);
@@ -376,14 +380,30 @@ const paginatedData = filteredData.slice(
   <div className="flex items-center justify-between">
 
     {/* LEFT */}
-    <div>
-      <h2 className="text-2xl font-semibold text-gray-900">
-      Document Verification
-      </h2>
-      <p className="text-sm text-gray-500 mt-1">
-        Dashboard / Receptionist / Documents
-      </p>
-    </div>
+    {/* LEFT */}
+<div className="flex items-center gap-4">
+
+{/* BACK ARROW */}
+<button
+  onClick={() => navigate("/admin/dashboard/receptionist")}
+  className="p-2 rounded-lg hover:bg-gray-100"
+  title="Back to Receptionist Dashboard"
+>
+  <ArrowLeft className="w-5 h-5 text-gray-700" />
+</button>
+
+{/* TITLE */}
+<div>
+  <h2 className="text-2xl font-semibold text-gray-900">
+    Document Verification
+  </h2>
+  <p className="text-sm text-gray-500 mt-1">
+    Dashboard / Receptionist / Documents
+  </p>
+</div>
+
+</div>
+
 
     {/* RIGHT ACTIONS */}
     <div className="flex items-center gap-3">

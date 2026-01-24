@@ -6,6 +6,8 @@ import r4 from "../../assets/gif/r4.gif";
   import AdmissionFunnel from "./Admissions/AdmissionFunnel";
 import ClassCapacity from "./Admissions/ClassCapacity";
 import RecentApplications from "./Admissions/RecentApplications";
+import { ArrowUpRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
   export default function ReceptionistDashboard() {
     return (
@@ -59,7 +61,7 @@ import RecentApplications from "./Admissions/RecentApplications";
     value="50"
     change="+12%"
     gif={r1}
-    
+    navigateTo="/admin/dashboard/receptionist/admissions/all"
   />
 
   <ReceptionistCard
@@ -67,7 +69,7 @@ import RecentApplications from "./Admissions/RecentApplications";
     value="11"
     change="-5%"
     gif={r2}
-    
+    navigateTo="/admin/dashboard/receptionist/admissions/documents"
   />
 
   <ReceptionistCard
@@ -75,7 +77,7 @@ import RecentApplications from "./Admissions/RecentApplications";
     value="5"
     change="+3%"
     gif={r3}
-    
+    navigateTo="/admin/dashboard/receptionist/admissions/interviews"
   />
 
   <ReceptionistCard
@@ -83,9 +85,10 @@ import RecentApplications from "./Admissions/RecentApplications";
     value="6"
     change="+8%"
     gif={r4}
-    
+    navigateTo="/admin/dashboard/receptionist/admissions/enrolled"
   />
 </div>
+
 {/* 🔥 ADMISSION FUNNEL SECTION */}
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
@@ -105,8 +108,10 @@ import RecentApplications from "./Admissions/RecentApplications";
     value,
     change,
     gif,
+    navigateTo,
   }: any) {
     const isPositive = change.startsWith("+");
+    const navigate = useNavigate();
   
     return (
       <div
@@ -118,8 +123,18 @@ import RecentApplications from "./Admissions/RecentApplications";
           shadow-sm
           hover:shadow-md
           transition
+          relative
         "
       >
+        {/* 🔥 ARROW BUTTON */}
+        <button
+          onClick={() => navigate(navigateTo)}
+          className="absolute top-4 right-4 p-1.5 rounded-lg hover:bg-gray-100"
+          title="View details"
+        >
+          <ArrowUpRight className="w-4 h-4 text-gray-500" />
+        </button>
+  
         {/* TOP ROW */}
         <div className="flex items-start gap-4">
           {/* GIF ICON */}

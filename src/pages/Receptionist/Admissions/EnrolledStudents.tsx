@@ -6,7 +6,8 @@ import {
   ArrowUpDown,
   Plus,Eye,
 } from "lucide-react";
-
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
   
 const applications = [
   {
@@ -294,6 +295,7 @@ const [viewProfile, setViewProfile] = useState<any>(null);
 const handlePrint = () => {
   window.print();
 };
+const navigate = useNavigate();
 
 const [newAppOpen, setNewAppOpen] = useState(false);
 
@@ -362,14 +364,30 @@ const handleSort = () => {
   <div className="flex items-center justify-between">
 
     {/* LEFT */}
-    <div>
-      <h2 className="text-2xl font-semibold text-gray-900">
-        Enrolled Students
-      </h2>
-      <p className="text-sm text-gray-500 mt-1">
-        Dashboard / Receptionist / Enrolled Students
-      </p>
-    </div>
+    {/* LEFT */}
+<div className="flex items-center gap-4">
+
+{/* BACK ARROW */}
+<button
+  onClick={() => navigate("/admin/dashboard/receptionist")}
+  className="p-2 rounded-lg hover:bg-gray-100"
+  title="Back to Receptionist Dashboard"
+>
+  <ArrowLeft className="w-5 h-5 text-gray-700" />
+</button>
+
+{/* TITLE */}
+<div>
+  <h2 className="text-2xl font-semibold text-gray-900">
+    Enrolled Students
+  </h2>
+  <p className="text-sm text-gray-500 mt-1">
+    Dashboard / Receptionist / Enrolled Students
+  </p>
+</div>
+
+</div>
+
 
     {/* RIGHT ACTIONS */}
     <div className="flex items-center gap-3">

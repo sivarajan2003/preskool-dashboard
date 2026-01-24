@@ -5,7 +5,7 @@ import {
     Filter,
     ArrowUpDown,
     Plus,
-    CalendarDays,
+    CalendarDays,ArrowLeft ,
   } from "lucide-react";
   import { useState } from "react";
   import { useEffect } from "react";
@@ -373,11 +373,16 @@ const paginatedData = filteredData.slice(
   currentPage * rowsPerPage
 );
 const role = localStorage.getItem("role");
+const isParentPortal = localStorage.getItem("portal") === "true";
 
-if (role === "parent") {
+/**
+ * BLOCK only:
+ * - normal parent (not parent portal)
+ */
+if (role === "parent" && !isParentPortal) {
   return (
     <div className="p-10 text-center text-red-600 font-medium">
-      
+      Access Denied
     </div>
   );
 }
@@ -390,13 +395,26 @@ if (role === "parent") {
   <div className="flex items-center justify-between">
 
     {/* LEFT */}
-    <div>
-      <h2 className="text-2xl font-semibold text-gray-900">
-        All Applications
-      </h2>
-      <p className="text-sm text-gray-500 mt-1">
-        Dashboard / Receptionist / Applications
-      </p>
+    <div className="flex items-center gap-4">
+
+  {/* BACK ARROW */}
+  <button
+    onClick={() => navigate("/admin/dashboard/receptionist")}
+    className="p-2 rounded-lg hover:bg-gray-100"
+    title="Back to Receptionist Dashboard"
+  >
+    <ArrowLeft className="w-5 h-5 text-gray-700" />
+  </button>
+
+  {/* TITLE */}
+  <div>
+    <h2 className="text-2xl font-semibold text-gray-900">
+      All Applications
+    </h2>
+    <p className="text-sm text-gray-500 mt-1">
+      Dashboard / Receptionist / Applications
+    </p>
+  </div>
     </div>
 
     {/* RIGHT ACTIONS */}

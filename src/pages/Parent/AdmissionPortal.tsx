@@ -67,6 +67,7 @@ const isAdmissionRoot =
         rzp.open();
       };
       const [showReceipt, setShowReceipt] = useState(false);
+      const [showInterviewPopup, setShowInterviewPopup] = useState(false);
 
     return (
         <div className="space-y-8">
@@ -168,11 +169,13 @@ const isAdmissionRoot =
               Please arrive 15 minutes early with original documents.
             </p>
           </div>
-  
-          <button className="bg-orange-500 text-white px-5 py-2 rounded-lg text-sm hover:bg-orange-600">
-            View Interview Details
-          </button>
-        </section>
+          <button
+  onClick={() => setShowInterviewPopup(true)}
+  className="bg-orange-500 text-white px-5 py-2 rounded-lg text-sm hover:bg-orange-600"
+>
+  View Interview Instructions
+</button>
+</section>
   
         {/* ================= IMG 4 – NOTIFICATIONS ================= */}
         <section className="bg-white rounded-2xl border p-6">
@@ -419,6 +422,60 @@ const isAdmissionRoot =
     </div>
   </div>
 )}
+{showInterviewPopup && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+
+    <div className="bg-white w-full max-w-lg rounded-2xl p-6 relative">
+
+      {/* ❌ CLOSE BUTTON */}
+      <button
+        onClick={() => setShowInterviewPopup(false)}
+        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+      >
+        ✕
+      </button>
+
+      {/* TITLE */}
+      <h2 className="text-xl font-semibold mb-1">
+        School Interview Instructions
+      </h2>
+      <p className="text-sm text-gray-500 mb-4">
+        Please read carefully before attending the interview
+      </p>
+
+      {/* INFO BOX */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+        <p className="text-sm text-blue-700 font-medium">
+          Interview Schedule
+        </p>
+        <p className="text-sm mt-1">
+          📅 <b>20 Jan 2026</b> <br />
+          ⏰ <b>03:00 PM</b> <br />
+          📍 School Campus – Admission Office
+        </p>
+      </div>
+
+      {/* INSTRUCTIONS */}
+      <ul className="space-y-3 text-sm text-gray-700">
+        <li>✅ Please arrive <b>15 minutes early</b></li>
+        <li>📄 Bring all <b>original documents</b></li>
+        <li>👶 Child must be accompanied by a parent</li>
+        <li>✍️ Carry a pen and necessary stationery</li>
+        <li>📱 Mobile phones should be kept on silent</li>
+      </ul>
+
+      {/* FOOTER BUTTON */}
+      <button
+        onClick={() => setShowInterviewPopup(false)}
+        className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+      >
+        Got it
+      </button>
+
+    </div>
+  </div>
+)}
+
 </>
     )}
 

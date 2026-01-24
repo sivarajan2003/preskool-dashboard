@@ -366,20 +366,29 @@ export default function App() {
 
       {/* PARENT */}
       {/* ================= PARENT ================= */}
-<Route
+      <Route
   path="/parent/dashboard"
   element={
-    <ProtectedRoute role={["parent"]}>
+    <ProtectedRoute role={["parent", "admin"]}>
       <DashboardLayout />
     </ProtectedRoute>
   }
 >
+<Route
+  path="/parent/dashboard/admissions"
+  element={
+    <ProtectedRoute role={["parent", "admin"]}>
+      <AdmissionPortal />
+    </ProtectedRoute>
+  }
+/>
+
   {/* Parent main dashboard */}
   <Route index element={<ParentDashboard />} />
 
   {/* ✅ Parent Portal – Admissions (NESTED PROPERLY) */}
   <Route path="admissions" element={<AdmissionPortal />}>
-    <Route index element={<AllApplications />} />
+
     <Route path="all" element={<AllApplications />} />
     <Route path="application-form" element={<ApplicationForm />} />
     <Route path="fee-payment" element={<FeePayment />} />

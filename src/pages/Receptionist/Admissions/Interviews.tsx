@@ -5,12 +5,11 @@ import {
     Filter,
     ArrowUpDown,
     Plus,
-    CalendarDays,
+    CalendarDays,ArrowLeft,
   } from "lucide-react";
   import { useState } from "react";
   import { useLocation, useNavigate } from "react-router-dom";
   import { useEffect} from "react";
-
 
   import i1 from "../../../assets/gif/i1.gif";
 import i2 from "../../../assets/gif/i2.gif";
@@ -400,16 +399,30 @@ const paginatedData = filteredData.slice(
   <div className="flex items-center justify-between">
 
     {/* LEFT */}
-    <div>
-      <h2 className="text-2xl font-semibold text-gray-900">
-       Interviews
-      </h2>
-      <p className="text-sm text-gray-500 mt-1">
-        Dashboard / Receptionist / Interviews
-      </p>
-    </div>
+    {/* LEFT */}
+<div className="flex items-center gap-4">
 
-    {/* RIGHT ACTIONS */}
+{/* BACK ARROW */}
+<button
+  onClick={() => navigate("/admin/dashboard/receptionist")}
+  className="p-2 rounded-lg hover:bg-gray-100"
+  title="Back to Receptionist Dashboard"
+>
+  <ArrowLeft className="w-5 h-5 text-gray-700" />
+</button>
+
+{/* TITLE */}
+<div>
+  <h2 className="text-2xl font-semibold text-gray-900">
+    Interviews
+  </h2>
+  <p className="text-sm text-gray-500 mt-1">
+    Dashboard / Receptionist / Interviews
+  </p>
+</div>
+
+</div>
+{/* RIGHT ACTIONS */}
     <div className="flex items-center gap-3">
     <button
   onClick={handleRefresh}
