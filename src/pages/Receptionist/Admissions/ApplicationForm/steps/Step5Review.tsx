@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+//import { toast } from "sonner";
 
 interface Props {
     data: any;
@@ -10,14 +11,44 @@ interface Props {
   export default function Step5Review({ data, onBack, onSubmit }: Props) {
     const { personal, academic, previousSchool, documents } = data;
   
-    const [submitted, setSubmitted] = useState(false); // ✅ ADD THIS
+   const [submitted, setSubmitted] = useState(false); // ✅ ADD THIS
     const navigate = useNavigate();                    // ✅ ADD THIS
-    const handleSubmit = () => {
-      onSubmit();          // existing submit logic (API / toast)
-      setSubmitted(true);  // ✅ switch UI after submit
+    const handleSubmit = async () => {
+      await onSubmit();
+    
+      const STORAGE_KEY = "admission_applications";
+    
+      // 🔹 Get existing applications
+      const existing = JSON.parse(
+        localStorage.getItem(STORAGE_KEY) || "[]"
+      );
+    
+      // 🔹 Create new application object
+      const newApplication = {
+        id: `ADM-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+        name: `${personal.firstName} ${personal.lastName}`,
+        dob: personal.dob,
+        phone: personal.phone,
+        email: personal.email,
+        class: academic.classApplying,
+        status: "Submitted",              // ✅ STATUS SET HERE
+        documents: "0/2",
+        avatar: "https://i.pravatar.cc/40",
+        address: personal.address,
+      };
+    
+      // 🔹 Save back to localStorage
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify([newApplication, ...existing])
+      );
+    
+      // 🔹 Redirect to All Applications
+      navigate("/admin/dashboard/receptionist/admissions/all");
     };
-      
-    const Row = ({ label, value }: { label: string; value: any }) => (
+    
+    
+     const Row = ({ label, value }: { label: string; value: any }) => (
       <div>
         <p className="text-xs text-gray-500">{label}</p>
         <p className="text-sm font-medium text-gray-800">
@@ -118,58 +149,28 @@ interface Props {
   
         
             {/* FOOTER BUTTONS */}
-<div className="flex justify-between pt-4 border-t">
-  
-  {/* LEFT SIDE */}
-  {!submitted && (
-    <button
-      onClick={onBack}
-      className="px-4 py-2 border rounded-lg"
-    >
-      Previous
-    </button>
-  )}
+            <div className="flex justify-between pt-4 border-t">
 
-  {/* RIGHT SIDE */}
-  <div className="flex gap-3 ml-auto">
-    {!submitted && (
-      <>
-        <button className="px-4 py-2 border rounded-lg">
-          Save Draft
-        </button>
+<button
+  onClick={onBack}
+  className="px-4 py-2 border rounded-lg"
+>
+  Previous
+</button>
 
-        <button
-          onClick={handleSubmit}
-          className="px-6 py-2 rounded-lg bg-green-600 text-white"
-        >
-          Submit Application
-        </button>
-      </>
-    )}
-
-{submitted && (
-  <button
-    onClick={() =>
-      navigate(
-        "/admin/dashboard/receptionist/admissions/fee-payment",
-        {
-          state: {
-            applicationId: "ADM-2026-0145",
-            applicantName: `${personal.firstName} ${personal.lastName}`,
-            className: academic.classApplying,
-          },
-        }
-      )
-    }
-    className="px-6 py-2 rounded-lg bg-blue-600 text-white"
-  >
-    Go to Fee Payment
+<div className="flex gap-3 ml-auto">
+  <button className="px-4 py-2 border rounded-lg">
+    Save Draft
   </button>
-  
-)}
 
+  <button
+    onClick={handleSubmit}
+    className="px-6 py-2 rounded-lg bg-green-600 text-white"
+  >
+    Submit Application
+  </button>
+</div>
 
-  </div>
 </div>
 
           </div>

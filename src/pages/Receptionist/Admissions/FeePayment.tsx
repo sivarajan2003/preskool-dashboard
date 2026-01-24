@@ -22,14 +22,7 @@ export default function FeePayment() {
   const applicantName = state?.applicantName;
   const className = state?.className;
   
-  if (!applicationId) {
-    return (
-      <Navigate
-        to="/admin/dashboard/receptionist/admissions"
-        replace
-      />
-    );
-  }
+  
 
   
   const [showPayment, setShowPayment] = useState(false);

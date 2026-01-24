@@ -22,6 +22,7 @@ import FeePayment from "./pages/Receptionist/Admissions/FeePayment";
 import SeatAllocation from "./pages/Receptionist/Admissions/SeatAllocation";
 import Verification from "./pages/Receptionist/Admissions/Verification";
 import Reports from "./pages/Receptionist/Admissions/Reports";
+import VerificationDetails from "./pages/Receptionist/Admissions/VerificationDetails";
 
 // People
 import StudentsPage from "./pages/People/StudentsPage";
@@ -131,6 +132,7 @@ export default function App() {
     </ProtectedRoute>
   }
 >
+
 <Route path="academic/reasons" element={<ReasonsPage />}>
     <Route path="exam" element={<ExamReasons />} />
     <Route path="leave" element={<LeaveReasons />} />
@@ -161,7 +163,10 @@ export default function App() {
   <Route path="seat-allocation" element={<SeatAllocation />} />
   <Route path="reports" element={<Reports />} />
   <Route path="verification" element={<Verification />} />
-
+  <Route
+    path="verification/:applicationId"
+    element={<VerificationDetails />}
+  />
 </Route>
 
 

@@ -8,7 +8,9 @@ export interface PersonalDetails {
     parentName: string;
     phone: string;
     email: string;
+    class: string; 
   }
+  
   export interface AdmissionApplication {
     personal: any;
     academic: any;

@@ -47,11 +47,40 @@ export default function NewApplication() {
     );
   
     setData(updated);
-    localStorage.setItem("applications", JSON.stringify(updated));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
   };
   const [openDate, setOpenDate] = useState(false);
 const [startDate, setStartDate] = useState("2020-05-15");
 const [endDate, setEndDate] = useState("2024-05-24");
+const submitApplication = (formData: any) => {
+  const STORAGE_KEY = "admission_applications";
+
+  const existing =
+    JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+  const newApplication = {
+    ...formData,
+    id: `ADM-${Date.now()}`,
+    status: "Applied", // 🔥 VERY IMPORTANT
+    createdAt: new Date().toISOString(),
+  };
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify([...existing, newApplication])
+  );
+
+  // ❌ Clear draft after submit
+  localStorage.removeItem("admission_form_draft");
+};
+
+useEffect(() => {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  const list = saved ? JSON.parse(saved) : [];
+
+  // Ignore drafts accidentally saved
+  setData(list.filter((a: any) => a.status));
+}, []);
 
   const [viewApp, setViewApp] = useState<any>(null);
 const [activeTab, setActiveTab] = useState<
@@ -68,10 +97,14 @@ const handleSort = () => {
   setData(sorted);
   setSortOrder(sortOrder === "asc" ? "desc" : "asc");
 };
+const newApplications = data.filter(
+  (a) => a.status === "Applied"
+);
+
 
 const handleRefresh = () => {
-  const saved = localStorage.getItem("applications");
-  setData(saved ? JSON.parse(saved) : applications);
+  const saved = localStorage.getItem(STORAGE_KEY);
+setData(saved ? JSON.parse(saved) : []);
 };
 
 const handlePrint = () => {
@@ -96,15 +129,12 @@ const handleExport = () => {
 
   /* LOAD FROM LOCAL STORAGE */
   useEffect(() => {
-    const saved = localStorage.getItem("applications");
-    setData(saved ? JSON.parse(saved) : applications);
+    const saved = localStorage.getItem(STORAGE_KEY);
+    setData(saved ? JSON.parse(saved) : []);
   }, []);
-
+  
   /* ONLY NEW / PENDING APPLICATIONS */
-  const newApplications = data.filter(
-    (a) => a.status === "Applied" || a.status === "Interview Scheduled"
-  );
-
+  
   return (
     <div className="space-y-6">
 {/* ================= MAIN HEADER ================= */}
@@ -253,7 +283,9 @@ const handleExport = () => {
                 </td>
 
                 {/* CLASS */}
-                <td className="px-6 py-4">{app.class}</td>
+                <td className="px-6 py-4">
+  {app.class || "—"}
+</td>
 
                 {/* STATUS */}
                 <td className="px-6 py-4">

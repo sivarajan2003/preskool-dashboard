@@ -9,6 +9,8 @@ import {
   } from "lucide-react";
   import { useState } from "react";
   import { useEffect } from "react";
+  import { useNavigate } from "react-router-dom";
+
 const applications = [
     {
         id: "ADM-2026-0004",
@@ -257,6 +259,8 @@ const initialApplications = [...applications];
 
 export default function AllApplications() {
   const STORAGE_KEY = "admission_applications";
+  const navigate = useNavigate();
+
   const [data, setData] = useState<any[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     return saved ? JSON.parse(saved) : applications;
@@ -280,7 +284,7 @@ const [deleteApp, setDeleteApp] = useState<any>(null);
 const [activeTab, setActiveTab] = useState<
   "overview" | "documents" | "interview" | "offer"
 >("overview");
-const [openNew, setOpenNew] = useState(false);
+//const [openNew, setOpenNew] = useState(false);
 
 const emptyApplication = {
   id: "",
@@ -296,7 +300,7 @@ const emptyApplication = {
 };
 const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-const [newApp, setNewApp] = useState(emptyApplication);
+//const [newApp, setNewApp] = useState(emptyApplication);
 
 const handleRefresh = () => {
   const saved = localStorage.getItem(STORAGE_KEY);
@@ -368,6 +372,15 @@ const paginatedData = filteredData.slice(
   (currentPage - 1) * rowsPerPage,
   currentPage * rowsPerPage
 );
+const role = localStorage.getItem("role");
+
+if (role === "parent") {
+  return (
+    <div className="p-10 text-center text-red-600 font-medium">
+      
+    </div>
+  );
+}
 
   return (
     <div className="space-y-6">
@@ -406,14 +419,14 @@ const paginatedData = filteredData.slice(
 >
   Export
 </button>
-
 <button
-  onClick={() => setOpenNew(true)}
+  onClick={() =>
+    navigate("/admin/dashboard/receptionist/admissions/application-form")
+  }
   className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium flex items-center gap-1"
 >
   <Plus size={14} /> New Application
 </button>
-
     </div>
   </div>
 </div>
@@ -594,7 +607,9 @@ const paginatedData = filteredData.slice(
         <p className="text-xs text-gray-500">{app.email}</p>
       </td>
 
-      <td className="px-6 py-4">{app.class}</td>
+      <td className="px-6 py-4">
+  {app.class || "Grade 1"}
+</td>
 
       <td className="px-6 py-4">
         <span
@@ -996,17 +1011,15 @@ const paginatedData = filteredData.slice(
     </div>
   </div>
 )}
-{openNew && (
+{/*{openNew && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
     <div className="bg-white w-full max-w-3xl rounded-xl overflow-hidden">
 
-      {/* HEADER */}
+     
       <div className="px-6 py-4 border-b flex justify-between items-center">
         <h2 className="text-xl font-semibold">New Application</h2>
         <button onClick={() => setOpenNew(false)} className="text-xl">✕</button>
       </div>
-
-      {/* FORM */}
       <div className="p-6 grid grid-cols-2 gap-4 text-sm">
 
         <div>
@@ -1088,7 +1101,6 @@ const paginatedData = filteredData.slice(
 
       </div>
 
-      {/* FOOTER */}
       <div className="px-6 py-4 border-t flex justify-end gap-3">
         <button
           onClick={() => setOpenNew(false)}
@@ -1123,7 +1135,7 @@ const paginatedData = filteredData.slice(
 
     </div>
   </div>
-)}
+)}*/}
 {photoPreview && (
   <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
     

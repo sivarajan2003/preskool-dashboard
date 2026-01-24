@@ -271,7 +271,15 @@ export default function Verification() {
 
   className="text-blue-600 hover:text-blue-800"
 >
-  <Eye size={16} />
+<Eye
+  size={16}
+  className="cursor-pointer text-blue-600 hover:text-blue-800"
+  onClick={() =>
+    navigate(
+      `/admin/dashboard/receptionist/admissions/verification/${app.id}`
+    )
+  }
+/>
 </button>
 
                 </td>
@@ -301,140 +309,7 @@ export default function Verification() {
           </button>
         </div>
       </div>
-      {selectedApp && (
-  <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-    <div className="bg-white w-full max-w-5xl rounded-xl overflow-hidden">
-
-      {/* HEADER */}
-      <div className="px-6 py-4 border-b flex justify-between items-center">
-        <div>
-          <h2 className="text-xl font-semibold">
-            Verification – {selectedApp.name}
-          </h2>
-          <p className="text-sm text-gray-500">
-            Application ID: {selectedApp.id}
-          </p>
-        </div>
-
-        <button
-          onClick={() => setSelectedApp(null)}
-          className="text-xl"
-        >
-          ✕
-        </button>
-      </div>
-
-      {/* TABLE */}
-      <div className="p-6 overflow-x-auto">
-        <table className="w-full text-sm border">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-4 py-3 text-left">Section</th>
-              <th className="px-4 py-3 text-left">Field</th>
-              <th className="px-4 py-3 text-left">Value</th>
-              <th className="px-4 py-3 text-left">Status</th>
-              <th className="px-4 py-3 text-left">Action</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-  {verificationRows.map((row) => (
-    <tr key={row.id} className="hover:bg-gray-50">
-      {/* SECTION */}
-      <td className="px-4 py-3 font-medium whitespace-nowrap">
-        {row.section}
-      </td>
-
-      {/* FIELD */}
-      <td className="px-4 py-3 whitespace-nowrap">
-        {row.field}
-      </td>
-
-      {/* VALUE */}
-      <td className="px-4 py-3">
-        {row.value || "-"}
-      </td>
-
-      {/* STATUS */}
-      <td className="px-4 py-3">
-        {row.status === "verified" && (
-          <span className="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700">
-            Verified
-          </span>
-        )}
-        {row.status === "query" && (
-          <span className="px-3 py-1 rounded-full text-xs bg-red-100 text-red-700">
-            Query
-          </span>
-        )}
-        {row.status === "pending" && (
-          <span className="px-3 py-1 rounded-full text-xs bg-yellow-100 text-yellow-700">
-            Pending
-          </span>
-        )}
-      </td>
-
-      {/* ACTION */}
-      <td className="px-4 py-3">
-        <div className="flex gap-2">
-          <button
-            onClick={() => updateStatus(row.id, "verified")}
-            className="px-3 py-1 text-xs bg-green-600 text-white rounded"
-          >
-            Verify
-          </button>
-          <button
-            onClick={() => updateStatus(row.id, "query")}
-            className="px-3 py-1 text-xs bg-red-500 text-white rounded"
-          >
-            Query
-          </button>
-        </div>
-      </td>
-    </tr>
-  ))}
-</tbody>
-
-         </table>
-      </div>
-
-      {/* FOOTER */}
-      <div className="flex justify-end gap-3 px-6 py-4 border-t">
-      <button
-  onClick={() => {
-    localStorage.setItem(
-      `verification_${selectedApp.id}`,
-      JSON.stringify(verificationRows)
-    );
-    alert("Progress saved");
-  }}
-  className="px-4 py-2 border rounded-lg"
->
-  Save Progress
-</button>
-
-<button
-  onClick={() => {
-    const updated = data.map(app =>
-      app.id === selectedApp.id
-        ? { ...app, status: "Enrolled" }
-        : app
-    );
-
-    setData(updated);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    setSelectedApp(null);
-  }}
-  className="px-5 py-2 bg-green-600 text-white rounded-lg"
->
-  Approve Admission
-</button>
-
-      </div>
-
-    </div>
-  </div>
-)}
-
+     
     </div>
   );
 }

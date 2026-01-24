@@ -8,7 +8,7 @@ import {
   BarChart2,
   Maximize2,
   Minimize2,
-  ChevronDown,
+  ChevronDown,Menu ,
 } from "lucide-react";
 import A1 from "../assets/a1.png";
 import IN_FLAG from "../assets/in.png";
@@ -63,26 +63,28 @@ const academicYears = Array.from({ length: 6 }, (_, i) => {
   <div className="flex items-center justify-between">
 
     {/* LEFT SECTION */}
-    <div className="flex items-center gap-3">
+{/* LEFT SECTION */}
+<div className="flex items-center gap-3">
 
-      {/* 🍔 Mobile Menu */}
-      <button
-        onClick={onMenuClick}
-        className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
-      >
-        ☰
-      </button>
+  {/* 🍔 HAMBURGER MENU (ALWAYS VISIBLE LIKE IMG-2) */}
+  <button
+    onClick={onMenuClick}
+    className="p-2 rounded-lg hover:bg-gray-100"
+  >
+    <Menu className="w-5 h-5 text-gray-700" />
+  </button>
 
-      {/* SEARCH */}
-      <div className="relative w-[240px] hidden md:block">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-        <input
-          type="text"
-          placeholder="Search"
-          className="w-full pl-9 pr-4 py-2 text-sm border rounded-lg"
-        />
-      </div>
-    </div>
+  {/* 🔍 SEARCH BAR */}
+  <div className="relative w-[260px] hidden md:block">
+    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+    <input
+      type="text"
+      placeholder="Search"
+      className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+  </div>
+
+</div>
 
     {/* RIGHT ICONS  */}
 

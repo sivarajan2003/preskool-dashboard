@@ -9,6 +9,7 @@ export default function ProtectedRoute({
 }) {
   const userRole = localStorage.getItem("role");
   const isAuth = localStorage.getItem("isAuth");
+  const isParentPortal = localStorage.getItem("portal") === "true";
 
   if (!isAuth || !userRole) {
     return <Navigate to="/login" replace />;
@@ -16,9 +17,13 @@ export default function ProtectedRoute({
 
   const allowedRoles = Array.isArray(role) ? role : [role];
 
-  if (!allowedRoles.includes(userRole)) {
-    return <Navigate to="/unauthorized" replace />;
+  // ✅ ALLOW PARENT PORTAL TO ACCESS RECEPTIONIST ROUTES
+  if (
+    allowedRoles.includes(userRole) ||
+    (isParentPortal && allowedRoles.includes("receptionist"))
+  ) {
+    return children;
   }
 
-  return children;
+  return <Navigate to="/unauthorized" replace />;
 }

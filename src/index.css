@@ -101,6 +101,15 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     padding: 1.25rem;
   }
 }
+/* Hide scrollbar but allow scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE & Edge */
+  scrollbar-width: none;     /* Firefox */
+}
 
 .animate-popup {
   animation: popupEnter 0.25s ease-out forwards;

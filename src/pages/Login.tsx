@@ -6,7 +6,7 @@ import { Eye, EyeOff, Mail } from "lucide-react";
 import LeftIllustration from "../assets/login-left.png";
 import SampleLogin from "../assets/samplelogin.png";
 import LoginWave from "../assets/png.png";
-import PreLogo from "../assets/pre1.png"; 
+import PreLogo from "../assets/pre2.png"; 
 
 //import LoginImg from '../assets/login.png';
 import Logo from '../assets/logo.png';
@@ -171,11 +171,10 @@ export default function Login() {
           {/* LOGO */}
           <div className="flex items-center justify-center gap-2 mb-5">
           <img
-    src={PreLogo}
-    alt="PreSkool Logo"
-    
-    className="h-20 w-64 object-contain"
-  />
+      src={PreLogo}
+      alt="Atelier Logo"
+      className="h-12 w-12 object-contain"
+    />
           </div>
   
           {/* TITLE */}

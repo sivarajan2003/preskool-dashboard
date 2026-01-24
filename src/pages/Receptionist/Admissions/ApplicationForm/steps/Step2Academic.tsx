@@ -84,10 +84,11 @@ export default function Step2Academic({ data, onNext, onBack }: Props) {
               onChange={handleChange}
               className="w-full border rounded-lg px-4 py-2"
             >
-              <option value="">Select stream</option>
-              <option value="science">Science</option>
-              <option value="commerce">Commerce</option>
-              <option value="arts">Arts</option>
+              <option value="">Select Grade/Class</option>
+              <option value="grade1">Grade1</option>
+              <option value="grade2">Grade 2</option>
+              <option value="grade3">Grade 3</option>
+              <option value="grade4">Grade 4</option>
             </select>
           </div>
 

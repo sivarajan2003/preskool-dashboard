@@ -17,9 +17,13 @@ import {
   Users,
 } from "lucide-react";
 import {  useLocation } from "react-router-dom";
-import PreLogo from "../assets/pre1.png"; 
+import PreLogo from "../assets/pre2.png"; 
 
-export default function Sidebar() {
+export default function Sidebar({
+  collapsed,
+}: {
+  collapsed: boolean;
+}) {
   const navigate = useNavigate();
   const location = useLocation();
   const role = localStorage.getItem("role");
@@ -111,21 +115,39 @@ const isManagementItemActive = (path: string) =>
   location.pathname.startsWith(path);
 
   return (
-<div className="w-64 bg-white border-r h-screen overflow-y-auto">
-
+<div
+  className={`${
+    collapsed ? "w-20" : "w-64"
+  } bg-white border-r h-screen overflow-y-auto no-scrollbar transition-all duration-300`}
+>
       {/* ================= HEADER ================= */}
-      <div className="p-6 border-b">
-      <div className="flex items-center gap-3 px-4 py-3">
-  <img
-    src={PreLogo}
-    alt="PreSkool Logo"
-    
-    className="h-20 w-64 object-contain"
-  />
+      <div className="border-b px-4 py-4">
+  <div
+    className={`flex items-center ${
+      collapsed ? "justify-center" : "gap-2"
+    }`}
+  >
+    {/* LOGO ICON */}
+    <img
+      src={PreLogo}
+      alt="Logo"
+      className="h-10 w-10 object-contain"
+    />
+
+    {/* LOGO TEXT */}
+    {!collapsed && (
+      <div className="leading-tight">
+        <p className="text-xs font-medium text-gray-600">
+          Atelier
+        </p>
+        <p className="text-sm font-semibold text-gray-900">
+          Smart campus
+        </p>
+      </div>
+    )}
+  </div>
 </div>
 
-
-</div>
 
       <nav className="p-4 space-y-2">
       {canAccess(["admin", "teacher", "student", "parent"]) && (
@@ -135,10 +157,18 @@ const isManagementItemActive = (path: string) =>
           onClick={() => setOpenDashboard(!openDashboard)}
           className="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-blue-50 text-blue-600"
         >
-          <div className="flex items-center gap-3">
-            <LayoutDashboard className="w-5 h-5" />
-            <span className="text-sm font-medium">Dashboard</span>
-          </div>
+          <div
+  className={`flex items-center ${
+    collapsed ? "justify-center" : "gap-3"
+  }`}
+>
+  <LayoutDashboard className="w-5 h-5" />
+
+  {!collapsed && (
+    <span className="text-sm font-medium">Dashboard</span>
+  )}
+</div>
+
           <ChevronDown
             className={`w-4 h-4 transition-transform ${
               openDashboard ? "rotate-180" : ""
@@ -146,10 +176,9 @@ const isManagementItemActive = (path: string) =>
           />
         </button>
 
-        {openDashboard && (
+        {!collapsed && openDashboard && (
   <div className="ml-11 mt-2 space-y-2">
-
-    {/* ADMIN CAN SEE ALL */}
+{/* ADMIN CAN SEE ALL */}
     {role === "admin" && (
       <>
         <SubItem
@@ -157,13 +186,15 @@ const isManagementItemActive = (path: string) =>
           onClick={() => navigate("/admin/dashboard")}
           active={location.pathname === "/admin/dashboard"}
           />
-        <SubItem
-  label="Receptionist Dashboard"
-  onClick={() => navigate("/admin/dashboard/receptionist")}
-  active={location.pathname.startsWith(
-    "/admin/dashboard/receptionist"
-  )}
-/>
+        {(role === "admin" || isPureParentPortal) && (
+  <SubItem
+    label="Receptionist Dashboard"
+    onClick={() => navigate("/admin/dashboard/receptionist")}
+    active={location.pathname.startsWith(
+      "/admin/dashboard/receptionist"
+    )}
+  />
+)}
 
         <SubItem
           label="Student Dashboard"
@@ -213,12 +244,24 @@ const isManagementItemActive = (path: string) =>
 )}
 
 {isPureParentPortal && (
+  <>
   <SubItem
-    label="Parent Portal"
-    onClick={() => navigate("/parent/dashboard/admissions")}
-    active={location.pathname.startsWith("/parent/dashboard/admissions")}
-  />
+      label="Receptionist Dashboard"
+      onClick={() => navigate("/admin/dashboard/receptionist")}
+      active={location.pathname.startsWith(
+        "/admin/dashboard/receptionist"
+      )}
+    />
+    <SubItem
+      label="Parent Dashboard"
+      onClick={() => navigate("/parent/dashboard")}
+      active={location.pathname === "/parent/dashboard"}
+    />
+
+    
+  </>
 )}
+
 
 
   </div>
@@ -229,24 +272,16 @@ const isManagementItemActive = (path: string) =>
 {/* ================= APPLICATIONS (Receptionist Only) ================= */}
 {canSeeAdmission && (
   <>
-    <button
+    <SectionHeader
+      icon={LayoutGrid}
+      label="Admission"
+      collapsed={collapsed}
+      open={openApplications}
       onClick={() => setOpenApplications(!openApplications)}
-      className="w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-100"
-    >
-      <div className="flex items-center gap-3">
-        <LayoutGrid className="w-5 h-5" />
-        <span className="text-sm font-medium">Admission </span>
-      </div>
+    />
+{!collapsed && openApplications && (
+  <div className="ml-6 mt-2 space-y-1">
 
-      <ChevronDown
-        className={`w-4 h-4 transition-transform ${
-          openApplications ? "rotate-180" : ""
-        }`}
-      />
-    </button>
-
-    {openApplications && (
-      <div className="ml-6 mt-2 space-y-1">
         <ApplicationItem
   label="All Applications"
   icon={FileText}
@@ -321,22 +356,16 @@ const isManagementItemActive = (path: string) =>
 {canAccess(["admin", "teacher", "parent"]) && !isPureParentPortal && (
   <>
 {/* ================= PEOPLE ================= */}
-<button
+<SectionHeader
+  icon={Users}
+  label="People"
+  collapsed={collapsed}
+  open={openPeople}
   onClick={() => setOpenPeople(!openPeople)}
-  className={`w-full flex items-center px-4 py-3 rounded-lg
-    ${
-      isPeopleActive
-        ? "bg-blue-50 text-blue-600"
-        : "hover:bg-gray-100 text-gray-700"
-    }`}
->
-  <span className="text-sm font-medium">People</span>
-</button>
-
-{openPeople && (
+/>
+{!collapsed && openPeople && (
   <div className="ml-6 mt-2 space-y-1">
-
-    {/* ================= STUDENTS ================= */}
+{/* ================= STUDENTS ================= */}
     {!isParent && (
   <>
     <button
@@ -477,19 +506,16 @@ const isManagementItemActive = (path: string) =>
   <>
 {/* ================= ACADEMIC ================= */}
 
-<button
+<SectionHeader
+  icon={GraduationCap}
+  label="Academic"
+  collapsed={collapsed}
+  open={openAcademic}
   onClick={() => setOpenAcademic(!openAcademic)}
-  className="w-full flex items-center px-4 py-3 rounded-lg hover:bg-gray-100"
->
-  <span className="text-sm font-semibold text-gray-700">
-    Academic
-  </span>
-</button>
-
-{openAcademic && (
+/>
+{!collapsed && openAcademic && (
   <div className="ml-4 mt-2 space-y-1">
-
-    {/* ================= CLASSES (HAS CHILD) ================= */}
+ {/* ================= CLASSES (HAS CHILD) ================= */}
     {!isParent && (
     <button
   onClick={() => navigate(`${basePath}/academic/classes`)}
@@ -641,20 +667,16 @@ const isManagementItemActive = (path: string) =>
 {canAccess(["admin", "student", "teacher"]) && !isPureParentPortal && (
   <>
 {/* ================= MANAGEMENT ================= */}
-<button
+<SectionHeader
+  icon={Briefcase}
+  label="Management"
+  collapsed={collapsed}
+  open={openManagement}
   onClick={() => setOpenManagement(!openManagement)}
-  className="w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-100"
->
-  <span className="text-sm font-semibold text-gray-700">
-    Management
-  </span>
-</button>
-
-
-{openManagement && (
+/>
+{!collapsed && openManagement && (
   <div className="ml-4 mt-2 space-y-1">
-
-    {/* ================= FEES COLLECTION ================= */}
+ {/* ================= FEES COLLECTION ================= */}
     {role === "admin" && (
     <button
   onClick={() =>
@@ -826,14 +848,14 @@ const isManagementItemActive = (path: string) =>
 {canAccess(["admin", "student", "teacher", "parent"]) && !isPureParentPortal && (
   <>
 {/* ================= HRM ================= */}
-<button
+<SectionHeader
+  icon={UserCog}
+  label="HRM"
+  collapsed={collapsed}
+  open={openHRM}
   onClick={() => setOpenHRM(!openHRM)}
-  className="w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-100"
->
-  <span className="text-sm font-semibold text-gray-500">HRM</span>
-</button>
-
-{openHRM && (
+/>
+{!collapsed && openHRM && (
   <div className="ml-4 mt-2 space-y-1">
 
 {/*<HRMItem
@@ -986,21 +1008,14 @@ const isManagementItemActive = (path: string) =>
 {canAccess(["admin", "teacher", "parent", "student"]) && !isPureParentPortal && (
   <>
 {/* ================= REPORTS ================= */}
-<button
+<SectionHeader
+  icon={FileBarChart2}
+  label="Reports"
+  collapsed={collapsed}
+  open={openReports}
   onClick={() => setOpenReports(!openReports)}
-  className="w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-100"
->
-  <span className="text-sm font-semibold text-gray-700">
-    Reports
-  </span>
-  <ChevronDown
-    className={`w-4 h-4 transition-transform ${
-      openReports ? "rotate-180" : ""
-    }`}
-  />
-</button>
-
-{openReports && (
+/>
+{!collapsed && openReports && (
   <div className="ml-4 mt-2 space-y-1">
 
     <ReportItem
@@ -1072,23 +1087,42 @@ const isManagementItemActive = (path: string) =>
     <MenuItem icon={FileText} label="Attendance" />
     <MenuItem icon={DollarSign} label="Fees Collection" />
     <MenuItem icon={MessageSquare} label="Notice Board" />*/}
-    <MenuItem
-      icon={Settings}
-      label="Settings"
-      onClick={() => navigate("/admin/dashboard/settings")}
-      active={location.pathname === "/admin/dashboard/settings"}
-    />
+   <button
+    onClick={() => navigate("/admin/dashboard/settings")}
+    className={`w-full flex items-center ${
+      collapsed ? "justify-center" : "gap-3"
+    } px-4 py-3 rounded-lg transition
+      ${
+        location.pathname === "/admin/dashboard/settings"
+          ? "bg-blue-600 text-white"
+          : "text-gray-700 hover:bg-gray-50"
+      }`}
+    title={collapsed ? "Settings" : undefined}
+  >
+    <Settings className="w-5 h-5" />
+
+    {!collapsed && (
+      <span className="text-sm font-medium">Settings</span>
+    )}
+  </button>
+
   </div>
 )}
       {/* ================= LOGOUT ================= */}
-<div className="pt-4 mt-4 border-t">
+      <div className="pt-4 mt-4 border-t">
   <button
     onClick={logout}
-    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg
-      text-red-600 hover:bg-red-50 transition"
+    className={`w-full flex items-center ${
+      collapsed ? "justify-center" : "gap-3"
+    } px-4 py-3 rounded-lg
+      text-red-600 hover:bg-red-50 transition`}
+    title={collapsed ? "Logout" : undefined}
   >
     <DoorOpen className="w-5 h-5" />
-    <span className="text-sm font-medium">Logout</span>
+
+    {!collapsed && (
+      <span className="text-sm font-medium">Logout</span>
+    )}
   </button>
 </div>
 
@@ -1375,6 +1409,55 @@ function ReportItem({
       </span>
 
       <span className="text-sm font-medium">{label}</span>
+    </button>
+  );
+}
+function SectionHeader({
+  icon: Icon,
+  label,
+  collapsed,
+  onClick,
+  open,
+}: {
+  icon: any;
+  label: string;
+  collapsed: boolean;
+  onClick?: () => void;
+  open?: boolean;
+}) {
+  return (
+    <button
+  onClick={() => {
+    if (!collapsed && onClick) {
+      onClick();
+    }
+  }}
+  className="w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-100"
+>
+
+      <div
+        className={`flex items-center ${
+          collapsed ? "justify-center" : "gap-3"
+        }`}
+      >
+<div title={collapsed ? label : undefined}>
+  <Icon className="w-5 h-5 text-gray-600" />
+</div>
+
+        {!collapsed && (
+          <span className="text-sm font-semibold text-gray-700">
+            {label}
+          </span>
+        )}
+      </div>
+
+      {!collapsed && open !== undefined && (
+        <ChevronDown
+          className={`w-4 h-4 transition-transform ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      )}
     </button>
   );
 }
