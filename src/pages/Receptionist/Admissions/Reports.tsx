@@ -153,7 +153,7 @@ export default function Report() {
 
       {/* ================= REPORT TABLE (IMG 2) ================= */}
       <div className="bg-white border rounded-xl p-6 space-y-4">
-        <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div>
             <h2 className="text-lg font-semibold">Admission Report</h2>
             <p className="text-sm text-gray-500">
@@ -161,7 +161,7 @@ export default function Report() {
             </p>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-2">
           <button
   onClick={exportExcel}
   className="px-4 py-2 border rounded-lg text-green-600 flex gap-2"
@@ -177,10 +177,9 @@ export default function Report() {
 
           </div>
         </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-gray-600">
+        <div className="hidden md:block overflow-x-auto">
+  <table className="w-full text-sm">
+   <thead className="bg-gray-50 text-gray-600">
               <tr>
                 <Th>Application ID</Th>
                 <Th>Student Name</Th>
@@ -211,6 +210,48 @@ export default function Report() {
             </tbody>
           </table>
         </div>
+{/* ================= MOBILE VIEW (CARDS) ================= */}
+<div className="md:hidden space-y-4">
+  {filteredData.map((row) => (
+    <div
+      key={row.id}
+      className="bg-white border rounded-xl p-4 space-y-3"
+    >
+      {/* HEADER */}
+      <div className="flex justify-between items-start">
+        <div>
+          <p className="font-semibold text-blue-600">{row.id}</p>
+          <p className="font-medium">{row.name}</p>
+          <p className="text-xs text-gray-500">{row.className}</p>
+        </div>
+        <StatusBadge status={row.status} />
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <p className="text-gray-500">Quota</p>
+          <Badge>{row.quota}</Badge>
+        </div>
+
+        <div>
+          <p className="text-gray-500">Applied Date</p>
+          <p className="font-medium">{row.date}</p>
+        </div>
+
+        <div>
+          <p className="text-gray-500">Fee Status</p>
+          <FeeBadge status={row.fee} />
+        </div>
+      </div>
+
+      {/* ACTION */}
+      <button className="w-full border border-blue-600 text-blue-600 rounded-lg py-2 text-sm font-medium">
+        View Details
+      </button>
+    </div>
+  ))}
+</div>
 
         <div className="flex justify-between items-center text-sm text-gray-500 pt-4">
           <span>Total Records: {data.length}</span>
@@ -231,6 +272,7 @@ export default function Report() {
       </div>
 
     </div>
+    
   );
 }
 

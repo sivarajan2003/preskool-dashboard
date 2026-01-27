@@ -77,19 +77,19 @@ export default function SeatAllocation() {
 
       {/* ================= SEAT MATRIX TABLE (IMG 2) ================= */}
       <div className="bg-white border rounded-xl p-6 space-y-4">
-        <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <h2 className="text-lg font-semibold">Seat Allocation Matrix</h2>
 
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-2">
             <SummaryChip label="Total Seats" value="293" />
             <SummaryChip label="Allocated" value="254" />
             <SummaryChip label="Available" value="39" />
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border rounded-lg overflow-hidden">
-            <thead className="bg-gray-50 text-gray-600">
+        <div className="hidden md:block overflow-x-auto">
+  <table className="w-full text-sm border rounded-lg overflow-hidden">            
+  <thead className="bg-gray-50 text-gray-600">
               <tr>
                 <Th>Stream</Th>
                 <Th>Quota</Th>
@@ -122,6 +122,90 @@ export default function SeatAllocation() {
           </table>
         </div>
       </div>
+{/* STEP-2: MOBILE VIEW (Cards) */}
+<div className="md:hidden space-y-4">
+  {filteredData.map((row, i) => (
+    <div
+      key={i}
+      className="bg-white border rounded-xl p-4 space-y-3"
+    >
+      {/* HEADER */}
+      <div className="flex justify-between items-center">
+        <div>
+          <p className="font-semibold">{row.stream}</p>
+          <span className="text-xs border rounded-full px-2 py-0.5">
+            {row.quota}
+          </span>
+        </div>
+
+        {row.status === "Locked" ? (
+          <span className="flex items-center gap-1 text-xs bg-gray-100 px-2 py-1 rounded-full">
+            <Lock size={14} /> Locked
+          </span>
+        ) : (
+          <span className="flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+            <Unlock size={14} /> Active
+          </span>
+        )}
+      </div>
+
+      {/* STATS */}
+      <div className="grid grid-cols-3 text-center text-sm">
+        <div>
+          <p className="text-gray-500">Total</p>
+          <p className="font-medium">{row.total}</p>
+        </div>
+        <div>
+          <p className="text-gray-500">Allocated</p>
+          <p className="font-medium text-blue-600">
+            {row.allocated}
+          </p>
+        </div>
+        <div>
+          <p className="text-gray-500">Available</p>
+          <p
+            className={`font-medium ${
+              row.available <= 5
+                ? "text-red-500"
+                : "text-green-600"
+            }`}
+          >
+            {row.available}
+          </p>
+        </div>
+      </div>
+
+      {/* UTILIZATION */}
+      <div className="space-y-1">
+        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div
+            className={`h-full ${
+              row.percent > 90
+                ? "bg-red-500"
+                : "bg-orange-400"
+            }`}
+            style={{ width: `${row.percent}%` }}
+          />
+        </div>
+        <p className="text-xs text-gray-500">
+          Utilization: {row.percent}%
+        </p>
+      </div>
+
+      {/* ACTION */}
+      <button
+        onClick={() => toggleLock(i)}
+        className={`w-full py-2 rounded-lg border text-sm font-medium ${
+          row.status === "Locked"
+            ? "border-blue-500 text-blue-600"
+            : "border-red-500 text-red-600"
+        }`}
+      >
+        {row.status === "Locked" ? "Unlock" : "Lock"}
+      </button>
+    </div>
+  ))}
+</div>
 
       {/* ================= BOTTOM SUMMARY CARDS (IMG 3) ================= */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">

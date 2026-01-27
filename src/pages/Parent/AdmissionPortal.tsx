@@ -70,13 +70,14 @@ const isAdmissionRoot =
       const [showInterviewPopup, setShowInterviewPopup] = useState(false);
 
     return (
-        <div className="space-y-8">
+<div className="space-y-6 sm:space-y-8 px-3 sm:px-4 md:px-6 lg:px-0">
 
         {/* ✅ SHOW DASHBOARD ONLY ON ROOT */}
         {isAdmissionRoot && (
           <>
         {/* ================= IMG 1 – APPLICATION STATUS ================= */}
-        <section className="bg-gray-50 text-gray-900 border border-blue-200 rounded-2xl p-6 ...">
+        <section className="bg-gray-50 text-gray-900 border border-blue-200 rounded-2xl 
+p-4 sm:p-5 md:p-6">
         <div>
           <h2 className="text-2xl font-semibold">Parent Dashboard</h2>
           <p className="text-sm text-gray-500">
@@ -93,7 +94,10 @@ const isAdmissionRoot =
   </div>
 </section>
 
-        <section className="bg-blue-600 text-white rounded-2xl p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between">
+<section className="bg-blue-600 text-white rounded-2xl 
+p-4 sm:p-5 md:p-6 
+flex flex-col 
+lg:flex-row lg:items-center lg:justify-between">
           <div>
             <h1 className="text-xl font-semibold">Application Status</h1>
             <p className="text-sm opacity-90">
@@ -186,7 +190,7 @@ const isAdmissionRoot =
             </button>
           </div>
   
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex gap-3">
               <Bell className="text-green-600" />
               <div>
@@ -220,8 +224,7 @@ const isAdmissionRoot =
         </section>
   
         {/* ================= IMG 5 – DOCUMENTS + FEES ================= */}
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-  
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6">  
           {/* DOCUMENTS */}
           <div className="bg-white rounded-2xl border p-6">
             <h2 className="font-semibold mb-4">
@@ -273,8 +276,8 @@ const isAdmissionRoot =
   
               <button
   onClick={() => setShowPaymentModal(true)}
-  className="mt-3 w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600"
->
+  className="mt-3 w-full bg-orange-500 text-white py-2 rounded-lg 
+  hover:bg-orange-600 text-sm sm:text-base">
   Pay Now
 </button>
 
@@ -343,7 +346,7 @@ const isAdmissionRoot =
         <section className="bg-white rounded-2xl border p-6">
           <h2 className="font-semibold mb-4">Help & Support</h2>
   
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 text-sm">
             <div className="flex gap-3 items-center">
               <Phone /> +91 98765 43210
             </div>
@@ -359,7 +362,8 @@ const isAdmissionRoot =
 {showPaymentModal && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
 
-    <div className="bg-white w-full max-w-md rounded-2xl p-6 relative">
+<div className="bg-white w-full max-w-md rounded-2xl p-4 sm:p-6 relative 
+max-h-[90vh] overflow-y-auto">
 
       {/* CLOSE BUTTON */}
       <button
@@ -427,7 +431,6 @@ const isAdmissionRoot =
 
     <div className="bg-white w-full max-w-lg rounded-2xl p-6 relative">
 
-      {/* ❌ CLOSE BUTTON */}
       <button
         onClick={() => setShowInterviewPopup(false)}
         className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"

@@ -419,7 +419,7 @@ const totalGenerated = acceptedCount + pendingCount;
 
      {/* ================= HEADER ================= */}
 <div className="bg-white border border-gray-200 rounded-2xl px-6 py-6">
-  <div className="flex items-center justify-between">
+<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
     {/* LEFT */}
     <div>
@@ -432,7 +432,7 @@ const totalGenerated = acceptedCount + pendingCount;
     </div>
 
     {/* RIGHT ACTIONS */}
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap gap-2 sm:gap-3">
     <button
   onClick={handleRefresh}
   className="p-2.5 border rounded-lg hover:bg-gray-50"
@@ -453,8 +453,13 @@ const totalGenerated = acceptedCount + pendingCount;
 </button>
 <button
   onClick={() => setNewAppOpen(true)}
-  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium flex items-center gap-1"
->
+  className="
+  w-full sm:w-auto
+  px-4 py-2
+  bg-blue-600 hover:bg-blue-700
+  text-white rounded-lg text-sm
+  flex items-center justify-center gap-1
+">
   <Plus size={14} /> New Application
 </button>
     </div>
@@ -464,12 +469,12 @@ const totalGenerated = acceptedCount + pendingCount;
 <div className="bg-white border border-gray-200 rounded-2xl px-6 py-5">
 
   {/* TOP ROW */}
-  <div className="flex items-center justify-between">
+  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <h3 className="text-lg font-semibold text-gray-900">
     Offer Letters List
     </h3>
 
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap gap-2">
 
       {/* DATE */}
       <div className="relative">
@@ -557,7 +562,7 @@ const totalGenerated = acceptedCount + pendingCount;
   </div>
 
   {/* BOTTOM ROW */}
-  <div className="flex items-center justify-between mt-4">
+  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mt-4">
   <div className="flex items-center gap-2 text-sm text-gray-600">
   Row Per Page
   <select
@@ -581,8 +586,8 @@ const totalGenerated = acceptedCount + pendingCount;
       placeholder="Search"
       value={search}
       onChange={(e) => setSearch(e.target.value)}
-      className="border rounded-lg px-4 py-2 text-sm w-60"
-    />
+      className="border rounded-lg px-4 py-2 text-sm w-full sm:w-60"
+      />
   </div>
 </div>
 {/* ================= SUMMARY CARDS ================= */}
@@ -620,8 +625,8 @@ const totalGenerated = acceptedCount + pendingCount;
 </div>
 
       {/* TABLE */}
-      <div className="bg-white rounded-xl border overflow-hidden">
-      <table className="w-full text-sm table-fixed">
+      <div className="bg-white rounded-xl border overflow-x-auto hidden md:block">
+      <table className="min-w-[900px] w-full text-sm table-fixed">
 
         <thead className="bg-gray-50 text-gray-600">
   <tr>
@@ -692,7 +697,7 @@ const totalGenerated = acceptedCount + pendingCount;
  
    {/* ACTIONS */}
    <td className="px-6 py-4">
-  <div className="flex items-center justify-center gap-2 flex-nowrap">
+   <div className="flex flex-wrap justify-center gap-2">
   {app.status === "Offer Accepted" && (
   <>
     {/* PREVIEW */}
@@ -769,6 +774,65 @@ School Admin`
   ))}
 </tbody>
         </table>
+        </div> {/* ✅ CLOSE md:block DESKTOP TABLE */}
+
+
+{/* ================= 2️⃣ MOBILE VIEW ================= */}
+<div className="md:hidden space-y-4">
+  {paginatedData.map((app) => (
+    <div
+      key={app.id}
+      className="bg-white border rounded-xl p-4 space-y-4"
+    >
+      {/* TOP */}
+      <div className="flex justify-between items-start">
+        <div className="flex gap-3">
+          <img
+            src={app.avatar}
+            className="w-12 h-12 rounded-full"
+          />
+          <div>
+            <p className="font-medium">{app.name}</p>
+            <p className="text-xs text-gray-500">{app.id}</p>
+          </div>
+        </div>
+
+        <span
+          className={`px-3 py-1 rounded-full text-xs font-medium ${statusStyle(app.status)}`}
+        >
+          {app.status}
+        </span>
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <p className="text-gray-500">Class</p>
+          <p className="font-medium">{app.class}</p>
+        </div>
+        <div>
+          <p className="text-gray-500">Documents</p>
+          <p className="font-medium">{app.documents}</p>
+        </div>
+        <div className="col-span-2">
+          <p className="text-gray-500">Phone</p>
+          <p className="font-medium">{app.phone}</p>
+        </div>
+      </div>
+
+      {/* ACTIONS */}
+      <div className="flex gap-2 pt-2">
+        <button
+          onClick={() => setPreviewApp(app)}
+          className="flex-1 border rounded-lg py-2 text-sm"
+        >
+          <Eye size={14} /> Preview
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
         {/* PAGINATION */}
 <div className="flex justify-end items-center gap-2 px-6 py-4 border-t text-sm">
   <button
@@ -791,8 +855,6 @@ School Admin`
     Next
   </button>
 </div>
-
-      </div>
       {viewApp && (
   <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
     <div className="bg-white w-full max-w-5xl rounded-xl overflow-hidden">
@@ -1206,7 +1268,14 @@ School Admin`
 )}
 {newAppOpen && (
   <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-    <div className="bg-white w-full max-w-xl rounded-2xl p-6">
+<div className="
+  bg-white
+  w-full h-full sm:h-auto
+  sm:max-w-xl
+  rounded-none sm:rounded-2xl
+  p-6
+  overflow-y-auto
+">
 
       {/* HEADER */}
       <h2 className="text-xl font-semibold">New Application</h2>

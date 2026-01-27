@@ -423,7 +423,7 @@ const paginatedData = filteredData.slice(
 
 </div>
 {/* RIGHT ACTIONS */}
-    <div className="flex items-center gap-3">
+<div className="flex flex-wrap items-center gap-2 sm:gap-3">
     <button
   onClick={handleRefresh}
   className="p-2.5 border rounded-lg hover:bg-gray-50"
@@ -444,10 +444,18 @@ const paginatedData = filteredData.slice(
 </button>
 <button
   onClick={() => setOpenNewApp(true)}
-  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium flex items-center gap-1"
+  className="
+    w-full sm:w-auto
+    px-4 py-2
+    bg-blue-600 hover:bg-blue-700
+    text-white rounded-lg
+    text-sm font-medium
+    flex items-center justify-center gap-1
+  "
 >
   <Plus size={14} /> New Application
 </button>
+
     </div>
   </div>
 </div>
@@ -611,95 +619,107 @@ const paginatedData = filteredData.slice(
 
 </div>
       {/* TABLE */}
-      <div className="bg-white rounded-xl border overflow-hidden">
-        <table className="w-full text-sm">
-        <thead className="bg-gray-50 text-gray-600">
-  <tr>
-    <th className="px-6 py-3 text-left">STUDENT</th>
-    <th className="px-6 py-3 text-left">SCHEDULE</th>
-    <th className="px-6 py-3 text-left">LOCATION</th>
-    <th className="px-6 py-3 text-left">RESULT</th>
-    <th className="px-6 py-3 text-center">ACTIONS</th>
-  </tr>
-</thead>
+      {/* ================= DESKTOP TABLE ================= */}
+<div className="hidden lg:block bg-white rounded-xl border overflow-hidden">
+  <table className="w-full text-sm">
+    <thead className="bg-gray-50 text-gray-600">
+      <tr>
+        <th className="px-6 py-3 text-left">STUDENT</th>
+        <th className="px-6 py-3 text-left">SCHEDULE</th>
+        <th className="px-6 py-3 text-left">LOCATION</th>
+        <th className="px-6 py-3 text-left">RESULT</th>
+        <th className="px-6 py-3 text-center">ACTIONS</th>
+      </tr>
+    </thead>
 
-          <tbody className="divide-y">
-          {paginatedData.map((app) => (
-    <tr key={app.id} className="hover:bg-gray-50">
-      <td className="px-6 py-4">
-  <div className="flex items-center gap-3">
-    <img src={app.avatar} className="w-10 h-10 rounded-full" />
-    <div>
-      <p className="font-medium">{app.name}</p>
-      <p className="text-xs text-gray-500">{app.id}</p>
+    <tbody className="divide-y">
+      {paginatedData.map((app) => (
+        <tr key={app.id}>
+          <td className="px-6 py-4">
+            <div className="flex items-center gap-3">
+              <img src={app.avatar} className="w-10 h-10 rounded-full" />
+              <div>
+                <p className="font-medium">{app.name}</p>
+                <p className="text-xs text-gray-500">{app.id}</p>
+              </div>
+            </div>
+          </td>
+
+          <td className="px-6 py-4">
+            {app.interviewDate ?? "Not scheduled"}
+          </td>
+
+          <td className="px-6 py-4 text-gray-600">
+            Admin Office – Room 101
+          </td>
+
+          <td className="px-6 py-4">
+            {app.status === "Interview Done" ? (
+              <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                PASS
+              </span>
+            ) : (
+              <span className="px-3 py-1 text-xs rounded-full bg-gray-100">
+                Pending
+              </span>
+            )}
+          </td>
+
+          <td className="px-6 py-4 text-center">
+            <button className="px-4 py-2 border rounded-lg text-sm">
+              View
+            </button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+{/* ================= MOBILE & TABLET CARDS ================= */}
+<div className="lg:hidden space-y-4">
+  {paginatedData.map((app) => (
+    <div
+      key={app.id}
+      className="bg-white border rounded-2xl p-4 space-y-4"
+    >
+      <div className="flex gap-3 items-center">
+        <img
+          src={app.avatar}
+          className="w-12 h-12 rounded-full"
+        />
+        <div>
+          <p className="text-blue-600 font-semibold">{app.id}</p>
+          <p className="font-medium">{app.name}</p>
+          <p className="text-xs text-gray-500">DOB: {app.dob}</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <p className="text-gray-500">Class</p>
+          <p className="font-medium">{app.class}</p>
+        </div>
+
+        <div>
+          <p className="text-gray-500">Status</p>
+          <p className="font-medium">{app.status}</p>
+        </div>
+
+        <div className="col-span-2">
+          <p className="text-gray-500">Contact</p>
+          <p className="font-medium">{app.phone}</p>
+        </div>
+      </div>
+
+      <button
+        onClick={() => setViewApp(app)}
+        className="w-full border rounded-lg py-2 flex items-center justify-center gap-2 text-sm"
+      >
+        <Eye size={16} /> View Profile
+      </button>
     </div>
-  </div>
-</td>
-<td className="px-6 py-4">
-  {app.interviewDate ? (
-    <span className="font-medium">
-      {new Date(app.interviewDate).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      })}
-    </span>
-  ) : (
-    <span className="text-gray-400">Not scheduled</span>
-  )}
-</td>
-<td className="px-6 py-4 text-gray-600">
-  Admin Office – Room 101
-</td>
-<td className="px-6 py-4">
-  {app.status === "Interview Done" ? (
-    <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">
-      PASS
-    </span>
-  ) : (
-    <span className="px-3 py-1 text-xs rounded-full bg-gray-100">
-      Pending
-    </span>
-  )}
-</td>
-<td className="px-6 py-4 text-center">
-
-  {/* MARK DONE */}
-  {app.status === "Interview Scheduled" && (
-    <button
-      onClick={() => markInterviewDone(app.id)}
-      className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
-    >
-      Mark Done
-    </button>
-  )}
-
-  {/* OFFER LETTER ICON */}
-  {app.status === "Interview Done" && (
-    <button
-      onClick={() =>
-        navigate("/admin/dashboard/receptionist/admissions/offers")
-      }
-      className="px-4 py-2 border rounded-lg text-sm"
-    >
-      📄 Offer Letter
-    </button>
-  )}
-
-  {/* SCHEDULE */}
-  {app.status === "Applied" && (
-    <button
-      onClick={() => setScheduleApp(app)}
-      className="px-4 py-2 border rounded-lg text-sm"
-    >
-      + Schedule
-    </button>
-  )}
-</td>
-    </tr>
   ))}
-</tbody>
-        </table>
+</div>
         {/* PAGINATION */}
 <div className="flex justify-end items-center gap-2 px-6 py-4 border-t text-sm">
   <button
@@ -721,7 +741,6 @@ const paginatedData = filteredData.slice(
   >
     Next
   </button>
-</div>
 
       </div>
       {viewApp && (

@@ -138,7 +138,9 @@ const handleExport = () => {
   return (
     <div className="space-y-6">
 {/* ================= MAIN HEADER ================= */}
-<div className="bg-white border rounded-2xl px-6 py-6 flex justify-between items-center">
+<div className="bg-white border rounded-2xl px-4 sm:px-6 py-4 sm:py-6
+                flex flex-col sm:flex-row gap-4 sm:gap-0
+                sm:justify-between sm:items-center">
   <div>
     <h2 className="text-2xl font-semibold text-gray-900">
      New Applications
@@ -174,7 +176,9 @@ const handleExport = () => {
   </div>
 </div>
 {/* ================= SUB HEADER ================= */}
-<div className="bg-white border rounded-2xl px-6 py-5 flex items-center justify-between">
+<div className="bg-white border rounded-2xl px-4 sm:px-6 py-4 sm:py-5
+                flex flex-col lg:flex-row gap-4
+                lg:items-center lg:justify-between">
   <h3 className="text-lg font-semibold text-gray-900">
     Application List
   </h3>
@@ -228,13 +232,12 @@ const handleExport = () => {
   <ArrowUpDown size={16} />
   Sort {sortOrder === "asc" ? "A-Z" : "Z-A"}
 </button>
-
-
-    <input
-      type="text"
-      placeholder="Search"
-      className="border rounded-lg px-4 py-2 text-sm w-60"
-    />
+<input
+  type="text"
+  placeholder="Search"
+  className="border rounded-lg px-4 py-2 text-sm
+             w-full sm:w-60"
+/>
   </div>
 </div>
       {/* ================= TABLE ================= */}
@@ -296,7 +299,7 @@ const handleExport = () => {
 
                 {/* ACTIONS */}
                 <td className="px-6 py-4 text-center">
-  <div className="inline-flex gap-4">
+                <div className="inline-flex gap-6 sm:gap-4">
 
     {/* VIEW */}
     <Eye
@@ -323,7 +326,9 @@ const handleExport = () => {
       </div>
       {viewApp && (
   <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-    <div className="bg-white w-full max-w-5xl rounded-xl overflow-hidden">
+<div className="bg-white w-full h-full sm:h-auto
+                sm:max-w-5xl rounded-none sm:rounded-xl
+                overflow-hidden">
 
       {/* HEADER */}
       <div className="bg-blue-50 px-6 py-4 flex justify-between items-start">

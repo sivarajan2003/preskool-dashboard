@@ -51,10 +51,10 @@ export default function Step3PreviousSchool({
   };
 
   return (
-    <div className="bg-white border rounded-xl">
+<div className="bg-white border rounded-xl overflow-hidden">
       {/* BODY */}
-      <div className="p-6 space-y-6">
-        <h2 className="text-lg font-semibold">
+      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+      <h2 className="text-base sm:text-lg font-semibold">
           Previous School History
         </h2>
 
@@ -135,7 +135,7 @@ export default function Step3PreviousSchool({
       </div>
 
       {/* FOOTER (EXACT MATCH) */}
-      <div className="flex items-center justify-between border-t px-6 py-4">
+      <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between border-t px-4 sm:px-6 py-4">
         <button
           onClick={onBack}
           className="px-4 py-2 rounded-lg border"
@@ -143,7 +143,7 @@ export default function Step3PreviousSchool({
           Previous
         </button>
 
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           <button className="px-4 py-2 rounded-lg border">
             Save Draft
           </button>

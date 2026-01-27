@@ -67,31 +67,39 @@ export default function VerificationDetails() {
   };
        
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 px-3 sm:px-4 md:px-6 py-4 sm:py-6">
       {/* LEFT CARD */}
-      <div className="bg-white border rounded-2xl p-6">
-
-{/* BACK ARROW */}
+      <div className="bg-white border rounded-2xl p-4 sm:p-6">
+        {/* BACK ARROW */}
 <button
   onClick={() =>
     navigate("/admin/dashboard/receptionist/admissions/verification")
   }
-  className="mb-4 flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600"
+  className="mb-3 flex items-center gap-2 text-sm touch-manipulation text-gray-600 hover:text-blue-600"
 >
   <ArrowLeft className="w-4 h-4" />
   Back
 </button>
+      <h2 className="text-sm uppercase tracking-wide text-gray-500 mb-2">
+  Verification
+</h2>
+<h1 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">
+  Student Documents
+</h1>
+
+
+
 
 <div className="flex flex-col items-center">
 
-    <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center text-4xl font-semibold">
+    <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gray-200 flex items-center justify-center text-4xl font-semibold">
       {application.name
         .split(" ")
         .map((n: string) => n[0])
         .join("")}
     </div>
 
-    <h3 className="mt-4 text-lg font-semibold">
+    <h3 className="mt-4 text-base sm:text-lg font-semibold">
       {application.name}
     </h3>
 
@@ -124,7 +132,7 @@ export default function VerificationDetails() {
 </div>
 
       {/* RIGHT CARD */}
-      <div className="bg-white border rounded-2xl p-6 space-y-6 lg:col-span-2">
+      <div className="bg-white border rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-6 lg:col-span-2">
   <h3 className="text-lg font-semibold">Document Verification</h3>
 
   {documents.map((doc) => (
@@ -139,7 +147,7 @@ export default function VerificationDetails() {
 ))}
   
 
-  <div className="flex justify-end gap-4 pt-4 border-t">
+  <div className="flex flex-col sm:flex-row sm:justify-end gap-3 sm:gap-4 pt-4 border-t">
   <button
     onClick={saveProgress}
     className="px-4 py-2 border rounded-lg"
@@ -192,12 +200,12 @@ function DocumentCard({
         </div>
   
         <textarea
-          className="w-full border rounded-lg p-3 text-sm"
+          className="w-full border rounded-lg p-3 text-sm min-h-[90px]"
           placeholder="Add remarks..."
           defaultValue={remarks}
         />
   
-        <div className="flex gap-3">
+  <div className="flex flex-col sm:flex-row gap-3">
           <button
             onClick={onVerify}
             className="flex-1 bg-green-600 text-white py-2 rounded-lg"

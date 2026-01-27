@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import {  useLocation } from "react-router-dom";
 import PreLogo from "../assets/pre2.png"; 
+import SchFull from "../assets/sch1.png";   // full sidebar logo
+import SchCollapsed from "../assets/sch2.png"; // collapsed icon logo
 
 export default function Sidebar({
   collapsed,
@@ -120,36 +122,23 @@ const isManagementItemActive = (path: string) =>
     collapsed ? "w-20" : "w-64"
   } bg-white border-r h-screen overflow-y-auto no-scrollbar transition-all duration-300`}
 >
-      {/* ================= HEADER ================= */}
-      <div className="border-b px-4 py-4">
-  <div
-    className={`flex items-center ${
-      collapsed ? "justify-center" : "gap-5"
-    }`}
+     {/* ================= HEADER ================= */}
+     <div className="h-16 border-b flex items-center px-4">
+        <div
+    className={`flex items-center transition-all duration-300
+      ${collapsed ? "justify-center" : "justify-start"}
+    `}
   >
-    {/* LOGO ICON */}
     <img
-      src={PreLogo}
-      alt="Logo"
-      className="h-16 w-16 object-contain"
+      src={collapsed ? SchCollapsed : SchFull}
+      alt="School Logo"
+      className={`object-contain transition-all duration-300
+        ${collapsed ? "h-14 w-14" : "h-18 w-auto"}
+      `}
     />
-
-    {/* LOGO TEXT */}
-    {!collapsed && (
-      <div className="leading-tight">
-        <p className="text-xs font-medium text-gray-600">
-          Atelier
-        </p>
-        <p className="text-sm font-semibold text-gray-900">
-          Smart campus
-        </p>
-      </div>
-    )}
   </div>
 </div>
-
-
-      <nav className="p-4 space-y-2">
+ <nav className="p-4 space-y-2">
       {canAccess(["admin", "teacher", "student", "parent"]) && (
   <>
         {/* ================= DASHBOARD ================= */}

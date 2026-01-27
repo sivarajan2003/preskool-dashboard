@@ -73,7 +73,10 @@
     "react-toastify": "^11.0.5",
 
 
-    "recharts": "^3.6.0"
+    "recharts": "^3.6.0",
+
+
+    "sonner": "^2.0.7"
 
 
   },

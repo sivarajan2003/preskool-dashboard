@@ -359,9 +359,8 @@ const handleSort = () => {
     <div className="space-y-6">
 
       {/* ================= HEADER ================= */}
-      {/* ================= HEADER ================= */}
 <div className="bg-white border border-gray-200 rounded-2xl px-6 py-6">
-  <div className="flex items-center justify-between">
+<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
     {/* LEFT */}
     {/* LEFT */}
@@ -390,7 +389,7 @@ const handleSort = () => {
 
 
     {/* RIGHT ACTIONS */}
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap gap-2 sm:flex-nowrap sm:gap-3">
       <button
         onClick={handleRefresh}
         className="p-2.5 border rounded-lg hover:bg-gray-50"
@@ -413,11 +412,12 @@ const handleSort = () => {
       </button>
       <button
   onClick={() => setNewAppOpen(true)}
-  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium flex items-center gap-1"
+  className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium flex items-center gap-1"
 >
   <Plus size={14} />
-  New Application
+  <span className="hidden sm:inline">New Application</span>
 </button>
+
     </div>
 
   </div>
@@ -432,7 +432,7 @@ const handleSort = () => {
   Enrolled Students List
   </h3>
 
-  <div className="flex items-center gap-3">
+  <div className="flex flex-wrap gap-2 sm:flex-nowrap sm:gap-3">
 
     {/* DATE RANGE */}
     <div className="relative">
@@ -533,9 +533,9 @@ const handleSort = () => {
 </div>
 </div>
 {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-2xl overflow-hidden">
-        <table className="w-full text-sm">
-        <thead className="bg-gray-50 text-gray-600">
+<div className="bg-white border rounded-2xl overflow-hidden hidden md:block">
+  <table className="w-full text-sm">
+ <thead className="bg-gray-50 text-gray-600">
   <tr>
     <th className="px-6 py-4 text-left">ADMISSION NO / ROLL</th>
     <th className="px-6 py-4 text-left">STUDENT DETAILS</th>
@@ -559,7 +559,7 @@ const handleSort = () => {
             
               {/* STUDENT */}
               <td className="px-6 py-4">
-                <div className="flex items-center gap-3">
+              <div className="flex flex-wrap gap-2 sm:flex-nowrap sm:gap-3">
                   <img src={app.avatar} className="w-10 h-10 rounded-full" />
                   <div>
                     <p className="font-medium">{app.name}</p>
@@ -617,6 +617,68 @@ const handleSort = () => {
           </tbody>
         </table>
       </div>
+      {/* ================= MOBILE VIEW (CARDS) ================= */}
+<div className="md:hidden space-y-4">
+  {paginatedData.map((app, index) => (
+    <div
+      key={app.id}
+      className="bg-white border rounded-xl p-4 space-y-3"
+    >
+      {/* TOP */}
+      <div className="flex justify-between items-start">
+      <div className="flex gap-3">
+    <img
+      src={app.avatar}
+      alt={app.name}
+      className="w-12 h-12 rounded-full object-cover border"
+    />
+
+    <div>
+      <p className="text-blue-600 font-semibold">{app.id}</p>
+      <p className="font-medium">{app.name}</p>
+      <p className="text-xs text-gray-500">
+        DOB: {app.dob}
+      </p>
+    </div>
+  </div>
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <p className="text-gray-500">Class</p>
+          <p className="font-medium">{app.class}</p>
+        </div>
+
+        <div>
+          <p className="text-gray-500">Enrollment</p>
+          <p className="font-medium">{app.enrolledOn}</p>
+        </div>
+
+        <div className="col-span-2">
+          <p className="text-gray-500">Guardian Contact</p>
+          <p className="font-medium">{app.phone}</p>
+        </div>
+      </div>
+
+      {/* ACTION */}
+      <button
+        onClick={() => setViewProfile(app)}
+        className="
+          w-full py-2
+          border rounded-lg
+          text-sm font-medium
+          flex items-center justify-center gap-2
+          hover:bg-gray-50
+        "
+      >
+        <Eye size={16} />
+        View Profile
+      </button>
+    </div>
+  ))}
+</div>
+
       <div className="flex justify-end items-center gap-3 px-6 py-4 bg-white border rounded-b-2xl">
 
   <button
@@ -742,9 +804,16 @@ const handleSort = () => {
 )}
 
 {newAppOpen && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-    <div className="bg-white w-full max-w-lg rounded-2xl p-6">
-
+  <div className="fixed inset-0 z-50 bg-black/40 flex items-end sm:items-center justify-center">
+<div
+  className="
+    bg-white w-full sm:max-w-lg
+    rounded-t-2xl sm:rounded-2xl
+    p-6
+    max-h-[90vh]
+    overflow-y-auto
+  "
+>
       {/* HEADER */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">New Application</h2>

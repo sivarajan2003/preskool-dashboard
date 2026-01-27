@@ -43,7 +43,7 @@ export default function FeePayment() {
   };
 
   return (
-    <div className="p-4 md:p-6 space-y-6">
+<div className="p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6 max-w-7xl mx-auto">
       {/* HEADER */}
       <div>
         <h1 className="text-xl font-semibold">Admissions</h1>
@@ -55,7 +55,7 @@ export default function FeePayment() {
       {/* RESPONSIVE GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* ================= PAYMENT SUMMARY ================= */}
-        <div className="bg-white border rounded-xl p-6 space-y-5">
+        <div className="bg-white border rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-5">
           <h2 className="text-lg font-semibold">Payment Summary</h2>
 
           <InfoRow
@@ -84,7 +84,7 @@ export default function FeePayment() {
             </div>
           </div>
 
-          <div className="border border-yellow-300 bg-yellow-50 rounded-lg p-4 flex justify-between">
+          <div className="border border-yellow-300 bg-yellow-50 rounded-lg p-4 flex flex-col sm:flex-row sm:justify-between gap-3">
             <div>
               <p className="font-medium text-yellow-800">
                 Payment Status
@@ -167,7 +167,7 @@ export default function FeePayment() {
             <input className="input" placeholder="Name on Card" />
           </div>
 
-          <div className="flex justify-end gap-3 mt-6">
+          <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
             <button
               onClick={() => setShowPayment(false)}
               className="px-4 py-2 border rounded-lg"
@@ -221,7 +221,7 @@ function Modal({
 }) {
   return (
     <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
-      <div className="bg-white w-full max-w-lg rounded-xl p-6 relative">
+<div className="bg-white w-full max-w-lg rounded-xl p-4 sm:p-6 relative max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
           className="absolute top-4 right-4"
@@ -258,7 +258,7 @@ function FeeRow({ label, amount }: any) {
 function HistoryItem({ title, date, amount, status, receipt }: any) {
   return (
     <div className="border rounded-lg p-4 space-y-2">
-      <div className="flex justify-between">
+<div className="flex flex-col sm:flex-row sm:justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="font-medium">{title}</span>
           {status === "paid" ? (

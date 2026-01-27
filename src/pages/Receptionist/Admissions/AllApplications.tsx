@@ -388,11 +388,11 @@ if (role === "parent" && !isParentPortal) {
 }
 
   return (
-    <div className="space-y-6">
+<div className="space-y-4 sm:space-y-6 px-3 sm:px-4 md:px-6">
 
      {/* ================= HEADER ================= */}
 <div className="bg-white border border-gray-200 rounded-2xl px-6 py-6">
-  <div className="flex items-center justify-between">
+<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
     {/* LEFT */}
     <div className="flex items-center gap-4">
@@ -569,14 +569,14 @@ if (role === "parent" && !isParentPortal) {
       placeholder="Search"
       value={search}
       onChange={(e) => setSearch(e.target.value)}
-      className="border rounded-lg px-4 py-2 text-sm w-60"
+      className="border rounded-lg px-4 py-2 text-sm w-full sm:w-60"
     />
   </div>
 </div>
 
 
       {/* TABLE */}
-      <div className="bg-white rounded-xl border overflow-hidden">
+      <div className="hidden lg:block bg-white rounded-xl border overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-gray-600">
             <tr>
@@ -680,6 +680,94 @@ if (role === "parent" && !isParentPortal) {
   ))}
 </tbody>
         </table>
+        </div>
+        {/* ================= MOBILE & TABLET VIEW ================= */}
+<div className="lg:hidden space-y-4">
+
+{paginatedData.map((app) => (
+  <div
+    key={app.id}
+    className="bg-white border rounded-2xl p-4 space-y-4"
+  >
+
+    {/* TOP SECTION */}
+    <div className="flex justify-between items-start gap-3">
+
+      <div className="flex items-center gap-3">
+        {/* PROFILE IMAGE */}
+        <img
+          src={app.avatar}
+          alt={app.name}
+          className="w-12 h-12 rounded-full object-cover border"
+        />
+
+        {/* BASIC INFO */}
+        <div>
+          <p className="text-blue-600 font-semibold">{app.id}</p>
+          <p className="font-medium text-gray-900">{app.name}</p>
+          <p className="text-xs text-gray-500">DOB: {app.dob}</p>
+        </div>
+      </div>
+
+      {/* STATUS */}
+      <span
+        className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${statusStyle(
+          app.status
+        )}`}
+      >
+        {app.status}
+      </span>
+    </div>
+
+    {/* DETAILS GRID */}
+    <div className="grid grid-cols-2 gap-4 text-sm">
+      <div>
+        <p className="text-gray-500">Class</p>
+        <p className="font-medium">{app.class}</p>
+      </div>
+
+      <div>
+        <p className="text-gray-500">Documents</p>
+        <p className="font-medium">{app.documents}</p>
+      </div>
+
+      <div className="col-span-2">
+        <p className="text-gray-500">Contact</p>
+        <p className="font-medium">{app.phone}</p>
+        <p className="text-xs text-gray-500">{app.email}</p>
+      </div>
+    </div>
+
+    {/* ACTIONS */}
+    <div className="flex justify-between items-center pt-2 border-t">
+
+      <button
+        onClick={() => setViewApp(app)}
+        className="flex items-center gap-2 text-blue-600 text-sm"
+      >
+        <Eye size={16} /> View
+      </button>
+
+      <button
+        onClick={() => setEditApp(app)}
+        className="flex items-center gap-2 text-gray-600 text-sm"
+      >
+        <Pencil size={16} /> Edit
+      </button>
+
+      <button
+        onClick={() => setDeleteApp(app)}
+        className="flex items-center gap-2 text-red-600 text-sm"
+      >
+        <Trash2 size={16} /> Delete
+      </button>
+
+    </div>
+  </div>
+))}
+
+</div>
+
         {/* PAGINATION */}
 <div className="flex justify-end items-center gap-2 px-6 py-4 border-t text-sm">
   <button
@@ -702,11 +790,9 @@ if (role === "parent" && !isParentPortal) {
     Next
   </button>
 </div>
-
-      </div>
       {viewApp && (
   <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-    <div className="bg-white w-full max-w-5xl rounded-xl overflow-hidden">
+    <div className="bg-white w-full max-w-5xl mx-3 sm:mx-auto rounded-xl overflow-hidden">
 
       {/* HEADER */}
       <div className="bg-blue-50 px-6 py-4 flex justify-between items-start">

@@ -32,6 +32,7 @@ import TeachersPage from "./pages/People/TeachersPage";
 import PayFees from "./pages/Student/PayFees";
 
 // Academic
+import AddClass from "./pages/Academic/Classes/AddClass";
 import ClassesPage from "./pages/Academic/ClassesPage";
 import ClassRoomPage from "./pages/Academic/ClassRoomPage";
 import ClassRoutinePage from "./pages/Academic/ClassRoutinePage";
@@ -180,6 +181,10 @@ export default function App() {
   <Route path="people/parents" element={<ParentsPage />} />
   <Route path="people/guardians" element={<GuardiansPage />} />
   <Route path="people/teachers" element={<TeachersPage />} />
+  <Route
+  path="/admin/dashboard/academic/classes/add"
+  element={<AddClass />}
+/>
 
   {/* ACADEMIC */}
   <Route path="academic/classes" element={<ClassesPage />} />

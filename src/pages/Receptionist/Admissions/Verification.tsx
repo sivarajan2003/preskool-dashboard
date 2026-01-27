@@ -104,13 +104,13 @@ export default function Verification() {
   /* ================= UI ================= */
 
   return (
-    <div className="space-y-6">
+<div className="space-y-4 sm:space-y-6 px-3 sm:px-4 md:px-6">
 
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-6">
-        <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
           <div>
-            <h2 className="text-2xl font-semibold">Verification</h2>
+          <h2 className="text-xl sm:text-2xl font-semibold">Verification</h2>
             <p className="text-sm text-gray-500">
               Dashboard / Receptionist / Admissions / Verification
             </p>
@@ -132,7 +132,7 @@ export default function Verification() {
         <div className="flex justify-between items-center flex-wrap gap-4">
           <h3 className="text-lg font-semibold"> Verification</h3>
 
-          <div className="flex gap-3 items-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:items-center w-full sm:w-auto">
             <button
               onClick={handleSort}
               className="flex items-center gap-2 px-4 py-2 border rounded-lg text-sm"
@@ -145,14 +145,14 @@ export default function Verification() {
               placeholder="Search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="border rounded-lg px-4 py-2 text-sm w-60"
-            />
+              className="border rounded-lg px-4 py-2 text-sm w-full sm:w-60"
+              />
           </div>
         </div>
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="hidden lg:block bg-white border rounded-xl overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-gray-50">
             <tr>
@@ -173,7 +173,7 @@ export default function Verification() {
                   {app.id}
                 </td>
 
-                <td className="px-6 py-4">
+                <td className="px-4 sm:px-6 py-3 sm:py-4">
                   <div className="flex items-center gap-3">
                     <img
                       src={app.avatar}
@@ -287,9 +287,78 @@ export default function Verification() {
             ))}
           </tbody>
         </table>
+        </div>
+{/* ================= MOBILE & TABLET VIEW ================= */}
+<div className="lg:hidden space-y-4">
+  {paginatedData.map((app) => (
+    <div
+      key={app.id}
+      className="bg-white border rounded-2xl p-4 space-y-4"
+    >
+      {/* TOP */}
+      <div className="flex justify-between items-start gap-3">
+  <div className="flex gap-3">
+    {/* PROFILE IMAGE */}
+    <img
+      src={app.avatar}
+      alt={app.name}
+      className="w-12 h-12 rounded-full object-cover border"
+    />
+
+    {/* STUDENT INFO */}
+    <div>
+      <p className="text-blue-600 font-semibold">{app.id}</p>
+      <p className="font-medium">{app.name}</p>
+      <p className="text-xs text-gray-500">DOB: {app.dob}</p>
+    </div>
+  </div>
+
+  {/* STATUS */}
+  <span
+    className={`px-3 py-1 rounded-full text-xs whitespace-nowrap ${statusStyle(
+      app.status
+    )}`}
+  >
+    {app.status}
+  </span>
+</div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <p className="text-gray-500">Class</p>
+          <p className="font-medium">{app.class}</p>
+        </div>
+
+        <div>
+          <p className="text-gray-500">Documents</p>
+          <p className="font-medium">{app.documents}</p>
+        </div>
+
+        <div className="col-span-2">
+          <p className="text-gray-500">Contact</p>
+          <p className="font-medium">{app.phone}</p>
+          <p className="text-xs text-gray-500">{app.email}</p>
+        </div>
+      </div>
+
+      {/* ACTION */}
+      <button
+        onClick={() =>
+          navigate(
+            `/admin/dashboard/receptionist/admissions/verification/${app.id}`
+          )
+        }
+        className="w-full border rounded-lg py-2 flex items-center justify-center gap-2 text-sm text-blue-600"
+      >
+        <Eye size={16} /> View Verification
+      </button>
+    </div>
+  ))}
+</div>
 
         {/* ================= PAGINATION ================= */}
-        <div className="flex justify-end gap-2 px-6 py-4 border-t text-sm">
+        <div className="flex flex-col sm:flex-row sm:justify-end sm:items-center gap-3 px-4 sm:px-6 py-4 border-t text-sm">
           <button
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((p) => p - 1)}
@@ -308,7 +377,6 @@ export default function Verification() {
             Next
           </button>
         </div>
-      </div>
      
     </div>
   );

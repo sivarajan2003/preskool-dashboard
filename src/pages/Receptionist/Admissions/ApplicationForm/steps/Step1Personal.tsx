@@ -51,9 +51,9 @@ export default function Step1Personal({ data, onNext, onBack }: Props) {
   };
 
   return (
-    <div className="bg-white border rounded-xl">
+<div className="bg-white border rounded-xl mx-2 sm:mx-0">
       {/* FORM BODY */}
-      <div className="p-6 space-y-6">
+      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
         <h2 className="text-lg font-semibold">Student Personal Details</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -66,7 +66,7 @@ export default function Step1Personal({ data, onNext, onBack }: Props) {
               name="firstName"
               value={form.firstName}
               onChange={handleChange}
-              className="w-full border rounded-lg px-4 py-2"
+              className="w-full border rounded-lg px-3 sm:px-4 py-2"
               placeholder="Enter first name"
             />
             {errors.firstName && (
@@ -202,23 +202,26 @@ export default function Step1Personal({ data, onNext, onBack }: Props) {
       </div>
 
       {/* FOOTER ACTION BAR (like Image-1 & 2) */}
-      <div className="flex items-center justify-between border-t px-6 py-4">
+      <div className="
+  flex flex-col sm:flex-row
+  gap-3 sm:gap-0
+  sm:items-center sm:justify-between
+  border-t px-4 sm:px-6 py-4
+">
         <button
           disabled
-          className="px-4 py-2 rounded-lg border text-gray-400 cursor-not-allowed"
-        >
+          className="w-full sm:w-auto px-4 py-2 rounded-lg border text-gray-400 cursor-not-allowed">
           Previous
         </button>
 
-        <div className="flex gap-3">
-          <button className="px-4 py-2 rounded-lg border">
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+        <button className="w-full sm:w-auto px-4 py-2 rounded-lg border">
             Save Draft
           </button>
 
           <button
             onClick={handleNext}
-            className="px-5 py-2 rounded-lg bg-blue-600 text-white"
-          >
+            className="w-full sm:w-auto px-5 py-2 rounded-lg bg-blue-600 text-white">
             Next Step
           </button>
         </div>

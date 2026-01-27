@@ -11,20 +11,21 @@ import { useNavigate } from "react-router-dom";
 
   export default function ReceptionistDashboard() {
     return (
-      <div className="space-y-6">
+<div className="space-y-4 sm:space-y-6 px-3 sm:px-4 md:px-6 lg:px-0">
   
         {/* Header */}
         <div className="mb-4">
-          <h1 className="text-2xl font-semibold text-gray-900">
+        <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
             Receptionist Dashboard
           </h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-xs sm:text-sm text-gray-500">
             Dashboard / Receptionist Dashboard
           </p>
         </div>
   
         {/* ================= NOTIFICATION ================= */}
-        <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-4 py-3">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between 
+bg-green-50 border border-green-200 rounded-lg px-4 py-3 gap-2">
           <div className="flex items-center gap-3">
             <span className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center text-sm font-bold">
               ✓
@@ -38,9 +39,9 @@ import { useNavigate } from "react-router-dom";
   
         {/* ================= WELCOME BANNER ================= */}
         <div className="bg-gradient-to-r from-[#0F0C29] via-[#302B63] to-[#24243E]
-          rounded-xl px-6 py-6 text-white flex justify-between items-center">
-  
-          <div>
+rounded-xl px-4 sm:px-6 py-4 sm:py-6 text-white
+flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+  <div>
             <h2 className="text-lg font-semibold">
               Welcome Back, Receptionist
             </h2>
@@ -49,13 +50,13 @@ import { useNavigate } from "react-router-dom";
             </p>
           </div>
   
-          <p className="text-xs text-gray-300">
+          <p className="text-xs text-gray-300 self-start sm:self-auto">
             {new Date().toLocaleString()}
           </p>
         </div>
   
         {/* ================= STAT CARDS ================= */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6">
   <ReceptionistCard
     title="Total Applications"
     value="50"
@@ -90,7 +91,7 @@ import { useNavigate } from "react-router-dom";
 </div>
 
 {/* 🔥 ADMISSION FUNNEL SECTION */}
-<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <div className="lg:col-span-2">
           <AdmissionFunnel />
         </div>
@@ -115,30 +116,31 @@ import { useNavigate } from "react-router-dom";
   
     return (
       <div
-        className="
-          bg-white
-          border border-gray-200
-          rounded-xl
-          p-6
-          shadow-sm
-          hover:shadow-md
-          transition
-          relative
-        "
-      >
-        {/* 🔥 ARROW BUTTON */}
+  className="
+    bg-white
+    border border-gray-200
+    rounded-xl
+    p-4 sm:p-6
+    shadow-sm
+    hover:shadow-md
+    transition
+    relative
+  "
+>
+ {/* 🔥 ARROW BUTTON */}
         <button
           onClick={() => navigate(navigateTo)}
-          className="absolute top-4 right-4 p-1.5 rounded-lg hover:bg-gray-100"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 
+          p-2 rounded-lg hover:bg-gray-100"
           title="View details"
         >
           <ArrowUpRight className="w-4 h-4 text-gray-500" />
         </button>
   
         {/* TOP ROW */}
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4">
           {/* GIF ICON */}
-          <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gray-50 flex items-center justify-center">
             <img
               src={gif}
               alt={title}

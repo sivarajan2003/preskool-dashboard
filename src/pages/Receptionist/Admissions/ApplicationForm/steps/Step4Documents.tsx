@@ -18,7 +18,7 @@ function UploadBox({
   onChange: (file: File | null) => void;
 }) {
   return (
-    <div className="border-2 border-dashed rounded-xl p-6">
+<div className="border-2 border-dashed rounded-xl p-4 sm:p-6">
       {!file ? (
         /* ===== UPLOAD STATE ===== */
         <label className="flex flex-col items-center text-center cursor-pointer hover:bg-gray-50 p-4 rounded-lg">
@@ -35,7 +35,7 @@ function UploadBox({
         </label>
       ) : (
         /* ===== FILE PREVIEW STATE ===== */
-        <div className="flex items-center justify-between">
+<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <p className="font-medium text-sm">{label}</p>
             <p className="text-xs text-gray-500">
@@ -43,7 +43,7 @@ function UploadBox({
             </p>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {/* VIEW */}
             <button
               type="button"
@@ -88,8 +88,10 @@ export default function Step4Documents({
   const isValid = docs.birthCert && docs.photo;
 
   return (
-    <div className="bg-white p-6 rounded-xl border space-y-6">
-      <h2 className="text-lg font-semibold">Document Upload</h2>
+<div className="bg-white rounded-xl border overflow-hidden">
+<h2 className="text-base sm:text-lg font-semibold">
+  Document Upload
+</h2>
 
       <UploadBox
   label="Birth Certificate *"
@@ -127,12 +129,12 @@ export default function Step4Documents({
   }
 />
 
-      <div className="flex justify-between pt-4 border-t">
+<div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between pt-4 border-t px-4 sm:px-6 py-4">
         <button onClick={onBack} className="px-4 py-2 border rounded-lg">
           Previous
         </button>
 
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           <button className="px-4 py-2 border rounded-lg">
             Save Draft
           </button>

@@ -51,15 +51,18 @@ interface Props {
      const Row = ({ label, value }: { label: string; value: any }) => (
       <div>
         <p className="text-xs text-gray-500">{label}</p>
-        <p className="text-sm font-medium text-gray-800">
+        <p className="text-sm sm:text-base font-medium text-gray-800">
           {value || "-"}
         </p>
       </div>
     );
   
     return (
-      <div className="bg-white p-6 rounded-xl border space-y-6">
-        <h2 className="text-lg font-semibold">Review & Submit</h2>
+<div className="bg-white rounded-xl border overflow-hidden">
+  <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+  <h2 className="text-base sm:text-lg font-semibold">
+  Review & Submit
+</h2>
   
         {/* PERSONAL DETAILS */}
         <Section title="Personal Details">
@@ -149,8 +152,7 @@ interface Props {
   
         
             {/* FOOTER BUTTONS */}
-            <div className="flex justify-between pt-4 border-t">
-
+            <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between pt-4 border-t px-4 sm:px-6 py-4">
 <button
   onClick={onBack}
   className="px-4 py-2 border rounded-lg"
@@ -158,7 +160,7 @@ interface Props {
   Previous
 </button>
 
-<div className="flex gap-3 ml-auto">
+<div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto sm:ml-auto">
   <button className="px-4 py-2 border rounded-lg">
     Save Draft
   </button>
@@ -172,7 +174,7 @@ interface Props {
 </div>
 
 </div>
-
+          </div>
           </div>
     );
   }
@@ -187,7 +189,7 @@ interface Props {
     children: React.ReactNode;
   }) {
     return (
-      <div className="border rounded-lg p-4 space-y-3">
+<div className="border rounded-lg p-3 sm:p-4 space-y-3">
         <h3 className="text-sm font-semibold text-gray-700">
           {title}
         </h3>
@@ -198,7 +200,7 @@ interface Props {
   
   function Grid({ children }: { children: React.ReactNode }) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
         {children}
       </div>
     );

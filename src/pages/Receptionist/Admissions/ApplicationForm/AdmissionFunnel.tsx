@@ -43,44 +43,51 @@ export default function AdmissionFunnel() {
     saveApplication(formData); // FINAL SAVE
     navigate("/admin/dashboard/receptionist/admissions/verification");
   };
-
   return (
-    <>
-      {step === 1 && (
-        <Step1Personal data={formData.personal} onNext={next} />
-      )}
-
-      {step === 2 && (
-        <Step2Academic
-          data={formData.academic}
-          onNext={next}
-          onBack={back}
-        />
-      )}
-
-      {step === 3 && (
-        <Step3PreviousSchool
-          data={formData.previousSchool}
-          onNext={next}
-          onBack={back}
-        />
-      )}
-
-      {step === 4 && (
-        <Step4Documents
-          data={formData.documents}
-          onNext={next}
-          onBack={back}
-        />
-      )}
-
-      {step === 5 && (
-        <Step5Review
-          data={formData}
-          onBack={back}
-          onSubmit={submit}
-        />
-      )}
-    </>
+    <div className="w-full">
+      {/* PAGE CONTAINER */}
+      <div className="mx-auto max-w-6xl px-3 sm:px-4 md:px-6 space-y-6">
+        
+        {step === 1 && (
+          <Step1Personal
+            data={formData.personal}
+            onNext={next}
+          />
+        )}
+  
+        {step === 2 && (
+          <Step2Academic
+            data={formData.academic}
+            onNext={next}
+            onBack={back}
+          />
+        )}
+  
+        {step === 3 && (
+          <Step3PreviousSchool
+            data={formData.previousSchool}
+            onNext={next}
+            onBack={back}
+          />
+        )}
+  
+        {step === 4 && (
+          <Step4Documents
+            data={formData.documents}
+            onNext={next}
+            onBack={back}
+          />
+        )}
+  
+        {step === 5 && (
+          <Step5Review
+            data={formData}
+            onBack={back}
+            onSubmit={submit}
+          />
+        )}
+      </div>
+    </div>
   );
+  
 }

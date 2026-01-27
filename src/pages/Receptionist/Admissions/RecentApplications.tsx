@@ -148,7 +148,8 @@ const visibleApplications = showAll
   const [viewApp, setViewApp] = useState<any>(null);
 
     return (
-      <div className="bg-white rounded-2xl border shadow-sm overflow-hidden">
+<div className="bg-white rounded-2xl border shadow-sm overflow-hidden 
+px-0 sm:px-0">
         {/* HEADER */}
         <div className="flex justify-between items-center px-6 py-4 border-b">
           <div>
@@ -170,7 +171,7 @@ const visibleApplications = showAll
         </div>
   
         {/* TABLE */}
-        <div className="overflow-x-auto">
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
               <tr>
@@ -206,7 +207,7 @@ const visibleApplications = showAll
   
                   <td className="px-6 py-4">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${statusStyle(
+                      className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${statusStyle(
                         app.status
                       )}`}
                     >
@@ -228,12 +229,63 @@ const visibleApplications = showAll
             </tbody>
           </table>
         </div>
+        {/* ================= MOBILE VIEW ================= */}
+<div className="md:hidden space-y-4 p-4">
+  {visibleApplications.map((app) => (
+    <div
+      key={app.id}
+      className="border rounded-xl p-4 bg-white space-y-3"
+    >
+      {/* TOP */}
+      <div className="flex items-center gap-3">
+        <img
+          src={app.avatar}
+          className="w-10 h-10 rounded-full"
+        />
+        <div>
+          <p className="font-medium">{app.name}</p>
+          <p className="text-xs text-gray-500">{app.id}</p>
+        </div>
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <p className="text-gray-500">Class</p>
+          <p>{app.class}</p>
+        </div>
+        <div>
+          <p className="text-gray-500">Date</p>
+          <p>{app.date}</p>
+        </div>
+      </div>
+
+      <span
+        className={`inline-block px-3 py-1 rounded-full text-xs ${statusStyle(
+          app.status
+        )}`}
+      >
+        {app.status}
+      </span>
+
+      <button
+        onClick={() => setViewApp(app)}
+        className="w-full border rounded-lg py-2 text-blue-600 text-sm"
+      >
+        View Details
+      </button>
+    </div>
+  ))}
+</div>
+
         {viewApp && (
   <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-    <div className="bg-white w-full max-w-4xl rounded-2xl overflow-hidden">
+<div className="bg-white w-full max-w-4xl rounded-2xl overflow-hidden 
+max-h-[90vh] overflow-y-auto">
 
       {/* HEADER */}
-      <div className="bg-blue-50 px-6 py-4 flex justify-between items-start">
+      <div className="bg-blue-50 px-4 sm:px-6 py-4 
+flex flex-col sm:flex-row sm:justify-between gap-3">
         <div>
           <h2 className="text-2xl font-semibold text-gray-900">
             {viewApp.name}
@@ -270,7 +322,7 @@ const visibleApplications = showAll
         <div className="bg-white p-5 rounded-xl border">
           <h3 className="font-semibold mb-4">Student Information</h3>
 
-          <div className="grid grid-cols-2 gap-y-3 text-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 text-sm">
             <p><b>Full Name:</b> {viewApp.name}</p>
             <p><b>Applied On:</b> {viewApp.date}</p>
             <p><b>Class:</b> {viewApp.class}</p>
@@ -287,7 +339,7 @@ const visibleApplications = showAll
       </div>
 
       {/* FOOTER */}
-      <div className="px-6 py-4 border-t flex justify-end">
+      <div className="px-4 sm:px-6 py-4 border-t flex justify-center sm:justify-end">
         <button
           onClick={() => setViewApp(null)}
           className="px-4 py-2 border rounded-lg text-sm"
