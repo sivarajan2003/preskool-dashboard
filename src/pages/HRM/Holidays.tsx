@@ -225,8 +225,8 @@ onClick={() => window.history.back()}
       </div>
 
       {/* ================= SUB HEADER ================= */}
-      <div className="bg-white border rounded-xl px-6 py-4 space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="bg-white border rounded-xl px-4 sm:px-6 py-4 space-y-4">
+<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h3 className="text-base font-semibold">Holidays List</h3>
 
           <div className="flex items-center gap-3">
@@ -361,7 +361,7 @@ onClick={() => window.history.back()}
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-sm">
             Row Per Page
             <select
@@ -376,16 +376,17 @@ onClick={() => window.history.back()}
           </div>
 
           <input
-            placeholder="Search"
-            className="border rounded-lg px-3 py-2 text-sm w-52"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
+  placeholder="Search"
+  className="w-full sm:w-52 border rounded-lg px-3 py-2 text-sm"
+  value={search}
+  onChange={e => setSearch(e.target.value)}
+/>
+
         </div>
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="hidden lg:block bg-white border rounded-xl overflow-x-auto">
       <div className="min-w-[900px]">
 
   <table className="min-w-[900px] w-full text-sm">
@@ -450,6 +451,74 @@ onClick={() => window.history.back()}
             ))}
           </tbody>
         </table>
+        </div></div>
+{/* ================= MOBILE & TABLET VIEW ================= */}
+<div className="lg:hidden space-y-4">
+  {paginated.map((h) => (
+    <div
+      key={h.id}
+      className="bg-white border rounded-2xl p-4 space-y-4"
+    >
+      {/* TOP ROW */}
+      <div className="flex justify-between items-start">
+        <div>
+          <p className="text-blue-600 font-semibold">{h.id}</p>
+          <p className="font-medium">{h.title}</p>
+        </div>
+
+        <span className="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700">
+          {h.status}
+        </span>
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <p className="text-gray-500">Date</p>
+          <p className="font-medium">{h.date}</p>
+        </div>
+        <div>
+          <p className="text-gray-500">Description</p>
+          <p className="font-medium line-clamp-2">
+            {h.description}
+          </p>
+        </div>
+      </div>
+
+      {/* ACTION BUTTONS */}
+      <div className="flex gap-2 pt-2">
+        <button
+          onClick={() => {
+            setSelectedHoliday(h);
+            setOpenView(true);
+          }}
+          className="flex-1 h-10 border rounded-lg flex items-center justify-center gap-2 text-sm"
+        >
+          <Eye size={16} />
+          View
+        </button>
+
+        <button
+          onClick={() => {
+            setSelectedHoliday(h);
+            setOpenEdit(true);
+          }}
+          className="flex-1 h-10 border rounded-lg flex items-center justify-center gap-2 text-sm"
+        >
+          <Pencil size={16} />
+          Edit
+        </button>
+
+        <button
+          onClick={() => setConfirmDeleteId(h.id)}
+          className="w-10 h-10 border rounded-lg flex items-center justify-center text-red-600"
+        >
+          <Trash2 size={16} />
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
 
         {/* ================= PAGINATION ================= */}
         
@@ -486,8 +555,7 @@ onClick={() => window.history.back()}
       </button>
     </div>
 
-  </div>
-</div>
+ 
 
       {/* ================= DELETE CONFIRM ================= */}
       {confirmDeleteId && (

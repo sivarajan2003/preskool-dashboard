@@ -110,42 +110,53 @@ export default function Departments() {
     <div className="space-y-6">
 
       {/* ================= HEADER ================= */}
-      <div className="bg-white border rounded-2xl px-6 py-5">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold">Department</h2>
-            <p className="text-sm text-gray-500 mt-1">
-              Dashboard / HRM / Department
-            </p>
-          </div>
+      {/* ================= HEADER ================= */}
+<div className="bg-white border rounded-2xl px-4 sm:px-6 py-4 sm:py-5">
+  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-          <div className="flex items-center gap-3">
-            <button onClick={handleRefresh} className="p-2.5 border rounded-lg">
-              <RefreshCcw size={16} />
-            </button>
-            <button onClick={() => window.print()} className="p-2.5 border rounded-lg">
-              <Printer size={16} />
-            </button>
-            <button onClick={handleExport} className="px-4 py-2 border rounded-lg text-sm">
-              Export
-            </button>
-            <button
-  onClick={() => setOpenAddModal(true)}
-  className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-1"
->
-  <Plus size={16} /> Add Department
-</button>
+    {/* LEFT */}
+    <div>
+      <h2 className="text-xl sm:text-2xl font-semibold">
+        Department
+      </h2>
+      <p className="text-xs sm:text-sm text-gray-500 mt-1">
+        Dashboard / HRM / Department
+      </p>
+    </div>
 
-          </div>
-        </div>
-      </div>
+    {/* RIGHT ACTIONS */}
+    <div className="flex flex-wrap gap-2 sm:gap-3">
+      <button className="p-2 border rounded-lg">
+        <RefreshCcw size={16} />
+      </button>
+
+      <button className="p-2 border rounded-lg">
+        <Printer size={16} />
+      </button>
+
+      <button className="px-3 py-2 border rounded-lg text-sm">
+        Export
+      </button>
+
+      <button
+        onClick={() => setOpenAddModal(true)}
+        className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg text-sm flex items-center justify-center gap-1"
+      >
+        <Plus size={14} /> Add Department
+      </button>
+    </div>
+  </div>
+</div>
 
       {/* ================= SUB HEADER ================= */}
-      <div className="bg-white border rounded-xl px-6 py-4 space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-base font-semibold">Department List</h3>
+      <div className="bg-white border rounded-xl px-4 sm:px-6 py-4 space-y-4">
 
-          <div className="flex items-center gap-3">
+  {/* TOP ROW */}
+  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <h3 className="text-base font-semibold">
+      Department List
+    </h3>
+       <div className="flex items-center gap-3">
             {/* DATE RANGE */}
             <div className="relative">
             <button
@@ -262,7 +273,7 @@ export default function Departments() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 text-sm">
             Row Per Page
             <select
@@ -276,16 +287,17 @@ export default function Departments() {
             Entries
           </div>
 
-          <input
-            placeholder="Search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border rounded-lg px-3 py-2 text-sm w-52"
-          />
+         {/* SEARCH */}
+    <input
+      placeholder="Search department"
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      className="w-full sm:w-56 border rounded-lg px-3 py-2 text-sm"
+    />
         </div>
       </div>
 {/* ================= TABLE ================= */}
-<div className="bg-white border rounded-xl overflow-x-auto">
+<div className="hidden lg:block bg-white border rounded-xl overflow-x-auto">
   {/* 👇 THIS WRAPPER IS THE KEY FIX */}
   <div className="min-w-[900px]">
 
@@ -360,41 +372,83 @@ export default function Departments() {
       </tbody>
     </table>
 
-    {/* ✅ PAGINATION — NOW INSIDE SAME WIDTH */}
-    <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
-      <button
-        disabled={currentPage === 1}
-        onClick={() => setCurrentPage((p) => p - 1)}
-        className="px-3 py-1 border rounded disabled:opacity-40"
-      >
-        Prev
-      </button>
-
-      {Array.from({ length: totalPages }).map((_, i) => (
-        <button
-          key={i}
-          onClick={() => setCurrentPage(i + 1)}
-          className={`px-3 py-1 rounded ${
-            currentPage === i + 1
-              ? "bg-blue-600 text-white"
-              : "border"
-          }`}
-        >
-          {i + 1}
-        </button>
-      ))}
-
-      <button
-        disabled={currentPage === totalPages}
-        onClick={() => setCurrentPage((p) => p + 1)}
-        className="px-3 py-1 border rounded disabled:opacity-40"
-      >
-        Next
-      </button>
-    </div>
-
   </div>
 </div>
+{/* ================= STEP 2: MOBILE & TABLET VIEW ================= */}
+<div className="lg:hidden space-y-4">
+  {paginated.map((d) => (
+    <div
+      key={d.id}
+      className="bg-white border rounded-2xl p-4 space-y-4"
+    >
+      {/* HEADER */}
+      <div className="flex justify-between items-start">
+        <div>
+          <p className="text-blue-600 font-semibold">{d.id}</p>
+          <p className="font-medium">{d.name}</p>
+        </div>
+
+        <span
+          className={`px-3 py-1 rounded-full text-xs font-medium ${
+            d.status === "Active"
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
+          {d.status}
+        </span>
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <p className="text-gray-500">Department</p>
+          <p className="font-medium">{d.name}</p>
+        </div>
+        <div>
+          <p className="text-gray-500">Created Date</p>
+          <p className="font-medium">{d.date}</p>
+        </div>
+      </div>
+
+      {/* ACTIONS */}
+      <div className="flex gap-2 pt-2">
+        {/* VIEW */}
+        <button
+          onClick={() => {
+            setSelectedDepartment(d);
+            setOpenView(true);
+          }}
+          className="flex-1 h-10 flex items-center justify-center gap-2 border rounded-lg text-sm hover:bg-blue-50"
+        >
+          <Eye className="w-4 h-4" />
+          View
+        </button>
+
+        {/* EDIT */}
+        <button
+          onClick={() => {
+            setSelectedDepartment(d);
+            setOpenEdit(true);
+          }}
+          className="flex-1 h-10 flex items-center justify-center gap-2 border rounded-lg text-sm hover:bg-green-50"
+        >
+          <Pencil className="w-4 h-4" />
+          Edit
+        </button>
+
+        {/* DELETE */}
+        <button
+          onClick={() => setConfirmDeleteId(d.id)}
+          className="w-10 h-10 flex items-center justify-center border rounded-lg text-red-600 hover:bg-red-50"
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
 {confirmDeleteId && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
     <div className="bg-white rounded-xl w-full max-w-sm p-6">

@@ -221,11 +221,11 @@ const [selectedPayroll, setSelectedPayroll] = useState<any>(null);
       </div>
 
       {/* ================= SUB HEADER ================= */}
-      <div className="bg-white border rounded-xl px-6 py-4 space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="bg-white border rounded-xl px-4 sm:px-6 py-4 space-y-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h3 className="text-base font-semibold">Payroll List</h3>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap gap-2">
           <div className="relative">
   <button
     onClick={(e) => {
@@ -357,13 +357,13 @@ const [selectedPayroll, setSelectedPayroll] = useState<any>(null);
             placeholder="Search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="border rounded-lg px-3 py-2 text-sm w-52"
-          />
+            className="w-full sm:w-52 border rounded-lg px-3 py-2 text-sm"
+            />
         </div>
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="hidden lg:block bg-white border rounded-xl overflow-x-auto">
   <table className="min-w-[900px] w-full text-sm">
         <thead className="bg-gray-50">
   <tr>
@@ -437,6 +437,75 @@ const [selectedPayroll, setSelectedPayroll] = useState<any>(null);
             ))}
           </tbody>
         </table>
+        </div>
+{/* ================= MOBILE & TABLET VIEW ================= */}
+<div className="lg:hidden space-y-4">
+  {paginated.map((d) => (
+    <div
+      key={d.id}
+      className="bg-white border rounded-2xl p-4 space-y-4"
+    >
+      {/* TOP */}
+      <div className="flex justify-between items-start">
+        <div className="flex items-center gap-3">
+          <img
+            src={d.image}
+            className="w-10 h-10 rounded-full object-cover"
+            alt={d.name}
+          />
+          <div>
+            <p className="font-semibold">{d.name}</p>
+            <p className="text-xs text-gray-500">{d.id}</p>
+          </div>
+        </div>
+
+        <span
+          className={`px-3 py-1 rounded-full text-xs ${
+            d.status === "Paid"
+              ? "bg-green-100 text-green-700"
+              : "bg-yellow-100 text-yellow-700"
+          }`}
+        >
+          {d.status}
+        </span>
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <p className="text-gray-500">Department</p>
+          <p className="font-medium">{d.department}</p>
+        </div>
+        <div>
+          <p className="text-gray-500">Designation</p>
+          <p className="font-medium">{d.designation}</p>
+        </div>
+        <div>
+          <p className="text-gray-500">Phone</p>
+          <p className="font-medium">{d.phone}</p>
+        </div>
+        <div>
+          <p className="text-gray-500">Amount</p>
+          <p className="font-semibold text-green-600">
+            ${d.amount.toLocaleString()}
+          </p>
+        </div>
+      </div>
+
+      {/* ACTION */}
+      <button
+        onClick={() => {
+          setSelectedPayroll(d);
+          setOpenView(true);
+        }}
+        className="w-full h-10 border rounded-lg flex items-center justify-center gap-2 text-sm"
+      >
+        <FileText size={16} />
+        {d.status === "Paid" ? "View Payslip" : "View Details"}
+      </button>
+    </div>
+  ))}
+</div>
 
         {/* PAGINATION */}
         <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
@@ -458,7 +527,7 @@ const [selectedPayroll, setSelectedPayroll] = useState<any>(null);
             Next
           </button>
         </div>
-      </div>
+     
       {openView && selectedPayroll && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
     <div className="bg-white rounded-xl w-full max-w-md p-6">

@@ -418,7 +418,7 @@ if (role === "parent" && !isParentPortal) {
     </div>
 
     {/* RIGHT ACTIONS */}
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3">
     <button
   onClick={handleRefresh}
   className="p-2.5 border rounded-lg hover:bg-gray-50"
@@ -441,8 +441,8 @@ if (role === "parent" && !isParentPortal) {
   onClick={() =>
     navigate("/admin/dashboard/receptionist/admissions/application-form")
   }
-  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium flex items-center gap-1"
->
+  className="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium flex items-center justify-center gap-1"
+  >
   <Plus size={14} /> New Application
 </button>
     </div>
@@ -452,7 +452,7 @@ if (role === "parent" && !isParentPortal) {
 <div className="bg-white border border-gray-200 rounded-2xl px-6 py-5">
 
   {/* TOP ROW */}
-  <div className="flex items-center justify-between">
+  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
     <h3 className="text-lg font-semibold text-gray-900">
       Application List
     </h3>
@@ -686,90 +686,95 @@ if (role === "parent" && !isParentPortal) {
 
 {paginatedData.map((app) => (
   <div
-    key={app.id}
-    className="bg-white border rounded-2xl p-4 space-y-4"
-  >
+  key={app.id}
+  className="bg-white border rounded-2xl p-4 space-y-3"
+>
+  {/* HEADER */}
+  <div className="flex items-start justify-between gap-3">
 
-    {/* TOP SECTION */}
-    <div className="flex justify-between items-start gap-3">
-
-      <div className="flex items-center gap-3">
-        {/* PROFILE IMAGE */}
-        <img
-          src={app.avatar}
-          alt={app.name}
-          className="w-12 h-12 rounded-full object-cover border"
-        />
-
-        {/* BASIC INFO */}
-        <div>
-          <p className="text-blue-600 font-semibold">{app.id}</p>
-          <p className="font-medium text-gray-900">{app.name}</p>
-          <p className="text-xs text-gray-500">DOB: {app.dob}</p>
-        </div>
-      </div>
-
-      {/* STATUS */}
-      <span
-        className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${statusStyle(
-          app.status
-        )}`}
-      >
-        {app.status}
-      </span>
-    </div>
-
-    {/* DETAILS GRID */}
-    <div className="grid grid-cols-2 gap-4 text-sm">
-      <div>
-        <p className="text-gray-500">Class</p>
-        <p className="font-medium">{app.class}</p>
-      </div>
+    {/* LEFT: PROFILE + BASIC INFO */}
+    <div className="flex items-start gap-3">
+      <img
+        src={app.avatar}
+        alt={app.name}
+        className="w-11 h-11 rounded-full object-cover border"
+      />
 
       <div>
-        <p className="text-gray-500">Documents</p>
-        <p className="font-medium">{app.documents}</p>
-      </div>
-
-      <div className="col-span-2">
-        <p className="text-gray-500">Contact</p>
-        <p className="font-medium">{app.phone}</p>
-        <p className="text-xs text-gray-500">{app.email}</p>
+        <p className="text-blue-600 text-sm font-semibold">
+          {app.id}
+        </p>
+        <p className="font-medium text-gray-900 leading-tight">
+          {app.name}
+        </p>
+        <p className="text-xs text-gray-500">
+          DOB: {app.dob}
+        </p>
       </div>
     </div>
 
-    {/* ACTIONS */}
-    <div className="flex justify-between items-center pt-2 border-t">
+    {/* RIGHT: STATUS */}
+    <span
+      className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap ${statusStyle(
+        app.status
+      )}`}
+    >
+      {app.status}
+    </span>
+  </div>
 
-      <button
-        onClick={() => setViewApp(app)}
-        className="flex items-center gap-2 text-blue-600 text-sm"
-      >
-        <Eye size={16} /> View
-      </button>
+  {/* DETAILS */}
+  <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-sm pt-2">
+    <div>
+      <p className="text-gray-500 text-xs">Class</p>
+      <p className="font-medium">{app.class}</p>
+    </div>
 
-      <button
-        onClick={() => setEditApp(app)}
-        className="flex items-center gap-2 text-gray-600 text-sm"
-      >
-        <Pencil size={16} /> Edit
-      </button>
+    <div>
+      <p className="text-gray-500 text-xs">Documents</p>
+      <p className="font-medium">{app.documents}</p>
+    </div>
 
-      <button
-        onClick={() => setDeleteApp(app)}
-        className="flex items-center gap-2 text-red-600 text-sm"
-      >
-        <Trash2 size={16} /> Delete
-      </button>
-
+    <div className="col-span-2">
+      <p className="text-gray-500 text-xs">Contact</p>
+      <p className="font-medium">{app.phone}</p>
+      <p className="text-xs text-gray-500 truncate">
+        {app.email}
+      </p>
     </div>
   </div>
+
+  {/* ACTIONS */}
+  <div className="flex justify-between items-center pt-3 border-t text-sm">
+    <button
+      onClick={() => setViewApp(app)}
+      className="flex items-center gap-1 text-blue-600"
+    >
+      <Eye size={14} /> View
+    </button>
+
+    <button
+      onClick={() => setEditApp(app)}
+      className="flex items-center gap-1 text-gray-600"
+    >
+      <Pencil size={14} /> Edit
+    </button>
+
+    <button
+      onClick={() => setDeleteApp(app)}
+      className="flex items-center gap-1 text-red-600"
+    >
+      <Trash2 size={14} /> Delete
+    </button>
+  </div>
+</div>
+
 ))}
 
 </div>
 
         {/* PAGINATION */}
-<div className="flex justify-end items-center gap-2 px-6 py-4 border-t text-sm">
+  <div className="flex flex-col sm:flex-row sm:justify-end items-center gap-2 px-4 sm:px-6 py-4 border-t text-sm">
   <button
     disabled={currentPage === 1}
     onClick={() => setCurrentPage((p) => p - 1)}

@@ -150,7 +150,7 @@ const handleExport = () => {
     </p>
   </div>
 
-  <div className="flex items-center gap-3">
+  <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3">
     <button
       onClick={handleRefresh}
       className="p-2.5 border rounded-lg hover:bg-gray-50"
@@ -241,7 +241,7 @@ const handleExport = () => {
   </div>
 </div>
       {/* ================= TABLE ================= */}
-      <div className="bg-white rounded-xl border overflow-hidden">
+      <div className="hidden lg:block bg-white rounded-xl border overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-gray-600">
             <tr>
@@ -324,6 +324,79 @@ const handleExport = () => {
           </tbody>
         </table>
       </div>
+      {/* ================= MOBILE & TABLET VIEW ================= */}
+<div className="lg:hidden space-y-4">
+
+{newApplications.map((app) => (
+  <div
+    key={app.id}
+    className="bg-white border rounded-2xl p-4 space-y-4"
+  >
+
+    {/* TOP ROW */}
+    <div className="flex justify-between items-start gap-3">
+
+      <div className="flex items-center gap-3">
+        <img
+          src={app.avatar}
+          alt={app.name}
+          className="w-12 h-12 rounded-full border object-cover"
+        />
+
+        <div>
+          <p className="text-blue-600 font-semibold">{app.id}</p>
+          <p className="font-medium text-gray-900">{app.name}</p>
+          <p className="text-xs text-gray-500">DOB: {app.dob}</p>
+        </div>
+      </div>
+
+      <span className="px-3 py-1 rounded-full text-xs bg-indigo-100 text-indigo-700 whitespace-nowrap">
+        {app.status}
+      </span>
+    </div>
+
+    {/* DETAILS */}
+    <div className="grid grid-cols-2 gap-4 text-sm">
+      <div>
+        <p className="text-gray-500">Class</p>
+        <p className="font-medium">{app.class || "—"}</p>
+      </div>
+
+      <div>
+        <p className="text-gray-500">Contact</p>
+        <p className="font-medium">{app.phone}</p>
+        <p className="text-xs text-gray-500 truncate">{app.email}</p>
+      </div>
+    </div>
+
+    {/* ACTIONS */}
+    <div className="flex justify-between items-center pt-2 border-t">
+
+      <button
+        onClick={() => setViewApp(app)}
+        className="flex items-center gap-2 text-blue-600 text-sm"
+      >
+        <Eye size={16} /> View
+      </button>
+
+      <button
+        onClick={() =>
+          navigate(
+            "/admin/dashboard/receptionist/admissions/interviews",
+            { state: app }
+          )
+        }
+        className="flex items-center gap-2 text-gray-600 text-sm"
+      >
+        <CalendarDays size={16} /> Interview
+      </button>
+
+    </div>
+
+  </div>
+))}
+</div>
+
       {viewApp && (
   <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
 <div className="bg-white w-full h-full sm:h-auto

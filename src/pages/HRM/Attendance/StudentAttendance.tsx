@@ -209,7 +209,7 @@ export default function StudentAttendance() {
 
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-5">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold">Student Attendance</h2>
             <p className="text-sm text-gray-500 mt-1">
@@ -217,7 +217,7 @@ export default function StudentAttendance() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap gap-2 sm:flex-nowrap sm:gap-3">
           <button
   onClick={handleRefresh}
   className="p-2.5 border rounded-lg hover:bg-gray-50"
@@ -239,12 +239,14 @@ export default function StudentAttendance() {
         </div>
       </div>
 
-      {/* ================= SUB HEADER ================= */}
+      {/* ================= SUB HEADER ================= <div className="flex items-center justify-between">
+<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+*/}
       <div className="bg-white border rounded-xl px-6 py-4 space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <h3 className="text-base font-semibold">Student Attendance List</h3>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap gap-2 sm:flex-nowrap sm:gap-3">
             {/* DATE RANGE */}
             <div className="relative">
               <button
@@ -348,7 +350,7 @@ export default function StudentAttendance() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-sm">Row Per Page 10 Entries</div>
 
           <input
@@ -361,7 +363,7 @@ export default function StudentAttendance() {
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="hidden lg:block bg-white border rounded-xl overflow-x-auto">
       <table className="min-w-[1200px] w-full text-sm table-fixed">
       <thead className="bg-gray-50">
   <tr>
@@ -422,6 +424,80 @@ export default function StudentAttendance() {
             ))}
           </tbody>
         </table>
+        </div>
+{/* ================= MOBILE & TABLET VIEW ================= */}
+<div className="lg:hidden space-y-4">
+  {paginated.map((d) => (
+    <div
+      key={d.id}
+      className="bg-white border rounded-2xl p-4 space-y-4"
+    >
+      {/* TOP */}
+<div className="flex justify-between items-start">
+  <div className="flex items-center gap-3">
+    {/* PROFILE IMAGE */}
+    <img
+      src={d.image}
+      alt={d.name}
+      className="w-10 h-10 rounded-full object-cover"
+    />
+
+    {/* NAME + ADMISSION NO */}
+    <div>
+      <p className="font-medium leading-tight">{d.name}</p>
+      <p className="text-xs text-blue-600">{d.id}</p>
+    </div>
+  </div>
+
+  {/* ATTENDANCE STATUS */}
+  <span
+    className={`px-3 py-1 rounded-full text-xs ${
+      d.attendance === "Present"
+        ? "bg-green-100 text-green-600"
+        : d.attendance === "Absent"
+        ? "bg-red-100 text-red-600"
+        : "bg-yellow-100 text-yellow-600"
+    }`}
+  >
+    {d.attendance}
+  </span>
+</div>
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <p className="text-gray-500">Roll No</p>
+          <p className="font-medium">{d.roll}</p>
+        </div>
+        <div>
+          <p className="text-gray-500">Class</p>
+          <p className="font-medium">
+            {d.class} - {d.section}
+          </p>
+        </div>
+      </div>
+
+      {/* ATTENDANCE */}
+      <div className="flex flex-wrap gap-3 text-xs">
+        {["Present", "Late", "Absent", "Holiday", "Halfday"].map((s) => (
+          <label key={s} className="flex items-center gap-1">
+            <input
+              type="radio"
+              checked={d.attendance === s}
+              onChange={() => updateAttendance(d.id, s)}
+            />
+            {s}
+          </label>
+        ))}
+      </div>
+
+      {/* NOTES */}
+      <input
+        placeholder="Notes"
+        className="w-full border rounded-lg px-3 py-2 text-sm"
+      />
+    </div>
+  ))}
+</div>
 
         {/* PAGINATION */}
         <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
@@ -443,7 +519,7 @@ export default function StudentAttendance() {
             Next
           </button>
         </div>
-      </div>
+    
     </div>
   );
 }

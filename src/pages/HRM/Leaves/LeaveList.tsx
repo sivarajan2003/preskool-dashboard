@@ -101,7 +101,7 @@ export default function LeaveList() {
 
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-5">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold">List of Leaves</h2>
             <p className="text-sm text-gray-500 mt-1">
@@ -109,7 +109,7 @@ export default function LeaveList() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap gap-2 sm:flex-nowrap sm:gap-3">
             <button onClick={handleRefresh} className="p-2.5 border rounded-lg">
               <RefreshCcw size={16} />
             </button>
@@ -132,10 +132,10 @@ export default function LeaveList() {
 
       {/* ================= SUB HEADER ================= */}
       <div className="bg-white border rounded-xl px-6 py-4 space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <h3 className="text-base font-semibold">Leave List</h3>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap gap-2 sm:flex-nowrap sm:gap-3">
 
             {/* DATE RANGE */}
             {/* DATE RANGE */}
@@ -255,7 +255,7 @@ export default function LeaveList() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 text-sm">
             Row Per Page
             <select
@@ -279,7 +279,7 @@ export default function LeaveList() {
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="hidden lg:block bg-white border rounded-xl overflow-x-auto">
       <div className="min-w-[900px]">
 
   <table className="min-w-[900px] w-full text-sm">
@@ -351,6 +351,76 @@ export default function LeaveList() {
             ))}
           </tbody>
         </table>
+        </div>
+{/* ================= MOBILE & TABLET VIEW ================= */}
+<div className="lg:hidden space-y-4">
+  {paginated.map((d) => (
+    <div
+      key={d.id}
+      className="bg-white border rounded-2xl p-4 space-y-4"
+    >
+      {/* TOP ROW */}
+      <div className="flex justify-between items-start">
+        <div>
+          <p className="text-blue-600 font-semibold">{d.id}</p>
+          <p className="font-medium">{d.name}</p>
+        </div>
+
+        <span
+          className={`px-3 py-1 rounded-full text-xs ${
+            d.status === "Active"
+              ? "bg-green-100 text-green-600"
+              : "bg-red-100 text-red-600"
+          }`}
+        >
+          {d.status}
+        </span>
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <p className="text-gray-500">Leave Type</p>
+          <p className="font-medium">{d.name}</p>
+        </div>
+        <div>
+          <p className="text-gray-500">Created Date</p>
+          <p className="font-medium">{d.date}</p>
+        </div>
+      </div>
+
+      {/* ACTIONS */}
+      <div className="grid grid-cols-3 gap-2">
+        <button
+          onClick={() => {
+            setSelectedLeave(d);
+            setOpenView(true);
+          }}
+          className="flex items-center justify-center gap-1 border rounded-lg py-2 text-sm"
+        >
+          <Eye size={14} /> View
+        </button>
+
+        <button
+          onClick={() => {
+            setSelectedLeave(d);
+            setOpenEdit(true);
+          }}
+          className="flex items-center justify-center gap-1 border rounded-lg py-2 text-sm"
+        >
+          <Pencil size={14} /> Edit
+        </button>
+
+        <button
+          onClick={() => setConfirmDeleteId(d.id)}
+          className="flex items-center justify-center gap-1 border rounded-lg py-2 text-sm text-red-600"
+        >
+          <Trash2 size={14} /> Delete
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
 
         {/* ✅ PAGINATION — INSIDE SAME WIDTH */}
     <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
@@ -385,7 +455,7 @@ export default function LeaveList() {
       </button>
     </div>
 
-  </div>
+ 
 </div>
 
       {/* ================= DELETE CONFIRM ================= */}

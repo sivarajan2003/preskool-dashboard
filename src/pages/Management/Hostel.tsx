@@ -192,7 +192,7 @@ const [selectedHostel, setSelectedHostel] = useState<any>(null);
 
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-5">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold">Hostel</h2>
             <p className="text-sm text-gray-500 mt-1">
@@ -200,7 +200,7 @@ const [selectedHostel, setSelectedHostel] = useState<any>(null);
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap gap-2 sm:flex-nowrap sm:gap-3">
             <button onClick={handleRefresh} className="p-2.5 border rounded-lg hover:bg-gray-50">
               <RefreshCcw size={16} />
             </button>
@@ -223,10 +223,10 @@ const [selectedHostel, setSelectedHostel] = useState<any>(null);
 
       {/* ================= SUB HEADER ================= */}
       <div className="bg-white border rounded-xl px-6 py-4 space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <h3 className="text-base font-semibold">Hostel List</h3>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap gap-2 sm:flex-nowrap sm:gap-3">
           <div className="relative">
   <button
     onClick={(e) => {
@@ -334,7 +334,7 @@ const [selectedHostel, setSelectedHostel] = useState<any>(null);
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 text-sm">
             Row Per Page
             <select
@@ -358,7 +358,7 @@ const [selectedHostel, setSelectedHostel] = useState<any>(null);
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="hidden lg:block bg-white border rounded-xl overflow-x-auto">
       <div className="min-w-[900px]">
   <table className="min-w-[900px] w-full text-sm">
 
@@ -429,6 +429,88 @@ const [selectedHostel, setSelectedHostel] = useState<any>(null);
             ))}
           </tbody>
         </table>
+        </div>
+        </div>
+        {/* ================= MOBILE & TABLET VIEW ================= */}
+<div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+  {paginated.map((d) => (
+    <div
+      key={d.id}
+      className="bg-white border rounded-2xl p-4 space-y-4"
+    >
+
+      {/* TOP */}
+      <div className="flex justify-between items-start">
+        <div>
+          <p className="text-blue-600 font-semibold">{d.id}</p>
+          <p className="font-medium">{d.name}</p>
+          <p className="text-xs text-gray-500">{d.type} Hostel</p>
+        </div>
+
+        <span
+          className={`px-3 py-1 rounded-full text-xs ${
+            d.type === "Boys"
+              ? "bg-blue-100 text-blue-600"
+              : "bg-pink-100 text-pink-600"
+          }`}
+        >
+          {d.type}
+        </span>
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <p className="text-gray-500">Intake</p>
+          <p className="font-medium">{d.intake}</p>
+        </div>
+
+        <div>
+          <p className="text-gray-500">Address</p>
+          <p className="font-medium line-clamp-2">{d.address}</p>
+        </div>
+      </div>
+
+      {/* DESCRIPTION */}
+      <div>
+        <p className="text-gray-500 text-sm">Description</p>
+        <p className="text-sm">{d.description}</p>
+      </div>
+
+      {/* ACTIONS */}
+      <div className="grid grid-cols-3 gap-2">
+        <button
+          onClick={() => {
+            setSelectedHostel(d);
+            setOpenView(true);
+          }}
+          className="flex items-center justify-center gap-1 border rounded-lg py-2 text-sm"
+        >
+          <Eye size={14} /> View
+        </button>
+
+        <button
+          onClick={() => {
+            setSelectedHostel(d);
+            setOpenEdit(true);
+          }}
+          className="flex items-center justify-center gap-1 border rounded-lg py-2 text-sm"
+        >
+          <Pencil size={14} /> Edit
+        </button>
+
+        <button
+          onClick={() => setConfirmDeleteId(d.id)}
+          className="flex items-center justify-center gap-1 border rounded-lg py-2 text-sm text-red-600"
+        >
+          <Trash2 size={14} /> Delete
+        </button>
+      </div>
+
+    </div>
+  ))}
+
+
 {/* ✅ PAGINATION — INSIDE SAME WIDTH */}
 <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
       <button
@@ -462,7 +544,7 @@ const [selectedHostel, setSelectedHostel] = useState<any>(null);
       </button>
     </div>
 
-  </div>
+  
 </div> 
       {confirmDeleteId && (
   <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">

@@ -821,14 +821,25 @@ School Admin`
       </div>
 
       {/* ACTIONS */}
-      <div className="flex gap-2 pt-2">
-        <button
-          onClick={() => setPreviewApp(app)}
-          className="flex-1 border rounded-lg py-2 text-sm"
-        >
-          <Eye size={14} /> Preview
-        </button>
-      </div>
+      {/* ACTIONS */}
+<div className="flex gap-2 pt-2">
+  <button
+    onClick={() => setPreviewApp(app)}
+    className="
+      flex-1
+      h-10
+      flex items-center justify-center gap-2
+      border rounded-lg
+      text-sm font-medium
+      text-gray-700
+      hover:bg-gray-50
+    "
+  >
+    <Eye className="w-4 h-4" />
+    <span>Preview</span>
+  </button>
+</div>
+
     </div>
   ))}
 </div>

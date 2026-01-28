@@ -59,8 +59,8 @@ const academicYears = Array.from({ length: 6 }, (_, i) => {
   };
 
   return (
-    <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-2">
-  <div className="flex items-center justify-between">
+<header className="bg-white border-b border-gray-200 px-3 sm:px-4 md:px-6 py-2">
+<div className="flex items-center justify-between gap-2 flex-wrap md:flex-nowrap">
 
     {/* LEFT SECTION */}
 {/* LEFT SECTION */}
@@ -92,10 +92,15 @@ const academicYears = Array.from({ length: 6 }, (_, i) => {
         <div className="relative">
         <button
   onClick={() => setYearOpen(!yearOpen)}
-  className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50"
+  className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 border border-gray-200 rounded-lg text-xs sm:text-sm text-gray-700 hover:bg-gray-50"
 >
   <CalendarDays className="w-4 h-4 text-gray-500" />
-  <span>Academic Year : {selectedYear}</span>
+  <span className="hidden sm:inline">
+  Academic Year : {selectedYear}
+</span>
+<span className="sm:hidden">
+  {selectedYear}
+</span>
   <ChevronDown className="w-4 h-4 text-gray-400" />
 </button>
 
@@ -125,7 +130,7 @@ const academicYears = Array.from({ length: 6 }, (_, i) => {
         </div>
 
         {/* ICONS */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 sm:gap-3">
 
        
           {/* Notification */}
@@ -237,8 +242,16 @@ function IconBtn({
   return (
     <button
       onClick={onClick}
-      className="relative w-9 h-9 border border-gray-200 rounded-lg flex items-center justify-center text-gray-600 hover:bg-gray-100"
-    >
+      className="
+      relative 
+      w-8 h-8 
+      sm:w-9 sm:h-9 
+      border border-gray-200 
+      rounded-lg 
+      flex items-center justify-center 
+      text-gray-600 
+      hover:bg-gray-100
+    ">
       {children}
     </button>
   );

@@ -204,7 +204,7 @@ export default function LibraryMembers() {
 
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-5">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-start gap-3">
   {/* BACK ARROW */}
   <button
@@ -225,7 +225,7 @@ export default function LibraryMembers() {
 </div>
 
 
-          <div className="flex items-center gap-3">
+<div className="flex flex-wrap gap-2 sm:flex-nowrap sm:gap-3">
             <button
               onClick={handleRefresh}
               className="p-2.5 border rounded-lg hover:bg-gray-50"
@@ -261,12 +261,12 @@ export default function LibraryMembers() {
 
       {/* ================= SUB HEADER ================= */}
       <div className="bg-white border rounded-xl px-6 py-4 space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <h3 className="text-base font-semibold">
             Library Members List
           </h3>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap gap-2 sm:flex-nowrap sm:gap-3">
           <div className="relative">
   <button
     onClick={(e) => {
@@ -381,7 +381,7 @@ export default function LibraryMembers() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 text-sm">
             Row Per Page
             <select
@@ -408,7 +408,7 @@ export default function LibraryMembers() {
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="hidden lg:block bg-white border rounded-xl overflow-x-auto">
       <div className="min-w-[900px]">
 
   <table className="min-w-[900px] w-full text-sm">
@@ -489,6 +489,87 @@ export default function LibraryMembers() {
             ))}
           </tbody>
         </table>
+        </div>
+        </div>
+        {/* ================= MOBILE & TABLET VIEW ================= */}
+<div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+  {paginated.map((d) => (
+    <div
+      key={d.id}
+      className="bg-white border rounded-2xl p-4 space-y-4"
+    >
+
+      {/* TOP */}
+      <div className="flex justify-between items-start">
+        <div className="flex items-center gap-3">
+          <img
+            src={d.avatar}
+            className="w-10 h-10 rounded-full object-cover"
+            alt={d.name}
+          />
+          <div>
+            <p className="font-semibold">{d.name}</p>
+            <p className="text-xs text-gray-500">{d.id}</p>
+          </div>
+        </div>
+
+        <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">
+          Card #{d.cardNo}
+        </span>
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <p className="text-gray-500">Email</p>
+          <p className="font-medium truncate">{d.email}</p>
+        </div>
+
+        <div>
+          <p className="text-gray-500">Joined</p>
+          <p className="font-medium">{d.date}</p>
+        </div>
+
+        <div className="col-span-2">
+          <p className="text-gray-500">Mobile</p>
+          <p className="font-medium">{d.mobile}</p>
+        </div>
+      </div>
+
+      {/* ACTIONS */}
+      <div className="grid grid-cols-3 gap-2">
+        <button
+          onClick={() => {
+            setSelectedMember(d);
+            setOpenView(true);
+          }}
+          className="flex items-center justify-center gap-1 border rounded-lg py-2 text-sm"
+        >
+          <Eye size={14} /> View
+        </button>
+
+        <button
+          onClick={() => {
+            setSelectedMember(d);
+            setOpenEdit(true);
+          }}
+          className="flex items-center justify-center gap-1 border rounded-lg py-2 text-sm"
+        >
+          <Pencil size={14} /> Edit
+        </button>
+
+        <button
+          onClick={() => setConfirmDeleteId(d.id)}
+          className="flex items-center justify-center gap-1 border rounded-lg py-2 text-sm text-red-600"
+        >
+          <Trash2 size={14} /> Delete
+        </button>
+      </div>
+
+    </div>
+  ))}
+</div>
+
 {/* ✅ PAGINATION — INSIDE SAME WIDTH */}
 <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
       <button
@@ -520,10 +601,7 @@ export default function LibraryMembers() {
       >
         Next
       </button>
-    </div>
-
-  </div>
-</div>     
+    </div>     
   {confirmDeleteId && (
   <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
     <div className="bg-white rounded-xl w-[320px] p-6">

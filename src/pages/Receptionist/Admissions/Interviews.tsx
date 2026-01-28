@@ -423,40 +423,51 @@ const paginatedData = filteredData.slice(
 
 </div>
 {/* RIGHT ACTIONS */}
-<div className="flex flex-wrap items-center gap-2 sm:gap-3">
-    <button
-  onClick={handleRefresh}
-  className="p-2.5 border rounded-lg hover:bg-gray-50"
->
-  <RefreshCcw size={16} />
-</button>
-<button
-  onClick={handlePrint}
-  className="p-2.5 border rounded-lg hover:bg-gray-50"
->
-  <Printer size={16} />
-</button>
-<button
-  onClick={handleExport}
-  className="px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
->
-  Export
-</button>
-<button
-  onClick={() => setOpenNewApp(true)}
-  className="
-    w-full sm:w-auto
-    px-4 py-2
-    bg-blue-600 hover:bg-blue-700
-    text-white rounded-lg
-    text-sm font-medium
-    flex items-center justify-center gap-1
-  "
->
-  <Plus size={14} /> New Application
-</button>
+<div className="w-full sm:w-auto flex flex-col sm:flex-row gap-2 sm:gap-3 sm:items-center">
 
-    </div>
+  {/* ICON BUTTONS */}
+  <div className="flex items-center gap-2">
+    <button
+      onClick={handleRefresh}
+      className="p-2.5 border rounded-lg hover:bg-gray-50"
+      title="Refresh"
+    >
+      <RefreshCcw size={16} />
+    </button>
+
+    <button
+      onClick={handlePrint}
+      className="p-2.5 border rounded-lg hover:bg-gray-50"
+      title="Print"
+    >
+      <Printer size={16} />
+    </button>
+
+    {/* Hide Export text on very small screens */}
+    <button
+      onClick={handleExport}
+      className="hidden sm:flex px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+    >
+      Export
+    </button>
+  </div>
+
+  {/* PRIMARY ACTION */}
+  <button
+    onClick={() => setOpenNewApp(true)}
+    className="
+      w-full sm:w-auto
+      px-4 py-2
+      bg-blue-600 hover:bg-blue-700
+      text-white rounded-lg
+      text-sm font-medium
+      flex items-center justify-center gap-1
+    "
+  >
+    <Plus size={14} /> New Application
+  </button>
+
+</div>
   </div>
 </div>
 {/* ================= SUB HEADER ================= */}
