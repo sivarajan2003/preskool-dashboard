@@ -99,10 +99,10 @@ import {
       <div className="bg-white border rounded-xl overflow-hidden">
   
         {/* ================= HEADER ================= */}
-        <div className="flex items-center justify-between px-5 py-4 border-b">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between px-4 sm:px-5 py-4 border-b">
           <h3 className="font-semibold">Student Day Wise List</h3>
   
-          <div className="relative flex items-center gap-2">
+          <div className="relative flex flex-wrap gap-2 w-full lg:w-auto">
   
             {/* CALENDAR */}
             <button
@@ -110,8 +110,7 @@ import {
     setShowCalendar(!showCalendar);
     setShowFilter(false);
   }}
-  className="btn-outline text-sm flex items-center gap-1"
->
+  className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center">
   <CalendarDays size={14} />
   {startDate && endDate
     ? `${startDate} - ${endDate}`
@@ -162,8 +161,7 @@ import {
                 setShowFilter(!showFilter);
                 setShowCalendar(false);
               }}
-              className="btn-outline text-sm flex items-center gap-1"
-            >
+              className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center">
               <Filter size={14} /> Filter
             </button>
   
@@ -203,8 +201,7 @@ import {
             {/* SORT */}
             <button
               onClick={() => setSortAsc(!sortAsc)}
-              className="btn-outline text-sm flex items-center gap-1"
-            >
+              className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center">
               <ArrowUpDown size={14} />
               Sort {sortAsc ? "A-Z" : "Z-A"}
             </button>
@@ -212,7 +209,7 @@ import {
         </div>
   
         {/* ================= CONTROLS ================= */}
-        <div className="flex items-center justify-between px-5 py-4 border-b text-sm">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between px-4 sm:px-5 py-4 border-b text-sm">
           <div className="flex items-center gap-2">
             Row Per Page
             <select className="border rounded px-2 py-1 text-sm">
@@ -226,14 +223,14 @@ import {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-7 pr-3 py-1.5 border rounded text-sm"
+              className="pl-7 pr-3 py-1.5 border rounded text-sm w-full sm:w-52"
               placeholder="Search"
             />
           </div>
         </div>
   
         {/* ================= TABLE ================= */}
-        <div className="overflow-x-auto">
+        <div className="hidden lg:block overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead className="bg-gray-50 border-b">
               <tr>
@@ -269,7 +266,45 @@ import {
             </tbody>
           </table>
         </div>
-  
+  {/* ===== MOBILE & TABLET VIEW ===== */}
+<div className="lg:hidden space-y-4 px-4 pb-4">
+  {rows.map((r, index) => (
+    <div
+      key={r.admissionNo}
+      className="border rounded-xl p-4 bg-white space-y-3"
+    >
+      {/* STUDENT */}
+      <div className="flex items-center gap-3">
+        <img src={r.img} className="w-10 h-10 rounded-full" />
+        <div>
+          <p className="font-semibold">{r.name}</p>
+          <p className="text-xs text-gray-500">
+            Admission No: {r.admissionNo}
+          </p>
+        </div>
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <p className="text-gray-500 text-xs">Roll No</p>
+          <p className="font-medium">{r.rollNo}</p>
+        </div>
+
+        <div>
+          <p className="text-gray-500 text-xs">S.No</p>
+          <p className="font-medium">{index + 1}</p>
+        </div>
+      </div>
+
+      {/* STATUS */}
+      <div className="pt-2">
+        <StatusBadge status={r.status} />
+      </div>
+    </div>
+  ))}
+</div>
+
         {/* ================= PAGINATION ================= */}
         <div className="flex justify-end items-center gap-2 px-5 py-4 text-sm">
           <button className="px-3 py-1 border rounded">Prev</button>

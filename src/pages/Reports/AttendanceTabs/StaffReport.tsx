@@ -84,17 +84,16 @@ import {
       <div className="bg-white border rounded-xl overflow-hidden">
   
         {/* ================= HEADER ================= */}
-        <div className="flex items-center justify-between px-5 py-4 border-b">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between px-4 sm:px-5 py-4 border-b">
           <h3 className="font-semibold">Staff Report List</h3>
   
-          <div className="relative flex items-center gap-2">
+          <div className="relative flex flex-wrap gap-2 w-full lg:w-auto">
           <button
   onClick={() => {
     setShowCalendar(!showCalendar);
     setShowFilter(false);
   }}
-  className="btn-outline text-sm flex items-center gap-1"
->
+  className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center">
   <CalendarDays size={14} />
   {startDate && endDate
     ? `${startDate} - ${endDate}`
@@ -145,8 +144,7 @@ import {
                 setShowFilter(!showFilter);
                 setShowCalendar(false);
               }}
-              className="btn-outline text-sm flex items-center gap-1"
-            >
+              className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center">
               <Filter size={14} /> Filter
             </button>
   
@@ -185,8 +183,7 @@ import {
   
             <button
               onClick={() => setSortAsc(!sortAsc)}
-              className="btn-outline text-sm flex items-center gap-1"
-            >
+              className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center">
               <ArrowUpDown size={14} />
               Sort {sortAsc ? "A-Z" : "Z-A"}
             </button>
@@ -194,9 +191,7 @@ import {
         </div>
   
         {/* ================= CONTROLS ================= */}
-        {/* ================= CONTROLS + LEGEND (FINAL LAYOUT) ================= */}
-<div className="flex items-center px-5 py-4 border-b text-sm gap-6">
-
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center px-4 sm:px-5 py-4 border-b text-sm">
 {/* LEFT : ROW PER PAGE */}
 <div className="flex items-center gap-2">
             Row Per Page
@@ -283,7 +278,7 @@ import {
 
 
 {/* RIGHT : SEARCH */}
-<div className="relative w-56">
+<div className="relative w-full sm:w-56">
   <Search size={14} className="absolute left-2 top-2.5 text-gray-400" />
   <input
     value={search}
@@ -296,7 +291,7 @@ import {
 </div>
 
         {/* ================= TABLE ================= */}
-        <div className="overflow-x-auto">
+        <div className="hidden lg:block overflow-x-auto">
         <table className="min-w-full table-fixed text-sm whitespace-nowrap">
             <thead className="bg-gray-50 border-b">
               <tr>
@@ -357,6 +352,66 @@ import {
             </tbody>
           </table>
         </div>
+        {/* ================= MOBILE & TABLET VIEW ================= */}
+<div className="lg:hidden space-y-4 px-4 pb-4">
+  {rows.map((t, index) => (
+    <div
+      key={index}
+      className="border rounded-xl p-4 bg-white space-y-3"
+    >
+      {/* HEADER */}
+      <div className="flex items-center gap-3">
+        <img
+          src={t.img}
+          className="w-10 h-10 rounded-full"
+        />
+        <div className="flex-1">
+          <p className="font-semibold">{t.name}</p>
+          <p className="text-xs text-gray-500">
+            Attendance: {t.percent}%
+          </p>
+        </div>
+        <span
+          className={`px-2 py-1 rounded text-xs font-semibold ${
+            t.percent >= 75
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
+          {t.percent}%
+        </span>
+      </div>
+
+      {/* SUMMARY COUNTS */}
+      <div className="grid grid-cols-3 gap-3 text-sm text-center">
+        <div>
+          <p className="text-xs text-gray-500">Present</p>
+          <p className="font-medium">{t.P}</p>
+        </div>
+        <div>
+          <p className="text-xs text-gray-500">Late</p>
+          <p className="font-medium">{t.L}</p>
+        </div>
+        <div>
+          <p className="text-xs text-gray-500">Absent</p>
+          <p className="font-medium">{t.A}</p>
+        </div>
+      </div>
+
+      {/* DAY STATUS STRIP */}
+      <div className="flex gap-1 overflow-x-auto pt-2">
+        {days.map((d) => {
+          const status = getStatus(d);
+          if (!filters[status]) return null;
+          if (activeStatus !== "ALL" && activeStatus !== status) return null;
+
+          return <Dot key={d} type={status} />;
+        })}
+      </div>
+    </div>
+  ))}
+</div>
+
         <div className="flex justify-end items-center gap-2 px-5 py-4 text-sm">
   <button className="px-3 py-1 border rounded text-gray-500">Prev</button>
   <button className="px-3 py-1 bg-blue-600 text-white rounded">1</button>

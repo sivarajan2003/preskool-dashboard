@@ -27,7 +27,7 @@ export default function FeeCollectionChart() {
   return (
     <div className="bg-white rounded-xl border border-gray-200 transition hover:shadow-md">
       {/* HEADER */}
-      <div className="flex items-center justify-between px-6 py-4 border-b">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 sm:px-6 py-4 border-b">
         <h3 className="text-lg font-semibold text-gray-900">
           Fees Collection
         </h3>
@@ -48,7 +48,7 @@ export default function FeeCollectionChart() {
       </div>
 
       {/* LEGEND */}
-      <div className="flex items-center gap-6 px-6 py-3 text-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 px-4 sm:px-6 py-3 text-sm">
         <div className="flex items-center gap-2 text-gray-500">
           <span className="w-2.5 h-2.5 rounded-full bg-gray-300"></span>
           Total Fee
@@ -60,12 +60,12 @@ export default function FeeCollectionChart() {
       </div>
 
       {/* CHART */}
-      <div className="px-6 pb-6 flex">
+      <div className="px-4 sm:px-6 pb-6 flex overflow-x-auto">
         {/* Y AXIS */}
         <div
-          className="flex flex-col justify-between pr-4 text-xs text-gray-500"
-          style={{ height: CHART_HEIGHT }}
-        >
+  className="hidden sm:flex flex-col justify-between pr-4 text-xs text-gray-500"
+  style={{ height: CHART_HEIGHT }}
+>
           <span>60L</span>
           <span>50L</span>
           <span>40L</span>
@@ -77,9 +77,9 @@ export default function FeeCollectionChart() {
 
         {/* BARS */}
         <div
-          className="flex-1 flex items-end justify-between gap-6"
-          style={{ height: CHART_HEIGHT }}
-        >
+  className="flex min-w-max items-end gap-4 sm:gap-6"
+  style={{ height: CHART_HEIGHT }}
+>
           {visibleData.map((item, index) => {
             const totalHeight =
               (item.total / MAX_VALUE) * CHART_HEIGHT;
@@ -90,13 +90,12 @@ export default function FeeCollectionChart() {
               <div
                 key={index}
                 className="
-                  group flex flex-col items-center w-full
-                  transition-all duration-300
+                group flex flex-col items-center min-w-[48px] sm:min-w-[56px]                  transition-all duration-300
                   hover:-translate-y-1
                 "
               >
                 {/* BAR */}
-                <div className="relative w-10 h-full flex items-end justify-center">
+                <div className="relative w-6 sm:w-8 md:w-10 h-full flex items-end justify-center">
                   {/* Total Fee */}
                   <div
                     className="
@@ -110,8 +109,7 @@ export default function FeeCollectionChart() {
                   {/* Collected Fee */}
                   <div
                     className="
-                      relative w-7 bg-blue-600 rounded-md
-                      transition-all duration-700 ease-out
+                    relative w-4 sm:w-6 bg-blue-600 rounded-md transition-all duration-700 ease-out
                       group-hover:scale-x-110
                     "
                     style={{ height: collectedHeight }}
@@ -119,7 +117,7 @@ export default function FeeCollectionChart() {
                 </div>
 
                 {/* LABEL */}
-                <span className="mt-3 text-xs text-gray-500 transition group-hover:text-gray-800">
+                <span className="mt-2 text-[10px] sm:text-xs text-gray-500 text-center whitespace-nowrap">
                   {item.label}
                 </span>
               </div>

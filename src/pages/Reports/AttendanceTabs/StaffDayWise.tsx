@@ -88,18 +88,17 @@ import {
       <div className="bg-white border rounded-xl overflow-hidden">
   
         {/* ================= HEADER ================= */}
-        <div className="flex items-center justify-between px-5 py-4 border-b">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between px-4 sm:px-5 py-4 border-b">
           <h3 className="font-semibold">Staff Day Wise List</h3>
   
-          <div className="relative flex items-center gap-2">
+          <div className="relative flex flex-wrap gap-2 w-full lg:w-auto">
             {/* CALENDAR */}
             <button
   onClick={() => {
     setShowCalendar(!showCalendar);
     setShowFilter(false);
   }}
-  className="btn-outline text-sm flex items-center gap-1"
->
+  className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center">
   <CalendarDays size={14} />
   {startDate && endDate
     ? `${startDate} - ${endDate}`
@@ -151,8 +150,7 @@ import {
                 setShowFilter(!showFilter);
                 setShowCalendar(false);
               }}
-              className="btn-outline text-sm flex items-center gap-1"
-            >
+              className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center">
               <Filter size={14} /> Filter
             </button>
   
@@ -192,8 +190,7 @@ import {
             {/* SORT */}
             <button
               onClick={() => setSortAsc(!sortAsc)}
-              className="btn-outline text-sm flex items-center gap-1"
-            >
+              className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center">
               <ArrowUpDown size={14} />
               Sort {sortAsc ? "A-Z" : "Z-A"}
             </button>
@@ -201,7 +198,7 @@ import {
         </div>
   
         {/* ================= CONTROLS ================= */}
-        <div className="flex items-center justify-between px-5 py-4 border-b text-sm">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-4 sm:px-5 py-4 border-b text-sm">
           <div className="flex items-center gap-2">
             Row Per Page
             <select className="border rounded px-2 py-1 text-sm">
@@ -210,7 +207,7 @@ import {
             Entries
           </div>
   
-          <div className="relative">
+          <div className="relative w-full sm:w-56">
             <Search size={14} className="absolute left-2 top-2.5 text-gray-400" />
             <input
               value={search}
@@ -222,7 +219,7 @@ import {
         </div>
   
         {/* ================= TABLE ================= */}
-        <div className="overflow-x-auto">
+        <div className="hidden lg:block overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead className="bg-gray-50 border-b">
               <tr>
@@ -256,7 +253,43 @@ import {
             </tbody>
           </table>
         </div>
-  
+  {/* ================= MOBILE & TABLET VIEW ================= */}
+<div className="lg:hidden space-y-4 px-4 pb-4">
+  {rows.map((r, index) => (
+    <div
+      key={r.id}
+      className="border rounded-xl p-4 bg-white space-y-3"
+    >
+      {/* STAFF HEADER */}
+      <div className="flex items-center gap-3">
+        <img
+          src={r.img}
+          className="w-10 h-10 rounded-full"
+        />
+        <div className="flex-1">
+          <p className="font-semibold">{r.name}</p>
+          <p className="text-xs text-gray-500">
+            ID: {r.id}
+          </p>
+        </div>
+        <StatusBadge status={r.status} />
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <p className="text-xs text-gray-500">Department</p>
+          <p className="font-medium">{r.department}</p>
+        </div>
+        <div>
+          <p className="text-xs text-gray-500">Role</p>
+          <p className="font-medium">{r.role}</p>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
         {/* ================= PAGINATION ================= */}
         <div className="flex justify-end items-center gap-2 px-5 py-4 text-sm">
           <button className="px-3 py-1 border rounded">Pre</button>

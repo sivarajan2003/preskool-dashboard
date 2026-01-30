@@ -205,7 +205,7 @@ export default function FeesReport() {
     <div className="space-y-6">
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-5">
-        <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold">
               Fees Collection Report
@@ -215,7 +215,7 @@ export default function FeesReport() {
             </p>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-2 sm:gap-3">
             <button onClick={handleRefresh} className="p-2.5 border rounded-lg">
               <RefreshCcw size={16} />
             </button>
@@ -235,10 +235,10 @@ export default function FeesReport() {
 
       {/* ================= SUB HEADER ================= */}
       <div className="bg-white border rounded-xl px-6 py-4 space-y-4">
-        <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h3 className="font-semibold">Fees Records</h3>
 
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-2 sm:gap-3">
             {/* DATE RANGE */}
             {/* DATE RANGE */}
 <div className="relative">
@@ -354,7 +354,7 @@ export default function FeesReport() {
           </div>
         </div>
 
-        <div className="flex justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 text-sm">
             Row Per Page
             <select
@@ -372,13 +372,13 @@ export default function FeesReport() {
             placeholder="Search student or ID"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="border rounded-lg px-3 py-2 text-sm w-52"
-          />
+            className="border rounded-lg px-3 py-2 text-sm w-full sm:w-52"
+            />
         </div>
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="hidden lg:block bg-white border rounded-xl overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-gray-50">
             <tr>
@@ -441,6 +441,63 @@ export default function FeesReport() {
             ))}
           </tbody>
         </table>
+        </div>
+        {/* ===== MOBILE & TABLET VIEW ===== */}
+<div className="space-y-4 lg:hidden">
+  {paginated.map((d) => (
+    <div
+      key={d.id}
+      className="bg-white border rounded-xl p-4 space-y-3"
+    >
+      {/* TOP */}
+      <div className="flex justify-between items-center">
+        <span className="text-sm font-semibold text-blue-600">
+          {d.id}
+        </span>
+        <span
+          className={`text-xs px-2 py-1 rounded-full ${
+            d.status === "Paid"
+              ? "bg-green-100 text-green-600"
+              : "bg-yellow-100 text-yellow-600"
+          }`}
+        >
+          ● {d.status}
+        </span>
+      </div>
+
+      {/* DETAILS */}
+      <div className="text-sm space-y-1">
+        <p><span className="text-gray-500">Student:</span> {d.student}</p>
+        <p><span className="text-gray-500">Class:</span> {d.class}</p>
+        <p><span className="text-gray-500">Amount:</span> ₹ {d.amount}</p>
+        <p><span className="text-gray-500">Date:</span> {d.date}</p>
+      </div>
+
+      {/* ACTIONS */}
+      <div className="grid grid-cols-3 gap-2 pt-2">
+        <button
+          onClick={() => { setSelectedRow(d); setOpenView(true); }}
+          className="h-9 border rounded-lg text-sm"
+        >
+          View
+        </button>
+        <button
+          onClick={() => { setSelectedRow(d); setOpenEdit(true); }}
+          className="h-9 border rounded-lg text-sm"
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => setConfirmDeleteId(d.id)}
+          className="h-9 border rounded-lg text-sm text-red-600"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
         {/* ================= PAGINATION ================= */}
 <div className="flex justify-end items-center gap-2 px-4 py-4 border-t text-sm">
   {/* PREV */}
@@ -485,7 +542,7 @@ export default function FeesReport() {
   </button>
 </div>
 
-      </div>
+     
 
       {/* DELETE CONFIRMATION */}
       {confirmDeleteId && (

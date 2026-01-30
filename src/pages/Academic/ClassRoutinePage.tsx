@@ -264,7 +264,7 @@ const handleDownloadRoutine = (r: any) => {
     <div className="space-y-6">
 {/* ================= MAIN HEADER ================= */}
 <div className="bg-white border border-gray-200 rounded-2xl px-6 py-6">
-  <div className="flex items-center justify-between">
+<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
     {/* LEFT */}
     <div>
@@ -277,7 +277,7 @@ const handleDownloadRoutine = (r: any) => {
     </div>
 
     {/* RIGHT ACTIONS */}
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap gap-2 sm:gap-3">
       <button
         onClick={handleRefresh}
         className="p-2.5 border rounded-lg hover:bg-gray-50"
@@ -298,13 +298,19 @@ const handleDownloadRoutine = (r: any) => {
       >
         Export
       </button>
-
       <button
-        onClick={() => setOpenAddRoutine(true)}
-        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium"
-      >
-        + Add Class Routine
-      </button>
+  onClick={() => setOpenAddRoutine(true)}
+  className="
+    w-full sm:w-auto
+    px-4 py-2
+    bg-blue-600 hover:bg-blue-700
+    text-white
+    rounded-lg
+    text-sm font-medium
+  "
+>
+  + Add Class Routine
+</button>
     </div>
     </div>
   </div>
@@ -312,12 +318,12 @@ const handleDownloadRoutine = (r: any) => {
 <div className="bg-white border border-gray-200 rounded-2xl px-6 py-5 mt-6 space-y-4">
 
   {/* TOP ROW */}
-  <div className="flex items-center justify-between">
+  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
     <h3 className="text-lg font-semibold text-gray-900">
       Class Routine List
     </h3>
 
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap gap-2">
     <div className="relative">
     <button
   onClick={(e) => {
@@ -325,7 +331,11 @@ const handleDownloadRoutine = (r: any) => {
     setOpenDate(!openDate);  // ✅ Toggle calendar
     setOpenFilter(false);    // optional: close filter
   }}
-  className="flex items-center gap-2 px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+  className="flex items-center gap-2
+  px-3 py-2
+  border rounded-lg
+  text-sm
+  w-full sm:w-auto hover:bg-gray-50"
 >
   <CalendarDays size={16} />
   {startDate} - {endDate}
@@ -426,7 +436,7 @@ const handleDownloadRoutine = (r: any) => {
   </div>
 
   {/* BOTTOM ROW */}
-  <div className="flex items-center justify-between">
+  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <div className="flex items-center gap-2 text-sm text-gray-600">
       Row Per Page
       <select className="border rounded px-2 py-1 text-sm">
@@ -440,12 +450,12 @@ const handleDownloadRoutine = (r: any) => {
       placeholder="Search"
       value={search}
       onChange={(e) => setSearch(e.target.value)}
-      className="border rounded-lg px-4 py-2 text-sm w-60"
-    />
+      className="border rounded-lg px-4 py-2 text-sm w-full sm:w-60"
+      />
   </div>
 </div>
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="hidden lg:block bg-white border rounded-xl overflow-x-auto">
       <div className="min-w-[900px]">
 
   <table className="min-w-[900px] w-full text-sm">
@@ -518,6 +528,42 @@ const handleDownloadRoutine = (r: any) => {
             ))}
           </tbody>
         </table>
+        </div>
+      </div>
+      <div className="space-y-4 lg:hidden">
+  {paginatedData.map((r) => (
+    <div
+      key={r.id}
+      className="bg-white border border-gray-200 rounded-xl p-4 space-y-3"
+    >
+      <div className="flex justify-between items-center">
+        <span className="text-blue-600 font-medium text-sm">
+          {r.id}
+        </span>
+        <span className="text-xs px-3 py-1 rounded-full bg-green-100 text-green-600">
+          {r.day}
+        </span>
+      </div>
+
+      <div className="text-sm space-y-1">
+        <p><span className="text-gray-500">Class:</span> {r.className} - {r.section}</p>
+        <p><span className="text-gray-500">Teacher:</span> {r.teacher}</p>
+        <p><span className="text-gray-500">Subject:</span> {r.subject}</p>
+        <p><span className="text-gray-500">Time:</span> {r.start} – {r.end}</p>
+        <p><span className="text-gray-500">Room:</span> {r.room}</p>
+      </div>
+
+      <div className="grid grid-cols-3 gap-2 pt-2">
+        <button className="border rounded-lg py-2 text-sm">View</button>
+        <button className="border rounded-lg py-2 text-sm">Edit</button>
+        <button className="border rounded-lg py-2 text-sm text-red-600">
+          Delete
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
         {/* ================= PAGINATION ================= */}
 <div className="flex items-center justify-end gap-2 px-4 py-3 text-sm border-t">
   {/* PREV */}
@@ -565,8 +611,7 @@ const handleDownloadRoutine = (r: any) => {
     Next
   </button>
 </div>
-</div>
-      </div>
+
       {openAddRoutine && (
   <AddRoutineModal
     onClose={() => setOpenAddRoutine(false)}

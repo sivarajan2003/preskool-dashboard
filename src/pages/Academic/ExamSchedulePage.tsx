@@ -240,7 +240,7 @@ export default function ExamSchedulePage() {
 
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-5">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold">Exam Schedule</h2>
             <p className="text-sm text-gray-500 mt-1">
@@ -248,15 +248,15 @@ export default function ExamSchedulePage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap gap-2 sm:gap-3">
+
           <button
-  onClick={handleRefresh}
-  className="p-2.5 border rounded-lg hover:bg-gray-50"
->
-  <RefreshCcw size={16} />
-</button>
-
-
+              onClick={handleRefresh}
+              className="p-2.5 border rounded-lg hover:bg-gray-50"
+            >
+              <RefreshCcw size={16} />
+            </button>
+            
             <button
               onClick={() => window.print()}
               className="p-2.5 border rounded-lg hover:bg-gray-50"
@@ -271,23 +271,39 @@ export default function ExamSchedulePage() {
               Export
             </button>
 
-            <button
+<button
   onClick={() => setOpenAdd(true)}
-  className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-1"
+  className="
+    h-10 w-full
+    sm:col-span-4
+    lg:w-auto lg:col-span-auto
+    px-4
+    bg-blue-600 hover:bg-blue-700
+    text-white
+    rounded-lg
+    text-sm font-medium
+    flex items-center justify-center gap-1
+  "
 >
-  + Add Exam Schedule
+  <Plus size={14} />
+  Add Exam Schedule
 </button>
-
-          </div>
+   </div>
         </div>
       </div>
 
       {/* ================= SUB HEADER ================= */}
       <div className="bg-white border rounded-xl px-6 py-4 space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h3 className="text-2xl font-semibold">Exam Schedule List</h3>
 
-          <div className="flex items-center gap-3">
+          <div
+  className="
+    grid grid-cols-2 gap-2
+    sm:grid-cols-3
+    lg:flex lg:items-center lg:gap-3
+  "
+>
           <div className="relative">
   <button
     onClick={(e) => {
@@ -460,7 +476,7 @@ export default function ExamSchedulePage() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-sm text-gray-600">
             Row Per Page
             <select
@@ -479,7 +495,7 @@ export default function ExamSchedulePage() {
 
           <input
             placeholder="Search"
-            className="border rounded-lg px-3 py-2 text-sm w-52"
+            className="border rounded-lg px-3 py-2 text-sm w-full sm:w-52"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -487,7 +503,7 @@ export default function ExamSchedulePage() {
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="hidden lg:block bg-white border rounded-xl overflow-x-auto">
               <div className="min-w-[900px]">
 
   <table className="min-w-[900px] w-full text-sm">
@@ -558,6 +574,54 @@ export default function ExamSchedulePage() {
             ))}
           </tbody>
         </table>
+        </div>
+      </div>
+{/* ===== MOBILE & TABLET VIEW ===== */}
+<div className="space-y-4 lg:hidden">
+  {paginated.map((d) => (
+    <div
+      key={d.id}
+      className="bg-white border rounded-xl p-4 space-y-3"
+    >
+      <div className="flex justify-between items-center">
+        <span className="font-medium text-sm">
+          {d.subject}
+        </span>
+        <span className="text-xs text-gray-500">
+          {d.date}
+        </span>
+      </div>
+
+      <div className="text-sm space-y-1">
+        <p><span className="text-gray-500">Start:</span> {d.start}</p>
+        <p><span className="text-gray-500">End:</span> {d.end}</p>
+        <p><span className="text-gray-500">Room:</span> {d.room}</p>
+        <p><span className="text-gray-500">Duration:</span> {d.duration}</p>
+      </div>
+
+      <div className="grid grid-cols-3 gap-3 pt-2">
+        <button
+          onClick={() => { setSelectedSchedule(d); setOpenView(true); }}
+          className="h-9 border rounded-lg text-sm"
+        >
+          View
+        </button>
+        <button
+          onClick={() => { setSelectedSchedule(d); setOpenEdit(true); }}
+          className="h-9 border rounded-lg text-sm"
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => setConfirmDeleteId(d.id)}
+          className="h-9 border rounded-lg text-sm text-red-600"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
 
         {/* ================= PAGINATION ================= */}
         <div className="flex items-center justify-end gap-2 px-4 py-3 border-t text-sm">
@@ -591,8 +655,7 @@ export default function ExamSchedulePage() {
             Next
           </button>
         </div>
-      </div>
-      </div>
+      
       {openAdd && (
   <AddExamScheduleModal
     onClose={() => setOpenAdd(false)}

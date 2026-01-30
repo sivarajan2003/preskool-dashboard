@@ -206,7 +206,7 @@ export default function ExamResultsReport() {
     <div className="space-y-6">
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-5">
-        <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold">Exam Results Report</h2>
             <p className="text-sm text-gray-500 mt-1">
@@ -214,7 +214,7 @@ export default function ExamResultsReport() {
             </p>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-2 sm:gap-3">
             <button onClick={handleRefresh} className="p-2.5 border rounded-lg">
               <RefreshCcw size={16} />
             </button>
@@ -223,8 +223,7 @@ export default function ExamResultsReport() {
             </button>
             <button
               onClick={handleExport}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
-            >
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm flex items-center gap-2">
               Export
             </button>
           </div>
@@ -233,10 +232,10 @@ export default function ExamResultsReport() {
 
       {/* ================= SUB HEADER ================= */}
       <div className="bg-white border rounded-xl px-6 py-4 space-y-4">
-        <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h3 className="font-semibold">Exam Records</h3>
 
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-2 sm:gap-3">
             {/* DATE RANGE */}
             <div className="relative">
               <button
@@ -317,7 +316,7 @@ export default function ExamResultsReport() {
           </div>
         </div>
 
-        <div className="flex justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 text-sm">
             Row Per Page
             <select
@@ -335,13 +334,12 @@ export default function ExamResultsReport() {
             placeholder="Search student or ID"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="border rounded-lg px-3 py-2 text-sm w-52"
-          />
+            className="border rounded-lg px-3 py-2 text-sm w-full sm:w-52"/>
         </div>
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="hidden lg:block bg-white border rounded-xl overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-gray-50">
             <tr>
@@ -377,6 +375,42 @@ export default function ExamResultsReport() {
             ))}
           </tbody>
         </table>
+        </div>
+        {/* ===== MOBILE & TABLET VIEW ===== */}
+<div className="space-y-4 lg:hidden">
+  {paginated.map((d) => (
+    <div
+      key={d.id}
+      className="bg-white border rounded-xl p-4 space-y-3"
+    >
+      {/* TOP */}
+      <div className="flex justify-between items-center">
+        <span className="text-sm font-semibold text-blue-600">
+          {d.id}
+        </span>
+        <span
+          className={`text-xs px-2 py-1 rounded-full ${
+            d.result === "Pass"
+              ? "bg-green-100 text-green-600"
+              : "bg-red-100 text-red-600"
+          }`}
+        >
+          ● {d.result}
+        </span>
+      </div>
+
+      {/* DETAILS */}
+      <div className="text-sm space-y-1">
+        <p><span className="text-gray-500">Student:</span> {d.student}</p>
+        <p><span className="text-gray-500">Class:</span> {d.class}</p>
+        <p><span className="text-gray-500">Subject:</span> {d.subject}</p>
+        <p><span className="text-gray-500">Marks:</span> {d.marks}</p>
+        <p><span className="text-gray-500">Date:</span> {d.date}</p>
+      </div>
+    </div>
+  ))}
+</div>
+
         {/* ================= PAGINATION ================= */}
 <div className="flex justify-end items-center gap-2 px-4 py-4 border-t text-sm">
   {/* PREV */}
@@ -421,7 +455,7 @@ export default function ExamResultsReport() {
   </button>
 </div>
 
-      </div>
+
     </div>
   );
 }

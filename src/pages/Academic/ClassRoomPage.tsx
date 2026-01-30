@@ -148,12 +148,11 @@ export default function ClassRoomPage() {
   };
   
   return (
-    <div className="space-y-6">
+<div className="space-y-6 px-3 sm:px-4 md:px-6">
 
       {/* ================= MAIN HEADER ================= */}
 <div className="bg-white border border-gray-200 rounded-2xl px-6 py-6">
-  <div className="flex items-center justify-between">
-
+<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     {/* LEFT */}
     <div>
       <h2 className="text-2xl font-semibold text-gray-900">
@@ -165,7 +164,7 @@ export default function ClassRoomPage() {
     </div>
 
     {/* RIGHT ACTIONS */}
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap gap-2 sm:gap-3">
       <button
         onClick={handleRefresh}
         className="p-2.5 border rounded-lg hover:bg-gray-50"
@@ -186,13 +185,18 @@ export default function ClassRoomPage() {
       >
         Export
       </button>
-
       <button
-        onClick={() => setOpenAddRoom(true)}
-        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium"
-      >
-        + Add Class Room
-      </button>
+  onClick={() => setOpenAddRoom(true)}
+  className="
+    w-full sm:w-auto
+    px-4 py-2
+    bg-blue-600 hover:bg-blue-700
+    text-white rounded-lg
+    text-sm font-medium
+  "
+>
+  + Add Class Room
+</button>
     </div>
 
   </div>
@@ -201,19 +205,22 @@ export default function ClassRoomPage() {
 <div className="bg-white border border-gray-200 rounded-2xl px-6 py-5 mt-6 space-y-4">
 
   {/* TOP ROW */}
-  <div className="flex items-center justify-between">
+  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
     <h3 className="text-lg font-semibold text-gray-900">
       Class Room List
     </h3>
 
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap gap-2">
     <div className="relative">
   <button
     onClick={(e) => {
       e.stopPropagation();   // 🔥 REQUIRED
       setOpenDate(!openDate);
     }}
-    className="flex items-center gap-2 px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+    className="flex items-center gap-2
+    px-3 py-2
+    border rounded-lg text-sm
+    w-full sm:w-auto hover:bg-gray-50"
   >
     <CalendarDays size={16} />
     {startDate} - {endDate}
@@ -332,7 +339,7 @@ export default function ClassRoomPage() {
   </div>
 
   {/* BOTTOM ROW */}
-  <div className="flex items-center justify-between">
+  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <div className="flex items-center gap-2 text-sm text-gray-600">
       Row Per Page
       <select
@@ -357,12 +364,12 @@ export default function ClassRoomPage() {
         setSearch(e.target.value);
         setCurrentPage(1);
       }}
-      className="border rounded-lg px-4 py-2 text-sm w-60"
-    />
+      className="border rounded-lg px-4 py-2 text-sm w-full sm:w-60"
+      />
   </div>
 </div>
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="bg-white border rounded-xl overflow-x-auto hidden lg:block">
       <div className="min-w-[900px]">
 
   <table className="min-w-[900px] w-full text-sm">
@@ -439,6 +446,76 @@ export default function ClassRoomPage() {
             ))}
           </tbody>
         </table>
+         </div>
+</div> 
+{/* ================= MOBILE / TAB CARD VIEW ================= */}
+<div className="space-y-4 lg:hidden">
+  {paginatedData.map((r) => (
+    <div
+      key={r.id}
+      className="bg-white border border-gray-200 rounded-xl p-4 space-y-3"
+    >
+      {/* TOP */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <span className="text-blue-600 text-sm font-medium">
+          {r.id}
+        </span>
+
+        <span
+          className={`px-3 py-1 text-xs rounded-full ${
+            r.status === "Active"
+              ? "bg-green-100 text-green-600"
+              : "bg-red-100 text-red-600"
+          }`}
+        >
+          {r.status}
+        </span>
+      </div>
+
+      {/* DETAILS */}
+      <div className="text-sm space-y-1">
+        <p>
+          <span className="text-gray-500">Room No:</span>{" "}
+          <span className="font-medium">{r.roomNo}</span>
+        </p>
+        <p>
+          <span className="text-gray-500">Capacity:</span>{" "}
+          <span className="font-medium">{r.capacity}</span>
+        </p>
+      </div>
+
+      {/* ACTIONS */}
+      <div className="grid grid-cols-3 gap-2 pt-2">
+        <button
+          onClick={() => {
+            setSelectedRoom(r);
+            setOpenViewRoom(true);
+          }}
+          className="flex items-center justify-center gap-1 border rounded-lg py-2 text-sm"
+        >
+          <Eye size={14} /> View
+        </button>
+
+        <button
+          onClick={() => {
+            setSelectedRoom(r);
+            setOpenEditRoom(true);
+          }}
+          className="flex items-center justify-center gap-1 border rounded-lg py-2 text-sm"
+        >
+          <Pencil size={14} /> Edit
+        </button>
+
+        <button
+          onClick={() => setConfirmDeleteId(r.id)}
+          className="flex items-center justify-center gap-1 border rounded-lg py-2 text-sm text-red-600"
+        >
+          <Trash2 size={14} /> Delete
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
 
        {/* PAGINATION */}
     <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
@@ -473,8 +550,7 @@ export default function ClassRoomPage() {
       </button>
     </div>
 
-  </div>
-</div> 
+ 
       {openAddRoom && (
   <AddClassRoomModal
     onClose={() => setOpenAddRoom(false)}

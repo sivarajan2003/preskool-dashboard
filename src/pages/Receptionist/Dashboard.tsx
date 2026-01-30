@@ -24,9 +24,19 @@ import { useNavigate } from "react-router-dom";
         </div>
   
         {/* ================= NOTIFICATION ================= */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between 
-bg-green-50 border border-green-200 rounded-lg px-4 py-3 gap-2">
-          <div className="flex items-center gap-3">
+        <div
+  className="
+    flex items-start sm:items-center
+    justify-between
+    gap-3
+    bg-green-50
+    border border-green-200
+    rounded-lg
+    px-4
+    py-3
+  "
+>
+<div className="flex items-center gap-3">
             <span className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center text-sm font-bold">
               ✓
             </span>
@@ -34,7 +44,24 @@ bg-green-50 border border-green-200 rounded-lg px-4 py-3 gap-2">
               New admission application received today
             </p>
           </div>
-          <button className="text-green-700 text-xl">&times;</button>
+          <button
+  className="
+    text-green-700
+    text-xl
+    leading-none
+    w-8
+    h-8
+    flex
+    items-center
+    justify-center
+    rounded-md
+    hover:bg-green-100
+    shrink-0
+  "
+  aria-label="Close notification"
+>
+  &times;
+</button>
         </div>
   
         {/* ================= WELCOME BANNER ================= */}
@@ -50,7 +77,7 @@ flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
             </p>
           </div>
   
-          <p className="text-xs text-gray-300 self-start sm:self-auto">
+          <p className="text-xs text-gray-300 sm:text-right">
             {new Date().toLocaleString()}
           </p>
         </div>
@@ -144,7 +171,7 @@ flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
             <img
               src={gif}
               alt={title}
-              className="w-8 h-8 object-contain"
+              className="w-8 h-8 sm:w-8 sm:h-8 object-contain"
             />
           </div>
   

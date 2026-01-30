@@ -47,7 +47,7 @@ useEffect(() => {
   const navigate = useNavigate();
     return (
       <>
-        <div className="flex items-center justify-between mb-6">
+<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
           <div>
             <h2 className="text-xl font-semibold">Admin Dashboard</h2>
             <p className="text-sm text-gray-500">
@@ -55,17 +55,17 @@ useEffect(() => {
             </p>
           </div>
   
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
           <button
   onClick={() => navigate("/admin/dashboard/academic/classes/add")}
-  className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
->
+  className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm w-full sm:w-auto"
+  >
   Add Class
 </button>
 <button
   onClick={() => navigate("/admin/dashboard/people/students/add")}
-  className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
->
+  className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm w-full sm:w-auto"
+  >
   Add New Student
 </button>
 <button
@@ -80,7 +80,7 @@ useEffect(() => {
         {/* SUCCESS NOTIFICATION */}
         {showAlert && (
   <div className="flex items-center justify-between bg-green-50 border border-green-300 text-green-700 rounded-lg px-4 py-2 mb-4">
-    <div className="flex items-center gap-2 text-sm">
+<div className="flex items-start sm:items-center gap-2 text-sm">
       <img src={A1} className="w-6 h-6 rounded-full" alt="student" />
       <span>
         <strong>Fahed III.C</strong> has paid Fees for the{" "}
@@ -131,7 +131,7 @@ useEffect(() => {
   
         {/* WELCOME BANNER */}
         <div className="relative bg-gradient-to-r from-[#0F0C29] via-[#302B63] to-[#24243E] text-white rounded-xl p-6 mb-6 overflow-hidden">
-          <div className="relative flex items-center justify-between">
+        <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <h3 className="text-lg font-semibold">
                 Welcome Back, Mr. Praga
@@ -203,7 +203,7 @@ useEffect(() => {
 </div>
 
           {/* FEES + LEAVE */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             <div className="lg:col-span-2">
               <FeeCollectionChart />
             </div>
@@ -211,7 +211,7 @@ useEffect(() => {
           </div>
 
           {/* LOWER GRID */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             <div className="flex flex-col gap-6">
               <Calendar />
               <UpcomingEvents />
@@ -230,7 +230,7 @@ useEffect(() => {
           </div>
 
           {/* EARNINGS + NOTICE + FEES */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
             <div className="lg:col-span-1">
               <EarningsExpenses />
             </div>

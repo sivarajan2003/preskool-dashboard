@@ -81,10 +81,10 @@ import {
       <div className="bg-white border rounded-xl overflow-hidden">
   
         {/* ================= HEADER ================= */}
-        <div className="flex items-center justify-between px-5 py-4 border-b">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between px-4 sm:px-5 py-4 border-b">
           <h3 className="font-semibold">Daily Attendance List</h3>
   
-          <div className="relative flex items-center gap-2">
+          <div className="relative flex flex-wrap gap-2 w-full lg:w-auto">
   
             {/* CALENDAR */}
             <button
@@ -92,8 +92,8 @@ import {
     setShowCalendar(!showCalendar);
     setShowFilter(false);
   }}
-  className="btn-outline text-sm flex items-center gap-1"
->
+  className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center"
+  >
   <CalendarDays size={14} />
   {startDate && endDate
     ? `${startDate} - ${endDate}`
@@ -145,8 +145,7 @@ import {
                 setShowFilter(!showFilter);
                 setShowCalendar(false);
               }}
-              className="btn-outline text-sm flex items-center gap-1"
-            >
+              className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center">
               <Filter size={14} /> Filter
             </button>
   
@@ -184,8 +183,7 @@ import {
             {/* SORT */}
             <button
               onClick={() => setSortAsc(!sortAsc)}
-              className="btn-outline text-sm flex items-center gap-1"
-            >
+              className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center">
               <ArrowUpDown size={14} />
               Sort {sortAsc ? "A-Z" : "Z-A"}
             </button>
@@ -193,7 +191,7 @@ import {
         </div>
   
         {/* ================= CONTROLS ================= */}
-        <div className="flex items-center justify-between px-5 py-4 border-b text-sm">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between px-4 sm:px-5 py-4 border-b text-sm">
           <div className="flex items-center gap-2">
             Row Per Page
             <select className="border rounded px-2 py-1 text-sm">
@@ -208,14 +206,14 @@ import {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-7 pr-3 py-1.5 border rounded text-sm"
+              className="pl-7 pr-3 py-1.5 border rounded text-sm w-full sm:w-52"
               placeholder="Search"
             />
           </div>
         </div>
   
         {/* ================= TABLE ================= */}
-        <div className="overflow-x-auto">
+        <div className="hidden lg:block overflow-x-auto">
           <table className="min-w-full text-sm">
           <thead className="bg-gray-50 border-b">
   <tr>
@@ -250,7 +248,57 @@ import {
 
           </table>
         </div>
-  
+  {/* ===== MOBILE & TABLET VIEW ===== */}
+<div className="lg:hidden space-y-4 px-4 pb-4">
+  {paginatedRows.map((r, i) => {
+    const total = r.present + r.absent;
+
+    return (
+      <div
+        key={i}
+        className="border rounded-xl p-4 bg-white space-y-3"
+      >
+        {/* CLASS + SECTION */}
+        <div className="flex justify-between items-center">
+          <div>
+            <p className="text-sm text-gray-500">Class</p>
+            <p className="font-semibold">
+              {r.class} - {r.section}
+            </p>
+          </div>
+        </div>
+
+        {/* COUNTS */}
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          <div>
+            <p className="text-gray-500 text-xs">Present</p>
+            <p className="font-medium">{r.present}</p>
+          </div>
+
+          <div>
+            <p className="text-gray-500 text-xs">Absent</p>
+            <p className="font-medium">{r.absent}</p>
+          </div>
+
+          <div>
+            <p className="text-gray-500 text-xs">Present %</p>
+            <p className="font-medium">
+              {Math.round((r.present / total) * 100)}%
+            </p>
+          </div>
+
+          <div>
+            <p className="text-gray-500 text-xs">Absent %</p>
+            <p className="font-medium">
+              {Math.round((r.absent / total) * 100)}%
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  })}
+</div>
+
         {/* ================= PAGINATION ================= */}
         <div className="flex justify-end items-center gap-2 px-5 py-4 text-sm">
 

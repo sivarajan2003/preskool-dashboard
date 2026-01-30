@@ -100,18 +100,18 @@ import {
       <div className="bg-white border rounded-xl overflow-hidden">
   
         {/* ================= HEADER ================= */}
-        <div className="flex items-center justify-between px-5 py-4 border-b">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between px-4 sm:px-5 py-4 border-b">
           <h3 className="font-semibold">Attendance Report List</h3>
   
-          <div className="relative flex items-center gap-2">
+          <div className="relative flex flex-wrap gap-2 w-full lg:w-auto">
             {/* CALENDAR */}
             <button
   onClick={() => {
     setShowCalendar(!showCalendar);
     setShowFilter(false);
   }}
-  className="btn-outline text-sm flex items-center gap-1"
->
+  className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center"
+  >
   <CalendarDays size={14} />
   {startDate && endDate
     ? `${startDate} - ${endDate}`
@@ -160,8 +160,7 @@ import {
             {/* FILTER */}
             <button
               onClick={() => setShowFilter(!showFilter)}
-              className="btn-outline text-sm flex items-center gap-1"
-            >
+              className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center">
               <Filter size={14} /> Filter
             </button>
   
@@ -199,8 +198,7 @@ import {
             {/* SORT */}
             <button
               onClick={() => setSortAsc(!sortAsc)}
-              className="btn-outline text-sm flex items-center gap-1"
-            >
+              className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center">
               <ArrowUpDown size={14} />
               Sort {sortAsc ? "A-Z" : "Z-A"}
             </button>
@@ -208,7 +206,7 @@ import {
         </div>
   
         {/* ================= CONTROLS ================= */}
-        <div className="flex items-center justify-between px-5 py-4 border-b text-sm">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between px-4 sm:px-5 py-4 border-b text-sm">
           <div className="flex items-center gap-2">
             Row Per Page
             <select className="border rounded px-2 py-1 text-sm">
@@ -219,7 +217,12 @@ import {
           </div>
 
 
-          <div className="flex gap-2 flex-1 justify-center text-xs whitespace-nowrap">
+          <div className="
+  flex gap-2 flex-1
+  overflow-x-auto
+  whitespace-nowrap
+  text-xs
+">
   {[
     { key: "P", label: "Present", bg: "green" },
     { key: "A", label: "Absent", bg: "red" },
@@ -262,7 +265,7 @@ import {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-7 pr-3 py-1.5 border rounded text-sm"
+              className="pl-7 pr-3 py-1.5 border rounded text-sm w-full sm:w-48"
               placeholder="Search"
             />
           </div>
@@ -270,7 +273,7 @@ import {
         </div>
   
         {/* ================= TABLE ================= */}
-        <div className="overflow-x-auto">
+        <div className="hidden lg:block overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead className="bg-gray-50 border-b">
               <tr>
@@ -318,6 +321,51 @@ import {
             </tbody>
           </table>
         </div>
+        {/* ===== MOBILE & TABLET VIEW ===== */}
+<div className="space-y-4 lg:hidden px-4 pb-4">
+  {students.map((s, i) => (
+    <div
+      key={i}
+      className="border rounded-xl p-4 bg-white space-y-3"
+    >
+      {/* HEADER */}
+      <div className="flex items-center gap-3">
+        <img src={s.img} className="w-10 h-10 rounded-full" />
+        <div>
+          <p className="font-semibold">{s.name}</p>
+          <span
+            className={`text-xs px-2 py-0.5 rounded-full ${
+              s.percent >= 75
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
+            }`}
+          >
+            {s.percent}% Attendance
+          </span>
+        </div>
+      </div>
+
+      {/* SUMMARY */}
+      <div className="grid grid-cols-5 text-center text-xs gap-2">
+        <div><p className="text-gray-500">P</p>{s.P}</div>
+        <div><p className="text-gray-500">L</p>{s.L}</div>
+        <div><p className="text-gray-500">A</p>{s.A}</div>
+        <div><p className="text-gray-500">H</p>{s.H}</div>
+        <div><p className="text-gray-500">F</p>{s.F}</div>
+      </div>
+
+      {/* DAY DOTS */}
+      <div className="flex flex-wrap gap-2 pt-2">
+        {days.map((d) => (
+          filters[getStatus(d)] && (
+            <Dot key={d} type={getStatus(d)} />
+          )
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
         <div className="flex justify-end items-center gap-2 px-5 py-4 text-sm">
   <button className="px-3 py-1 border rounded text-gray-500">Prev</button>
   <button className="px-3 py-1 bg-blue-600 text-white rounded">1</button>

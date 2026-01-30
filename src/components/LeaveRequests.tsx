@@ -51,7 +51,7 @@ export default function LeaveRequests() {
 
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 h-full transition hover:shadow-md">
+<div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 h-full transition hover:shadow-md">
       {successMsg && (
   <div className="mb-4 bg-green-50 border border-green-300 text-green-700 px-4 py-2 rounded-lg text-sm">
     ✅ {successMsg}
@@ -59,7 +59,7 @@ export default function LeaveRequests() {
 )}
 
       {/* HEADER */}
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
         <h3 className="text-lg font-semibold text-gray-900">
           Leave Requests
         </h3>
@@ -92,7 +92,7 @@ export default function LeaveRequests() {
               cursor-pointer
             "
           >
-            <div className="flex items-start gap-3">
+<div className="flex items-start gap-3 w-full">
               <img
                 src={item.img}
                 className="
@@ -104,7 +104,7 @@ export default function LeaveRequests() {
               />
 
               <div>
-                <p className="font-medium text-gray-900">
+              <p className="font-medium text-gray-900 flex flex-wrap items-center gap-2">
                   {item.name}
                   <span
                     className={`
@@ -123,7 +123,7 @@ export default function LeaveRequests() {
 
                 <p className="text-sm text-gray-500">{item.role}</p>
 
-                <div className="flex items-center gap-6 mt-1 text-xs text-gray-400">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-6 mt-1 text-xs text-gray-400">
                   <span>
                     Leave : {item.leaveFrom} - {item.leaveTo}
                   </span>
@@ -133,7 +133,7 @@ export default function LeaveRequests() {
             </div>
 
             {/* ACTIONS */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 justify-end sm:justify-start">
             <button
   onClick={() => {
     setLeaves((prev) => prev.filter((l) => l.id !== item.id));
@@ -168,7 +168,7 @@ export default function LeaveRequests() {
       </div>
       {confirmReject !== null && (
   <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-    <div className="bg-white rounded-xl p-6 w-[360px] shadow-lg">
+<div className="bg-white rounded-xl p-5 w-[90%] max-w-[360px] shadow-lg">
       <h3 className="text-lg font-semibold mb-2">
         Reject Leave Request?
       </h3>

@@ -164,11 +164,11 @@ const [editingClass, setEditingClass] = useState<any>(null);
   };
   
   return (
-    <div className="space-y-6">
+<div className="space-y-6 px-3 sm:px-4 md:px-6">
 
       {/* ================= HEADER ================= */}
       <div className="bg-white border border-gray-200 rounded-2xl px-6 py-6">
-  <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     
 
     {/* LEFT */}
@@ -183,7 +183,7 @@ const [editingClass, setEditingClass] = useState<any>(null);
     </div>
 
     {/* RIGHT ACTIONS */}
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
       <button onClick={handleRefresh} className="p-2.5 border rounded-lg hover:bg-gray-50">
         <RefreshCcw size={16} />
       </button>
@@ -213,19 +213,19 @@ const [editingClass, setEditingClass] = useState<any>(null);
 <div className="bg-white border border-gray-200 rounded-2xl px-6 py-5">
 
   {/* TOP ROW */}
-  <div className="flex items-center justify-between">
+  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
     <h3 className="text-lg font-semibold text-gray-900">
       Class List
     </h3>
 
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap items-center gap-2">
     <div className="relative">
   <button
     onClick={(e) => {
       e.stopPropagation();
       setOpenDate(!openDate);
     }}
-    className="flex items-center gap-2 px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
+className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm w-full sm:w-auto"
   >
     <CalendarDays size={16} />
     {startDate} - {endDate}
@@ -305,7 +305,7 @@ const [editingClass, setEditingClass] = useState<any>(null);
   </div>
 
   {/* BOTTOM ROW */}
-  <div className="flex items-center justify-between mt-4">
+  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mt-4">
     <div className="flex items-center gap-2 text-sm text-gray-600">
       Row Per Page
       <select
@@ -331,13 +331,13 @@ const [editingClass, setEditingClass] = useState<any>(null);
         setSearch(e.target.value);
         setCurrentPage(1);
       }}
-      className="border rounded-lg px-4 py-2 text-sm w-60"
-    />
+      className="border rounded-lg px-4 py-2 text-sm w-full sm:w-60"
+      />
   </div>
 </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="bg-white border rounded-xl overflow-x-auto hidden lg:block">
       <div className="min-w-[900px]">
 
   <table className="min-w-[900px] w-full text-sm">
@@ -418,6 +418,88 @@ const [editingClass, setEditingClass] = useState<any>(null);
             ))}
           </tbody>
         </table>
+        </div>
+        </div>
+        {/* ================= MOBILE / TAB CARD VIEW ================= */}
+<div className="space-y-4 lg:hidden">
+  {paginatedData.map((c) => (
+    <div
+      key={c.id}
+      className="bg-white border border-gray-200 rounded-xl p-4 space-y-3"
+    >
+      {/* TOP ROW */}
+      <div className="flex items-center justify-between">
+        <span className="text-blue-600 text-sm font-medium">
+          {c.id}
+        </span>
+
+        <span
+          className={`px-3 py-1 text-xs rounded-full ${
+            c.status === "Active"
+              ? "bg-green-100 text-green-600"
+              : "bg-red-100 text-red-600"
+          }`}
+        >
+          {c.status}
+        </span>
+      </div>
+
+      {/* MAIN INFO */}
+      <div className="space-y-1 text-sm">
+        <p>
+          <span className="text-gray-500">Class:</span>{" "}
+          <span className="font-medium">{c.className}</span>
+        </p>
+
+        <p>
+          <span className="text-gray-500">Section:</span>{" "}
+          <span className="font-medium">{c.section}</span>
+        </p>
+
+        <p>
+          <span className="text-gray-500">Students:</span>{" "}
+          <span className="font-medium">{c.students}</span>
+        </p>
+
+        <p>
+          <span className="text-gray-500">Subjects:</span>{" "}
+          <span className="font-medium">{c.subjects}</span>
+        </p>
+      </div>
+
+      {/* ACTIONS */}
+      <div className="grid grid-cols-3 gap-2 pt-2">
+        <button
+          onClick={() => {
+            setSelectedClass(c);
+            setOpenViewModal(true);
+          }}
+          className="flex items-center justify-center gap-1 border rounded-lg py-2 text-sm"
+        >
+          <Eye size={14} /> View
+        </button>
+
+        <button
+          onClick={() => {
+            setEditingClass(c);
+            setOpenEditClass(true);
+          }}
+          className="flex items-center justify-center gap-1 border rounded-lg py-2 text-sm"
+        >
+          <Pencil size={14} /> Edit
+        </button>
+
+        <button
+          onClick={() => setConfirmDeleteId(c.id)}
+          className="flex items-center justify-center gap-1 border rounded-lg py-2 text-sm text-red-600"
+        >
+          <Trash2 size={14} /> Delete
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
         {/* PAGINATION */}
     <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
       <button
@@ -451,8 +533,7 @@ const [editingClass, setEditingClass] = useState<any>(null);
       </button>
     </div>
 
-  </div>
-</div> 
+  
       {openAddClass && (
   <AddClassModal
     onClose={() => setOpenAddClass(false)}

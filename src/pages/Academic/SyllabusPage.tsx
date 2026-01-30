@@ -148,7 +148,7 @@ export default function SyllabusPage() {
 <div className="bg-white border border-gray-200 rounded-2xl px-6 py-5 space-y-5">
 
 {/* TOP ROW */}
-<div className="flex items-center justify-between">
+<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
   <div>
     <h2 className="text-2xl font-semibold">
       Syllabus
@@ -159,7 +159,7 @@ export default function SyllabusPage() {
   </div>
 
   {/* ACTION BUTTONS */}
-  <div className="flex items-center gap-3">
+  <div className="flex flex-wrap gap-2 sm:gap-3">
 
     {/* REFRESH */}
     <button
@@ -188,7 +188,15 @@ export default function SyllabusPage() {
     {/* ADD SUBJECT GROUP */}
     <button
   onClick={() => setOpenAdd(true)}
-  className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-1"
+  className="
+    w-full sm:w-auto
+    px-4 py-2
+    bg-blue-600
+    text-white
+    rounded-lg
+    flex items-center justify-center gap-1
+    text-sm font-medium
+  "
 >
   <Plus size={14} />
   Add Subject Group
@@ -202,12 +210,12 @@ export default function SyllabusPage() {
 <div className="bg-white border border-gray-200 rounded-xl px-6 py-4 space-y-4">
 
   {/* TOP ROW */}
-  <div className="flex items-center justify-between">
+  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
     <h3 className="text-base font-semibold text-gray-900">
       Subject Group List
     </h3>
 
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap gap-2">
 
       {/* DATE */}
       <div className="relative">
@@ -216,8 +224,14 @@ export default function SyllabusPage() {
       e.stopPropagation();
       setOpenCalendar(!openCalendar);
     }}
-    className="flex items-center gap-2 px-4 py-2 border rounded-lg text-sm hover:bg-gray-50"
-  >
+    className="
+    flex items-center gap-2
+    px-3 py-2
+    border rounded-lg
+    text-sm
+    w-full sm:w-auto
+    hover:bg-gray-50
+  ">
     <CalendarDays size={14} />
     {startDate && endDate
       ? `${startDate} - ${endDate}`
@@ -319,7 +333,7 @@ onClick={(e) => {
   </div>
 
   {/* BOTTOM ROW */}
-  <div className="flex items-center justify-between">
+  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <div className="flex items-center gap-2 text-sm text-gray-600">
       Row Per Page
       <select
@@ -345,13 +359,12 @@ onClick={(e) => {
         setSearch(e.target.value);
         setCurrentPage(1);
       }}
-      className="border rounded-lg px-3 py-2 text-sm w-52"
-    />
+      className="border rounded-lg px-3 py-2 text-sm w-full sm:w-52"/>
   </div>
 </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="hidden lg:block bg-white border rounded-xl overflow-x-auto">
       <div className="min-w-[900px]">
 
   <table className="min-w-[900px] w-full text-sm">
@@ -432,6 +445,42 @@ onClick={(e) => {
             ))}
           </tbody>
         </table>
+        </div>
+      </div>
+<div className="space-y-4 lg:hidden">
+  {paginated.map((d) => (
+    <div
+      key={d.id}
+      className="bg-white border border-gray-200 rounded-xl p-4 space-y-3"
+    >
+      <div className="flex justify-between items-center">
+        <span className="text-sm font-medium text-gray-900">
+          Class {d.class} - {d.section}
+        </span>
+        <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-600">
+          {d.status}
+        </span>
+      </div>
+
+      <div className="text-sm space-y-1">
+        <p>
+          <span className="text-gray-500">Subject Group:</span> {d.group}
+        </p>
+        <p>
+          <span className="text-gray-500">Created Date:</span> {d.date}
+        </p>
+      </div>
+
+      <div className="grid grid-cols-3 gap-2 pt-2">
+        <button className="border rounded-lg py-2 text-sm">View</button>
+        <button className="border rounded-lg py-2 text-sm">Edit</button>
+        <button className="border rounded-lg py-2 text-sm text-red-600">
+          Delete
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
 
         {/* PAGINATION */}
         <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
@@ -453,10 +502,7 @@ onClick={(e) => {
             Next
           </button>
         </div>
-      </div>
-      </div>
-
-      {openAdd && (
+        {openAdd && (
   <AddSubjectGroupModal
     onClose={() => setOpenAdd(false)}
     onAdd={(group) =>

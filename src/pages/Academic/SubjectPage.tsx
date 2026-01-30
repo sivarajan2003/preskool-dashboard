@@ -122,15 +122,15 @@ useEffect(() => {
 <div className="bg-white border border-gray-200 rounded-2xl px-6 py-5 space-y-5">
 
 {/* TOP ROW */}
-<div className="flex items-center justify-between">
+<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
   <div>
     <h2 className="text-2xl font-semibold">Subject</h2>
     <p className="text-sm text-gray-500 mt-1">
       Dashboard / Academic / Subject
     </p>
   </div>
+  <div className="flex flex-wrap gap-2 sm:gap-3">
 
-  <div className="flex items-center gap-3">
     {/* REFRESH */}
     <button
       onClick={handleRefresh}
@@ -157,12 +157,20 @@ useEffect(() => {
 
     {/* ADD SUBJECT */}
     <button
-      onClick={() => setOpenAdd(true)}
-      className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-1"
-    >
-      <Plus size={14} />
-      Add Subject
-    </button>
+  onClick={() => setOpenAdd(true)}
+  className="
+    w-full sm:w-auto
+    px-4 py-2
+    bg-blue-600
+    text-white
+    rounded-lg
+    flex items-center justify-center gap-1
+    text-sm font-medium
+  "
+>
+  <Plus size={14} />
+  Add Subject
+</button>
   </div>
 </div>
 </div>
@@ -170,12 +178,12 @@ useEffect(() => {
 <div className="bg-white border border-gray-200 rounded-xl px-6 py-4 space-y-4">
 
   {/* TOP ROW */}
-  <div className="flex items-center justify-between">
+  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
     <h3 className="text-base font-semibold text-gray-900">
       Subject List
     </h3>
 
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap gap-2">
       {/* DATE */}
       <div className="relative">
   <button
@@ -183,8 +191,13 @@ useEffect(() => {
       e.stopPropagation();
       setOpenDate(!openDate);
     }}
-    className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm hover:bg-gray-50"
-  >
+    className="
+  flex items-center gap-2
+  px-3 py-2
+  border rounded-lg
+  text-sm
+  w-full sm:w-auto
+  hover:bg-gray-50">
     <CalendarDays size={14} />
     {startDate} - {endDate}
   </button>
@@ -236,7 +249,7 @@ useEffect(() => {
   </div>
 
   {/* BOTTOM ROW */}
-  <div className="flex items-center justify-between">
+  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <div className="flex items-center gap-2 text-sm text-gray-600">
       Row Per Page
       <select
@@ -261,15 +274,14 @@ useEffect(() => {
         setSearch(e.target.value);
         setCurrentPage(1);
       }}
-      className="border rounded-lg px-3 py-2 text-sm w-52"
-    />
+      className="border rounded-lg px-3 py-2 text-sm w-full sm:w-52"
+      />
   </div>
 </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="hidden lg:block bg-white border rounded-xl overflow-x-auto">
       <div className="min-w-[900px]">
-
   <table className="min-w-[900px] w-full text-sm">
 
           <thead className="bg-gray-50">
@@ -341,6 +353,45 @@ useEffect(() => {
             ))}
           </tbody>
         </table>
+        </div>
+      </div>
+        <div className="space-y-4 lg:hidden">
+  {paginated.map((s) => (
+    <div
+      key={s.id}
+      className="bg-white border border-gray-200 rounded-xl p-4 space-y-3"
+    >
+      <div className="flex justify-between items-center">
+        <span className="text-blue-600 font-medium text-sm">
+          {s.id}
+        </span>
+        <span
+          className={`px-3 py-1 text-xs rounded-full ${
+            s.status === "Active"
+              ? "bg-green-100 text-green-600"
+              : "bg-red-100 text-red-600"
+          }`}
+        >
+          {s.status}
+        </span>
+      </div>
+
+      <div className="text-sm space-y-1">
+        <p><span className="text-gray-500">Name:</span> {s.name}</p>
+        <p><span className="text-gray-500">Code:</span> {s.code}</p>
+        <p><span className="text-gray-500">Type:</span> {s.type}</p>
+      </div>
+
+      <div className="grid grid-cols-3 gap-2 pt-2">
+        <button className="border rounded-lg py-2 text-sm">View</button>
+        <button className="border rounded-lg py-2 text-sm">Edit</button>
+        <button className="border rounded-lg py-2 text-sm text-red-600">
+          Delete
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
 
         {/* PAGINATION */}
         <div className="flex justify-end gap-2 px-4 py-3 border-t text-sm">
@@ -362,8 +413,7 @@ useEffect(() => {
             Next
           </button>
         </div>
-      </div>
-      </div>
+      
       {openAdd && (
   <AddSubjectModal
     onClose={() => setOpenAdd(false)}

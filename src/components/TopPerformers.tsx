@@ -47,15 +47,21 @@ export default function TopPerformers() {
       <div className="rounded-xl overflow-hidden bg-green-500 text-white flex flex-col">
 
         {/* TOP CONTENT */}
-        <div className="p-4">
+        <div className="p-3 sm:p-4">
           <div className="flex items-center justify-between mb-2">
             <h4 className="font-semibold text-sm">Best Performer</h4>
 
             <div className="flex gap-2">
-            <button onClick={prevBest} className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
+            <button onClick={prevBest} className="w-8 h-8 sm:w-7 sm:h-7
+    rounded-full bg-white/20
+    flex items-center justify-center
+    active:scale-95">
   <ChevronLeft size={14} />
 </button>
-<button onClick={nextBest} className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
+<button onClick={nextBest} className="w-8 h-8 sm:w-7 sm:h-7
+    rounded-full bg-white/20
+    flex items-center justify-center
+    active:scale-95">
   <ChevronRight size={14} />
 </button>
 
@@ -94,10 +100,16 @@ export default function TopPerformers() {
             </div>
 
             <div className="flex gap-2">
-            <button onClick={prevStudent} className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
+            <button onClick={prevStudent} className="w-8 h-8 sm:w-7 sm:h-7
+    rounded-full bg-white/20
+    flex items-center justify-center
+    active:scale-95">
   <ChevronLeft size={14} />
 </button>
-<button onClick={nextStudent} className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
+<button onClick={nextStudent} className="w-8 h-8 sm:w-7 sm:h-7
+    rounded-full bg-white/20
+    flex items-center justify-center
+    active:scale-95">
   <ChevronRight size={14} />
 </button>
 

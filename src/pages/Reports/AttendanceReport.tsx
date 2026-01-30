@@ -35,9 +35,9 @@ export default function AttendanceReport() {
       const [endDate, setEndDate] = useState<string>("");
       
   return (
-    <div className="p-6">
+<div className="p-4 sm:p-6">
       {/* ================= HEADER ================= */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mb-4">
       <div className="flex items-start gap-3">
   {/* BACK ARROW */}
   <button
@@ -50,21 +50,21 @@ onClick={() => window.history.back()}
 
   {/* TITLE */}
   <div>
-    <h2 className="text-2xl font-semibold">Attendance Report</h2>
+  <h2 className="text-xl sm:text-2xl font-semibold">Attendance Report</h2>
     <p className="text-sm text-gray-500">
       Dashboard / Report / Attendance Report
     </p>
   </div>
 </div>
         {/* ACTION BUTTONS */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap gap-2 w-full lg:w-auto">
         <div className="relative">
   <button
     onClick={() => {
       setShowCalendar(!showCalendar);
       setShowFilter(false);
     }}
-    className="btn-outline text-sm flex items-center gap-1"
+    className="btn-outline text-sm flex items-center gap-1 w-full sm:w-auto justify-center"
   >
     <CalendarDays size={14} />
     {startDate && endDate
@@ -73,7 +73,7 @@ onClick={() => window.history.back()}
   </button>
 
   {showCalendar && (
-    <div className="absolute left-0 top-full mt-2 bg-white border rounded-xl p-4 w-72 shadow z-50">
+    <div className="absolute left-0 top-full mt-2 bg-white border rounded-xl p-4 w-full sm:w-72 shadow z-50">
       <label className="text-sm font-medium">Start Date</label>
       <input
         type="date"
@@ -160,7 +160,7 @@ onClick={() => window.history.back()}
 </button>
 
 
-          <button className="btn-primary">
+<button className="btn-primary w-full sm:w-auto flex items-center justify-center gap-1">
             <Download size={16} />
             Export
           </button>
@@ -168,12 +168,17 @@ onClick={() => window.history.back()}
       </div>
 
       {/* ================= TABS ================= */}
-      <div className="flex gap-6 border-b mb-6">
+      <div className="
+  flex gap-6 border-b mb-6
+  overflow-x-auto
+  scrollbar-hide
+  whitespace-nowrap
+">
         {TABS.map((tab) => (
           <button
             key={tab.path}
             onClick={() => navigate(tab.path)}
-            className={`pb-3 text-sm font-medium border-b-2 transition ${
+            className={`pb-3 text-sm font-medium border-b-2 transition shrink-0 ${
               isActiveTab(tab.path)
                 ? "border-blue-600 text-blue-600"
                 : "border-transparent text-gray-500 hover:text-gray-700"

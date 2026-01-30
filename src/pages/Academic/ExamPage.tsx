@@ -224,7 +224,7 @@ const [filterDate, setFilterDate] = useState<
 
       {/* ================= HEADER ================= */}
       <div className="bg-white border rounded-2xl px-6 py-5 space-y-5">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-start gap-3">
   {/* BACK ARROW */}
   <button
@@ -244,7 +244,8 @@ const [filterDate, setFilterDate] = useState<
   </div>
 </div>
 
-          <div className="flex items-center gap-3">
+<div className="flex flex-wrap gap-2 sm:gap-3">
+
             <button
               onClick={handleRefresh}
               className="p-2.5 border rounded-lg hover:bg-gray-50"
@@ -269,22 +270,30 @@ const [filterDate, setFilterDate] = useState<
             {/* ➕ ADD EXAM */}
             <button
   onClick={() => setOpenAddExam(true)}
-  className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-1"
+  className="
+    h-10 w-full
+    lg:w-auto
+    px-4
+    bg-blue-600 hover:bg-blue-700
+    text-white
+    rounded-lg
+    text-sm font-medium
+    flex items-center justify-center gap-1
+  "
 >
   <Plus size={14} />
   Add Exam
 </button>
-
-          </div>
+        </div>
         </div>
       </div>
 
       {/* ================= SUB HEADER ================= */}
       <div className="bg-white border rounded-xl px-6 py-4 space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <h3 className="text-base font-semibold">Exam List</h3>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap gap-2">
           <div className="relative">
   <button
     onClick={(e) => {
@@ -452,7 +461,7 @@ const [filterDate, setFilterDate] = useState<
 
           <input
             placeholder="Search"
-            className="border rounded-lg px-3 py-2 text-sm w-52"
+            className="border rounded-lg px-3 py-2 text-sm w-full lg:w-52"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -460,7 +469,7 @@ const [filterDate, setFilterDate] = useState<
       </div>
 
       {/* ================= TABLE ================= */}
-      <div className="bg-white border rounded-xl overflow-x-auto">
+      <div className="hidden lg:block bg-white border rounded-xl overflow-x-auto">
       <div className="min-w-[900px]">
 
   <table className="min-w-[900px] w-full text-sm">
@@ -547,6 +556,54 @@ const [filterDate, setFilterDate] = useState<
             ))}
           </tbody>
         </table>
+        </div>
+      </div>
+        {/* ================= MOBILE & TABLET VIEW ================= */}
+<div className="space-y-4 lg:hidden">
+  {paginated.map((d) => (
+    <div
+      key={d.id}
+      className="bg-white border rounded-xl p-4 space-y-3"
+    >
+      <div className="flex justify-between items-center">
+        <span className="text-blue-600 font-medium text-sm">
+          {d.id}
+        </span>
+        <span className="text-xs text-gray-500">
+          {d.date}
+        </span>
+      </div>
+
+      <div className="text-sm space-y-1">
+        <p><span className="text-gray-500">Exam:</span> {d.name}</p>
+        <p><span className="text-gray-500">Start:</span> {d.start}</p>
+        <p><span className="text-gray-500">End:</span> {d.end}</p>
+      </div>
+
+      <div className="grid grid-cols-3 gap-2 pt-2">
+        <button
+          onClick={() => { setSelectedExam(d); setOpenView(true); }}
+          className="border rounded-lg py-2 text-sm"
+        >
+          View
+        </button>
+        <button
+          onClick={() => { setSelectedExam(d); setOpenEdit(true); }}
+          className="border rounded-lg py-2 text-sm"
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => setDeleteId(d.id)}
+          className="border rounded-lg py-2 text-sm text-red-600"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
         {/* ================= PAGINATION ================= */}
 <div className="flex items-center justify-end gap-2 px-4 py-3 border-t text-sm">
 
@@ -597,8 +654,7 @@ const [filterDate, setFilterDate] = useState<
   Next
 </button>
 </div>
-</div>
-      </div>
+
       {openAddExam && (
   <AddExamModal
     onClose={() => setOpenAddExam(false)}
