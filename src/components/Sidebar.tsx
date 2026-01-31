@@ -115,6 +115,8 @@ const isManagementActive = location.pathname.startsWith(
 );
 const isManagementItemActive = (path: string) =>
   location.pathname.startsWith(path);
+  const isAdmissionAdmin =
+  JSON.parse(localStorage.getItem("user") || "{}")?.admissionAdmin === true;
 
   return (
 <div
@@ -516,7 +518,7 @@ const isManagementItemActive = (path: string) =>
  {/* ================= CLASSES (HAS CHILD) ================= */}
     {!isParent && (
     <button
-  onClick={() => navigate(`${basePath}/academic/classes`)}
+    onClick={() => navigate(`${basePath}/academic/classes`)}
   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg
     ${
       location.pathname === `${basePath}/academic/classes`
@@ -552,43 +554,37 @@ const isManagementItemActive = (path: string) =>
   icon={DoorOpen}
   path={`${basePath}/academic/class-room`}
 />
-<AcademicItem
-  label="Class Routine"
-  icon={CalendarDays}
-  path={`${basePath}/academic/class-routine`}
-/>
-
- {/*<AcademicItem
-  label="Section"
-  icon={Layers}
-  path="/admin/dashboard/academic/section"
-/>*/}
-
-<AcademicItem
-  label="Subject"
-  icon={BookOpen}
-  path={`${basePath}/academic/subject`}
-/>
-<AcademicItem
-  label="Syllabus"
-  icon={FileText}
-  path={`${basePath}/academic/syllabus`}
-/>
-<AcademicItem
-  label="Time Table"
-  icon={Table}
-  path={`${basePath}/academic/time-table`}
-/>
- {/* <AcademicItem
-  label="Home Work"
-  icon={ClipboardList}
-  path="/admin/dashboard/academic/home-work"
-/> 
-*/}
-
+{!isAdmissionAdmin && (
+  <AcademicItem
+    label="Class Routine"
+    icon={CalendarDays}
+    path={`${basePath}/academic/class-routine`}
+  />
+)}
+{!isAdmissionAdmin && (
+  <AcademicItem
+    label="Subject"
+    icon={BookOpen}
+    path={`${basePath}/academic/subject`}
+  />
+)}
+{!isAdmissionAdmin && (
+  <AcademicItem
+    label="Syllabus"
+    icon={FileText}
+    path={`${basePath}/academic/syllabus`}
+  />
+)}
+{!isAdmissionAdmin && (
+  <AcademicItem
+    label="Time Table"
+    icon={Table}
+    path={`${basePath}/academic/time-table`}
+  />
+)}
     {/* ================= EXAMINATIONS (HAS CHILD) ================= */}
-    {!isParent && (
-  <>
+    {!isParent && !isAdmissionAdmin && (
+        <>
     <button
       onClick={() => setOpenExams(!openExams)}
       className="w-full flex items-center gap-3 px-3 py-2 rounded-lg"
@@ -648,12 +644,15 @@ const isManagementItemActive = (path: string) =>
 
 
     {/* ================= SINGLE MENU ================= */}
-    <MainItem
-  label="Reasons"
-  icon={HelpCircle}
-  active={location.pathname.startsWith(`${basePath}/academic/reasons`)}
-  onClick={() => navigate(`${basePath}/academic/reasons`)}
-/>
+    {!isAdmissionAdmin && (
+  <MainItem
+    label="Reasons"
+    icon={HelpCircle}
+    active={location.pathname.startsWith(`${basePath}/academic/reasons`)}
+    onClick={() => navigate(`${basePath}/academic/reasons`)}
+  />
+)}
+
 
     </>
 )}
@@ -662,7 +661,9 @@ const isManagementItemActive = (path: string) =>
  </>
 )}
 
-{canAccess(["admin", "student", "teacher"]) && !isPureParentPortal && (
+{canAccess(["admin", "student", "teacher"]) &&
+ !isPureParentPortal &&
+ !isAdmissionAdmin && (
   <>
 {/* ================= MANAGEMENT ================= */}
 <SectionHeader
@@ -843,7 +844,9 @@ const isManagementItemActive = (path: string) =>
 )}
 </>
 )}
-{canAccess(["admin", "student", "teacher", "parent"]) && !isPureParentPortal && (
+{canAccess(["admin", "student", "teacher", "parent"]) &&
+ !isPureParentPortal &&
+ !isAdmissionAdmin && (
   <>
 {/* ================= HRM ================= */}
 <SectionHeader
@@ -1003,7 +1006,9 @@ const isManagementItemActive = (path: string) =>
 )}
  </>
 )}
-{canAccess(["admin", "teacher", "parent", "student"]) && !isPureParentPortal && (
+{canAccess(["admin", "teacher", "parent", "student"]) &&
+ !isPureParentPortal &&
+ !isAdmissionAdmin && (
   <>
 {/* ================= REPORTS ================= */}
 <SectionHeader

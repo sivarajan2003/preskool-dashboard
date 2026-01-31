@@ -61,7 +61,32 @@ export default function Login() {
     setError("");
     setLoading(true);
   
-    // ✅ STEP 1: FRONTEND-ONLY PARENT PORTAL LOGIN (PUT HERE)
+  //  ADMISSION ADMIN LOGIN 
+if (
+  email.trim() === "admission@preskool.com" &&
+  password.trim() === "admin123"
+) {
+  localStorage.setItem("token", "admission-admin-demo-token");
+  localStorage.setItem("role", "admin");
+
+  localStorage.setItem("portal", "false");
+  localStorage.setItem(
+    "user",
+    JSON.stringify({
+      email,
+      role: "admin",
+      admissionAdmin: true, 
+    })
+  );
+  localStorage.setItem("isAuth", "true");
+
+  toast.success("Admission Admin Login Successful ");
+
+  navigate("/admin/dashboard");
+  setLoading(false);
+  return;
+}
+
     if (
       email.trim() === "parentportal@preskool.com" &&
       password.trim() === "admin123"
@@ -79,11 +104,11 @@ export default function Login() {
       );
       localStorage.setItem("isAuth", "true");
   
-      toast.success("Parent Portal Login Successful ✅");
+      toast.success("Parent Portal Login Successful ");
   
       navigate("/parent/dashboard/admissions");
       setLoading(false);
-      return; // ⛔ VERY IMPORTANT → stops API call
+      return; 
     }
   
   
@@ -124,10 +149,10 @@ export default function Login() {
       
       if (user.role === "parent") {
         if (user.portal === true) {
-          // ✅ Parent Portal Login
+          //  Parent Portal Login
           navigate("/parent/dashboard/admissions");
         } else {
-          // ✅ Normal Parent Login
+          //  Normal Parent Login
           navigate("/parent/dashboard");
         }
       }
