@@ -547,6 +547,13 @@ const isManagementItemActive = (path: string) =>
         <ChildItem label="Schedule" />
       </div>
     )}*/}
+{(role === "admin" || role === "receptionist") && (
+  <AcademicItem
+    label="Academic Calendar"
+    icon={Calendar}
+    path="/admin/dashboard/academic/academic-calendar"
+  />
+)}
 
     {/* ================= SINGLE MENUS ================= */}
     <AcademicItem
@@ -554,6 +561,7 @@ const isManagementItemActive = (path: string) =>
   icon={DoorOpen}
   path={`${basePath}/academic/class-room`}
 />
+
 {!isAdmissionAdmin && (
   <AcademicItem
     label="Class Routine"

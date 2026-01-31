@@ -41,6 +41,7 @@ import SubjectPage from "./pages/Academic/SubjectPage";
 import SyllabusPage from "./pages/Academic/SyllabusPage";
 import TimeTablePage from "./pages/Academic/TimeTablePage";
 import HomeWorkPage from "./pages/Academic/HomeWorkPage";
+import AcademicCalendar from "./pages/Academic/AcademicCalendar";
 
 import ExamPage from "./pages/Academic/ExamPage";
 import ExamSchedulePage from "./pages/Academic/ExamSchedulePage";
@@ -130,11 +131,13 @@ export default function App() {
   element={
     <ProtectedRoute role={["admin", "receptionist"]}>
       <DashboardLayout />
+      
     </ProtectedRoute>
   }
 >
 
 <Route path="academic/reasons" element={<ReasonsPage />}>
+  
     <Route path="exam" element={<ExamReasons />} />
     <Route path="leave" element={<LeaveReasons />} />
     <Route path="disciplinary" element={<DisciplinaryReasons />} />
@@ -190,6 +193,10 @@ export default function App() {
   <Route path="academic/classes" element={<ClassesPage />} />
   <Route path="academic/class-room" element={<ClassRoomPage />} />
   <Route path="academic/class-routine" element={<ClassRoutinePage />} />
+  <Route
+  path="academic/academic-calendar"
+  element={<AcademicCalendar />}
+/>
   <Route
   path="academic/academic-year"
   element={
@@ -333,6 +340,7 @@ export default function App() {
   <Route path="academic/subject" element={<SubjectPage />} />
   <Route path="academic/syllabus" element={<SyllabusPage />} />
   <Route path="academic/time-table" element={<TimeTablePage />} />
+  
 
   {/* EXAMINATIONS */}
   <Route path="academic/examinations/exam" element={<ExamPage />} />
